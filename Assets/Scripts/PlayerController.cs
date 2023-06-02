@@ -13,9 +13,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     LayerMask _layerMask;
 
-    [SerializeField]
-    LayerMask _layerMask2;
-
     int shovelPower = 1;
 
 
@@ -202,7 +199,7 @@ public class PlayerController : MonoBehaviour
 
                 else if (hitdata.collider.tag == "BadRock") // weedwall이 힛데이타에 태그로 들어왓다면
                 {
-
+                    //hitdata.collider.GetComponent<Door>().InvincibilityWall();
                 }
                 //else if(hitdata.collider.tag == "적태그이름")
                 //{
