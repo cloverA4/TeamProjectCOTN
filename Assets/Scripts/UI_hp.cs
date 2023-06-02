@@ -9,24 +9,23 @@ using UnityEngine.UI;
 public class UI_hp : MonoBehaviour
 {
     [SerializeField] float _MaxHp;
+
     [SerializeField] float _damge;
     [SerializeField] Image _gameObject;
+    [SerializeField] Transform _gridPanel;
 
-    public List<Image> Hearts;
 
-    public Sprite Back, Front, halfHeart;
+    [SerializeField] Sprite Back, Front;
 
     int count = 0;
 
 
+
     private void Start()
     {
-        for (int i = 0; i < _MaxHp; i++)
-        {
-            Image obj = Instantiate(_gameObject, new Vector3(count--, 0, 0), Quaternion.identity, transform);
-            Hearts.Add(obj.GetComponent<Image>());
-        }
+        setMaxHP();
     }
+
     private void Update()
     {
         if (Input.GetMouseButton(0))
@@ -35,20 +34,32 @@ public class UI_hp : MonoBehaviour
         }
     }
 
-    void setHp(float dmg)
+    void setMaxHP()
     {
-        float _Hp = _MaxHp - dmg;
-
+        //�ߺ����� ���ƾ���.
         for (int i = 0; i < _MaxHp; i++)
         {
-            if (_Hp > i)
-            {
-                Hearts[i].sprite = Front;
+            Image obj = Instantiate(_gameObject, _gridPanel);
+            obj.gameObject.name = "HP" + i;
+        }
+    }
 
-                if (_Hp - (int)_Hp == 0.5 && (int)_Hp == i)
-                {
-                    Hearts[i].sprite = halfHeart;
-                }
+    void setHp(float hp)
+    {
+        for (int i = 0; i < _MaxHp; i++)
+        {
+            string str = "HP" + i;
+            if (i > hp)
+            {
+                Image im = _gridPanel.Find(str).GetComponent<Image>();
+                im.sprite = Back;
+                //��ĭ
+            }
+            else
+            {
+                //������Ʈ
+                Image im = _gridPanel.Find(str).GetComponent<Image>();
+                im.sprite = Front;
             }
         }
     }

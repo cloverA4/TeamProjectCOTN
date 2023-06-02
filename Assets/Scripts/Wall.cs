@@ -22,7 +22,6 @@ public class Wall : MonoBehaviour
 
     public void DamageWall(int ADWall)
     {
-
         //spriteRenderer의 스프라이트를 _attackedWall(데미지를받은 벽)으로 바꿔주는것
         _spriteRenderer.sprite = _attackedWall;
         
