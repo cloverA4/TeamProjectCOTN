@@ -30,11 +30,13 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.RightArrow)) // 오른쪽 화살표를 입력 받았을때
         {
             MoveCharacter(Vector3.right);
+            _spriter.flipX = true;
         }
 
         if (Input.GetKeyDown(KeyCode.LeftArrow)) // 왼쪽 화살표를 입력 받았을때
         {
             MoveCharacter(Vector3.left);
+            _spriter.flipX = false;
         }
     }
 
@@ -43,7 +45,7 @@ public class PlayerController : MonoBehaviour
         Vector3 Temp = transform.position + new Vector3(0, -0.5f, 0);
         RaycastHit2D hitdata = Physics2D.Raycast(Temp, vec, 1f, _layerMask);
         // 왼쪽으로 빔을쏘는 
-        _spriter.flipX = false;
+        
 
         Debug.Log(transform.position);
         if (hitdata)
