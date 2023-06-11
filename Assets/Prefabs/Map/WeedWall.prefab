@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 21206656}
   - component: {fileID: 4647989767156960021}
   - component: {fileID: -7296951238310784339}
-  m_Layer: 11
+  m_Layer: 20
   m_Name: WeedWall
   m_TagString: WeedWall
   m_Icon: {fileID: 0}

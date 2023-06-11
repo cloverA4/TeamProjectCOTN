@@ -62,6 +62,7 @@ public class PlayerController : MonoBehaviour
             {
 
                 hitdata.collider.GetComponent<Door>().OpenDoor();
+                
 
             }
             else if (hitdata.collider.tag == "BadRock") // weedwall이 힛데이타에 태그로 들어왓다면
