@@ -40,21 +40,13 @@ public class Wall : MonoBehaviour
             for (int i = 0; i < vecs.Length; i++)
             {
                 Collider2D coll = Physics2D.OverlapBox(currentPosition + vecs[i], new Vector2(), 0f);
-                if (coll != null) CheckDoor(coll);   // 벽의 위에 충돌체가 null이 아니라면
-                                                     
+                if (coll != null && coll.tag == "Door") // collider2D.tag가 "문"이고 null이 아니라면
+                {
+                    coll.GetComponent<Door>().updateWallCount(); // 충돌체의 문코드의 updateWallCount 함수를 실행한다
+                }
             }
 
             gameObject.SetActive(false); //벽 파괴 구문
-        }
-
-      
-
-        void CheckDoor(Collider2D col)
-        {
-            if (col.tag == "Door") // collider2D.tag가 "문"이라면
-            {
-                col.GetComponent<Door>().updateWallCount(); // 충돌체의 문코드의 updateWallCount 함수를 실행한다
-            }
         }
     }
 }
