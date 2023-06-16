@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Runtime.Serialization;
 using Unity.VisualScripting;
 using UnityEditor.Build.Content;
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEditor.Progress;
 
 public class UIManeger : MonoBehaviour
 {
@@ -16,22 +18,25 @@ public class UIManeger : MonoBehaviour
 
     [SerializeField] Transform _HPPanel;
 
+    [SerializeField] Text _goldCount;
+    [SerializeField] Text _diamondCount;
+    public int _gold;
+    public int _diamond;
+
+    [SerializeField] Image _shovelImage;
+    [SerializeField] Image _armorImage;
+    [SerializeField] Image _weaponImage;
+    [SerializeField] GameObject _emptyPotion;
+
+
+    
+
 
     private void Start()
     {
-       
-
         setMaxHP();
     }
-
-    private void Update()
-    {
-    //    if (Input.GetMouseButton(0))
-    //    {
-    //        setHP(_hpCount);
-    //    }
-    }
-
+    #region HP
     void setMaxHP()
     {
         for (int i = 0; i < _maxHP; i++)
@@ -54,4 +59,72 @@ public class UIManeger : MonoBehaviour
             }
         }
     }
+
+    #endregion
+
+    #region Wealth
+    void UpdateGold(int _count)
+    {
+        _gold += _count;
+
+        _goldCount.text = "X " + _gold;
+    }
+
+    void UpdataDiamond(int _count)
+    {
+        _diamond += _count;
+
+        _diamondCount.text = "X " + _diamond;
+    }
+
+    void ResetGold() 
+    {
+        _gold = 0;
+        _goldCount.text = "X " + _gold;
+    }
+    void RestDiamond()
+    {
+        _diamond= 0;
+        _diamondCount.text = "X " + _diamond;
+    }
+
+    #endregion
+
+    #region Equipment
+
+    public void Equipment(Item _item)
+    {
+        Sprite _changeImage;
+        switch (_item._itemType)
+        {
+            case ItemType.Weapon:
+                _changeImage = Resources.Load("UI/Item" + _item.ItemID) as Sprite;
+                _weaponImage.sprite = _changeImage;
+                break;
+            case ItemType.Armor:
+                _changeImage = Resources.Load("UI/Item" + _item.ItemID) as Sprite;
+                _armorImage.sprite = _changeImage;  
+                break;
+            case ItemType.Shovel:
+                _changeImage = Resources.Load("UI/Item" + _item.ItemID) as Sprite;
+                _shovelImage.sprite= _changeImage;
+                break;
+            case ItemType.Potion:
+                break;
+            default:
+                break;
+        }
+            
+    }
+   
+    public void PotionCount(bool _potion)
+    {
+        if(_potion == true ) _emptyPotion.SetActive(false);
+        else _emptyPotion.SetActive(true);
+    }
+
+    #endregion
+
+
+
 }

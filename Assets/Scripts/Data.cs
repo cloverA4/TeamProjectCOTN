@@ -62,8 +62,9 @@ public class Item
             _Name = value;
         }
     }
+    public ItemType _itemType = ItemType.Armor;
 }
-enum ItemType
+public enum ItemType
 {
     Shovel,
     Weapon,
@@ -71,7 +72,7 @@ enum ItemType
     Potion,
 }
 
-enum CharacterState
+public enum CharacterState
 {
     idle,
     attack,
