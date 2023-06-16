@@ -16,11 +16,7 @@ public class Door : MonoBehaviour
         GetComponent<SpriteRenderer>().sortingOrder = (int)(transform.position.y + 0.5f) * -1; // y의 위치를 확인하고 이미지를 정렬시켜주는 구문     
     }
 
-    private void Update()
-    {
-        //CheckAndSetActive();
-    }
-
+   
     public void updateWallCount()
     {
         _wallCount--;
@@ -68,7 +64,7 @@ public class Door : MonoBehaviour
         //Collider2D coll = Physics2D.OverlapBox(position, new Vector2(), 0f, objectLayer);
         Collider2D coll = Physics2D.OverlapBox(position, new Vector2(), 0f);
 
-        //OverlapBox는 오브젝트위치, size angle layermask를 사용해야한다
+        //OverlapBox는 오브젝트위치, size, angle, layermask를 사용해야한다
         //오브젝트위치는 문의 위치이고
         //사이즈는 overlapbox의 범위라는데 크게넣으면 바로앞옆위아래 1칸을 확인할수없으므로 1을넣어보기도 0을넣어보기도했는데
         //이게 오브젝트의 정가운데서 0.5 0.5씩할당해서 1의 크기여서 문제는 없으나 확실한 확인을위해 0을넣어도 보고 아무것도

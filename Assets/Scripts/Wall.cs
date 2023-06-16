@@ -1,6 +1,8 @@
 using Mono.Cecil;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -8,13 +10,15 @@ using UnityEngine.UIElements;
 public class Wall : MonoBehaviour
 {
     Sprite _attackedWall;
-    public int _hp = 2;
+    int _hp;
+    LayerMask objectLayer;
     //public GameObject _gameObject;
 
 
     private SpriteRenderer _spriteRenderer;
     void Start()
     {
+        _hp = 2;
         _spriteRenderer = GetComponent<SpriteRenderer>();
         GetComponent<SpriteRenderer>().sortingOrder = (int)(transform.position.y + 0.5f) * -1;
         _attackedWall = Resources.Load<Sprite>("Wall/isometric_pixel_flat_0074");
@@ -27,30 +31,29 @@ public class Wall : MonoBehaviour
         _spriteRenderer.sprite = _attackedWall;
 
         _hp -= ADWall; //벽의 남은체력에서 ADWall 만큼빼주기
-        Debug.Log(_hp);
-        if (_hp <= 0) //만약 _hp의 값이 0이라면 게임 오브젝트를 비활성화하기
+
+        if (_hp <= 0) //만약 벽의 _hp의 값이 0이라면 게임 오브젝트를 비활성화하기
         {
             Vector2 currentPosition = transform.position;
-            Collider2D coll = Physics2D.OverlapBox(currentPosition + Vector2.up, new Vector2(), 0f);
-            if (coll != null) CheckDoor(coll);            
+            Vector2[] vecs = new Vector2[] { Vector2.up, Vector2.down, Vector2.right, Vector2.left };
 
-            coll = Physics2D.OverlapBox(currentPosition + Vector2.down, new Vector2(), 0f);
-            if (coll != null) CheckDoor(coll);
+            for (int i = 0; i < vecs.Length; i++)
+            {
+                Collider2D coll = Physics2D.OverlapBox(currentPosition + vecs[i], new Vector2(), 0f);
+                if (coll != null) CheckDoor(coll);   // 벽의 위에 충돌체가 null이 아니라면
+                                                     
+            }
 
-            coll = Physics2D.OverlapBox(currentPosition + Vector2.right, new Vector2(), 0f);
-            if (coll != null) CheckDoor(coll);
-
-            coll = Physics2D.OverlapBox(currentPosition + Vector2.left, new Vector2(), 0f);
-            if (coll != null) CheckDoor(coll);
-
-            gameObject.SetActive(false);
+            gameObject.SetActive(false); //벽 파괴 구문
         }
+
+      
 
         void CheckDoor(Collider2D col)
         {
-            if (col.tag == "Door")
+            if (col.tag == "Door") // collider2D.tag가 "문"이라면
             {
-                col.GetComponent<Door>().updateWallCount();
+                col.GetComponent<Door>().updateWallCount(); // 충돌체의 문코드의 updateWallCount 함수를 실행한다
             }
         }
     }
