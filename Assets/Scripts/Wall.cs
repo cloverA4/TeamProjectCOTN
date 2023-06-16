@@ -2,6 +2,7 @@ using Mono.Cecil;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 
 public class Wall : MonoBehaviour
@@ -15,7 +16,7 @@ public class Wall : MonoBehaviour
     void Start()
     {
         _spriteRenderer = GetComponent<SpriteRenderer>();
-        GetComponent<SpriteRenderer>().sortingOrder = (int)(transform.position.y+0.5f) * -1;
+        GetComponent<SpriteRenderer>().sortingOrder = (int)(transform.position.y + 0.5f) * -1;
         _attackedWall = Resources.Load<Sprite>("Wall/isometric_pixel_flat_0074");
 
     }
@@ -24,13 +25,34 @@ public class Wall : MonoBehaviour
     {
         //spriteRenderer의 스프라이트를 _attackedWall(데미지를받은 벽)으로 바꿔주는것
         _spriteRenderer.sprite = _attackedWall;
-        
+
         _hp -= ADWall; //벽의 남은체력에서 ADWall 만큼빼주기
         Debug.Log(_hp);
         if (_hp <= 0) //만약 _hp의 값이 0이라면 게임 오브젝트를 비활성화하기
         {
+            Vector2 currentPosition = transform.position;
+            Collider2D coll = Physics2D.OverlapBox(currentPosition + Vector2.up, new Vector2(), 0f);
+            if (coll != null) CheckDoor(coll);            
+
+            coll = Physics2D.OverlapBox(currentPosition + Vector2.down, new Vector2(), 0f);
+            if (coll != null) CheckDoor(coll);
+
+            coll = Physics2D.OverlapBox(currentPosition + Vector2.right, new Vector2(), 0f);
+            if (coll != null) CheckDoor(coll);
+
+            coll = Physics2D.OverlapBox(currentPosition + Vector2.left, new Vector2(), 0f);
+            if (coll != null) CheckDoor(coll);
+
             gameObject.SetActive(false);
-           
+        }
+
+        void CheckDoor(Collider2D col)
+        {
+            if (col.tag == "Door")
+            {
+                col.GetComponent<Door>().updateWallCount();
+            }
         }
     }
 }
+

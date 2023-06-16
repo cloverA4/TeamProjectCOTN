@@ -5,27 +5,36 @@ using UnityEngine.Tilemaps;
 
 public class Door : MonoBehaviour
 {
+    int _wallCount;
     //1
     //[SerializeField]
     //LayerMask objectLayer;
 
     void Start()
     {
+        _wallCount = 2;
         GetComponent<SpriteRenderer>().sortingOrder = (int)(transform.position.y + 0.5f) * -1; // y의 위치를 확인하고 이미지를 정렬시켜주는 구문     
     }
 
     private void Update()
     {
-        CheckAndSetActive();
+        //CheckAndSetActive();
     }
 
-
+    public void updateWallCount()
+    {
+        _wallCount--;
+        if(_wallCount <= 0)
+        {
+            OpenDoor();
+        }
+    }
 
     public void OpenDoor()
     {
         gameObject.SetActive(false);
     }
-
+    /*
     private void CheckAndSetActive()
     {
         Vector2 currentPosition = transform.position;
@@ -74,5 +83,6 @@ public class Door : MonoBehaviour
         //이구문은 아직공부중
         return coll != null;
     }
+    */
 
 }
