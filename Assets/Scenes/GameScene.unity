@@ -7471,7 +7471,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: 64c4d25da914ec14fa52e8ec6eff2230, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -34708,7 +34708,7 @@ Sprite:
         format: 0
         dimension: 0
       m_DataSize: 80
-      _typelessdata: 000000bf0000003f000000000000003f0000003f00000000000000bf000000bf000000000000003f000000bf000000000000000000000000000000000000000000000000000000000000000000000000
+      _typelessdata: 000000bf0000003f000000000000003f0000003f00000000000000bf000000bf000000000000003f000000bf00000000000000000000803f0000803f0000803f00000000000000000000803f00000000
     m_Bindpose: []
     textureRect:
       serializedVersion: 2
@@ -50327,6 +50327,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4711340047464132854, guid: 6976d0d66cb8b8d428c2038da16eedf0,
         type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 5d11e447a46334444a677926229579c0,
+        type: 3}
+    - target: {fileID: 4711340047464132854, guid: 6976d0d66cb8b8d428c2038da16eedf0,
+        type: 3}
       propertyPath: m_SortingOrder
       value: 1
       objectReference: {fileID: 0}
@@ -53333,7 +53339,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: d1706b4b16fc99346b982d123593565b, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -59932,6 +59938,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4711340047464132854, guid: 6976d0d66cb8b8d428c2038da16eedf0,
         type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 5d11e447a46334444a677926229579c0,
+        type: 3}
+    - target: {fileID: 4711340047464132854, guid: 6976d0d66cb8b8d428c2038da16eedf0,
+        type: 3}
       propertyPath: m_SortingOrder
       value: 1
       objectReference: {fileID: 0}
@@ -62385,6 +62397,12 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 20
       objectReference: {fileID: 0}
+    - target: {fileID: 4711340047464132854, guid: 6976d0d66cb8b8d428c2038da16eedf0,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 5d11e447a46334444a677926229579c0,
+        type: 3}
     - target: {fileID: 4711340047464132854, guid: 6976d0d66cb8b8d428c2038da16eedf0,
         type: 3}
       propertyPath: m_SortingOrder
