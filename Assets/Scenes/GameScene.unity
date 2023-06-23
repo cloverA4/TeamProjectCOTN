@@ -39431,7 +39431,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1156711650}
   - component: {fileID: 1156711651}
-  - component: {fileID: 1156711652}
   m_Layer: 5
   m_Name: Wealth
   m_TagString: Untagged
@@ -39485,18 +39484,6 @@ MonoBehaviour:
   m_Spacing: {x: 0, y: 15}
   m_Constraint: 0
   m_ConstraintCount: 2
---- !u!114 &1156711652
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1156711649}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f50ef67b6541fff409dfad5f33e2a069, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &1156992003
 PrefabInstance:
   m_ObjectHideFlags: 0
