@@ -7,6 +7,9 @@ using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class Data : MonoBehaviour
 {
+    PlayerCharacterData _playerData = new PlayerCharacterData();
+    List<Item> ItemList = new List<Item>();
+
     private static Data instance = null;
     private void Awake()
     {
@@ -38,6 +41,24 @@ public class Data : MonoBehaviour
             return instance;
         }
     }
+    
+    public Item SearchItem(int itemID)
+    {
+        for (int i = 0; i < ItemList.Count; i++)
+        {
+            if (itemID == ItemList[i].ItemID)
+            {
+                return ItemList[i];
+            }
+        }
+        return null;
+    }
+
+    private void Start()
+    {
+        
+    }
+
 }
 
 public class Item
@@ -62,10 +83,11 @@ public class Item
             _Name = value;
         }
     }
-    public ItemType _itemType = ItemType.Armor;
+    public ItemType _itemType = ItemType.Null;
 }
 public enum ItemType
 {
+    Null,
     Shovel,
     Weapon,
     Armor,
@@ -100,3 +122,9 @@ public class PlayerCharacterData
 
     List<Item> _equpedItemList = new List<Item>();
 }
+
+class DropTable
+{
+    
+}
+

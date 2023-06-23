@@ -5,6 +5,7 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     private static GameManager instance = null;
+    [SerializeField] GameObject _dropItem;
     private void Awake()
     {
         if (null == instance)
@@ -21,6 +22,12 @@ public class GameManager : MonoBehaviour
             //그래서 이미 전역변수인 instance에 인스턴스가 존재한다면 자신을 삭제해준다.
             Destroy(this.gameObject);
         }
+    }
+
+    void CreateItem(Transform tf)
+    {
+        GameObject creatrItem = Instantiate(_dropItem , tf);
+        //creatrItem.GetComponent<DropItem>().Init();
     }
 
     //게임 매니저 인스턴스에 접근할 수 있는 프로퍼티. static이므로 다른 클래스에서 맘껏 호출할 수 있다.
