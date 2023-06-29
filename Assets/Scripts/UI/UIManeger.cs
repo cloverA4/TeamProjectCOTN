@@ -28,6 +28,9 @@ public class UIManeger : MonoBehaviour
     [SerializeField] Image _weaponImage;
     [SerializeField] GameObject _emptyPotion;
 
+    [SerializeField] GameObject NotePrefab;
+    [SerializeField] GameObject NotesPool;
+
 
     
 
@@ -125,6 +128,12 @@ public class UIManeger : MonoBehaviour
 
     #endregion
 
+    #region NoteCreate
 
+    void createNote()
+    {
 
+    }
+
+    #endregion
 }

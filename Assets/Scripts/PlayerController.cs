@@ -1,4 +1,6 @@
 using System.Collections;
+using Unity.VisualScripting;
+using UnityEditor.Rendering;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -7,6 +9,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] LayerMask _layerMask;
 
     int shovelPower = 1;
+    bool isLive = true;
+    bool _isSuccess = true;
 
     // Start is called before the first frame update
     void Start()
@@ -17,27 +21,60 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.UpArrow)) // 위 화살표를 입력 받았을때
+        if (isLive && _isSuccess)
         {
-            MoveCharacter(Vector3.up);
-        }
+            if (Input.GetKeyDown(KeyCode.UpArrow)) // 위 화살표를 입력 받았을때
+            {
+                if (!GameManager.Instance.IsSuccess())
+                {
+                    _isSuccess = false;
+                    Invoke("penalty", 0.2f);
+                    return;
+                }
+                MoveCharacter(Vector3.up);
+            }
 
-        if (Input.GetKeyDown(KeyCode.DownArrow)) // 아래 화살표를 입력 받았을때
-        {
-            MoveCharacter(Vector3.down);
-        }
+            if (Input.GetKeyDown(KeyCode.DownArrow)) // 아래 화살표를 입력 받았을때
+            {
+                if (!GameManager.Instance.IsSuccess())
+                {
+                    _isSuccess = false;
+                    Invoke("penalty", 0.2f);
+                    return;
+                }
+                MoveCharacter(Vector3.down);
+            }
 
-        if (Input.GetKeyDown(KeyCode.RightArrow)) // 오른쪽 화살표를 입력 받았을때
-        {
-            MoveCharacter(Vector3.right);
-            _spriter.flipX = true;
-        }
+            if (Input.GetKeyDown(KeyCode.RightArrow)) // 오른쪽 화살표를 입력 받았을때
+            {
+                if (!GameManager.Instance.IsSuccess())
+                {
+                    _isSuccess = false;
+                    Invoke("penalty", 0.2f);
+                    return;
+                }
+                MoveCharacter(Vector3.right);
+                _spriter.flipX = true;
+            }
 
-        if (Input.GetKeyDown(KeyCode.LeftArrow)) // 왼쪽 화살표를 입력 받았을때
-        {
-            MoveCharacter(Vector3.left);
-            _spriter.flipX = false;
+            if (Input.GetKeyDown(KeyCode.LeftArrow)) // 왼쪽 화살표를 입력 받았을때
+            {
+                if (!GameManager.Instance.IsSuccess())
+                {
+                    _isSuccess = false;
+                    Invoke("penalty", 0.2f);
+                    return;
+                }
+                MoveCharacter(Vector3.left);
+                _spriter.flipX = false;
+            }
         }
+    }
+
+    void penalty()
+    {
+        Debug.Log("패널티 해제!");
+        _isSuccess = true;
     }
 
     void MoveCharacter(Vector3 vec)
