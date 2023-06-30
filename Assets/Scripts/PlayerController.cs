@@ -26,30 +26,30 @@ public class PlayerController : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.UpArrow)) // 위 화살표를 입력 받았을때
             {
-                Judgement();
+                if (!Judgement()) return;
                 MoveCharacter(Vector3.up);
             }
             else if (Input.GetKeyDown(KeyCode.DownArrow)) // 아래 화살표를 입력 받았을때
             {
-                Judgement();
+                if (!Judgement()) return;
                 MoveCharacter(Vector3.down);
             }
             else if(Input.GetKeyDown(KeyCode.RightArrow)) // 오른쪽 화살표를 입력 받았을때
             {
-                Judgement();
+                if (!Judgement()) return;
                 MoveCharacter(Vector3.right);
                 _spriter.flipX = true;
             }
             else if (Input.GetKeyDown(KeyCode.LeftArrow)) // 왼쪽 화살표를 입력 받았을때
             {
-                Judgement();
+                if(!Judgement()) return;
                 MoveCharacter(Vector3.left);
                 _spriter.flipX = false;
             }
         }
     }
 
-    void Judgement()
+    bool Judgement()
     {
         _isDubbleClick = false;
         Invoke("DubbleLock", 0.1f);
@@ -58,8 +58,9 @@ public class PlayerController : MonoBehaviour
         {
             _isSuccess = false;
             Invoke("penalty", 60 / GameManager.Instance.BPM);
-            return;
+            return false;
         }
+        return true;
     }
 
     void DubbleLock()
