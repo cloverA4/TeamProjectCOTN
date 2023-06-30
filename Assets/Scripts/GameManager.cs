@@ -1,10 +1,6 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using TMPro.EditorUtilities;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Events;
 
 public class GameManager : MonoBehaviour
 {
@@ -57,33 +53,56 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0))
         {
             //스테이지1 시작을 가정하고 - 여기서 사운드오픈 및 노트생성 테스트
             StartCoroutine(Metronom());
+            StartCoroutine(StartMusic());
         }
         if (Input.GetMouseButtonDown(1))
         {
             //스테이지1 시작을 가정하고 - 여기서 사운드오픈 및 노트생성 테스트
             resetNote();
             StopCoroutine(Metronom());
+            StopCoroutine(StartMusic());
         }
     }
 
     #region 비트
 
     [SerializeField] float _bpm;
+    public float BPM
+    {
+        get { return _bpm; }
+    }
+
     [SerializeField] AudioSource _audio;
     [SerializeField] GameObject _note;
     [SerializeField] GameObject _notePool;
     List<GameObject> _activeNoteList = new List<GameObject>();
     List<GameObject> _pools = new List<GameObject>();
 
+    IEnumerator StartMusic()
+    {
+        yield return new WaitForSeconds(3);
+        _audio.Play();
+        while(true)
+        {
+            yield return new WaitForSeconds(1);
+            
+            if(!_audio.isPlaying)
+            {
+                resetNote();
+                //죽음처리
+                yield return null;
+            }
+        }
+    }
     IEnumerator Metronom()
     {
+        yield return new WaitForSeconds(2);
         float beatTime = 60 / _bpm;
-        _audio.Play(); // 노래시작을 첫노트가 도착할때 하게끔 해야함
-        while (_audio.isPlaying) // 여기 조건을 노래중이 아니라 다른거로 바꿔야함
+        while (_audio.time <= _audio.clip.length - 1)
         {
             foreach (GameObject prefab in _pools)
             {
@@ -96,7 +115,7 @@ public class GameManager : MonoBehaviour
             }
             yield return new WaitForSeconds(beatTime);
         }
-        
+
         //첫 노트가 판정선에 도착할때에 맞춰서 노래를 시작하게끔 어떻게 만들것인가?
         //판정시간과의 싱크는 어떻게 맞출것인가?
     }
@@ -107,7 +126,9 @@ public class GameManager : MonoBehaviour
         {
             GameObject go = Instantiate(_note, _notePool.transform);
             go.GetComponent<Note>().Init();
+            go.name = "Note" + i;
             _pools.Add(go);
+            
         }
     }
 
@@ -126,22 +147,32 @@ public class GameManager : MonoBehaviour
         _activeNoteList.Remove(note);
     }
 
+    void DeleteJudgementNote()
+    {
+        _activeNoteList[0].SetActive(false);
+        ActiveNoteRemove(_activeNoteList[0]);
+    }
+
     public bool IsSuccess()
     {
+        bool isSuccess = false;
+
         if (_activeNoteList.Count <= 0)
         {
-            return false;
             Debug.Log("실패");
+            return isSuccess;
         }
-        
+
         RectTransform rec = _activeNoteList[0].GetComponent<RectTransform>();
         if (rec != null && rec.anchoredPosition.x < 200)
         {
             Debug.Log("성공");
-            return true;
+            isSuccess = true;
         }
-        return false;
+
         Debug.Log("실패");
+        DeleteJudgementNote();
+        return isSuccess;
     }
 
     #endregion

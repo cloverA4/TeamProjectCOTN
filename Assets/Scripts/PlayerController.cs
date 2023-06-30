@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour
     int shovelPower = 1;
     bool isLive = true;
     bool _isSuccess = true;
+    bool _isDubbleClick = true;
 
     // Start is called before the first frame update
     void Start()
@@ -21,60 +22,55 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (isLive && _isSuccess)
+        if (isLive && _isSuccess && _isDubbleClick)
         {
             if (Input.GetKeyDown(KeyCode.UpArrow)) // 위 화살표를 입력 받았을때
             {
-                if (!GameManager.Instance.IsSuccess())
-                {
-                    _isSuccess = false;
-                    Invoke("penalty", 0.2f);
-                    return;
-                }
+                Judgement();
                 MoveCharacter(Vector3.up);
             }
-
-            if (Input.GetKeyDown(KeyCode.DownArrow)) // 아래 화살표를 입력 받았을때
+            else if (Input.GetKeyDown(KeyCode.DownArrow)) // 아래 화살표를 입력 받았을때
             {
-                if (!GameManager.Instance.IsSuccess())
-                {
-                    _isSuccess = false;
-                    Invoke("penalty", 0.2f);
-                    return;
-                }
+                Judgement();
                 MoveCharacter(Vector3.down);
             }
-
-            if (Input.GetKeyDown(KeyCode.RightArrow)) // 오른쪽 화살표를 입력 받았을때
+            else if(Input.GetKeyDown(KeyCode.RightArrow)) // 오른쪽 화살표를 입력 받았을때
             {
-                if (!GameManager.Instance.IsSuccess())
-                {
-                    _isSuccess = false;
-                    Invoke("penalty", 0.2f);
-                    return;
-                }
+                Judgement();
                 MoveCharacter(Vector3.right);
                 _spriter.flipX = true;
             }
-
-            if (Input.GetKeyDown(KeyCode.LeftArrow)) // 왼쪽 화살표를 입력 받았을때
+            else if (Input.GetKeyDown(KeyCode.LeftArrow)) // 왼쪽 화살표를 입력 받았을때
             {
-                if (!GameManager.Instance.IsSuccess())
-                {
-                    _isSuccess = false;
-                    Invoke("penalty", 0.2f);
-                    return;
-                }
+                Judgement();
                 MoveCharacter(Vector3.left);
                 _spriter.flipX = false;
             }
         }
     }
 
+    void Judgement()
+    {
+        _isDubbleClick = false;
+        Invoke("DubbleLock", 0.1f);
+
+        if (!GameManager.Instance.IsSuccess())
+        {
+            _isSuccess = false;
+            Invoke("penalty", 60 / GameManager.Instance.BPM);
+            return;
+        }
+    }
+
+    void DubbleLock()
+    {
+        _isDubbleClick = true;
+    }
     void penalty()
     {
         Debug.Log("패널티 해제!");
         _isSuccess = true;
+        _isDubbleClick = true;
     }
 
     void MoveCharacter(Vector3 vec)
@@ -82,8 +78,6 @@ public class PlayerController : MonoBehaviour
         Vector3 Temp = transform.position + new Vector3(0, -0.5f, 0);
         RaycastHit2D hitdata = Physics2D.Raycast(Temp, vec, 1f, _layerMask);
         // 왼쪽으로 빔을쏘는 
-        
-
         
         if (hitdata)
         {

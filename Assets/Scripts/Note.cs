@@ -31,7 +31,8 @@ public class Note : MonoBehaviour
     void Update()
     {
         rec.anchoredPosition3D += new Vector3(-1 * Time.deltaTime * _speed, 0, 0);
-        if(rec.anchoredPosition.x < _judgemonet.anchoredPosition.x)
+        //if(rec.anchoredPosition.x < _judgemonet.anchoredPosition.x)
+        if(rec.anchoredPosition.x <= 0)
         {
             gameObject.SetActive(false);
             GameManager.Instance.ActiveNoteRemove(gameObject);
