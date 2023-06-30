@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Security.Cryptography;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using static UnityEditor.Experimental.GraphView.GraphView;
@@ -8,7 +10,18 @@ using static UnityEditor.Experimental.GraphView.GraphView;
 public class Data : MonoBehaviour
 {
     PlayerCharacterData _playerData = new PlayerCharacterData();
-    List<Item> ItemList = new List<Item>();
+    ItemTable _itemTable;
+
+    void LoadDataFromJson()
+    {
+        TextAsset dataJson = Resources.Load<TextAsset>("TestCase/Json/ItemData");
+        Debug.Log(dataJson);
+        _itemTable = JsonUtility.FromJson<ItemTable>(dataJson.text);
+        foreach (var It in _itemTable.itemTable )
+        {
+            
+        }
+    } // json 파일 로드 함수
 
     private static Data instance = null;
     private void Awake()
@@ -27,6 +40,8 @@ public class Data : MonoBehaviour
             //그래서 이미 전역변수인 instance에 인스턴스가 존재한다면 자신을 삭제해준다.
             Destroy(this.gameObject);
         }
+        LoadDataFromJson();
+
     }
 
     //게임 매니저 인스턴스에 접근할 수 있는 프로퍼티. static이므로 다른 클래스에서 맘껏 호출할 수 있다.
@@ -44,23 +59,13 @@ public class Data : MonoBehaviour
     
     public Item SearchItem(int itemID)
     {
-        for (int i = 0; i < ItemList.Count; i++)
-        {
-            if (itemID == ItemList[i].ItemID)
-            {
-                return ItemList[i];
-            }
-        }
+        Item _tempItem;
         return null;
-    }
-
-    private void Start()
-    {
-        
-    }
+    } // 아이템 풀에서 아이템ID를 찾아서 아이템 정보 받아오는 함수
 
 }
 
+[Serializable]
 public class Item
 {
     int _ItemID;
@@ -83,7 +88,13 @@ public class Item
             _Name = value;
         }
     }
+
+    Sprite _itemImage;
     public ItemType _itemType = ItemType.Null;
+}
+public class ItemTable
+{
+    public List<Item> itemTable;
 }
 public enum ItemType
 {
@@ -123,8 +134,5 @@ public class PlayerCharacterData
     List<Item> _equpedItemList = new List<Item>();
 }
 
-class DropTable
-{
-    
-}
+
 
