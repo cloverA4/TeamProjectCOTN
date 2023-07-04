@@ -6,6 +6,11 @@ public class GameManager : MonoBehaviour
 {
     private static GameManager instance = null;
     [SerializeField] GameObject _dropItem;
+
+    //스테이지 관련 지역변수들
+    [SerializeField] Transform _lobbyStartPoint;
+    [SerializeField] Transform _stage1StartPoint;
+
     private void Awake()
     {
         if (null == instance)
@@ -176,7 +181,96 @@ public class GameManager : MonoBehaviour
     }
 
     #endregion
+
+    #region 스테이지관리
+
+    //데이터 스테이지변수에 변경할 스테이지가 어딘지 입력 후  페이드 후에 해당스테이지를 로드할수 있게끔
+    //해당 스테이지 입구별로 함수 개별 적용?
+    void FaidIn()
+    {
+        //페이드인효과 호출(어두워지게)
+    }
+
+    void FaidOut()
+    {
+        //페이드아웃 효과 호출(밝아지게)
+    }
+    
+
+    void StageLoad()
+    {
+        //페이드효과가 끝난 후 로드시작
+        //이니셜라이즈 용으로도 이용
+
+        //플레이어 위치데이터 변경을 위한 데이터처리.
+        if (Data.Instance.Player.PlayerTransform == null)
+        {
+            Data.Instance.Player.PlayerTransform = GameObject.Find("Player").transform;
+        }
+
+        //플레이어의 상태 초기화?
+        Data.Instance.Player.HP = Data.Instance.Player.MaxHP;
+        Data.Instance.Player.State = CharacterState.Live;
+
+        switch (Data.Instance.NowStage)
+        {
+            case Stage.Lobby:
+                //플레이어 위치 변경
+                Data.Instance.Player.PlayerTransform = _lobbyStartPoint.transform;
+                //스테이지 배경음 설정
+                break;
+            case Stage.Stage1:
+                //플레이어 위치 변경
+                Data.Instance.Player.PlayerTransform = _stage1StartPoint.transform;
+                //스테이지 배경음 설정
+                break;
+            case Stage.Stage2:
+                break;
+            case Stage.Stage3:
+                break;
+            case Stage.Stage4:
+                break;
+            case Stage.Stage5:
+                break;
+            default:
+                break;
+        }
+        
+        //벽 로드(부서진 벽 등 전부 리셋)
+        //몬스터 로드(몬스터 풀 만들고, 현재 생성된 몬스터 다 초기화 후 새로 스폰)
+        //아이템 로드(기획 후 작업)
+        //재화 초기화
+        
+        //로드가 끝나면 페이드아웃 호출        
+    }
+
+    void StageStart()
+    {
+        //페이드아웃이 끝난 후 노래,비트 시작
+        //스테이지에 맞는 bpm설정
+        
+        StartCoroutine(Metronom());
+        StartCoroutine(StartMusic());
+    }
+
+
+    public void StageFail()
+    {
+        //실패시 캐릭터를 죽음
+        Data.Instance.Player.State = CharacterState.Death;
+
+        //노래와 비트 중지
+        resetNote();
+        StopCoroutine(Metronom());
+        StopCoroutine(StartMusic());
+
+        //UI호출 - 스테이지 재시작, 로비이동, ??? 선택할수있게끔.
+    }
+
+    #endregion
 }
+
+
 
 
 /*

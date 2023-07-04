@@ -9,7 +9,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] LayerMask _layerMask;
 
     int shovelPower = 1;
-    bool isLive = true;
     bool _isSuccess = true;
     bool _isDubbleClick = true;
 
@@ -22,7 +21,7 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (isLive && _isSuccess && _isDubbleClick)
+        if (Data.Instance.Player.State == CharacterState.Live && _isSuccess && _isDubbleClick)
         {
             if (Input.GetKeyDown(KeyCode.UpArrow)) // 위 화살표를 입력 받았을때
             {
@@ -114,5 +113,10 @@ public class PlayerController : MonoBehaviour
         {
             transform.position += vec;
         }
+    }
+
+    void Death()
+    {        
+        GameManager.Instance.StageFail();
     }
 }

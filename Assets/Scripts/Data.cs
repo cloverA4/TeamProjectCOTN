@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Security.Cryptography;
 using TMPro;
 using UnityEngine;
@@ -9,8 +10,29 @@ using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class Data : MonoBehaviour
 {
-    PlayerCharacterData _playerData = new PlayerCharacterData();
+    #region 전역변수
+
     ItemTable _itemTable;
+
+    //스테이지 데이터
+    Stage _nowStage = Stage.Lobby;
+
+    public Stage NowStage
+    {
+        get { return _nowStage; }
+        set { _nowStage = value; }
+    }
+    
+    //캐릭터 데이터
+    PlayerCharacterData _player = new PlayerCharacterData();
+    public PlayerCharacterData Player
+    {
+        get { return _player; }
+        set { _player = value; }
+    }
+
+    #endregion
+
 
     void LoadDataFromJson()
     {
@@ -56,6 +78,11 @@ public class Data : MonoBehaviour
             return instance;
         }
     }
+
+    void PlayerInit()
+    {
+        //로드해온 플레이어 데이터 입력
+    }
     
     public Item SearchItem(int itemID)
     {
@@ -64,6 +91,8 @@ public class Data : MonoBehaviour
     } // 아이템 풀에서 아이템ID를 찾아서 아이템 정보 받아오는 함수
 
 }
+
+#region Data 클래스들 모음
 
 [Serializable]
 public class Item
@@ -96,21 +125,7 @@ public class ItemTable
 {
     public List<Item> itemTable;
 }
-public enum ItemType
-{
-    Null,
-    Shovel,
-    Weapon,
-    Armor,
-    Potion,
-}
 
-public enum CharacterState
-{
-    idle,
-    attack,
-    die,
-}
 public class PlayerCharacterData
 {
     float _hp;
@@ -129,10 +144,53 @@ public class PlayerCharacterData
         set { _maxHp = value; }
     }
 
-    CharacterState state = CharacterState.idle;
+    Transform _playerTransform;
+
+    public Transform PlayerTransform
+    {
+        get { return _playerTransform; }
+        set { _playerTransform = value; }
+    }
+
+    CharacterState _state = CharacterState.Live;
+
+    public CharacterState State 
+    {
+        get { return _state; }
+        set { _state = value; }
+    }
 
     List<Item> _equpedItemList = new List<Item>();
 }
 
+#endregion
+
+#region Enum모음
+public enum ItemType
+{
+    Null,
+    Shovel,
+    Weapon,
+    Armor,
+    Potion,
+}
+
+public enum CharacterState
+{
+    Live,
+    Death,
+}
+
+public enum Stage
+{
+    Lobby = 0,
+    Stage1 = 1,
+    Stage2 = 2,
+    Stage3 = 3,
+    Stage4 = 4,
+    Stage5 = 5,
+}
+
+#endregion
 
 
