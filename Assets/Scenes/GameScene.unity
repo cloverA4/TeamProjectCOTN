@@ -2462,7 +2462,7 @@ Transform:
   - {fileID: 1511669984}
   - {fileID: 1812212319}
   m_Father: {fileID: 134293494}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!483693784 &91365503
 TilemapRenderer:
@@ -3725,7 +3725,7 @@ Transform:
   - {fileID: 961807844}
   - {fileID: 757303860}
   m_Father: {fileID: 1833629407}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!483693784 &123159913
 TilemapRenderer:
@@ -4013,6 +4013,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 2005246946}
   - {fileID: 797295733}
   - {fileID: 1014773854}
   - {fileID: 1730954478}
@@ -12327,7 +12328,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1833629407}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!483693784 &398443751
 TilemapRenderer:
@@ -27973,7 +27974,7 @@ Transform:
   m_Children:
   - {fileID: 732171129}
   m_Father: {fileID: 1833629407}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!483693784 &742263831
 TilemapRenderer:
@@ -29050,7 +29051,7 @@ Transform:
   - {fileID: 378874410}
   - {fileID: 1532440667}
   m_Father: {fileID: 134293494}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!483693784 &778616687
 TilemapRenderer:
@@ -29379,7 +29380,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 134293494}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!483693784 &797295734
 TilemapRenderer:
@@ -37103,7 +37104,7 @@ Transform:
   m_Children:
   - {fileID: 478826105}
   m_Father: {fileID: 134293494}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!483693784 &1014773855
 TilemapRenderer:
@@ -51333,7 +51334,7 @@ Transform:
   - {fileID: 1476701292}
   - {fileID: 2066196631}
   m_Father: {fileID: 1833629407}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!483693784 &1528350924
 TilemapRenderer:
@@ -56963,13 +56964,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1716141463}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 2.612277, y: 3.7009716, z: 0.13469467}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_Father: {fileID: 1833629407}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1719370680
 PrefabInstance:
@@ -57607,7 +57608,7 @@ Transform:
   - {fileID: 2100072900}
   - {fileID: 1558339845}
   m_Father: {fileID: 134293494}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!483693784 &1730954479
 TilemapRenderer:
@@ -57909,7 +57910,7 @@ Transform:
   - {fileID: 599677264}
   - {fileID: 379190532}
   m_Father: {fileID: 134293494}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!483693784 &1732648935
 TilemapRenderer:
@@ -60733,6 +60734,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1716141464}
   - {fileID: 398443750}
   - {fileID: 2051046541}
   - {fileID: 1528350923}
@@ -65963,13 +65965,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2005246945}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -28.5, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_Father: {fileID: 134293494}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &2006427115
 PrefabInstance:
@@ -67322,7 +67324,7 @@ Transform:
   - {fileID: 1255629469}
   - {fileID: 425337690}
   m_Father: {fileID: 1833629407}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!483693784 &2051046542
 TilemapRenderer:
