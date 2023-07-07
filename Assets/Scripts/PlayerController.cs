@@ -21,7 +21,8 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Data.Instance.Player.State == CharacterState.Live && _isSuccess && _isDubbleClick)
+        //if (Data.Instance.Player.State == CharacterState.Live && _isSuccess && _isDubbleClick)
+        if (_isSuccess && _isDubbleClick)
         {
             if (Input.GetKeyDown(KeyCode.UpArrow)) // 위 화살표를 입력 받았을때
             {

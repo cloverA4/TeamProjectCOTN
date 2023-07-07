@@ -1,9 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Runtime.Serialization;
-using Unity.VisualScripting;
-using UnityEditor.Build.Content;
 using UnityEngine;
 using UnityEngine.UI;
 using static UnityEditor.Progress;
@@ -30,9 +25,13 @@ public class UIManeger : MonoBehaviour
 
     [SerializeField] GameObject NotePrefab;
     [SerializeField] GameObject NotesPool;
+    [SerializeField] Image _fade;
+    private void Update()
+    {
+        
+    }
 
 
-    
 
 
     private void Start()
@@ -134,6 +133,36 @@ public class UIManeger : MonoBehaviour
     {
 
     }
+
+    #endregion
+
+    #region FadeIn , FadeOut
+    public IEnumerator FadeIn()
+    {
+        Color color = _fade.color;
+        while(true)
+        {
+            color.a += Time.deltaTime;
+            _fade.color = color;
+            yield return null;
+            if (color.a >= 1) break;
+        }
+        GameManager.Instance.StageLoad();
+    }
+
+    public IEnumerator FadeOut()
+    {
+        Color color = _fade.color;
+        while (true)
+        {
+            color.a -= Time.deltaTime;
+            _fade.color = color;
+            yield return null;
+            if (color.a <= 0) break;
+        }
+        GameManager.Instance.StageStart();
+    }
+
 
     #endregion
 }

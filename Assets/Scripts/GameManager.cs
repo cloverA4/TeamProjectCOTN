@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour
     //스테이지 관련 지역변수들
     [SerializeField] Transform _lobbyStartPoint;
     [SerializeField] Transform _stage1StartPoint;
+    [SerializeField] UIManeger _uiManeger;
 
     private void Awake()
     {
@@ -189,15 +190,18 @@ public class GameManager : MonoBehaviour
     void FaidIn()
     {
         //페이드인효과 호출(어두워지게)
+        StartCoroutine(_uiManeger.FadeIn());
+
     }
 
     void FaidOut()
     {
         //페이드아웃 효과 호출(밝아지게)
+        StartCoroutine(_uiManeger.FadeOut());
     }
-    
 
-    void StageLoad()
+
+    public void StageLoad()
     {
         //페이드효과가 끝난 후 로드시작
         //이니셜라이즈 용으로도 이용
@@ -235,16 +239,17 @@ public class GameManager : MonoBehaviour
             default:
                 break;
         }
-        
+
         //벽 로드(부서진 벽 등 전부 리셋)
         //몬스터 로드(몬스터 풀 만들고, 현재 생성된 몬스터 다 초기화 후 새로 스폰)
         //아이템 로드(기획 후 작업)
         //재화 초기화
-        
+
         //로드가 끝나면 페이드아웃 호출        
+        FaidOut();
     }
 
-    void StageStart()
+    public void StageStart()
     {
         //페이드아웃이 끝난 후 노래,비트 시작
         //스테이지에 맞는 bpm설정
