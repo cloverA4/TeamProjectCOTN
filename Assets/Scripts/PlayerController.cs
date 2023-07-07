@@ -6,9 +6,13 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     SpriteRenderer _spriter; // 변수 선언과 초기화하기
-    [SerializeField] LayerMask _layerMask;
+    [SerializeField] 
+    LayerMask _layerMask;
+    [SerializeField]
+    MakeFog2 _MakeFog2;
 
     int shovelPower = 1;
+    bool isLive = true;
     bool _isSuccess = true;
     bool _isDubbleClick = true;
 
@@ -28,23 +32,27 @@ public class PlayerController : MonoBehaviour
             {
                 if (!Judgement()) return;
                 MoveCharacter(Vector3.up);
+                _MakeFog2.UpdateFogOfWar();
             }
             else if (Input.GetKeyDown(KeyCode.DownArrow)) // 아래 화살표를 입력 받았을때
             {
                 if (!Judgement()) return;
                 MoveCharacter(Vector3.down);
+                _MakeFog2.UpdateFogOfWar();
             }
             else if(Input.GetKeyDown(KeyCode.RightArrow)) // 오른쪽 화살표를 입력 받았을때
             {
                 if (!Judgement()) return;
                 MoveCharacter(Vector3.right);
                 _spriter.flipX = true;
+                _MakeFog2.UpdateFogOfWar();
             }
             else if (Input.GetKeyDown(KeyCode.LeftArrow)) // 왼쪽 화살표를 입력 받았을때
             {
                 if(!Judgement()) return;
                 MoveCharacter(Vector3.left);
                 _spriter.flipX = false;
+                _MakeFog2.UpdateFogOfWar();
             }
         }
     }
