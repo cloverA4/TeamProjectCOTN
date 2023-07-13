@@ -7,12 +7,34 @@ public class GameManager : MonoBehaviour
     private static GameManager instance = null;
     [SerializeField] GameObject _dropItem;
 
+    
+
+    //스테이지 데이터
+    Stage _nowStage = Stage.Lobby;
+
+    public Stage NowStage
+    {
+        get { return _nowStage; }
+        set { _nowStage = value; }
+    }
+
+    floor _nowFloor = floor.f1;
+
+    public floor NowFloor
+    {
+        get { return _nowFloor; }
+        set { _nowFloor = value; }
+    }
+
     //스테이지 관련 지역변수들
-    [SerializeField] Transform _lobbyStartPoint;
-    [SerializeField] Transform _stage1StartPoint;
-    [SerializeField] Transform _stage2StartPoint;
-    [SerializeField] Transform _stage3StartPoint;
-    [SerializeField] Transform _stageBossStartPoint;
+    Vector3 _StartPoint;
+
+    public Vector3 StartPoint
+    {
+        get { return _StartPoint; }
+        set { _StartPoint = value; }
+    }
+
     [SerializeField] UIManeger _uiManeger;
 
     private void Awake()
@@ -56,12 +78,31 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        //노트풀 생성
         CreateNote();
+        //몬스터 풀 생성
+        //아이템 풀 생성
+
+        // 로드전에 초기화
+        InitGameData();
+        // 로드시작
+        FaidIn();
+    }
+
+    void InitGameData()
+    {
+        //임시 강제 수정 코드
+        _nowStage = Stage.Lobby;            
+        _nowFloor = floor.f1;
+        
+        _StartPoint = new Vector3(-28, 0, 0);
+
     }
 
     // Update is called once per frame
     void Update()
     {
+        /*
         if (Input.GetMouseButtonDown(0))
         {
             //스테이지1 시작을 가정하고 - 여기서 사운드오픈 및 노트생성 테스트
@@ -75,6 +116,7 @@ public class GameManager : MonoBehaviour
             StopCoroutine(Metronom());
             StopCoroutine(StartMusic());
         }
+        */
     }
 
     #region 비트
@@ -190,14 +232,13 @@ public class GameManager : MonoBehaviour
 
     //데이터 스테이지변수에 변경할 스테이지가 어딘지 입력 후  페이드 후에 해당스테이지를 로드할수 있게끔
     //해당 스테이지 입구별로 함수 개별 적용?
-    void FaidIn()
+    public void FaidIn()
     {
         //페이드인효과 호출(어두워지게)
         StartCoroutine(_uiManeger.FadeIn());
-
     }
 
-    void FaidOut()
+    public void FaidOut()
     {
         //페이드아웃 효과 호출(밝아지게)
         StartCoroutine(_uiManeger.FadeOut());
@@ -209,46 +250,55 @@ public class GameManager : MonoBehaviour
         //페이드효과가 끝난 후 로드시작
         //이니셜라이즈 용으로도 이용
 
-        //플레이어 위치데이터 변경을 위한 데이터처리.
-        if (Data.Instance.Player.PlayerTransform == null)
-        {
-            Data.Instance.Player.PlayerTransform = GameObject.Find("Player").transform;
-        }
+        //플레이어의 상태 초기화?        
 
-        //플레이어의 상태 초기화?
-        Data.Instance.Player.HP = Data.Instance.Player.MaxHP;
-        Data.Instance.Player.State = CharacterState.Live;
-
-        switch (Data.Instance.NowStage)
+        switch (_nowStage)
         {
             case Stage.Lobby:
-                //플레이어 위치 변경
-                Data.Instance.Player.PlayerTransform = _lobbyStartPoint.transform;
+                switch (_nowFloor)
+                {
+                    case floor.f1:
+                        
+                        break;
+                    case floor.f2: 
+                    case floor.f3: 
+                    case floor.fBoss:
+                        //여기서 예외처리
+                        break;
+                }
+                
                 //스테이지 배경음 설정
                 break;
             case Stage.Stage1:
-                //플레이어 위치 변경
-                Data.Instance.Player.PlayerTransform = _stage1StartPoint.transform;
+                switch (_nowFloor)
+                {
+                    case floor.f1:
+                        break;
+                    case floor.f2:
+                    case floor.f3:
+                    case floor.fBoss:
+                        //여기서 예외처리
+                        break;
+                }
                 //스테이지 배경음 설정
                 break;
             case Stage.Stage2:
-                //플레이어 위치 변경
-                Data.Instance.Player.PlayerTransform = _stage2StartPoint.transform;
+                switch (_nowFloor)
+                {
+                    case floor.f1:
+                        break;
+                    case floor.f2:
+                    case floor.f3:
+                    case floor.fBoss:
+                        //여기서 예외처리
+                        break;
+                }
                 //스테이지 배경음 설정
-                break;
-            case Stage.Stage3:
-                //플레이어 위치 변경
-                Data.Instance.Player.PlayerTransform = _stage3StartPoint.transform;
-                //스테이지 배경음 설정
-                break;
-            case Stage.StageBoss:
-                //플레이어 위치 변경
-                Data.Instance.Player.PlayerTransform = _stageBossStartPoint.transform;
-                //스테이지 배경음 설정
-                break;
-            default:
                 break;
         }
+        
+        //플레이어 위치 변경
+        PlayerController.Instance.transfromUpdate(_StartPoint);
 
         //벽 로드(부서진 벽 등 전부 리셋)
         //몬스터 로드(몬스터 풀 만들고, 현재 생성된 몬스터 다 초기화 후 새로 스폰)
@@ -263,8 +313,15 @@ public class GameManager : MonoBehaviour
     {
         //페이드아웃이 끝난 후 노래,비트 시작
         //스테이지에 맞는 bpm설정
-        
-        StartCoroutine(Metronom());
+        switch (_nowStage)
+        {
+            case Stage.Lobby:
+                break;
+                case Stage.Stage1:
+                case Stage.Stage2:
+                StartCoroutine(Metronom());
+                break;
+        }
         StartCoroutine(StartMusic());
     }
 
@@ -272,14 +329,13 @@ public class GameManager : MonoBehaviour
     public void StageFail()
     {
         //실패시 캐릭터를 죽음
-        Data.Instance.Player.State = CharacterState.Death;
 
         //노래와 비트 중지
         resetNote();
         StopCoroutine(Metronom());
         StopCoroutine(StartMusic());
 
-        //UI호출 - 스테이지 재시작, 로비이동, ??? 선택할수있게끔.
+        //UI호출 - 스테이지 재시작, 로비이동, 다시보기 선택할수있게끔.
     }
 
     #endregion

@@ -22,10 +22,7 @@ public class Wall : MonoBehaviour
         _spriteRenderer = GetComponent<SpriteRenderer>();
         GetComponent<SpriteRenderer>().sortingOrder = (int)(transform.position.y + 0.8f) * -1;
         _attackedWall = Resources.Load<Sprite>("Wall/isometric_pixel_flat_0074");
-        Debug.Log((int)(-0.3 + 0.3f) * -1); // 0
-        Debug.Log((int)(-1.3 + 0.3f) * -1); // 0
-        Debug.Log((int)(-2.3 + 0.3f) * -1); // 1
-        /////////////////-2 * -1 2? 왜 1이나와 ?????
+        Debug.Log(transform.position.y);
 
     }
 

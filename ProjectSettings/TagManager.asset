@@ -8,6 +8,7 @@ TagManager:
   - WeedWall
   - BadRock
   - Door
+  - Stair
   layers:
   - Default
   - TransparentFX

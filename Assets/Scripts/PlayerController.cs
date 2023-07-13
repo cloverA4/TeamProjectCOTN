@@ -1,10 +1,9 @@
-using System.Collections;
-using Unity.VisualScripting;
-using UnityEditor.Rendering;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    private static PlayerController instance;
+
     SpriteRenderer _spriter; // 변수 선언과 초기화하기
     [SerializeField] 
     LayerMask _layerMask;
@@ -16,7 +15,45 @@ public class PlayerController : MonoBehaviour
     bool _isSuccess = true;
     bool _isDubbleClick = true;
 
-    // Start is called before the first frame update
+    //캐릭터 데이터
+    PlayerData _player = new PlayerData();
+    public PlayerData Player
+    {
+        get { return _player; }
+        set { _player = value; }
+    }
+
+    private void Awake()
+    {
+        if (null == instance)
+        {
+            instance = this;
+
+            //씬 전환이 되더라도 파괴되지 않게 한다.
+            DontDestroyOnLoad(this.gameObject);
+        }
+        else
+        {
+            //만약 씬 이동이 되었는데 그 씬에도 Hierarchy에 GameMgr이 존재할 수도 있다.
+            //그럴 경우엔 이전 씬에서 사용하던 인스턴스를 계속 사용해주는 경우가 많은 것 같다.
+            //그래서 이미 전역변수인 instance에 인스턴스가 존재한다면 자신을 삭제해준다.
+            Destroy(this.gameObject);
+        }
+    }
+
+    public static PlayerController Instance
+    {
+        get
+        {
+            if (null == instance)
+            {
+                return null;
+            }
+            return instance;
+        }
+    }
+
+
     void Start()
     {
         _spriter = GetComponent<SpriteRenderer>(); // 마찬가지로 가져오는 함수
@@ -30,26 +67,38 @@ public class PlayerController : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.UpArrow)) // 위 화살표를 입력 받았을때
             {
-                if (!Judgement()) return;
+                if(GameManager.Instance.NowStage != Stage.Lobby)
+                {
+                    if (!Judgement()) return;
+                }
                 MoveCharacter(Vector3.up);
                 _MakeFog2.UpdateFogOfWar();
             }
             else if (Input.GetKeyDown(KeyCode.DownArrow)) // 아래 화살표를 입력 받았을때
             {
-                if (!Judgement()) return;
+                if (GameManager.Instance.NowStage != Stage.Lobby)
+                {
+                    if (!Judgement()) return;
+                }
                 MoveCharacter(Vector3.down);
                 _MakeFog2.UpdateFogOfWar();
             }
             else if(Input.GetKeyDown(KeyCode.RightArrow)) // 오른쪽 화살표를 입력 받았을때
             {
-                if (!Judgement()) return;
+                if (GameManager.Instance.NowStage != Stage.Lobby)
+                {
+                    if (!Judgement()) return;
+                }
                 MoveCharacter(Vector3.right);
                 _spriter.flipX = true;
                 _MakeFog2.UpdateFogOfWar();
             }
             else if (Input.GetKeyDown(KeyCode.LeftArrow)) // 왼쪽 화살표를 입력 받았을때
             {
-                if(!Judgement()) return;
+                if (GameManager.Instance.NowStage != Stage.Lobby)
+                {
+                    if (!Judgement()) return;
+                }
                 MoveCharacter(Vector3.left);
                 _spriter.flipX = false;
                 _MakeFog2.UpdateFogOfWar();
@@ -86,10 +135,10 @@ public class PlayerController : MonoBehaviour
     {
         Vector3 Temp = transform.position + new Vector3(0, -0.5f, 0);
         RaycastHit2D hitdata = Physics2D.Raycast(Temp, vec, 1f, _layerMask);
-        // 왼쪽으로 빔을쏘는 
-        
+        // 왼쪽으로 빔을쏘는         
         if (hitdata)
         {
+            Debug.Log(hitdata.collider.name);
             if (hitdata.collider.tag == "WeedWall") // weedwall이 힛데이타에 태그로 들어왓다면
             {
                 //Debug.Log(hitdata.collider.gameObject); // 힛데이타콜라이더게임오브젝트에 대한 정보가 출력된다
@@ -109,6 +158,10 @@ public class PlayerController : MonoBehaviour
             {
                 //hitdata.collider.GetComponent<Door>().InvincibilityWall();
             }
+            else if (hitdata.collider.tag == "Stair")
+            {
+                transform.position += vec;
+            }
             //else if(hitdata.collider.tag == "적태그이름")
             //{
             //    공격에니메이션
@@ -124,6 +177,10 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public void transfromUpdate(Vector3 vec)
+    {
+        transform.position = vec;
+    }
     void Death()
     {        
         GameManager.Instance.StageFail();

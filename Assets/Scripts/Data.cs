@@ -14,23 +14,7 @@ public class Data : MonoBehaviour
 
     ItemTable _itemTable;
 
-    //스테이지 데이터
-    Stage _nowStage = Stage.Lobby;
-
-    public Stage NowStage
-    {
-        get { return _nowStage; }
-        set { _nowStage = value; }
-    }
     
-    //캐릭터 데이터
-    PlayerCharacterData _player = new PlayerCharacterData();
-    public PlayerCharacterData Player
-    {
-        get { return _player; }
-        set { _player = value; }
-    }
-
     #endregion
 
 
@@ -125,14 +109,14 @@ public class ItemTable
     public List<Item> itemTable;
 }
 
-public class PlayerCharacterData
+public class PlayerData
 {
     float _hp;
 
     public float HP
     {
         get { return _hp; }
-        set { _hp = value; }
+        set { _hp = value;}
     }
 
     float _maxHp;
@@ -148,7 +132,7 @@ public class PlayerCharacterData
     public Transform PlayerTransform
     {
         get { return _playerTransform; }
-        set { _playerTransform = value; }
+        set { _playerTransform = value; }    
     }
 
     CharacterState _state = CharacterState.Live;
@@ -185,8 +169,14 @@ public enum Stage
     Lobby = 0,
     Stage1 = 1,
     Stage2 = 2,
-    Stage3 = 3,
-    StageBoss = 4,
+}
+
+public enum floor
+{
+    f1 = 0,
+    f2 = 1,
+    f3 = 2,    
+    fBoss = 3,
 }
 
 #endregion
