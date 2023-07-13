@@ -10,6 +10,9 @@ public class GameManager : MonoBehaviour
     //스테이지 관련 지역변수들
     [SerializeField] Transform _lobbyStartPoint;
     [SerializeField] Transform _stage1StartPoint;
+    [SerializeField] Transform _stage2StartPoint;
+    [SerializeField] Transform _stage3StartPoint;
+    [SerializeField] Transform _stageBossStartPoint;
     [SerializeField] UIManeger _uiManeger;
 
     private void Awake()
@@ -229,12 +232,19 @@ public class GameManager : MonoBehaviour
                 //스테이지 배경음 설정
                 break;
             case Stage.Stage2:
+                //플레이어 위치 변경
+                Data.Instance.Player.PlayerTransform = _stage2StartPoint.transform;
+                //스테이지 배경음 설정
                 break;
             case Stage.Stage3:
+                //플레이어 위치 변경
+                Data.Instance.Player.PlayerTransform = _stage3StartPoint.transform;
+                //스테이지 배경음 설정
                 break;
-            case Stage.Stage4:
-                break;
-            case Stage.Stage5:
+            case Stage.StageBoss:
+                //플레이어 위치 변경
+                Data.Instance.Player.PlayerTransform = _stageBossStartPoint.transform;
+                //스테이지 배경음 설정
                 break;
             default:
                 break;
