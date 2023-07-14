@@ -55,11 +55,6 @@ public class Data : MonoBehaviour
             return instance;
         }
     }
-
-    void PlayerInit()
-    {
-        //로드해온 플레이어 데이터 입력
-    }
     
     public Item SearchItem(int itemID)
     {

@@ -94,9 +94,10 @@ public class GameManager : MonoBehaviour
         //임시 강제 수정 코드
         _nowStage = Stage.Lobby;            
         _nowFloor = floor.f1;
-        
         _StartPoint = new Vector3(-28, 0, 0);
 
+        PlayerController.Instance.MaxHP = 4;
+        PlayerController.Instance.NowHP = PlayerController.Instance.MaxHP;
     }
 
     // Update is called once per frame
@@ -234,26 +235,29 @@ public class GameManager : MonoBehaviour
     public void StageLoad()
     {
         //페이드효과가 끝난 후 로드시작
-        //이니셜라이즈 용으로도 이용
 
-        //플레이어의 상태 초기화?        
+        //플레이어의 상태 초기화
+        if (PlayerController.Instance.IsLive == false)
+        {
+            PlayerController.Instance.IsLive = true;
+            PlayerController.Instance.NowHP = PlayerController.Instance.MaxHP;
+        }
 
+        //초기화 및 로드
+        resetNote();
+        //스테이지 배경음 설정
         switch (_nowStage)
         {
             case Stage.Lobby:
                 switch (_nowFloor)
                 {
                     case floor.f1:
-                        
                         break;
-                    case floor.f2: 
-                    case floor.f3: 
+                    case floor.f2:
+                    case floor.f3:
                     case floor.fBoss:
-                        //여기서 예외처리
                         break;
                 }
-                
-                //스테이지 배경음 설정
                 break;
             case Stage.Stage1:
                 switch (_nowFloor)
@@ -263,10 +267,8 @@ public class GameManager : MonoBehaviour
                     case floor.f2:
                     case floor.f3:
                     case floor.fBoss:
-                        //여기서 예외처리
                         break;
                 }
-                //스테이지 배경음 설정
                 break;
             case Stage.Stage2:
                 switch (_nowFloor)
@@ -276,10 +278,8 @@ public class GameManager : MonoBehaviour
                     case floor.f2:
                     case floor.f3:
                     case floor.fBoss:
-                        //여기서 예외처리
                         break;
                 }
-                //스테이지 배경음 설정
                 break;
         }
         
@@ -297,7 +297,6 @@ public class GameManager : MonoBehaviour
 
     public void StageStart()
     {
-        resetNote();
         //페이드아웃이 끝난 후 노래,비트 시작
         //스테이지에 맞는 bpm설정
         switch (_nowStage)
@@ -316,6 +315,8 @@ public class GameManager : MonoBehaviour
     public void StageFail()
     {
         //실패시 캐릭터를 죽음
+        PlayerController.Instance.IsLive = false;
+        PlayerController.Instance.NowHP = 0;
 
         //노래와 비트 중지
         resetNote();
@@ -326,6 +327,12 @@ public class GameManager : MonoBehaviour
     }
 
     #endregion
+
+    public void PlayerHPUpdate()
+    {
+        //유아이호출
+        //체력변경사항 저장 -> 데이터 세이브데이터 쪽 수정
+    }
 }
 
 

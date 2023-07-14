@@ -11,22 +11,36 @@ public class PlayerController : MonoBehaviour
     MakeFog2 _MakeFog2;
 
     int shovelPower = 1;
-    bool isLive = true;
+    
     bool _isSuccess = true;
     bool _isDubbleClick = true;
 
     //캐릭터 데이터
-    float _nowHp;
+    bool _isLive = true;
+    public bool IsLive
+    {
+        get { return _isLive; }
+        set { _isLive = value; }
+    }
 
-    float NowHP
+    float _nowHp;
+    public float NowHP
     {
         get { return _nowHp; }
-        set { _nowHp = value; }      
+        set 
+        {
+            _nowHp = value;
+            GameManager.Instance.PlayerHPUpdate();
+            if (_nowHp <= 0)
+            {
+                _isLive = false;
+                GameManager.Instance.StageFail();
+            }
+        }      
     }
 
     float _maxHP;
-
-    float MaxHP
+    public float MaxHP
     {
         get { return _maxHP; }
         set { _maxHP = value; }
