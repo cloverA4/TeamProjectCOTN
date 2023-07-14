@@ -9,21 +9,32 @@ using UnityEngine.UIElements;
 
 public class Wall : MonoBehaviour
 {
+    Sprite _normalWall;
     Sprite _attackedWall;
     int _hp;
+    int _WallMaxHp = 2;
     LayerMask objectLayer;
+    
     //public GameObject _gameObject;
 
 
     private SpriteRenderer _spriteRenderer;
     void Start()
     {
-        _hp = 2;
+        _hp = _WallMaxHp;
         _spriteRenderer = GetComponent<SpriteRenderer>();
         GetComponent<SpriteRenderer>().sortingOrder = (int)(transform.position.y + 0.8f) * -1;
         _attackedWall = Resources.Load<Sprite>("Wall/isometric_pixel_flat_0074");
         Debug.Log(transform.position.y);
+    }
 
+    
+
+    public void WallReset()
+    {
+        _hp = _WallMaxHp;
+        _normalWall = Resources.Load<Sprite>("Wall/WeedWallVer3");
+        gameObject.SetActive(true);
     }
 
     public void DamageWall(int ADWall)

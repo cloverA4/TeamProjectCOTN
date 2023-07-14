@@ -287,6 +287,7 @@ public class GameManager : MonoBehaviour
         PlayerController.Instance.transfromUpdate(_StartPoint);
 
         //벽 로드(부서진 벽 등 전부 리셋)
+        GameObject.Find("WallAndDoorManager").GetComponent<WallAndDoorManager>().ResetWallAndDoor();
         //몬스터 로드(몬스터 풀 만들고, 현재 생성된 몬스터 다 초기화 후 새로 스폰)
         //아이템 로드(기획 후 작업)
         //재화 초기화
