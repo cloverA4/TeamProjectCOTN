@@ -25,7 +25,15 @@ public class UIManeger : MonoBehaviour
 
     [SerializeField] GameObject NotePrefab;
     [SerializeField] GameObject NotesPool;
+
     [SerializeField] Image _fade;
+
+    [SerializeField] GameObject _lobbyButton;
+    [SerializeField] GameObject _retryButton;
+    [SerializeField] GameObject _lobbyText;
+    [SerializeField] GameObject _lobbyCheckMask;
+    [SerializeField] GameObject _retryText;
+    [SerializeField] GameObject _retryCheckMask;
     private void Update()
     {
         
@@ -163,6 +171,78 @@ public class UIManeger : MonoBehaviour
         GameManager.Instance.StageStart();
     }
 
+
+    #endregion
+
+    #region Lobby and Retry UI
+
+    enum LobbyAndRetry
+    {
+        Lobby,
+        Retry,
+    }
+    
+    LobbyAndRetry lar = new LobbyAndRetry();
+
+    public void ArrowUpdate()
+    {
+        
+    }
+
+    void GoLobby(LobbyAndRetry lar)
+    {
+        if (lar == LobbyAndRetry.Lobby)
+        {
+
+        }
+        else if (lar == LobbyAndRetry.Retry)
+        {
+
+        }
+        else return;
+    }
+
+    public void SelectLobbyButton()
+    {
+        if (_lobbyButton.GetComponent<Toggle>().isOn == true)
+        {
+            _lobbyText.SetActive(false);
+            _lobbyCheckMask.SetActive(true);
+
+            if(Input.GetKeyDown(KeyCode.KeypadEnter))
+            {
+                lar = LobbyAndRetry.Lobby;
+                GoLobby(lar);
+            }
+        }
+        else
+        {
+            _lobbyText.SetActive(true);
+            _lobbyCheckMask.SetActive(false);
+        }
+    }
+
+
+    public void SelectRetryButton()
+    {
+
+        if (_retryButton.GetComponent<Toggle>().isOn == true)
+        {
+            _retryText.SetActive(false);
+            _retryCheckMask.SetActive(true);
+            if (Input.GetKeyDown(KeyCode.KeypadEnter))
+            {
+                lar = LobbyAndRetry.Retry;
+                GoLobby(lar);
+            }
+
+        }
+        else
+        {
+            _retryText.SetActive(true);
+            _retryCheckMask.SetActive(false);
+        }
+    }
 
     #endregion
 }
