@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 21216776}
   - component: {fileID: 882136420498852450}
   - component: {fileID: 4726084038931832396}
-  m_Layer: 11
+  m_Layer: 20
   m_Name: BedRock
   m_TagString: BadRock
   m_Icon: {fileID: 0}

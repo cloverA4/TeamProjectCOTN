@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7933249609988124550}
   - component: {fileID: 7933249609988124551}
   - component: {fileID: 7933249609988124548}
-  m_Layer: 0
+  m_Layer: 20
   m_Name: DownStairLeft
   m_TagString: Untagged
   m_Icon: {fileID: 0}

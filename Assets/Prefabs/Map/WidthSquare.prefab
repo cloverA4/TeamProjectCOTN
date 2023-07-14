@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4711340047464132854}
   - component: {fileID: 4711340047464132853}
   - component: {fileID: 6758870357452221651}
-  m_Layer: 0
+  m_Layer: 20
   m_Name: WidthSquare
   m_TagString: Door
   m_Icon: {fileID: 0}
