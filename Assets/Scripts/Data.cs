@@ -1,12 +1,6 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Numerics;
-using System.Security.Cryptography;
-using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
-using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class Data : MonoBehaviour
 {
@@ -109,41 +103,23 @@ public class ItemTable
     public List<Item> itemTable;
 }
 
-public class PlayerData
+public class SaveDataList
 {
-    float _hp;
+    List<SaveData> _saveList = new List<SaveData>();
+}
+public class SaveData
+{
+    //플레이어 저장
+    float _nowHP;
+    float _maxHP;
+    Vector3 _nowPosition = Vector3.zero;
 
-    public float HP
+    public SaveData(float NowHP, float MaxHP, Vector3 vec)
     {
-        get { return _hp; }
-        set { _hp = value;}
+        _nowHP = NowHP;
+        _maxHP = MaxHP;
+        _nowPosition = vec;
     }
-
-    float _maxHp;
-
-    public float MaxHP
-    {
-        get { return _maxHp; }
-        set { _maxHp = value; }
-    }
-
-    Transform _playerTransform;
-
-    public Transform PlayerTransform
-    {
-        get { return _playerTransform; }
-        set { _playerTransform = value; }    
-    }
-
-    CharacterState _state = CharacterState.Live;
-
-    public CharacterState State 
-    {
-        get { return _state; }
-        set { _state = value; }
-    }
-
-    List<Item> _equpedItemList = new List<Item>();
 }
 
 #endregion

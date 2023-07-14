@@ -16,14 +16,14 @@ public class Note : MonoBehaviour
         //판정선
         if (_judgemonet == null) _judgemonet = GameObject.Find("Judgement").GetComponent<RectTransform>();
         //시작위치
-        rec.anchoredPosition = new Vector3(1000, -490, 0);
+        rec.anchoredPosition = new Vector3(1000, -450, 0);
 
         gameObject.SetActive(false);
     }
 
     public void PlayNote()
     {
-        rec.anchoredPosition = new Vector3(1000, -490, 0);
+        rec.anchoredPosition = new Vector3(1000, -450, 0);
         gameObject.SetActive(true);
     }
 

@@ -16,12 +16,22 @@ public class PlayerController : MonoBehaviour
     bool _isDubbleClick = true;
 
     //캐릭터 데이터
-    PlayerData _player = new PlayerData();
-    public PlayerData Player
+    float _nowHp;
+
+    float NowHP
     {
-        get { return _player; }
-        set { _player = value; }
+        get { return _nowHp; }
+        set { _nowHp = value; }      
     }
+
+    float _maxHP;
+
+    float MaxHP
+    {
+        get { return _maxHP; }
+        set { _maxHP = value; }
+    }
+    
 
     private void Awake()
     {

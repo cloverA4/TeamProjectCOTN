@@ -86,7 +86,7 @@ public class GameManager : MonoBehaviour
         // 로드전에 초기화
         InitGameData();
         // 로드시작
-        FaidIn();
+        StageLoad();
     }
 
     void InitGameData()
@@ -102,21 +102,7 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        /*
-        if (Input.GetMouseButtonDown(0))
-        {
-            //스테이지1 시작을 가정하고 - 여기서 사운드오픈 및 노트생성 테스트
-            StartCoroutine(Metronom());
-            StartCoroutine(StartMusic());
-        }
-        if (Input.GetMouseButtonDown(1))
-        {
-            //스테이지1 시작을 가정하고 - 여기서 사운드오픈 및 노트생성 테스트
-            resetNote();
-            StopCoroutine(Metronom());
-            StopCoroutine(StartMusic());
-        }
-        */
+
     }
 
     #region 비트
@@ -311,6 +297,7 @@ public class GameManager : MonoBehaviour
 
     public void StageStart()
     {
+        resetNote();
         //페이드아웃이 끝난 후 노래,비트 시작
         //스테이지에 맞는 bpm설정
         switch (_nowStage)
