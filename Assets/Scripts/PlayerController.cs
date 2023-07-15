@@ -96,7 +96,11 @@ public class PlayerController : MonoBehaviour
                     if (!Judgement()) return;
                 }
                 MoveCharacter(Vector3.up);
-                _MakeFog2.UpdateFogOfWar();
+                if ((GameManager.Instance.NowStage == Stage.Stage1) && 
+                    (GameManager.Instance.NowFloor == floor.f1) )
+                {
+                    _MakeFog2.Stage1F1UpdateFogOfWar();
+                }
             }
             else if (Input.GetKeyDown(KeyCode.DownArrow)) // 아래 화살표를 입력 받았을때
             {
@@ -105,7 +109,11 @@ public class PlayerController : MonoBehaviour
                     if (!Judgement()) return;
                 }
                 MoveCharacter(Vector3.down);
-                _MakeFog2.UpdateFogOfWar();
+                if ((GameManager.Instance.NowStage == Stage.Stage1) &&
+                    (GameManager.Instance.NowFloor == floor.f1))
+                {
+                    _MakeFog2.Stage1F1UpdateFogOfWar();
+                }
             }
             else if(Input.GetKeyDown(KeyCode.RightArrow)) // 오른쪽 화살표를 입력 받았을때
             {
@@ -115,7 +123,11 @@ public class PlayerController : MonoBehaviour
                 }
                 MoveCharacter(Vector3.right);
                 _spriter.flipX = true;
-                _MakeFog2.UpdateFogOfWar();
+                if ((GameManager.Instance.NowStage == Stage.Stage1) &&
+                    (GameManager.Instance.NowFloor == floor.f1))
+                {
+                    _MakeFog2.Stage1F1UpdateFogOfWar();
+                }
             }
             else if (Input.GetKeyDown(KeyCode.LeftArrow)) // 왼쪽 화살표를 입력 받았을때
             {
@@ -125,7 +137,11 @@ public class PlayerController : MonoBehaviour
                 }
                 MoveCharacter(Vector3.left);
                 _spriter.flipX = false;
-                _MakeFog2.UpdateFogOfWar();
+                if ((GameManager.Instance.NowStage == Stage.Stage1) &&
+                    (GameManager.Instance.NowFloor == floor.f1))
+                {
+                    _MakeFog2.Stage1F1UpdateFogOfWar();
+                }
             }
         }
     }
@@ -178,12 +194,17 @@ public class PlayerController : MonoBehaviour
                 
 
             }
-            else if (hitdata.collider.tag == "BadRock") // weedwall이 힛데이타에 태그로 들어왓다면
+            else if (hitdata.collider.tag == "BadRock") // BadRock이 힛데이타에 태그로 들어왓다면
+            {
+                //hitdata.collider.GetComponent<Door>().InvincibilityWall();
+            }
+            else if (hitdata.collider.tag == "ShopWall") // ShopWall이 힛데이타에 태그로 들어왓다면
             {
                 //hitdata.collider.GetComponent<Door>().InvincibilityWall();
             }
             else if (hitdata.collider.tag == "Stair")
             {
+                //
                 transform.position += vec;
             }
             //else if(hitdata.collider.tag == "적태그이름")

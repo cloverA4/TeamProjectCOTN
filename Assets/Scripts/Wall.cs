@@ -12,18 +12,20 @@ public class Wall : MonoBehaviour
     Sprite _normalWall;
     Sprite _attackedWall;
     int _hp;
-    int _WallMaxHp = 2;
-    LayerMask objectLayer;
-    
+    int _wallMaxHp = 2;
+
+    private SpriteRenderer _spriteRenderer;
+    //LayerMask objectLayer;
     //public GameObject _gameObject;
 
 
-    private SpriteRenderer _spriteRenderer;
+
     void Start()
     {
-        _hp = _WallMaxHp;
+        _hp = _wallMaxHp;
         _spriteRenderer = GetComponent<SpriteRenderer>();
-        GetComponent<SpriteRenderer>().sortingOrder = (int)(transform.position.y + 0.8f) * -1;
+        GetComponent<SpriteRenderer>().sortingOrder = (int)(transform.position.y+100) *-2;
+
         _attackedWall = Resources.Load<Sprite>("Wall/isometric_pixel_flat_0074");
         Debug.Log(transform.position.y);
     }
@@ -32,8 +34,9 @@ public class Wall : MonoBehaviour
 
     public void WallReset()
     {
-        _hp = _WallMaxHp;
         _normalWall = Resources.Load<Sprite>("Wall/WeedWallVer3");
+        _spriteRenderer.sprite = _normalWall;
+        _hp = _wallMaxHp;
         gameObject.SetActive(true);
     }
 

@@ -263,6 +263,9 @@ public class GameManager : MonoBehaviour
                 switch (_nowFloor)
                 {
                     case floor.f1:
+                        GameObject.Find("Fog/FogArea").GetComponent<MakeFog2>().ResetFog();
+                        PlayerController.Instance.transfromUpdate(_StartPoint);
+                        GameObject.Find("Fog/FogArea").GetComponent<MakeFog2>().Stage1F1UpdateFogOfWar();
                         break;
                     case floor.f2:
                     case floor.f3:
@@ -285,9 +288,17 @@ public class GameManager : MonoBehaviour
         
         //플레이어 위치 변경
         PlayerController.Instance.transfromUpdate(_StartPoint);
-
+        
         //벽 로드(부서진 벽 등 전부 리셋)
         GameObject.Find("WallAndDoorManager").GetComponent<WallAndDoorManager>().ResetWallAndDoor();
+
+        //안개초기화 및 위치 변경 ,스테이지 이동 후 플레이어 주변으로 안개 걷음
+        //GameObject.Find("Fog/FogArea").GetComponent<MakeFog2>().ResetFog();
+        //GameObject.Find("Fog/FogArea").GetComponent<MakeFog2>().Stage1F1UpdateFogOfWar();
+        
+
+
+
         //몬스터 로드(몬스터 풀 만들고, 현재 생성된 몬스터 다 초기화 후 새로 스폰)
         //아이템 로드(기획 후 작업)
         //재화 초기화

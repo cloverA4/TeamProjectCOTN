@@ -9,6 +9,7 @@ TagManager:
   - BadRock
   - Door
   - Stair
+  - ShopWall
   layers:
   - Default
   - TransparentFX

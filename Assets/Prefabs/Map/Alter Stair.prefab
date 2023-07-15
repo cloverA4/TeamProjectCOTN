@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: -5540872498159071263}
   m_Layer: 20
   m_Name: Alter Stair
-  m_TagString: Untagged
+  m_TagString: Stair
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -125,4 +125,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _nowStage: 0
-  _player: {fileID: 0}
+  _nowFloor: 0
+  _startPoint: {fileID: 0}
