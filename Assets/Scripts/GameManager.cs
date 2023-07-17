@@ -103,7 +103,17 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        if(Input.GetMouseButtonDown(0))
+        {
+            StartCoroutine(Metronom());
+            StartCoroutine(StartMusic());
+        }
+        if (Input.GetMouseButtonDown(1))
+        {
+            resetNote();
+            StopCoroutine(Metronom());
+            StopCoroutine(StartMusic());
+        }
     }
 
     #region 비트
@@ -117,7 +127,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] AudioSource _audio;
     [SerializeField] GameObject _note;
     [SerializeField] GameObject _notePool;
-    List<GameObject> _activeNoteList = new List<GameObject>();
+    List<GameObject> _rightNoteList = new List<GameObject>();
+    List<GameObject> _leftNoteList = new List<GameObject>();
     List<GameObject> _pools = new List<GameObject>();
 
     IEnumerator StartMusic()
@@ -146,8 +157,17 @@ public class GameManager : MonoBehaviour
             {
                 if (!prefab.activeSelf)
                 {
-                    prefab.GetComponent<Note>().PlayNote();
-                    _activeNoteList.Add(prefab);
+                    prefab.GetComponent<Note>().PlayNote(-1,1000);
+                    _rightNoteList.Add(prefab);
+                    break;
+                }
+            }
+            foreach (GameObject prefab in _pools)
+            {
+                if (!prefab.activeSelf)
+                {
+                    prefab.GetComponent<Note>().PlayNote(1, -1000);
+                    _leftNoteList.Add(prefab);
                     break;
                 }
             }
@@ -177,31 +197,38 @@ public class GameManager : MonoBehaviour
         {
             _pools[i].SetActive(false);
         }
-        _activeNoteList.Clear();
+        _rightNoteList.Clear();
+        _leftNoteList.Clear();
     }
 
-    public void ActiveNoteRemove(GameObject note) //활성노트 리스트에서 제거
+    public void RightNoteRemove(GameObject note) //활성노트 리스트에서 제거
     {
-        _activeNoteList.Remove(note);
+        _rightNoteList.Remove(note);
+    }
+    public void LeftNoteRemove(GameObject note) //활성노트 리스트에서 제거
+    {
+        _leftNoteList.Remove(note);
     }
 
     void DeleteJudgementNote()
     {
-        _activeNoteList[0].SetActive(false);
-        ActiveNoteRemove(_activeNoteList[0]);
+        _rightNoteList[0].SetActive(false);
+        _leftNoteList[0].SetActive(false);
+        RightNoteRemove(_rightNoteList[0]);
+        LeftNoteRemove(_leftNoteList[0]);
     }
 
     public bool IsSuccess()
     {
         bool isSuccess = false;
 
-        if (_activeNoteList.Count <= 0)
+        if (_rightNoteList.Count <= 0)
         {
             Debug.Log("실패");
             return isSuccess;
         }
 
-        RectTransform rec = _activeNoteList[0].GetComponent<RectTransform>();
+        RectTransform rec = _rightNoteList[0].GetComponent<RectTransform>();
         if (rec != null && rec.anchoredPosition.x < 200)
         {
             Debug.Log("성공");
