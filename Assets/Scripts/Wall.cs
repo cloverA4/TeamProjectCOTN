@@ -27,7 +27,6 @@ public class Wall : MonoBehaviour
         GetComponent<SpriteRenderer>().sortingOrder = (int)(transform.position.y+100) *-2;
 
         _attackedWall = Resources.Load<Sprite>("Wall/isometric_pixel_flat_0074");
-        Debug.Log(transform.position.y);
     }
 
     

@@ -99,10 +99,10 @@ public class GameManager : MonoBehaviour
         PlayerController.Instance.MaxHP = 4;
         PlayerController.Instance.NowHP = PlayerController.Instance.MaxHP;
     }
-
     // Update is called once per frame
     void Update()
     {
+        
         if(Input.GetMouseButtonDown(0))
         {
             StartCoroutine(Metronom());
@@ -114,6 +114,7 @@ public class GameManager : MonoBehaviour
             StopCoroutine(Metronom());
             StopCoroutine(StartMusic());
         }
+        
     }
 
     #region 비트
@@ -141,6 +142,7 @@ public class GameManager : MonoBehaviour
             
             if(!_audio.isPlaying)
             {
+                Debug.Log("??");
                 resetNote();
                 //죽음처리
                 yield return null;
@@ -151,13 +153,13 @@ public class GameManager : MonoBehaviour
     {
         yield return new WaitForSeconds(2);
         float beatTime = 60 / _bpm;
-        while (_audio.time <= _audio.clip.length - 1)
-        {
+        while (_audio.time <= _audio.clip.length - 1 && _audio.isPlaying)
+        {            
             foreach (GameObject prefab in _pools)
             {
                 if (!prefab.activeSelf)
                 {
-                    prefab.GetComponent<Note>().PlayNote(-1,1000);
+                    prefab.GetComponent<Note>().PlayNote(-1, 1000);
                     _rightNoteList.Add(prefab);
                     break;
                 }
@@ -171,6 +173,7 @@ public class GameManager : MonoBehaviour
                     break;
                 }
             }
+
             yield return new WaitForSeconds(beatTime);
         }
 
@@ -186,7 +189,6 @@ public class GameManager : MonoBehaviour
             go.GetComponent<Note>().Init();
             go.name = "Note" + i;
             _pools.Add(go);
-            
         }
     }
 
