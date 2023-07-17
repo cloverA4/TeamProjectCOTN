@@ -7,8 +7,6 @@ public class GameManager : MonoBehaviour
     private static GameManager instance = null;
     [SerializeField] GameObject _dropItem;
 
-    
-
     //스테이지 데이터
     Stage _nowStage = Stage.Lobby;
 
@@ -99,23 +97,15 @@ public class GameManager : MonoBehaviour
         PlayerController.Instance.MaxHP = 4;
         PlayerController.Instance.NowHP = PlayerController.Instance.MaxHP;
     }
+
+    
     // Update is called once per frame
     void Update()
     {
-        
-        if(Input.GetMouseButtonDown(0))
-        {
-            StartCoroutine(Metronom());
-            StartCoroutine(StartMusic());
-        }
-        if (Input.GetMouseButtonDown(1))
-        {
-            resetNote();
-            StopCoroutine(Metronom());
-            StopCoroutine(StartMusic());
-        }
-        
+
     }
+
+    
 
     #region 비트
 
@@ -128,9 +118,13 @@ public class GameManager : MonoBehaviour
     [SerializeField] AudioSource _audio;
     [SerializeField] GameObject _note;
     [SerializeField] GameObject _notePool;
+
     List<GameObject> _rightNoteList = new List<GameObject>();
     List<GameObject> _leftNoteList = new List<GameObject>();
     List<GameObject> _pools = new List<GameObject>();
+
+    IEnumerator mt;
+    IEnumerator sm;
 
     IEnumerator StartMusic()
     {
@@ -139,22 +133,20 @@ public class GameManager : MonoBehaviour
         while(true)
         {
             yield return new WaitForSeconds(1);
-            
-            if(!_audio.isPlaying)
+            if (!_audio.isPlaying)
             {
-                Debug.Log("??");
-                resetNote();
-                //죽음처리
-                yield return null;
+                StageFail();
+                break;
             }
         }
+        yield return null;
     }
     IEnumerator Metronom()
     {
         yield return new WaitForSeconds(2);
         float beatTime = 60 / _bpm;
-        while (_audio.time <= _audio.clip.length - 1 && _audio.isPlaying)
-        {            
+        while (_audio.time <= _audio.clip.length - 1)
+        {
             foreach (GameObject prefab in _pools)
             {
                 if (!prefab.activeSelf)
@@ -264,6 +256,7 @@ public class GameManager : MonoBehaviour
     public void StageLoad()
     {
         //페이드효과가 끝난 후 로드시작
+        
 
         //플레이어의 상태 초기화
         if (PlayerController.Instance.IsLive == false)
@@ -274,6 +267,8 @@ public class GameManager : MonoBehaviour
 
         //초기화 및 로드
         resetNote();
+        if(mt != null) StopCoroutine(mt);
+        if(sm != null) StopCoroutine(sm);
         //스테이지 배경음 설정
         switch (_nowStage)
         {
@@ -340,16 +335,32 @@ public class GameManager : MonoBehaviour
     {
         //페이드아웃이 끝난 후 노래,비트 시작
         //스테이지에 맞는 bpm설정
+        
+
+        
         switch (_nowStage)
         {
             case Stage.Lobby:
                 break;
                 case Stage.Stage1:
                 case Stage.Stage2:
-                StartCoroutine(Metronom());
+
+                if (mt != null)
+                {
+                    StopCoroutine(mt);
+                }
+                mt = Metronom();
+                StartCoroutine(mt);
+
                 break;
         }
-        StartCoroutine(StartMusic());
+
+        if (sm != null)
+        {
+            StopCoroutine(sm);
+        }
+        sm = StartMusic();
+        StartCoroutine(sm);
     }
 
 
@@ -361,8 +372,8 @@ public class GameManager : MonoBehaviour
 
         //노래와 비트 중지
         resetNote();
-        StopCoroutine(Metronom());
-        StopCoroutine(StartMusic());
+        if (mt != null) StopCoroutine(mt);
+        if (sm != null) StopCoroutine(sm);
 
         //UI호출 - 스테이지 재시작, 로비이동, 다시보기 선택할수있게끔.
     }

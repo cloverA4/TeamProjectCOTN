@@ -178,7 +178,6 @@ public class PlayerController : MonoBehaviour
         // 왼쪽으로 빔을쏘는         
         if (hitdata)
         {
-            Debug.Log(hitdata.collider.name);
             if (hitdata.collider.tag == "WeedWall") // weedwall이 힛데이타에 태그로 들어왓다면
             {
                 //Debug.Log(hitdata.collider.gameObject); // 힛데이타콜라이더게임오브젝트에 대한 정보가 출력된다
