@@ -28,15 +28,16 @@ public class UIManeger : MonoBehaviour
 
     [SerializeField] Image _fade;
 
-    [SerializeField] GameObject _lobbyButton;
-    [SerializeField] GameObject _retryButton;
-    [SerializeField] GameObject _lobbyText;
-    [SerializeField] GameObject _lobbyCheckMask;
-    [SerializeField] GameObject _retryText;
-    [SerializeField] GameObject _retryCheckMask;
+    [SerializeField] GameObject _goLobbyUI;
+    [SerializeField] GameObject _lobbyToggle;
+    [SerializeField] GameObject _retryToggle;
     private void Update()
     {
-        
+        if (Input.GetMouseButtonDown(0))
+        {
+            StartGoLobbyUI();
+            //SelectToggle();
+        }
     }
 
 
@@ -44,6 +45,7 @@ public class UIManeger : MonoBehaviour
 
     private void Start()
     {
+        endGoLobbyUI();
         setMaxHP();
     }
     #region HP
@@ -176,6 +178,16 @@ public class UIManeger : MonoBehaviour
 
     #region Lobby and Retry UI
 
+    public void endGoLobbyUI()
+    {
+        _goLobbyUI.SetActive(false);
+    }
+
+    public void StartGoLobbyUI()
+    {
+        _goLobbyUI.SetActive(true);
+    }
+
     enum LobbyAndRetry
     {
         Lobby,
@@ -183,11 +195,6 @@ public class UIManeger : MonoBehaviour
     }
     
     LobbyAndRetry lar = new LobbyAndRetry();
-
-    public void ArrowUpdate()
-    {
-        
-    }
 
     void GoLobby(LobbyAndRetry lar)
     {
@@ -202,47 +209,21 @@ public class UIManeger : MonoBehaviour
         else return;
     }
 
-    public void SelectLobbyButton()
+    public void SelectToggle()
     {
-        if (_lobbyButton.GetComponent<Toggle>().isOn == true)
+        if(_lobbyToggle.GetComponent<Toggle>().isOn == true)
         {
-            _lobbyText.SetActive(false);
-            _lobbyCheckMask.SetActive(true);
-
-            if(Input.GetKeyDown(KeyCode.KeypadEnter))
-            {
-                lar = LobbyAndRetry.Lobby;
-                GoLobby(lar);
-            }
+            _lobbyToggle.transform.Find("LobbyCheck").gameObject.SetActive(true);
+            _lobbyToggle.transform.Find("LobbyText").gameObject.SetActive(false);
         }
         else
         {
-            _lobbyText.SetActive(true);
-            _lobbyCheckMask.SetActive(false);
+            _retryToggle.transform.Find("RetryCheck").gameObject.SetActive(true);
+            _retryToggle.transform.Find("RetryText").gameObject.SetActive(false);
         }
     }
 
 
-    public void SelectRetryButton()
-    {
-
-        if (_retryButton.GetComponent<Toggle>().isOn == true)
-        {
-            _retryText.SetActive(false);
-            _retryCheckMask.SetActive(true);
-            if (Input.GetKeyDown(KeyCode.KeypadEnter))
-            {
-                lar = LobbyAndRetry.Retry;
-                GoLobby(lar);
-            }
-
-        }
-        else
-        {
-            _retryText.SetActive(true);
-            _retryCheckMask.SetActive(false);
-        }
-    }
 
     #endregion
 }

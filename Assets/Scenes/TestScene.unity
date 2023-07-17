@@ -1427,12 +1427,9 @@ MonoBehaviour:
   NotePrefab: {fileID: 0}
   NotesPool: {fileID: 0}
   _fade: {fileID: 422776299}
-  _lobbyButton: {fileID: 970032805}
-  _retryButton: {fileID: 79805441}
-  _lobbyText: {fileID: 1789221548}
-  _lobbyCheckMask: {fileID: 1082568862}
-  _retryText: {fileID: 1895818958}
-  _retryCheckMask: {fileID: 627609822}
+  _goLobbyUI: {fileID: 1158566123}
+  _lobbyToggle: {fileID: 970032805}
+  _retryToggle: {fileID: 79805441}
 --- !u!114 &890520543
 MonoBehaviour:
   m_ObjectHideFlags: 0
