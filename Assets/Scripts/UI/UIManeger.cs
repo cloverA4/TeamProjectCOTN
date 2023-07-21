@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using static UnityEditor.Progress;
@@ -31,13 +32,21 @@ public class UIManeger : MonoBehaviour
     [SerializeField] GameObject _goLobbyUI;
     [SerializeField] GameObject _lobbyToggle;
     [SerializeField] GameObject _retryToggle;
+    [SerializeField] GameObject _replayToggle;
+
+    [SerializeField] GameObject _alarmUI;
+    [SerializeField] GameObject _useDiamondToggle;
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if(_goLobbyUI == true)
         {
-            StartGoLobbyUI();
-            //SelectToggle();
+            GoLobbyArrow();
         }
+        if(_alarmUI== true)
+        {
+            //AlarmArrow();
+        }
+
     }
 
 
@@ -180,7 +189,7 @@ public class UIManeger : MonoBehaviour
 
     public void endGoLobbyUI()
     {
-        //_goLobbyUI.SetActive(false);
+        _goLobbyUI.SetActive(false);
     }
 
     public void StartGoLobbyUI()
@@ -208,22 +217,137 @@ public class UIManeger : MonoBehaviour
         }
         else return;
     }
-
-    public void SelectToggle()
+    int goLobbycount = 1;
+    public void GoLobbyArrow()
     {
-        if(_lobbyToggle.GetComponent<Toggle>().isOn == true)
+        if (Input.GetKeyDown(KeyCode.DownArrow))
         {
-            _lobbyToggle.transform.Find("LobbyCheck").gameObject.SetActive(true);
-            _lobbyToggle.transform.Find("LobbyText").gameObject.SetActive(false);
+            goLobbycount++;
+            if (goLobbycount > 3)
+            {
+                goLobbycount = 1;
+            }
+            if (goLobbycount < 1)
+            {
+                goLobbycount = 3;
+            }
+
         }
-        else
+        if (Input.GetKeyDown(KeyCode.UpArrow))
         {
-            _retryToggle.transform.Find("RetryCheck").gameObject.SetActive(true);
-            _retryToggle.transform.Find("RetryText").gameObject.SetActive(false);
+            goLobbycount--;
+            if (goLobbycount > 3)
+            {
+                goLobbycount = 1;
+            }
+            if (goLobbycount < 1)
+            {
+                goLobbycount = 3;
+            }
+        }
+
+        switch (goLobbycount)
+        {
+            case 1:
+                _lobbyToggle.GetComponent<Toggle>().isOn = true;
+                break;
+            case 2:
+                _retryToggle.GetComponent<Toggle>().isOn = true;
+                break;
+            case 3:
+                _replayToggle.GetComponent<Toggle>().isOn = true;
+                break;
+            default:
+                 break;
         }
     }
+    public void SelectLobby()
+    {
+        _lobbyToggle.GetComponent<LobbyToggle>().OnCheck();
+        _retryToggle.GetComponent<RetryToggle>().OffCheck();
+        _replayToggle.GetComponent<RePlayToggle>().OffCheck();
+    }
+
+    public void SelectRetry()
+    {
+        _lobbyToggle.GetComponent<LobbyToggle>().OffCheck();
+        _retryToggle.GetComponent<RetryToggle>().OnCheck();
+        _replayToggle.GetComponent<RePlayToggle>().OffCheck();
+
+        if (_useDiamondToggle.GetComponent<Toggle>().isOn == true)
+        {
+            _useDiamondToggle.GetComponent<UseDiamondToggle>().OffCheck();
+        }
+
+    }
+
+    public void SelectReplay()
+    {
+        _lobbyToggle.GetComponent<LobbyToggle>().OffCheck();
+        _retryToggle.GetComponent<RetryToggle>().OffCheck();
+        _replayToggle.GetComponent<RePlayToggle>().OnCheck();
+    }
+
+    
 
 
+    #endregion
+
+    #region Alarm UI
+    public void StartAlarmUI()
+    {
+        _alarmUI.SetActive(true);
+    }
+    public void EndAlarmUI()
+    {
+        _alarmUI.SetActive(false);
+    }
+
+    public void SelectUseDiamond()
+    {
+        //_useDiamondToggle.GetComponent<UseDiamondToggle>().OnCheck();
+        //_replayToggle.GetComponent <RetryToggle>().OffCheck();
+    }
+
+    int alarmCount = 1;
+    //public void AlarmArrow()
+    //{
+    //    if (Input.GetKeyDown(KeyCode.DownArrow))
+    //    {
+    //        alarmCount++;
+    //        if (alarmCount < 1)
+    //        {
+    //            alarmCount = 2;
+    //        }
+    //        if (alarmCount > 2)
+    //        {
+    //            alarmCount = 1;
+    //        }
+    //    }
+    //    if (Input.GetKeyDown(KeyCode.UpArrow))
+    //    {
+    //        alarmCount--;
+    //        if(alarmCount < 1)
+    //        {
+    //            alarmCount = 2;
+    //        }
+    //        if (alarmCount > 2)
+    //        {
+    //            alarmCount = 1;
+    //        }
+    //    }
+    //    switch (alarmCount)
+    //    {
+    //        case 1:
+    //            _useDiamondToggle.GetComponent<Toggle>().isOn = true;
+    //            break;
+    //        case 2:
+    //            _retryToggle.GetComponent<Toggle>().isOn = true;
+    //            break;
+    //        default:
+    //            break;
+    //    }
+    //}
 
     #endregion
 }
