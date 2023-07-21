@@ -12,7 +12,7 @@ public class Note : MonoBehaviour
 
     public void Init()
     {
-        _speed = 1000;
+        _speed = 500;
         rec = GetComponent<RectTransform>();
         //ÆÇÁ¤¼±
         if (_judgemonet == null) _judgemonet = GameObject.Find("Judgement").GetComponent<RectTransform>();

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class GameManager : MonoBehaviour
 {
@@ -9,6 +10,7 @@ public class GameManager : MonoBehaviour
 
     //스테이지 데이터
     Stage _nowStage = Stage.Lobby;
+    StageStartPosition _stageStartPosition = new StageStartPosition();
 
     public Stage NowStage
     {
@@ -22,15 +24,6 @@ public class GameManager : MonoBehaviour
     {
         get { return _nowFloor; }
         set { _nowFloor = value; }
-    }
-
-    //스테이지 관련 지역변수들
-    Vector3 _StartPoint;
-
-    public Vector3 StartPoint
-    {
-        get { return _StartPoint; }
-        set { _StartPoint = value; }
     }
 
     [SerializeField] UIManeger _uiManeger;
@@ -84,7 +77,7 @@ public class GameManager : MonoBehaviour
         // 로드전에 초기화
         InitGameData();
         // 로드시작
-        StageLoad();
+        StageLoad();        
     }
 
     void InitGameData()
@@ -92,7 +85,6 @@ public class GameManager : MonoBehaviour
         //임시 강제 수정 코드
         _nowStage = Stage.Lobby;            
         _nowFloor = floor.f1;
-        _StartPoint = new Vector3(-28, 0, 0);
 
         PlayerController.Instance.MaxHP = 4;
         PlayerController.Instance.NowHP = PlayerController.Instance.MaxHP;
@@ -143,7 +135,7 @@ public class GameManager : MonoBehaviour
     }
     IEnumerator Metronom()
     {
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(1);
         float beatTime = 60 / _bpm;
         while (_audio.time <= _audio.clip.length - 1)
         {
@@ -165,7 +157,8 @@ public class GameManager : MonoBehaviour
                     break;
                 }
             }
-
+            //몬스터 이동
+            MosterMoveEnvent?.Invoke(this, EventArgs.Empty);
             yield return new WaitForSeconds(beatTime);
         }
 
@@ -276,6 +269,7 @@ public class GameManager : MonoBehaviour
                 switch (_nowFloor)
                 {
                     case floor.f1:
+                        PlayerController.Instance.transfromUpdate(_stageStartPosition.LobbyPosition);                        
                         break;
                     case floor.f2:
                     case floor.f3:
@@ -286,13 +280,17 @@ public class GameManager : MonoBehaviour
             case Stage.Stage1:
                 switch (_nowFloor)
                 {
-                    case floor.f1:
+                    case floor.f1:                        
+                        PlayerController.Instance.transfromUpdate(_stageStartPosition.Stage1F1);
                         GameObject.Find("Fog/FogArea").GetComponent<MakeFog2>().ResetFog();
-                        PlayerController.Instance.transfromUpdate(_StartPoint);
                         GameObject.Find("Fog/FogArea").GetComponent<MakeFog2>().Stage1F1UpdateFogOfWar();
                         break;
                     case floor.f2:
+                        PlayerController.Instance.transfromUpdate(_stageStartPosition.Stage1F2);
+                        break;
                     case floor.f3:
+                        PlayerController.Instance.transfromUpdate(_stageStartPosition.Stage1F3);
+                        break;
                     case floor.fBoss:
                         break;
                 }
@@ -308,10 +306,7 @@ public class GameManager : MonoBehaviour
                         break;
                 }
                 break;
-        }
-        
-        //플레이어 위치 변경
-        PlayerController.Instance.transfromUpdate(_StartPoint);
+        }      
         
         //벽 로드(부서진 벽 등 전부 리셋)
         GameObject.Find("WallAndDoorManager").GetComponent<WallAndDoorManager>().ResetWallAndDoor();
@@ -380,6 +375,14 @@ public class GameManager : MonoBehaviour
 
     #endregion
 
+
+    #region 몬스터 제어
+    public event EventHandler MosterMoveEnvent; // 이벤트 정의
+
+    //몬스터 풀링/스폰 구현
+    //몬스터 ai 구현(종류별로 하나씩 추가)
+    
+    #endregion
     public void PlayerHPUpdate()
     {
         //유아이호출
@@ -390,7 +393,7 @@ public class GameManager : MonoBehaviour
 
 
 
-/*
+/* //심장 커졌다 작아졌다 하게 만드는 코드
 public class Pulse : MonoBehaviour
 {
     [SerializeField] float _pulseSize = 1.5f;

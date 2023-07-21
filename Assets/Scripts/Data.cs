@@ -66,6 +66,14 @@ public class Data : MonoBehaviour
 
 #region Data 클래스들 모음
 
+public class StageStartPosition
+{
+    public Vector3 LobbyPosition = new Vector3(-28, 100, 0);
+    public Vector3 Stage1F1 = new Vector3(-0, 100, 0);
+    public Vector3 Stage1F2 = new Vector3(54, 108, 0);
+    public Vector3 Stage1F3 = new Vector3(111, 92, 0);
+}
+
 [Serializable]
 public class Item
 {
