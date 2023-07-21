@@ -69,9 +69,9 @@ public class Data : MonoBehaviour
 public class StageStartPosition
 {
     public Vector3 LobbyPosition = new Vector3(-28, 100, 0);
-    public Vector3 Stage1F1 = new Vector3(-0, 100, 0);
-    public Vector3 Stage1F2 = new Vector3(54, 108, 0);
-    public Vector3 Stage1F3 = new Vector3(111, 92, 0);
+    public Vector3 Stage1F1 = new Vector3(-0, 99, 0);
+    public Vector3 Stage1F2 = new Vector3(55, 108, 0);
+    public Vector3 Stage1F3 = new Vector3(112, 92, 0);
 }
 
 [Serializable]
