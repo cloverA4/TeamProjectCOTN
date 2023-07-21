@@ -54,7 +54,6 @@ public class UIManeger : MonoBehaviour
 
     private void Start()
     {
-        endGoLobbyUI();
         setMaxHP();
     }
     #region HP
@@ -189,12 +188,12 @@ public class UIManeger : MonoBehaviour
 
     public void endGoLobbyUI()
     {
-        _goLobbyUI.SetActive(false);
+        //_goLobbyUI.SetActive(false);
     }
 
     public void StartGoLobbyUI()
     {
-        _goLobbyUI.SetActive(true);
+        //_goLobbyUI.SetActive(true);
     }
 
     enum LobbyAndRetry
