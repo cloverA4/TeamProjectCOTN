@@ -14,7 +14,7 @@ public class Door : MonoBehaviour
     void Start()
     {
         _wallCount = _WallCountReset;
-        GetComponent<SpriteRenderer>().sortingOrder = (int)(transform.position.y + 100) * -2; // y의 위치를 확인하고 이미지를 정렬시켜주는 구문     
+        GetComponent<SpriteRenderer>().sortingOrder = (int)transform.position.y * -1; // y의 위치를 확인하고 이미지를 정렬시켜주는 구문     
     }
 
     public void DoorReset()

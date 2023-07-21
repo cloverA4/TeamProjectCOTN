@@ -180,7 +180,7 @@ public class UIManeger : MonoBehaviour
 
     public void endGoLobbyUI()
     {
-        _goLobbyUI.SetActive(false);
+        //_goLobbyUI.SetActive(false);
     }
 
     public void StartGoLobbyUI()

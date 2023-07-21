@@ -81,6 +81,7 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         _spriter = GetComponent<SpriteRenderer>(); // 마찬가지로 가져오는 함수
+        
     }
 
     // Update is called once per frame
@@ -109,6 +110,7 @@ public class PlayerController : MonoBehaviour
                     if (!Judgement()) return;
                 }
                 MoveCharacter(Vector3.down);
+
                 if ((GameManager.Instance.NowStage == Stage.Stage1) &&
                     (GameManager.Instance.NowFloor == floor.f1))
                 {
@@ -175,6 +177,8 @@ public class PlayerController : MonoBehaviour
     {
         Vector3 Temp = transform.position + new Vector3(0, -0.5f, 0);
         RaycastHit2D hitdata = Physics2D.Raycast(Temp, vec, 1f, _layerMask);
+        
+
         // 왼쪽으로 빔을쏘는         
         if (hitdata)
         {
@@ -203,8 +207,7 @@ public class PlayerController : MonoBehaviour
             }
             else if (hitdata.collider.tag == "Stair")
             {
-                //
-                transform.position += vec;
+                Move(vec);
             }
             //else if(hitdata.collider.tag == "적태그이름")
             //{
@@ -217,8 +220,14 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            transform.position += vec;
+            Move(vec);
         }
+    }
+
+    void Move(Vector3 vec)
+    {
+        transform.position += vec;
+        GetComponent<SpriteRenderer>().sortingOrder = (int)(transform.position.y - 1) * -1; // 레이어 값변환
     }
 
     public void transfromUpdate(Vector3 vec)
