@@ -16,8 +16,6 @@ public class MakeFog2 : MonoBehaviour
     private Color[] visitedColorData; // 초기의 컬러데이터
     private Color[] currentColorData; // 현재의 컬러데이터(플레이어 위치)
 
-    private Vector3[] initialColorDataPo; // 탐색 영역 배열 초기화
-
     [SerializeField]
     private Transform stage1F1FogPosition;
     [SerializeField]
@@ -32,17 +30,13 @@ public class MakeFog2 : MonoBehaviour
     {
         transform.localScale = new Vector3(textureWidth, textureHeight, 0);
         // Create the Fog of War texture
-        MakeFogOfWarTexture();
-        MakeFogOfWarTexture2();
+
+        fogOfWarTexture = new Texture2D(textureWidth, textureHeight);
+        fogOfWarTexture.filterMode = FilterMode.Point;
 
         // 텍스처의 초기 상태를 완전 불투명으로 설정하여 탐험하지 않은 전장의 안개를 나타냅니다.
         visitedColorData = new Color[textureWidth * textureHeight];
         currentColorData = new Color[textureWidth * textureHeight];
-
-        // 탐색 영역 배열 초기화
-        initialColorDataPo = new Vector3[textureWidth * textureHeight];
-
-
 
         int index = 0;
 
@@ -50,7 +44,6 @@ public class MakeFog2 : MonoBehaviour
         {
             for (int y = 0; y < textureWidth; y++)
             {
-                initialColorDataPo[index] = new Vector3(x, y, 0);
                 visitedColorData[index] = Color.black;
                 currentColorData[index] = Color.black;
                 index++;
@@ -66,38 +59,13 @@ public class MakeFog2 : MonoBehaviour
         //Stage1F1UpdateFogOfWar();
     }
 
-
-
-    public Texture2D MakeFogOfWarTexture() //탐색하고 있는 영역
+    public void UpdateFogOfWar() // 안개 업데이트 구문
     {
-        fogOfWarTexture = new Texture2D(textureWidth, textureHeight);
-        fogOfWarTexture.filterMode = FilterMode.Point;
-
-        return fogOfWarTexture;
-    }
-
-    public Texture2D MakeFogOfWarTexture2() // 탐색된 영역
-    {
-        fogOfWarTexture = new Texture2D(textureWidth, textureHeight);
-        fogOfWarTexture.filterMode = FilterMode.Point;
-
-        return fogOfWarTexture;
-    }
-
-    public void Stage1F1UpdateFogOfWar() // 1-1 안개
-    {
-        ////Rect의 값과 비교
-        //transform.position = new Vector3(stage1F1FogPosition.position.x + textureWidth / 2,
-        //                     stage1F1FogPosition.position.y - 1 + textureHeight / 2, 0);
-        ////트랜스폼 포지션의 값비교
-        //int x = (int)_Player.transform.position.x - (int)stage1F1FogPosition.position.x;
-        //int y = (int)_Player.transform.position.y - (int)stage1F1FogPosition.position.y;
-
-
-        //int index = y * textureWidth + x;
-        
-
-
+        if ((GameManager.Instance.NowStage == Stage.Lobby) && (GameManager.Instance.NowFloor == floor.f1)) 
+        {
+            return;
+        } 
+        //예외처리 로비에 있을때는 안개 업데이트 x
 
         Color[] lastcolorData = visitedColorData;
 
@@ -124,13 +92,6 @@ public class MakeFog2 : MonoBehaviour
             if (visitedColorData[i] == new Color(0, 0, 0, 0) && currentColorData[i] == new Color(0, 0, 0, 0)) 
                 lastcolorData[i] = new Color(0, 0, 0, 0.0f);
             // 방문한곳과 현재정보가 투명 투명 이면 투명
-
-            
-            //검정
-            //하양
-            //반투명
-
-
         }
 
         // 변경 사항을 안개 텍스처에 적용
@@ -139,127 +100,162 @@ public class MakeFog2 : MonoBehaviour
         fogOfWarTexture.Apply();
     }
 
-    public void Stage1F2UpdateFogOfWar()
+    public int PlayerAround() 
     {
-        //Rect의 값과 비교
-        transform.position = new Vector3(stage1F2FogPosition.position.x + textureWidth / 2,
-                             stage1F2FogPosition.position.y - 1 + textureHeight / 2, 0);
-        //트랜스폼 포지션의 값비교
-        int x = (int)_Player.transform.position.x - (int)stage1F2FogPosition.position.x;
-        int y = (int)_Player.transform.position.y - (int)stage1F2FogPosition.position.y;
+        if ((GameManager.Instance.NowStage == Stage.Stage1) && (GameManager.Instance.NowFloor == floor.f1)) 
+        {
+            //Rect의 값과 비교
+            transform.position = new Vector3(stage1F1FogPosition.position.x + textureWidth / 2,
+                                 stage1F1FogPosition.position.y-1 + textureHeight / 2, 0);
+            //트랜스폼 포지션의 값비교
+            int x = (int)_Player.transform.position.x - (int)stage1F1FogPosition.position.x;
+            int y = (int)_Player.transform.position.y - (int)stage1F1FogPosition.position.y;
+            int index = y * textureWidth + x;
+
+            PlayerPosition(index, 0);                      //캐릭터 중앙
+
+            PlayerPosition(index, -1);                     //캐릭터 왼쪽+1
+            PlayerPosition(index, -2);                     //캐릭터 왼쪽+2
+            PlayerPosition(index, -3);                     //캐릭터 왼쪽+3
+                                                           //asd(index - 2);
+            PlayerPosition(index, +1);                     //캐릭터 오른쪽+1
+            PlayerPosition(index, +2);                     //캐릭터 오른쪽+2
+            PlayerPosition(index, +3);                     //캐릭터 오른쪽+3
+
+            PlayerPosition(index, +textureWidth);          //캐릭터 위쪽+1
+            PlayerPosition(index, +textureWidth * 2);      //캐릭터 위쪽+2
+            PlayerPosition(index, +textureWidth * 3);      //캐릭터 위쪽+3
+
+            PlayerPosition(index, -textureWidth);          //캐릭터 아래쪽+1
+            PlayerPosition(index, -textureWidth * 2);      //캐릭터 아래쪽+2
+            PlayerPosition(index, -textureWidth * 3);      //캐릭터 아래쪽+3
+
+            PlayerPosition(index, +textureWidth + 1);      //캐릭터 위오른쪽
+            PlayerPosition(index, +textureWidth * 2 + 1);  //캐릭터 위위오른쪽
+            PlayerPosition(index, +textureWidth + 2);      //캐릭터 위오른쪽오른쪽
+
+            PlayerPosition(index, +textureWidth - 1);      //캐릭터 위왼쪽
+            PlayerPosition(index, +textureWidth * 2 - 1);  //캐릭터 위위왼쪽
+            PlayerPosition(index, +textureWidth - 2);      //캐릭터 위왼쪽왼쪽
 
 
-        int index = y * textureWidth + x;
-        PlayerPosition(index, 0);                      //캐릭터 중앙
-
-        PlayerPosition(index, -1);                     //캐릭터 왼쪽+1
-        PlayerPosition(index, -2);                     //캐릭터 왼쪽+2
-        PlayerPosition(index, -3);                     //캐릭터 왼쪽+3
-        //asd(index - 2);
-        PlayerPosition(index, +1);                     //캐릭터 오른쪽+1
-        PlayerPosition(index, +2);                     //캐릭터 오른쪽+2
-        PlayerPosition(index, +3);                     //캐릭터 오른쪽+3
-
-        PlayerPosition(index, +textureWidth);          //캐릭터 위쪽+1
-        PlayerPosition(index, +textureWidth * 2);      //캐릭터 위쪽+2
-        PlayerPosition(index, +textureWidth * 3);      //캐릭터 위쪽+3
-
-        PlayerPosition(index, -textureWidth);          //캐릭터 아래쪽+1
-        PlayerPosition(index, -textureWidth * 2);      //캐릭터 아래쪽+2
-        PlayerPosition(index, -textureWidth * 3);      //캐릭터 아래쪽+3
-
-        PlayerPosition(index, +textureWidth + 1);      //캐릭터 위오른쪽
-        PlayerPosition(index, +textureWidth * 2 + 1);  //캐릭터 위위오른쪽
-        PlayerPosition(index, +textureWidth + 2);      //캐릭터 위오른쪽오른쪽
-
-        PlayerPosition(index, +textureWidth - 1);      //캐릭터 위왼쪽
-        PlayerPosition(index, +textureWidth * 2 - 1);  //캐릭터 위위왼쪽
-        PlayerPosition(index, +textureWidth - 2);      //캐릭터 위왼쪽왼쪽
+            PlayerPosition(index, -textureWidth - 1);      //캐릭터 아래왼쪽
+            PlayerPosition(index, -textureWidth * 2 - 1);  //캐릭터 아래아래왼쪽
+            PlayerPosition(index, -textureWidth - 2);      //캐릭터 아래왼쪽왼쪽
 
 
-        PlayerPosition(index, -textureWidth - 1);      //캐릭터 아래왼쪽
-        PlayerPosition(index, -textureWidth * 2 - 1);  //캐릭터 아래아래왼쪽
-        PlayerPosition(index, -textureWidth - 2);      //캐릭터 아래왼쪽왼쪽
+            PlayerPosition(index, -textureWidth + 1);      //캐릭터 아래오른쪽
+            PlayerPosition(index, -textureWidth * 2 + 1);  //캐릭터 아래아래오른쪽
+            PlayerPosition(index, -textureWidth + 2);      //캐릭터 아래오른쪽오른쪽
+
+            return index;
+        } //스테이지 1의 1층
+
+        if ((GameManager.Instance.NowStage == Stage.Stage1) && (GameManager.Instance.NowFloor == floor.f2)) 
+        {
+            //Rect의 값과 비교
+            transform.position = new Vector3(stage1F2FogPosition.position.x - 1 + textureWidth / 2,
+                                 stage1F2FogPosition.position.y - 1 + textureHeight / 2, 0);
+            //트랜스폼 포지션의 값비교
+            int x = (int)_Player.transform.position.x - (int)stage1F2FogPosition.position.x;
+            int y = (int)_Player.transform.position.y - (int)stage1F2FogPosition.position.y;
+            int index = y * textureWidth + x;
+
+            PlayerPosition(index, 0);                      //캐릭터 중앙
+
+            PlayerPosition(index, -1);                     //캐릭터 왼쪽+1
+            PlayerPosition(index, -2);                     //캐릭터 왼쪽+2
+            PlayerPosition(index, -3);                     //캐릭터 왼쪽+3
+                                                           //asd(index - 2);
+            PlayerPosition(index, +1);                     //캐릭터 오른쪽+1
+            PlayerPosition(index, +2);                     //캐릭터 오른쪽+2
+            PlayerPosition(index, +3);                     //캐릭터 오른쪽+3
+
+            PlayerPosition(index, +textureWidth);          //캐릭터 위쪽+1
+            PlayerPosition(index, +textureWidth * 2);      //캐릭터 위쪽+2
+            PlayerPosition(index, +textureWidth * 3);      //캐릭터 위쪽+3
+
+            PlayerPosition(index, -textureWidth);          //캐릭터 아래쪽+1
+            PlayerPosition(index, -textureWidth * 2);      //캐릭터 아래쪽+2
+            PlayerPosition(index, -textureWidth * 3);      //캐릭터 아래쪽+3
+
+            PlayerPosition(index, +textureWidth + 1);      //캐릭터 위오른쪽
+            PlayerPosition(index, +textureWidth * 2 + 1);  //캐릭터 위위오른쪽
+            PlayerPosition(index, +textureWidth + 2);      //캐릭터 위오른쪽오른쪽
+
+            PlayerPosition(index, +textureWidth - 1);      //캐릭터 위왼쪽
+            PlayerPosition(index, +textureWidth * 2 - 1);  //캐릭터 위위왼쪽
+            PlayerPosition(index, +textureWidth - 2);      //캐릭터 위왼쪽왼쪽
 
 
-        PlayerPosition(index, -textureWidth + 1);      //캐릭터 아래오른쪽
-        PlayerPosition(index, -textureWidth * 2 + 1);  //캐릭터 아래아래오른쪽
-        PlayerPosition(index, -textureWidth + 2);      //캐릭터 아래오른쪽오른쪽
+            PlayerPosition(index, -textureWidth - 1);      //캐릭터 아래왼쪽
+            PlayerPosition(index, -textureWidth * 2 - 1);  //캐릭터 아래아래왼쪽
+            PlayerPosition(index, -textureWidth - 2);      //캐릭터 아래왼쪽왼쪽
 
 
-        // 변경 사항을 안개 텍스처에 적용
-        //fogOfWarTexture.SetPixels(visitedColorData);
-        fogOfWarTexture.SetPixels(currentColorData);
+            PlayerPosition(index, -textureWidth + 1);      //캐릭터 아래오른쪽
+            PlayerPosition(index, -textureWidth * 2 + 1);  //캐릭터 아래아래오른쪽
+            PlayerPosition(index, -textureWidth + 2);      //캐릭터 아래오른쪽오른쪽
 
-        fogOfWarTexture.Apply();
-        //Sprites();
-    }  //1-2 스테이지 안개
+            return index;
+        } //스테이지 1의 2층
 
+        if ((GameManager.Instance.NowStage == Stage.Stage1) && (GameManager.Instance.NowFloor == floor.f3)) 
+        {
+            //Rect의 값과 비교
+            transform.position = new Vector3(stage1F3FogPosition.position.x - 1 + textureWidth / 2,
+                                 stage1F3FogPosition.position.y - 1 + textureHeight / 2, 0);
+            //트랜스폼 포지션의 값비교
+            int x = (int)_Player.transform.position.x - (int)stage1F3FogPosition.position.x;
+            int y = (int)_Player.transform.position.y - (int)stage1F3FogPosition.position.y;
+            int index = y * textureWidth + x;
 
-   
+            PlayerPosition(index, 0);                      //캐릭터 중앙
 
-    public int PlayerAround()
-    {
-        //Rect의 값과 비교
-        transform.position = new Vector3(stage1F1FogPosition.position.x + textureWidth / 2,
-                             stage1F1FogPosition.position.y - 1 + textureHeight / 2, 0);
-        //트랜스폼 포지션의 값비교
-        int x = (int)_Player.transform.position.x - (int)stage1F1FogPosition.position.x;
-        int y = (int)_Player.transform.position.y - (int)stage1F1FogPosition.position.y;
-         
+            PlayerPosition(index, -1);                     //캐릭터 왼쪽+1
+            PlayerPosition(index, -2);                     //캐릭터 왼쪽+2
+            PlayerPosition(index, -3);                     //캐릭터 왼쪽+3
+                                                           //asd(index - 2);
+            PlayerPosition(index, +1);                     //캐릭터 오른쪽+1
+            PlayerPosition(index, +2);                     //캐릭터 오른쪽+2
+            PlayerPosition(index, +3);                     //캐릭터 오른쪽+3
 
-        //Debug.Log($"인트변환 {int.Parse(_Player.transform.position.x)}, 변환전 : {_Player.transform.position.x}");
-        //Debug.Log($"인트변환 {(int)_Player.transform.position.y}, 변환전 : {_Player.transform.position.y}");
+            PlayerPosition(index, +textureWidth);          //캐릭터 위쪽+1
+            PlayerPosition(index, +textureWidth * 2);      //캐릭터 위쪽+2
+            PlayerPosition(index, +textureWidth * 3);      //캐릭터 위쪽+3
 
-        int index = y * textureWidth + x;
+            PlayerPosition(index, -textureWidth);          //캐릭터 아래쪽+1
+            PlayerPosition(index, -textureWidth * 2);      //캐릭터 아래쪽+2
+            PlayerPosition(index, -textureWidth * 3);      //캐릭터 아래쪽+3
 
-        PlayerPosition(index, 0);                      //캐릭터 중앙
+            PlayerPosition(index, +textureWidth + 1);      //캐릭터 위오른쪽
+            PlayerPosition(index, +textureWidth * 2 + 1);  //캐릭터 위위오른쪽
+            PlayerPosition(index, +textureWidth + 2);      //캐릭터 위오른쪽오른쪽
 
-        PlayerPosition(index, -1);                     //캐릭터 왼쪽+1
-        PlayerPosition(index, -2);                     //캐릭터 왼쪽+2
-        PlayerPosition(index, -3);                     //캐릭터 왼쪽+3
-        //asd(index - 2);
-        PlayerPosition(index, +1);                     //캐릭터 오른쪽+1
-        PlayerPosition(index, +2);                     //캐릭터 오른쪽+2
-        PlayerPosition(index, +3);                     //캐릭터 오른쪽+3
-            
-        PlayerPosition(index, +textureWidth);          //캐릭터 위쪽+1
-        PlayerPosition(index, +textureWidth * 2);      //캐릭터 위쪽+2
-        PlayerPosition(index, +textureWidth * 3);      //캐릭터 위쪽+3
-
-        PlayerPosition(index, -textureWidth);          //캐릭터 아래쪽+1
-        PlayerPosition(index, -textureWidth * 2);      //캐릭터 아래쪽+2
-        PlayerPosition(index, -textureWidth * 3);      //캐릭터 아래쪽+3
-
-        PlayerPosition(index, +textureWidth + 1);      //캐릭터 위오른쪽
-        PlayerPosition(index, +textureWidth * 2 + 1);  //캐릭터 위위오른쪽
-        PlayerPosition(index, +textureWidth + 2);      //캐릭터 위오른쪽오른쪽
-
-        PlayerPosition(index, +textureWidth - 1);      //캐릭터 위왼쪽
-        PlayerPosition(index, +textureWidth * 2 - 1);  //캐릭터 위위왼쪽
-        PlayerPosition(index, +textureWidth - 2);      //캐릭터 위왼쪽왼쪽
+            PlayerPosition(index, +textureWidth - 1);      //캐릭터 위왼쪽
+            PlayerPosition(index, +textureWidth * 2 - 1);  //캐릭터 위위왼쪽
+            PlayerPosition(index, +textureWidth - 2);      //캐릭터 위왼쪽왼쪽
 
 
-        PlayerPosition(index, -textureWidth - 1);      //캐릭터 아래왼쪽
-        PlayerPosition(index, -textureWidth * 2 - 1);  //캐릭터 아래아래왼쪽
-        PlayerPosition(index, -textureWidth - 2);      //캐릭터 아래왼쪽왼쪽
+            PlayerPosition(index, -textureWidth - 1);      //캐릭터 아래왼쪽
+            PlayerPosition(index, -textureWidth * 2 - 1);  //캐릭터 아래아래왼쪽
+            PlayerPosition(index, -textureWidth - 2);      //캐릭터 아래왼쪽왼쪽
 
 
-        PlayerPosition(index, -textureWidth + 1);      //캐릭터 아래오른쪽
-        PlayerPosition(index, -textureWidth * 2 + 1);  //캐릭터 아래아래오른쪽
-        PlayerPosition(index, -textureWidth + 2);      //캐릭터 아래오른쪽오른쪽
+            PlayerPosition(index, -textureWidth + 1);      //캐릭터 아래오른쪽
+            PlayerPosition(index, -textureWidth * 2 + 1);  //캐릭터 아래아래오른쪽
+            PlayerPosition(index, -textureWidth + 2);      //캐릭터 아래오른쪽오른쪽
 
-        return index;
+            return index;
+
+        } //스테이지 1의 3층
+
+            return 0;
     }
+
     void PlayerPosition(int index, int i)
     {
         int x = index + i;
-
-
-        if (x >= initialColorDataPo.Length || x < 0)
-        {
-            return;
-        }
 
         if (x >= visitedColorData.Length || x < 0)
         {

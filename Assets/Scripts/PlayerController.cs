@@ -97,11 +97,7 @@ public class PlayerController : MonoBehaviour
                     if (!Judgement()) return;
                 }
                 MoveCharacter(Vector3.up);
-                if ((GameManager.Instance.NowStage == Stage.Stage1) && 
-                    (GameManager.Instance.NowFloor == floor.f1) )
-                {
-                    _MakeFog2.Stage1F1UpdateFogOfWar();
-                }
+                _MakeFog2.UpdateFogOfWar();
             }
             else if (Input.GetKeyDown(KeyCode.DownArrow)) // 아래 화살표를 입력 받았을때
             {
@@ -110,12 +106,7 @@ public class PlayerController : MonoBehaviour
                     if (!Judgement()) return;
                 }
                 MoveCharacter(Vector3.down);
-
-                if ((GameManager.Instance.NowStage == Stage.Stage1) &&
-                    (GameManager.Instance.NowFloor == floor.f1))
-                {
-                    _MakeFog2.Stage1F1UpdateFogOfWar();
-                }
+                _MakeFog2.UpdateFogOfWar();
             }
             else if(Input.GetKeyDown(KeyCode.RightArrow)) // 오른쪽 화살표를 입력 받았을때
             {
@@ -125,11 +116,7 @@ public class PlayerController : MonoBehaviour
                 }
                 MoveCharacter(Vector3.right);
                 _spriter.flipX = true;
-                if ((GameManager.Instance.NowStage == Stage.Stage1) &&
-                    (GameManager.Instance.NowFloor == floor.f1))
-                {
-                    _MakeFog2.Stage1F1UpdateFogOfWar();
-                }
+                _MakeFog2.UpdateFogOfWar();
             }
             else if (Input.GetKeyDown(KeyCode.LeftArrow)) // 왼쪽 화살표를 입력 받았을때
             {
@@ -139,11 +126,7 @@ public class PlayerController : MonoBehaviour
                 }
                 MoveCharacter(Vector3.left);
                 _spriter.flipX = false;
-                if ((GameManager.Instance.NowStage == Stage.Stage1) &&
-                    (GameManager.Instance.NowFloor == floor.f1))
-                {
-                    _MakeFog2.Stage1F1UpdateFogOfWar();
-                }
+                _MakeFog2.UpdateFogOfWar();
             }
         }
     }

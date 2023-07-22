@@ -283,13 +283,18 @@ public class GameManager : MonoBehaviour
                     case floor.f1:                        
                         PlayerController.Instance.transfromUpdate(_stageStartPosition.Stage1F1);
                         GameObject.Find("Fog/FogArea").GetComponent<MakeFog2>().ResetFog();
-                        GameObject.Find("Fog/FogArea").GetComponent<MakeFog2>().Stage1F1UpdateFogOfWar();
+                        GameObject.Find("Fog/FogArea").GetComponent<MakeFog2>().UpdateFogOfWar();
                         break;
                     case floor.f2:
                         PlayerController.Instance.transfromUpdate(_stageStartPosition.Stage1F2);
+                        //GameObject.Find("Fog/FogArea").GetComponent<MakeFog2>().FogTextureMove();
+                        GameObject.Find("Fog/FogArea").GetComponent<MakeFog2>().ResetFog();
+                        GameObject.Find("Fog/FogArea").GetComponent<MakeFog2>().UpdateFogOfWar();
                         break;
                     case floor.f3:
                         PlayerController.Instance.transfromUpdate(_stageStartPosition.Stage1F3);
+                        GameObject.Find("Fog/FogArea").GetComponent<MakeFog2>().ResetFog();
+                        GameObject.Find("Fog/FogArea").GetComponent<MakeFog2>().UpdateFogOfWar();
                         break;
                     case floor.fBoss:
                         break;
