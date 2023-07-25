@@ -23,8 +23,12 @@ public class MakeFog2 : MonoBehaviour
     [SerializeField]
     private Transform stage1F3FogPosition;
 
-    [SerializeField]
     GameObject _Player;
+
+    private void Start()
+    {
+        _Player = PlayerController.Instance.gameObject;
+    }
 
     public void ResetFog()
     {
@@ -57,6 +61,12 @@ public class MakeFog2 : MonoBehaviour
         GetComponent<Renderer>().material.SetTexture("_BaseMap", fogOfWarTexture);
         GetComponent<Renderer>().sortingOrder = 999;
         //Stage1F1UpdateFogOfWar();
+    }
+
+    public void FogOfWarStageMove()
+    {
+        ResetFog();
+        UpdateFogOfWar();
     }
 
     public void UpdateFogOfWar() // 안개 업데이트 구문

@@ -7,6 +7,8 @@ public class GameManager : MonoBehaviour
 {
     private static GameManager instance = null;
     [SerializeField] GameObject _dropItem;
+    [SerializeField] MakeFog2 _MakeFog2;
+
 
     //스테이지 데이터
     Stage _nowStage = Stage.Lobby;
@@ -282,19 +284,15 @@ public class GameManager : MonoBehaviour
                 {
                     case floor.f1:                        
                         PlayerController.Instance.transfromUpdate(_stageStartPosition.Stage1F1);
-                        GameObject.Find("Fog/FogArea").GetComponent<MakeFog2>().ResetFog();
-                        GameObject.Find("Fog/FogArea").GetComponent<MakeFog2>().UpdateFogOfWar();
+                        _MakeFog2.FogOfWarStageMove();
                         break;
                     case floor.f2:
                         PlayerController.Instance.transfromUpdate(_stageStartPosition.Stage1F2);
-                        //GameObject.Find("Fog/FogArea").GetComponent<MakeFog2>().FogTextureMove();
-                        GameObject.Find("Fog/FogArea").GetComponent<MakeFog2>().ResetFog();
-                        GameObject.Find("Fog/FogArea").GetComponent<MakeFog2>().UpdateFogOfWar();
+                        _MakeFog2.FogOfWarStageMove();
                         break;
                     case floor.f3:
                         PlayerController.Instance.transfromUpdate(_stageStartPosition.Stage1F3);
-                        GameObject.Find("Fog/FogArea").GetComponent<MakeFog2>().ResetFog();
-                        GameObject.Find("Fog/FogArea").GetComponent<MakeFog2>().UpdateFogOfWar();
+                        _MakeFog2.FogOfWarStageMove();
                         break;
                     case floor.fBoss:
                         break;

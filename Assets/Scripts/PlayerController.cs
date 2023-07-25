@@ -97,7 +97,6 @@ public class PlayerController : MonoBehaviour
                     if (!Judgement()) return;
                 }
                 MoveCharacter(Vector3.up);
-                _MakeFog2.UpdateFogOfWar();
             }
             else if (Input.GetKeyDown(KeyCode.DownArrow)) // 아래 화살표를 입력 받았을때
             {
@@ -106,7 +105,6 @@ public class PlayerController : MonoBehaviour
                     if (!Judgement()) return;
                 }
                 MoveCharacter(Vector3.down);
-                _MakeFog2.UpdateFogOfWar();
             }
             else if(Input.GetKeyDown(KeyCode.RightArrow)) // 오른쪽 화살표를 입력 받았을때
             {
@@ -116,7 +114,6 @@ public class PlayerController : MonoBehaviour
                 }
                 MoveCharacter(Vector3.right);
                 _spriter.flipX = true;
-                _MakeFog2.UpdateFogOfWar();
             }
             else if (Input.GetKeyDown(KeyCode.LeftArrow)) // 왼쪽 화살표를 입력 받았을때
             {
@@ -126,7 +123,6 @@ public class PlayerController : MonoBehaviour
                 }
                 MoveCharacter(Vector3.left);
                 _spriter.flipX = false;
-                _MakeFog2.UpdateFogOfWar();
             }
         }
     }
@@ -210,6 +206,7 @@ public class PlayerController : MonoBehaviour
     void Move(Vector3 vec)
     {
         transform.position += vec;
+        _MakeFog2.UpdateFogOfWar();
         GetComponent<SpriteRenderer>().sortingOrder = (int)(transform.position.y - 1) * -1; // 레이어 값변환
     }
 
