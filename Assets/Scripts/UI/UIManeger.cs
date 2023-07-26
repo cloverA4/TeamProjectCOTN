@@ -36,16 +36,10 @@ public class UIManeger : MonoBehaviour
 
     [SerializeField] GameObject _alarmUI;
     [SerializeField] GameObject _useDiamondToggle;
+    [SerializeField] GameObject _retryToggle2;
+
     private void Update()
     {
-        if(_goLobbyUI == true)
-        {
-            GoLobbyArrow();
-        }
-        if(_alarmUI== true)
-        {
-            //AlarmArrow();
-        }
 
     }
 
@@ -287,7 +281,7 @@ public class UIManeger : MonoBehaviour
         _replayToggle.GetComponent<RePlayToggle>().OnCheck();
     }
 
-    
+
 
 
     #endregion
@@ -304,49 +298,47 @@ public class UIManeger : MonoBehaviour
 
     public void SelectUseDiamond()
     {
-        //_useDiamondToggle.GetComponent<UseDiamondToggle>().OnCheck();
-        //_replayToggle.GetComponent <RetryToggle>().OffCheck();
+        _useDiamondToggle.GetComponent<UseDiamondToggle>().OnCheck();
+        _retryToggle2.GetComponent<RetryToggle2>().OffCheck();
+    }
+    public void SelectRetry2()
+    {
+        _useDiamondToggle.GetComponent<UseDiamondToggle>().OffCheck();
+        _retryToggle2.GetComponent<RetryToggle2>().OnCheck();
     }
 
     int alarmCount = 1;
-    //public void AlarmArrow()
-    //{
-    //    if (Input.GetKeyDown(KeyCode.DownArrow))
-    //    {
-    //        alarmCount++;
-    //        if (alarmCount < 1)
-    //        {
-    //            alarmCount = 2;
-    //        }
-    //        if (alarmCount > 2)
-    //        {
-    //            alarmCount = 1;
-    //        }
-    //    }
-    //    if (Input.GetKeyDown(KeyCode.UpArrow))
-    //    {
-    //        alarmCount--;
-    //        if(alarmCount < 1)
-    //        {
-    //            alarmCount = 2;
-    //        }
-    //        if (alarmCount > 2)
-    //        {
-    //            alarmCount = 1;
-    //        }
-    //    }
-    //    switch (alarmCount)
-    //    {
-    //        case 1:
-    //            _useDiamondToggle.GetComponent<Toggle>().isOn = true;
-    //            break;
-    //        case 2:
-    //            _retryToggle.GetComponent<Toggle>().isOn = true;
-    //            break;
-    //        default:
-    //            break;
-    //    }
-    //}
+    public void AlarmArrow()
+    {
+        if (Input.GetKeyDown(KeyCode.DownArrow))
+        {
+            alarmCount--;
+            if (alarmCount < 1)
+            {
+                alarmCount = 2;
+            }
+        }
+        if (Input.GetKeyDown(KeyCode.UpArrow))
+        {
+            alarmCount++;
+            if (alarmCount > 2)
+            {
+                alarmCount = 1;
+            }
+        }
+
+        switch (alarmCount)
+        {
+            case 1:
+                _retryToggle2.GetComponent<Toggle>().isOn = true;
+                break;
+            case 2:
+                _useDiamondToggle.GetComponent<Toggle>().isOn = true;
+                break;
+            default:
+                break;
+        }
+    }
 
     #endregion
 }
