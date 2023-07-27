@@ -94,7 +94,7 @@ public class PlayerController : MonoBehaviour
             {
                 if(GameManager.Instance.NowStage != Stage.Lobby)
                 {
-                    if (!Judgement()) return;
+                    if(!GameManager.Instance.IsSuccess()) return;
                 }
                 MoveCharacter(Vector3.up);
             }
@@ -102,7 +102,7 @@ public class PlayerController : MonoBehaviour
             {
                 if (GameManager.Instance.NowStage != Stage.Lobby)
                 {
-                    if (!Judgement()) return;
+                    if(!GameManager.Instance.IsSuccess()) return;
                 }
                 MoveCharacter(Vector3.down);
             }
@@ -110,7 +110,7 @@ public class PlayerController : MonoBehaviour
             {
                 if (GameManager.Instance.NowStage != Stage.Lobby)
                 {
-                    if (!Judgement()) return;
+                    if(!GameManager.Instance.IsSuccess()) return;
                 }
                 MoveCharacter(Vector3.right);
                 _spriter.flipX = true;
@@ -119,7 +119,7 @@ public class PlayerController : MonoBehaviour
             {
                 if (GameManager.Instance.NowStage != Stage.Lobby)
                 {
-                    if (!Judgement()) return;
+                    if(!GameManager.Instance.IsSuccess()) return;
                 }
                 MoveCharacter(Vector3.left);
                 _spriter.flipX = false;
@@ -127,30 +127,6 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    bool Judgement()
-    {
-        _isDubbleClick = false;
-        Invoke("DubbleLock", 0.1f);
-
-        if (!GameManager.Instance.IsSuccess())
-        {
-            _isSuccess = false;
-            Invoke("penalty", 60 / GameManager.Instance.BPM);
-            return false;
-        }
-        return true;
-    }
-
-    void DubbleLock()
-    {
-        _isDubbleClick = true;
-    }
-    void penalty()
-    {
-        Debug.Log("패널티 해제!");
-        _isSuccess = true;
-        _isDubbleClick = true;
-    }
 
     void MoveCharacter(Vector3 vec)
     {

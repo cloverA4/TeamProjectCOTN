@@ -164,9 +164,6 @@ public class GameManager : MonoBehaviour
             MosterMoveEnvent?.Invoke(this, EventArgs.Empty);
             yield return new WaitForSeconds(beatTime);
         }
-
-        //첫 노트가 판정선에 도착할때에 맞춰서 노래를 시작하게끔 어떻게 만들것인가?
-        //판정시간과의 싱크는 어떻게 맞출것인가?
     }
 
     void CreateNote() // 풀링용 노트 미리만들기
@@ -214,19 +211,19 @@ public class GameManager : MonoBehaviour
 
         if (_rightNoteList.Count <= 0)
         {
-            Debug.Log("실패");
+            //실패
             return isSuccess;
         }
 
         RectTransform rec = _rightNoteList[0].GetComponent<RectTransform>();
         if (rec != null && rec.anchoredPosition.x < 200)
         {
-            Debug.Log("성공");
+            //성공
+            DeleteJudgementNote();
             isSuccess = true;
         }
 
-        Debug.Log("실패");
-        DeleteJudgementNote();
+        //실패
         return isSuccess;
     }
 
@@ -318,11 +315,14 @@ public class GameManager : MonoBehaviour
         //안개초기화 및 위치 변경 ,스테이지 이동 후 플레이어 주변으로 안개 걷음
         //GameObject.Find("Fog/FogArea").GetComponent<MakeFog2>().ResetFog();
         //GameObject.Find("Fog/FogArea").GetComponent<MakeFog2>().Stage1F1UpdateFogOfWar();
-        
+
 
 
 
         //몬스터 로드(몬스터 풀 만들고, 현재 생성된 몬스터 다 초기화 후 새로 스폰)
+        ResetMonster();
+        LoadingMonster();
+
         //아이템 로드(기획 후 작업)
         //재화 초기화
 
@@ -381,14 +381,142 @@ public class GameManager : MonoBehaviour
 
     #endregion
 
-
     #region 몬스터 제어
-    public event EventHandler MosterMoveEnvent; // 이벤트 정의
+    public event EventHandler MosterMoveEnvent; // 몬스터 행동 이벤트(턴마다1회씩)
 
+    [SerializeField] Transform[] _spawnPoint1s1f; // 방마다 하나씩
+    [SerializeField] Transform[] _spawnPoint1s2f;
+    [SerializeField] Transform[] _spawnPoint1s3f;
+
+    [SerializeField] Transform _eliteSpawnPoint1s1f;
+    [SerializeField] Transform _eliteSpawnPoint1s2f;
+    [SerializeField] Transform _eliteSpawnPoint1s3f;
+
+    [SerializeField] GameObject[] _monster;
+    [SerializeField] GameObject _eliteMonster;
+    [SerializeField] GameObject _monsterPool;
+
+
+    List<Vector3> randomSpawnList = new List<Vector3>();
     //몬스터 풀링/스폰 구현
+    void LoadingMonster()
+    {
+        randomSpawnList.Clear();
+        switch (NowStage)
+        {
+            case Stage.Stage1:
+                switch (NowFloor)
+                {
+                    case floor.f1:
+                        CreateSpawnList(_spawnPoint1s1f);
+                        EliteMonsterSpawn(_eliteSpawnPoint1s1f);
+                        break;
+                    case floor.f2:
+                        //CreateSpawnList(_spawnPoint1s2f);
+                        //EliteMonsterSpawn(_eliteSpawnPoint1s2f);
+                        break;
+                    case floor.f3:
+                        break;
+                }
+                break;
+            case Stage.Stage2:
+                break;
+        }
+    }
+
+    void CreateSpawnList(Transform[] vecs)
+    {
+        for (int i = 0; i < vecs.Length; i++)
+        {
+            //각 스폰포인트마다 상하좌우 4개씩 만들어서 리스트에 저장
+            Vector3 tempVec = new Vector3(vecs[i].position.x + 1, vecs[i].position.y, 0);
+            randomSpawnList.Add(tempVec);
+            tempVec = new Vector3(vecs[i].position.x - 1, vecs[i].position.y, 0);
+            randomSpawnList.Add(tempVec);
+            tempVec = new Vector3(vecs[i].position.x, vecs[i].position.y + 1, 0);
+            randomSpawnList.Add(tempVec);
+            tempVec = new Vector3(vecs[i].position.x, vecs[i].position.y - 1, 0);
+            randomSpawnList.Add(tempVec);
+        }
+        SpawnMonster();
+    }
+
+    void ResetMonster()
+    {
+        for (int i = 0; i < _monsterPool.transform.childCount; i++)
+        {
+            _monsterPool.transform.GetChild(i).gameObject.SetActive(false);
+        }
+    }
+
+    void SpawnMonster()
+    {
+        int index = 0;
+        int MonsterCount = 0;
+
+        while (randomSpawnList.Count > 0)
+        {
+            if (index < _monster.Length)
+            {
+                MonsterPooling(index);
+
+                MonsterCount++;
+                if (MonsterCount % 5 == 0)
+                {
+                    index++;
+                }
+            }
+        }
+    }
+
+    void MonsterPooling(int index)
+    {
+        int r = UnityEngine.Random.Range(0, randomSpawnList.Count);
+        MonsterType CurrentType = (MonsterType)index;
+        GameObject go;
+
+        for (int i = 0; i < _monsterPool.transform.childCount; i++)
+        {
+            if (_monsterPool.transform.GetChild(i).GetComponent<Monster>().Type == CurrentType)
+            {
+                go = _monsterPool.transform.GetChild(i).gameObject;
+            }
+        }
+
+        go = Instantiate(_monster[index], _monsterPool.transform);
+
+        if (go != null)
+        {
+            go.GetComponent<Monster>().Init(CurrentType);
+            go.transform.position = randomSpawnList[r];
+            randomSpawnList.RemoveAt(r);
+        }
+    }
+
+    void EliteMonsterSpawn(Transform transform)
+    {
+        GameObject go;
+        for (int i = 0; i < _monsterPool.transform.childCount; i++)
+        {
+            if (_monsterPool.transform.GetChild(i).GetComponent<Monster>().Type == MonsterType.EliteMonster)
+            {
+                go = _monsterPool.transform.GetChild(i).gameObject;
+                break;
+            }
+        }
+        //엘리트몬스터 스폰
+        go = Instantiate(_eliteMonster, _monsterPool.transform);
+
+        if (go != null)
+        {
+            go.GetComponent<Monster>().Init(MonsterType.EliteMonster);
+            go.transform.position = transform.position;
+        }
+    }
+
     //몬스터 ai 구현(종류별로 하나씩 추가)
-    
     #endregion
+
     public void PlayerHPUpdate()
     {
         //유아이호출
