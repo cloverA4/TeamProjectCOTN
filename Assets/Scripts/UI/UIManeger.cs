@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
@@ -38,9 +39,12 @@ public class UIManeger : MonoBehaviour
     [SerializeField] GameObject _useDiamondToggle;
     [SerializeField] GameObject _retryToggle2;
 
+    [SerializeField] GameObject _failMessage;
+
     private void Update()
     {
-
+        if(_goLobbyUI.activeSelf == true) GoLobbyArrow();
+        if (_alarmUI.activeSelf == true) AlarmArrow();
     }
 
 
@@ -91,14 +95,14 @@ public class UIManeger : MonoBehaviour
         _diamondCount.text = "X " + _diamond;
     }
 
-    void ResetGold() 
+    void ResetGold()
     {
         _gold = 0;
         _goldCount.text = "X " + _gold;
     }
     void RestDiamond()
     {
-        _diamond= 0;
+        _diamond = 0;
         _diamondCount.text = "X " + _diamond;
     }
 
@@ -117,23 +121,23 @@ public class UIManeger : MonoBehaviour
                 break;
             case ItemType.Armor:
                 _changeImage = Resources.Load("UI/Item" + _item.ItemID) as Sprite;
-                _armorImage.sprite = _changeImage;  
+                _armorImage.sprite = _changeImage;
                 break;
             case ItemType.Shovel:
                 _changeImage = Resources.Load("UI/Item" + _item.ItemID) as Sprite;
-                _shovelImage.sprite= _changeImage;
+                _shovelImage.sprite = _changeImage;
                 break;
             case ItemType.Potion:
                 break;
             default:
                 break;
         }
-            
+
     }
-   
+
     public void PotionCount(bool _potion)
     {
-        if(_potion == true ) _emptyPotion.SetActive(false);
+        if (_potion == true) _emptyPotion.SetActive(false);
         else _emptyPotion.SetActive(true);
     }
 
@@ -152,7 +156,7 @@ public class UIManeger : MonoBehaviour
     public IEnumerator FadeIn()
     {
         Color color = _fade.color;
-        while(true)
+        while (true)
         {
             color.a += Time.deltaTime;
             _fade.color = color;
@@ -178,38 +182,19 @@ public class UIManeger : MonoBehaviour
 
     #endregion
 
+
     #region Lobby and Retry UI
 
     public void endGoLobbyUI()
     {
-        //_goLobbyUI.SetActive(false);
+        _goLobbyUI.SetActive(false);
     }
 
     public void StartGoLobbyUI()
     {
-        //_goLobbyUI.SetActive(true);
-    }
+        _goLobbyUI.SetActive(true);
+    }    
 
-    enum LobbyAndRetry
-    {
-        Lobby,
-        Retry,
-    }
-    
-    LobbyAndRetry lar = new LobbyAndRetry();
-
-    void GoLobby(LobbyAndRetry lar)
-    {
-        if (lar == LobbyAndRetry.Lobby)
-        {
-
-        }
-        else if (lar == LobbyAndRetry.Retry)
-        {
-
-        }
-        else return;
-    }
     int goLobbycount = 1;
     public void GoLobbyArrow()
     {
@@ -243,9 +228,19 @@ public class UIManeger : MonoBehaviour
         {
             case 1:
                 _lobbyToggle.GetComponent<Toggle>().isOn = true;
+                if (Input.GetKeyDown(KeyCode.Return))
+                {
+                    StartCoroutine(FadeIn());
+                    Invoke("GoLobby", 1f);
+                }
                 break;
             case 2:
                 _retryToggle.GetComponent<Toggle>().isOn = true;
+                if (Input.GetKeyDown(KeyCode.Return))
+                {
+                    StartCoroutine(FadeIn());
+                    Invoke("GoRetry", 1f);
+                }
                 break;
             case 3:
                 _replayToggle.GetComponent<Toggle>().isOn = true;
@@ -254,11 +249,23 @@ public class UIManeger : MonoBehaviour
                  break;
         }
     }
+    public void GoLobby()
+    {
+        GameManager.Instance.NowStage = Stage.Lobby;
+        GameManager.Instance.NowFloor = floor.f1;
+        StageStartPosition tempPos = new StageStartPosition();
+        PlayerController.Instance.transfromUpdate(tempPos.LobbyPosition);
+        StartCoroutine(FadeOut());
+    }
+    public void GoRetry(Stage _nowStage , floor _nowFloor)
+    {
+        // 현재 스테이지와 
+    }
     public void SelectLobby()
     {
         _lobbyToggle.GetComponent<LobbyToggle>().OnCheck();
         _retryToggle.GetComponent<RetryToggle>().OffCheck();
-        _replayToggle.GetComponent<RePlayToggle>().OffCheck();
+        _replayToggle.GetComponent<RePlayToggle>().OffCheck();   
     }
 
     public void SelectRetry()
@@ -271,7 +278,6 @@ public class UIManeger : MonoBehaviour
         {
             _useDiamondToggle.GetComponent<UseDiamondToggle>().OffCheck();
         }
-
     }
 
     public void SelectReplay()
@@ -341,4 +347,9 @@ public class UIManeger : MonoBehaviour
     }
 
     #endregion
+
+    public void FailMassge()
+    { // 실패 메세지 
+        Instantiate(_failMessage, transform);
+    }
 }

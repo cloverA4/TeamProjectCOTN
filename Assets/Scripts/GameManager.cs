@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEditor.Rendering;
 
 public class GameManager : MonoBehaviour
 {
@@ -374,6 +375,8 @@ public class GameManager : MonoBehaviour
         if (sm != null) StopCoroutine(sm);
 
         //UI호출 - 스테이지 재시작, 로비이동, 다시보기 선택할수있게끔.
+        GetComponent<UIManeger>().StartGoLobbyUI();
+        
     }
 
     #endregion
