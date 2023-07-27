@@ -40,11 +40,13 @@ public class UIManeger : MonoBehaviour
     [SerializeField] GameObject _retryToggle2;
 
     [SerializeField] GameObject _failMessage;
+    [SerializeField] int _speed;
 
     private void Update()
     {
         if(_goLobbyUI.activeSelf == true) GoLobbyArrow();
         if (_alarmUI.activeSelf == true) AlarmArrow();
+        
     }
 
 
@@ -349,7 +351,20 @@ public class UIManeger : MonoBehaviour
     #endregion
 
     public void FailMassge()
-    { // 실패 메세지 
-        Instantiate(_failMessage, transform);
+    { // 실패 메세지 뜨면 3초동안 올라가고
+      // 점점 희미해지면서 사라짐
+        float timer = 0;
+        GameObject temp = Instantiate(_failMessage);
+        float tempPos = temp.GetComponent<Transform>().position.y;
+        //while (true)
+        //{
+        //    timer += Time.deltaTime;
+        //    tempPos += _speed;
+        //    if(timer > 3)
+        //    {
+        //        Destroy(temp);
+        //        break;
+        //    }
+        //}
     }
 }
