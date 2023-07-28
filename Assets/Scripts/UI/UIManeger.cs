@@ -7,13 +7,9 @@ using static UnityEditor.Progress;
 
 public class UIManeger : MonoBehaviour
 {
-    [SerializeField] int _maxHP;
-
-    [SerializeField] int _hpCount;
 
     [SerializeField] GameObject _heart;
-
-    [SerializeField] Transform _HPPanel;
+    [SerializeField] Transform _HeartBase;
 
     [SerializeField] Text _goldCount;
     [SerializeField] Text _diamondCount;
@@ -43,42 +39,31 @@ public class UIManeger : MonoBehaviour
     [SerializeField] GameObject _failMessageBase;
     [SerializeField] int _speed;
 
+
     private void Update()
     {
         if(_goLobbyUI.activeSelf == true) GoLobbyArrow();
         if (_alarmUI.activeSelf == true) AlarmArrow();
-        if (Input.GetMouseButtonDown(0))
-        {
-            StartCoroutine(FailMessge());
-        }
+        //if (Input.GetMouseButtonDown(0))
+        //{
+        //    StartCoroutine(FailMessge());
+        //}
         
     }
 
-
-
-
     private void Start()
     {
-        setMaxHP();
+        _fade.gameObject.SetActive(true);
+        setHP(5, 5);
     }
     #region HP
-    void setMaxHP()
+
+    void setHP(float nowHP , int maxHP)
     {
-        for (int i = 0; i < _maxHP; i++)
+        for (int i = 0; i < maxHP; i++)
         {
-            GameObject obj = Instantiate(_heart, _HPPanel);
-            obj.gameObject.name = "emptyHP" + i;
-        }
-    }
-
-    void setHP(float hp)
-    {
-
-        for (int i = 0; i < _maxHP; i++)
-        {
-            string str = "HP" + i;
-
-            if (i < hp)
+            Instantiate(_heart, _HeartBase);
+            for (int j = 0; j < nowHP; j++)
             {
 
             }
@@ -237,36 +222,47 @@ public class UIManeger : MonoBehaviour
                 _lobbyToggle.GetComponent<Toggle>().isOn = true;
                 if (Input.GetKeyDown(KeyCode.Return))
                 {
+                    GameManager.Instance.NowStage = Stage.Lobby;
+                    GameManager.Instance.NowFloor = floor.f1;
                     StartCoroutine(FadeIn());
-                    Invoke("GoLobby", 1f);
+                    endGoLobbyUI();
                 }
                 break;
             case 2:
                 _retryToggle.GetComponent<Toggle>().isOn = true;
                 if (Input.GetKeyDown(KeyCode.Return))
                 {
+                    GameManager.Instance.NowFloor = floor.f1;
                     StartCoroutine(FadeIn());
-                    Invoke("GoRetry", 1f);
+                    endGoLobbyUI();
                 }
                 break;
-            case 3:
+            case 3:  // replay 기능 추후 구현
                 _replayToggle.GetComponent<Toggle>().isOn = true;
                 break;
             default:
                  break;
         }
     }
-    public void GoLobby()
+    public void GoRetry()
     {
-        GameManager.Instance.NowStage = Stage.Lobby;
-        GameManager.Instance.NowFloor = floor.f1;
+        // 현재 스테이지 값은 그대로
+        // 플로어 값만 1로 변환
+        // 현재가 몇 스테이지인지 검사 후 스테이지 스타트 포인트를 받아옴
+        // 플레이어 위치 정보 업데이트
+        // 페이드 아웃
         StageStartPosition tempPos = new StageStartPosition();
-        PlayerController.Instance.transfromUpdate(tempPos.LobbyPosition);
+
+        GameManager.Instance.NowFloor = floor.f1;
+        if(GameManager.Instance.NowStage == Stage.Stage1)
+        {
+            PlayerController.Instance.transfromUpdate(tempPos.Stage1F1);
+        }
+        else if (GameManager.Instance.NowStage == Stage.Stage2)
+        {
+            // 나중에 스테이지2가 나왔을경우 추가
+        }
         StartCoroutine(FadeOut());
-    }
-    public void GoRetry(Stage _nowStage , floor _nowFloor)
-    {
-        // 현재 스테이지와 
     }
     public void SelectLobby()
     {
@@ -356,18 +352,23 @@ public class UIManeger : MonoBehaviour
     #endregion
 
     public IEnumerator FailMessge()
-    { // 실패 메세지 뜨면 3초동안 올라가고
+    { 
+      // 실패 메세지 뜨면 3초동안 올라가고
       // 점점 희미해지면서 사라짐
-        float timer = 0;
         GameObject temp = Instantiate(_failMessage, _failMessageBase.transform);
+        Color tempColor = temp.GetComponent<Image>().color;
         Vector3 tempPos = temp.GetComponent<Transform>().position;
+        Debug.Log("aaa");
         while(true)
         {
-            timer += Time.deltaTime;
+            tempColor.a -= Time.deltaTime;
+            temp.GetComponent<Image>().color = tempColor;
+
             tempPos.y += _speed;
             temp.GetComponent<Transform>().position = tempPos;
             yield return null;
-            if(timer > 0.5)
+
+            if(tempColor.a <= 0)
             {
                 break;
             }
