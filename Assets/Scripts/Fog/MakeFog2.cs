@@ -25,6 +25,7 @@ public class MakeFog2 : MonoBehaviour
 
     GameObject _Player;
 
+
     private void Start()
     {
         _Player = PlayerController.Instance.gameObject;
@@ -112,6 +113,7 @@ public class MakeFog2 : MonoBehaviour
 
     public int PlayerAround() 
     {
+        
         if ((GameManager.Instance.NowStage == Stage.Stage1) && (GameManager.Instance.NowFloor == floor.f1)) 
         {
             //Rect의 값과 비교
