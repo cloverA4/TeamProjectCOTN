@@ -130,7 +130,8 @@ public class GameManager : MonoBehaviour
             yield return new WaitForSeconds(1);
             if (!_audio.isPlaying)
             {
-                StageFail();
+                //스테이지가 넘어가는 코드 생성
+                //다음스테이지가 없으면?
                 break;
             }
         }
@@ -263,6 +264,8 @@ public class GameManager : MonoBehaviour
         if(mt != null) StopCoroutine(mt);
         if(sm != null) StopCoroutine(sm);
         //스테이지 배경음 설정
+
+        //현재 스테이 데이터에 맞춰서 해당 스테이지 로딩
         switch (_nowStage)
         {
             case Stage.Lobby:
@@ -367,7 +370,6 @@ public class GameManager : MonoBehaviour
     {
         //실패시 캐릭터를 죽음
         PlayerController.Instance.IsLive = false;
-        PlayerController.Instance.NowHP = 0;
 
         //노래와 비트 중지
         resetNote();
@@ -452,19 +454,15 @@ public class GameManager : MonoBehaviour
     void SpawnMonster()
     {
         int index = 0;
-        int MonsterCount = 0;
 
         while (randomSpawnList.Count > 0)
         {
-            if (index < _monster.Length)
-            {
-                MonsterPooling(index);
+            MonsterPooling(index);
+            index++;
 
-                MonsterCount++;
-                if (MonsterCount % 5 == 0)
-                {
-                    index++;
-                }
+            if(index >= _monster.Length)
+            {
+                index = 0;
             }
         }
     }
@@ -519,7 +517,7 @@ public class GameManager : MonoBehaviour
 
     public void PlayerHPUpdate()
     {
-        //유아이호출
+        //유아이호출     
         //체력변경사항 저장 -> 데이터 세이브데이터 쪽 수정
     }
 }
