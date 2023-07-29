@@ -250,7 +250,7 @@ public class GameManager : MonoBehaviour
     public void StageLoad()
     {
         //페이드효과가 끝난 후 로드시작
-        
+        _MakeFog2.gameObject.SetActive(true); // 안개 오브젝트를 켜주는 구문
 
         //플레이어의 상태 초기화
         if (PlayerController.Instance.IsLive == false)
