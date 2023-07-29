@@ -517,7 +517,8 @@ public class GameManager : MonoBehaviour
 
     public void PlayerHPUpdate()
     {
-        //유아이호출     
+        //유아이호출
+        _uiManeger.setHP();
         //체력변경사항 저장 -> 데이터 세이브데이터 쪽 수정
     }
 }

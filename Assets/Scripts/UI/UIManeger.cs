@@ -7,7 +7,6 @@ using static UnityEditor.Progress;
 
 public class UIManeger : MonoBehaviour
 {
-
     [SerializeField] GameObject _heart;
     [SerializeField] Transform _HeartBase;
 
@@ -44,30 +43,60 @@ public class UIManeger : MonoBehaviour
     {
         if(_goLobbyUI.activeSelf == true) GoLobbyArrow();
         if (_alarmUI.activeSelf == true) AlarmArrow();
-        //if (Input.GetMouseButtonDown(0))
-        //{
-        //    StartCoroutine(FailMessge());
-        //}
-        
+        if (Input.GetMouseButtonDown(0))
+        {
+            setHP();
+        }
+
     }
 
     private void Start()
     {
         _fade.gameObject.SetActive(true);
-        setHP(5, 5);
+        setHP();
     }
     #region HP
-
-    void setHP(float nowHP , int maxHP)
+    List<GameObject> hearts = new List<GameObject>();
+    public void setHP()
     {
-        for (int i = 0; i < maxHP; i++)
-        {
-            Instantiate(_heart, _HeartBase);
-            for (int j = 0; j < nowHP; j++)
-            {
+        ResetHP();
 
+        for (int i = 0; i < PlayerController.Instance.MaxHP; i++) // 맥스 HP값
+        {
+            var temp =Instantiate(_heart, _HeartBase);
+            hearts.Add(temp);
+        }
+        for(int i = 0; i< (int)PlayerController.Instance.NowHP; i++)  // 현재 HP값
+        {
+            var temp = hearts[i].gameObject.transform.GetChild(0);
+            temp.gameObject.SetActive(true);
+            if(i > PlayerController.Instance.MaxHP)
+            {
+                return;
             }
         }
+        if((PlayerController.Instance.NowHP - (int)PlayerController.Instance.NowHP) > 0)  // 반칸 하트 구현
+        {
+            var temp = hearts[(int)PlayerController.Instance.NowHP].gameObject.transform.GetChild(1);
+            var temp1 = hearts[(int)PlayerController.Instance.NowHP].gameObject.transform.GetChild(0);
+
+            temp1.gameObject.SetActive(false);
+            temp.gameObject.SetActive(true);
+        }
+    }
+
+    void ResetHP()
+    {
+        int index = hearts.Count;
+        if (hearts != null)
+        {
+            for (int i = 0; i < index; i++)
+            {
+                Destroy(hearts[0]);
+                hearts.RemoveAt(0);
+            }
+        }
+        else return;
     }
 
     #endregion
@@ -187,36 +216,39 @@ public class UIManeger : MonoBehaviour
         _goLobbyUI.SetActive(true);
     }    
 
-    int goLobbycount = 1;
+    int goLobbyIndex = 1;
     public void GoLobbyArrow()
     {
         if (Input.GetKeyDown(KeyCode.DownArrow))
         {
-            goLobbycount++;
-            if (goLobbycount > 3)
+            goLobbyIndex++;
+            if (goLobbyIndex > 3)
             {
-                goLobbycount = 1;
+                goLobbyIndex = 1;
             }
-            if (goLobbycount < 1)
+            if (goLobbyIndex < 1)
             {
-                goLobbycount = 3;
+                goLobbyIndex = 3;
             }
 
         }
         if (Input.GetKeyDown(KeyCode.UpArrow))
         {
-            goLobbycount--;
-            if (goLobbycount > 3)
+            goLobbyIndex--;
+            if (goLobbyIndex > 3)
             {
-                goLobbycount = 1;
+                goLobbyIndex = 1;
             }
-            if (goLobbycount < 1)
+            if (goLobbyIndex < 1)
             {
-                goLobbycount = 3;
+                goLobbyIndex = 3;
             }
         }
-
-        switch (goLobbycount)
+        SelectButton();
+    }
+    void SelectButton()
+    {
+        switch (goLobbyIndex)
         {
             case 1:
                 _lobbyToggle.GetComponent<Toggle>().isOn = true;
@@ -241,34 +273,14 @@ public class UIManeger : MonoBehaviour
                 _replayToggle.GetComponent<Toggle>().isOn = true;
                 break;
             default:
-                 break;
+                break;
         }
     }
-    public void GoRetry()
+    void Select()
     {
-        // 현재 스테이지 값은 그대로
-        // 플로어 값만 1로 변환
-        // 현재가 몇 스테이지인지 검사 후 스테이지 스타트 포인트를 받아옴
-        // 플레이어 위치 정보 업데이트
-        // 페이드 아웃
-        StageStartPosition tempPos = new StageStartPosition();
-
-        GameManager.Instance.NowFloor = floor.f1;
-        if(GameManager.Instance.NowStage == Stage.Stage1)
-        {
-            PlayerController.Instance.transfromUpdate(tempPos.Stage1F1);
-        }
-        else if (GameManager.Instance.NowStage == Stage.Stage2)
-        {
-            // 나중에 스테이지2가 나왔을경우 추가
-        }
-        StartCoroutine(FadeOut());
-    }
-    public void SelectLobby()
-    {
-        _lobbyToggle.GetComponent<LobbyToggle>().OnCheck();
-        _retryToggle.GetComponent<RetryToggle>().OffCheck();
-        _replayToggle.GetComponent<RePlayToggle>().OffCheck();   
+        // 토글을 선택시 체크 마크 뜨기(완)
+        //  토글이 활성화가되면 지금 함수가 실행
+        // 함수 실행시 Text가 비활됨
     }
 
     public void SelectRetry()
@@ -276,11 +288,6 @@ public class UIManeger : MonoBehaviour
         _lobbyToggle.GetComponent<LobbyToggle>().OffCheck();
         _retryToggle.GetComponent<RetryToggle>().OnCheck();
         _replayToggle.GetComponent<RePlayToggle>().OffCheck();
-
-        if (_useDiamondToggle.GetComponent<Toggle>().isOn == true)
-        {
-            _useDiamondToggle.GetComponent<UseDiamondToggle>().OffCheck();
-        }
     }
 
     public void SelectReplay()
