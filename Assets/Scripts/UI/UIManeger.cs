@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using static UnityEditor.Progress;
 
@@ -43,17 +44,14 @@ public class UIManeger : MonoBehaviour
     {
         if(_goLobbyUI.activeSelf == true) GoLobbyArrow();
         if (_alarmUI.activeSelf == true) AlarmArrow();
-        if (Input.GetMouseButtonDown(0))
-        {
-            setHP();
-        }
-
+        //MouseSelect();
     }
 
     private void Start()
     {
         _fade.gameObject.SetActive(true);
         setHP();
+        ToggleTextAllEnable();
     }
     #region HP
     List<GameObject> hearts = new List<GameObject>();
@@ -214,6 +212,7 @@ public class UIManeger : MonoBehaviour
     public void StartGoLobbyUI()
     {
         _goLobbyUI.SetActive(true);
+        ToggleTextAllEnable();
     }    
 
     int goLobbyIndex = 1;
@@ -244,9 +243,13 @@ public class UIManeger : MonoBehaviour
                 goLobbyIndex = 3;
             }
         }
-        SelectButton();
+        SelectToggle();
     }
-    void SelectButton()
+    public Camera mainCamera;
+    void MouseSelect()
+    {
+    }
+    void SelectToggle()
     {
         switch (goLobbyIndex)
         {
@@ -276,26 +279,30 @@ public class UIManeger : MonoBehaviour
                 break;
         }
     }
-    void Select()
+
+    
+    void ToggleTextAllEnable()
     {
-        // 토글을 선택시 체크 마크 뜨기(완)
-        //  토글이 활성화가되면 지금 함수가 실행
-        // 함수 실행시 Text가 비활됨
+        _lobbyToggle.transform.GetChild(1).gameObject.SetActive(true);
+        _retryToggle.transform.GetChild(1).gameObject.SetActive(true);
+        _replayToggle.transform.GetChild(1).gameObject.SetActive(true);
+    }
+    public void GoLobbySelect(bool _bool)
+    {
+        if (_bool == true) _lobbyToggle.transform.GetChild(1).gameObject.SetActive(false);
+        else if (_bool == false) _lobbyToggle.transform.GetChild(1).gameObject.SetActive(true);
+    }
+    public void RetrySelect(bool _bool)
+    {
+        if (_bool == true) _retryToggle.transform.GetChild(1).gameObject.SetActive(false);
+        else if (_bool == false) _retryToggle.transform.GetChild(1).gameObject.SetActive(true);
+    }
+    public void ReplaySelect(bool _bool)
+    {
+        if (_bool == true) _replayToggle.transform.GetChild(1).gameObject.SetActive(false);
+        else if (_bool == false) _replayToggle.transform.GetChild(1).gameObject.SetActive(true);
     }
 
-    public void SelectRetry()
-    {
-        _lobbyToggle.GetComponent<LobbyToggle>().OffCheck();
-        _retryToggle.GetComponent<RetryToggle>().OnCheck();
-        _replayToggle.GetComponent<RePlayToggle>().OffCheck();
-    }
-
-    public void SelectReplay()
-    {
-        _lobbyToggle.GetComponent<LobbyToggle>().OffCheck();
-        _retryToggle.GetComponent<RetryToggle>().OffCheck();
-        _replayToggle.GetComponent<RePlayToggle>().OnCheck();
-    }
 
 
 
@@ -312,16 +319,6 @@ public class UIManeger : MonoBehaviour
         _alarmUI.SetActive(false);
     }
 
-    public void SelectUseDiamond()
-    {
-        _useDiamondToggle.GetComponent<UseDiamondToggle>().OnCheck();
-        _retryToggle2.GetComponent<RetryToggle2>().OffCheck();
-    }
-    public void SelectRetry2()
-    {
-        _useDiamondToggle.GetComponent<UseDiamondToggle>().OffCheck();
-        _retryToggle2.GetComponent<RetryToggle2>().OnCheck();
-    }
 
     int alarmCount = 1;
     public void AlarmArrow()
