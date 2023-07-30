@@ -11,11 +11,11 @@ GameObject:
   - component: {fileID: 1331883499894413475}
   - component: {fileID: 3735962723053692095}
   - component: {fileID: 3884173645476458822}
-  - component: {fileID: 419366640262704421}
   - component: {fileID: 8870886419465753411}
-  m_Layer: 0
+  - component: {fileID: 4997599351488522276}
+  m_Layer: 20
   m_Name: EliteMonster
-  m_TagString: Untagged
+  m_TagString: Monster
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -85,20 +85,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!136 &419366640262704421
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7100928164799285504}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.5
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &8870886419465753411
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -111,3 +97,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f29440e94fc8c604ab896e5889715bb5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!70 &4997599351488522276
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7100928164799285504}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_Size: {x: 1, y: 2}
+  m_Direction: 0

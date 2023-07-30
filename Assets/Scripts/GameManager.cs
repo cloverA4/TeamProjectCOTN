@@ -368,9 +368,6 @@ public class GameManager : MonoBehaviour
 
     public void StageFail()
     {
-        //실패시 캐릭터를 죽음
-        PlayerController.Instance.IsLive = false;
-
         //노래와 비트 중지
         resetNote();
         if (mt != null) StopCoroutine(mt);
@@ -378,7 +375,6 @@ public class GameManager : MonoBehaviour
 
         //UI호출 - 스테이지 재시작, 로비이동, 다시보기 선택할수있게끔.
         GetComponent<UIManeger>().StartGoLobbyUI();
-        
     }
 
     #endregion
@@ -403,7 +399,6 @@ public class GameManager : MonoBehaviour
     //몬스터 풀링/스폰 구현
     void LoadingMonster()
     {
-        randomSpawnList.Clear();
         switch (NowStage)
         {
             case Stage.Stage1:
@@ -414,10 +409,12 @@ public class GameManager : MonoBehaviour
                         EliteMonsterSpawn(_eliteSpawnPoint1s1f);
                         break;
                     case floor.f2:
-                        //CreateSpawnList(_spawnPoint1s2f);
-                        //EliteMonsterSpawn(_eliteSpawnPoint1s2f);
+                        CreateSpawnList(_spawnPoint1s2f);
+                        EliteMonsterSpawn(_eliteSpawnPoint1s2f);
                         break;
                     case floor.f3:
+                        CreateSpawnList(_spawnPoint1s2f);
+                        EliteMonsterSpawn(_eliteSpawnPoint1s2f);
                         break;
                 }
                 break;
@@ -430,21 +427,25 @@ public class GameManager : MonoBehaviour
     {
         for (int i = 0; i < vecs.Length; i++)
         {
-            //각 스폰포인트마다 상하좌우 4개씩 만들어서 리스트에 저장
-            Vector3 tempVec = new Vector3(vecs[i].position.x + 1, vecs[i].position.y, 0);
-            randomSpawnList.Add(tempVec);
-            tempVec = new Vector3(vecs[i].position.x - 1, vecs[i].position.y, 0);
-            randomSpawnList.Add(tempVec);
-            tempVec = new Vector3(vecs[i].position.x, vecs[i].position.y + 1, 0);
-            randomSpawnList.Add(tempVec);
-            tempVec = new Vector3(vecs[i].position.x, vecs[i].position.y - 1, 0);
-            randomSpawnList.Add(tempVec);
+            vecs[i].GetComponent<Room>().CalculateRoomSize();
         }
+
+        for (int i = 0; i < vecs.Length; i++)
+        {
+            for(int j = 0; j < 4; j++)
+            {
+                int r = UnityEngine.Random.Range(0, vecs[i].GetComponent<Room>().Roomindex.Count);
+                randomSpawnList.Add(vecs[i].GetComponent<Room>().Roomindex[r]);
+                vecs[i].GetComponent<Room>().Roomindex.RemoveAt(r);
+            }
+        }
+
         SpawnMonster();
     }
 
     void ResetMonster()
     {
+        randomSpawnList.Clear();
         for (int i = 0; i < _monsterPool.transform.childCount; i++)
         {
             _monsterPool.transform.GetChild(i).gameObject.SetActive(false);

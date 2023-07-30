@@ -21,7 +21,6 @@ public class Room : MonoBehaviour
     void Start()
     {
         CalculateRoomSize();
-        Debug.Log(_Roomindex.Count);
     }
 
     
@@ -32,6 +31,7 @@ public class Room : MonoBehaviour
         //_roomWidth = (int)(_hitdataArea.collider.transform.position.x - transform.position.x);
         //_hitdataArea = Physics2D.Raycast(transform.position, Vector3.up);
         //_roomHeight = (int)(_hitdataArea.collider.transform.position.y - transform.position.y);
+        _Roomindex.Clear();
 
         for (int i = 0; i < _roomWidth; i++)  //
         {

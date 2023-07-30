@@ -10,6 +10,7 @@ TagManager:
   - Door
   - Stair
   - ShopWall
+  - Monster
   layers:
   - Default
   - TransparentFX
@@ -29,8 +30,8 @@ TagManager:
   - 
   - 
   - 
-  - 
-  - 
+  - Player
+  - Monster
   - RayCheck
   - 
   - 

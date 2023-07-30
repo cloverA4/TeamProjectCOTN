@@ -5,12 +5,10 @@ public class PlayerController : MonoBehaviour
     private static PlayerController instance;
 
     SpriteRenderer _spriter; // 변수 선언과 초기화하기
-    [SerializeField] 
-    LayerMask _layerMask;
-    [SerializeField]
-    MakeFog2 _MakeFog2;
+    [SerializeField] LayerMask _layerMask;
+    [SerializeField] MakeFog2 _MakeFog2;
 
-    int shovelPower = 1;
+    
     
     bool _isSuccess = true;
     bool _isDubbleClick = true;
@@ -29,7 +27,10 @@ public class PlayerController : MonoBehaviour
         get { return _nowHp; }
         set 
         {
-            _nowHp = value;
+            if(value <= _maxHP)
+            {
+                _nowHp = value;
+            }            
             GameManager.Instance.PlayerHPUpdate();
             if (_nowHp <= 0)
             {
@@ -45,7 +46,22 @@ public class PlayerController : MonoBehaviour
         get { return _maxHP; }
         set { _maxHP = value; }
     }
-    
+
+    int _shovelPower = 1;
+
+    public int ShovelPower
+    {
+        get { return _shovelPower; }
+        set { _shovelPower = value; }
+    }
+
+    int _damage = 1;
+
+    public int Damage
+    {
+        get { return _damage; }
+        set { _damage = value; }
+    }
 
     private void Awake()
     {
@@ -136,13 +152,13 @@ public class PlayerController : MonoBehaviour
 
         // 왼쪽으로 빔을쏘는         
         if (hitdata)
-        {
+        {            
             if (hitdata.collider.tag == "WeedWall") // weedwall이 힛데이타에 태그로 들어왓다면
             {
                 //Debug.Log(hitdata.collider.gameObject); // 힛데이타콜라이더게임오브젝트에 대한 정보가 출력된다
                 //Destroy(hitdata.collider.gameObject); // 힛데이타콜라이더게임오브젝트를 파괴한다
                 //setActive활용해서 벽부수는 표현해보기
-                hitdata.collider.GetComponent<Wall>().DamageWall(shovelPower);
+                hitdata.collider.GetComponent<Wall>().DamageWall(_shovelPower);
 
             }
             else if (hitdata.collider.tag == "Door") // Door이(가) 힛데이타에 태그로 들어왓다면
@@ -164,14 +180,10 @@ public class PlayerController : MonoBehaviour
             {
                 Move(vec);
             }
-            //else if(hitdata.collider.tag == "적태그이름")
-            //{
-            //    공격에니메이션
-            //    공격
-            //    적의 체력이 낮아짐
-            //    적의 체력이 0이됬을때
-            //    적의 오브젝트가 부서짐?
-            //}
+            else if (hitdata.collider.tag == "Monster")
+            {
+                hitdata.collider.GetComponent<Monster>().TakeDamage(_damage);
+            }
         }
         else
         {
