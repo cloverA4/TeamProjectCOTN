@@ -8,6 +8,8 @@ public class Room : MonoBehaviour
     private int _roomWidth; //너비
     [SerializeField]
     private int _roomHeight; //높이
+    [SerializeField] GameObject EliteMonster = null;
+    [SerializeField] GameObject Stair = null;
 
     
     List<Vector3> _Roomindex = new List<Vector3>();
@@ -37,7 +39,18 @@ public class Room : MonoBehaviour
         {
             for (int j = 0; j < _roomHeight; j++) 
             {
-                _Roomindex.Add(new Vector3(transform.position.x + i, transform.position.y + j, 0));
+                Vector3 vec = new Vector3(transform.position.x + i, transform.position.y + j);
+                if (EliteMonster != null && Stair != null)
+                {
+                    if (vec != EliteMonster.transform.position && vec != Stair.transform.position)
+                    {
+                        _Roomindex.Add(new Vector3(transform.position.x + i, transform.position.y + j, 0));
+                    }
+                }
+                else
+                {
+                    _Roomindex.Add(new Vector3(transform.position.x + i, transform.position.y + j, 0));
+                }    
             }
         }
     }
