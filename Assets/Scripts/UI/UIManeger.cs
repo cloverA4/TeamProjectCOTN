@@ -42,9 +42,11 @@ public class UIManeger : MonoBehaviour
 
     private void Update()
     {
-        if(_goLobbyUI.activeSelf == true) GoLobbyArrow();
+        if (_goLobbyUI.activeSelf == true) 
+        {
+            GoLobbyArrow();
+        }
         if (_alarmUI.activeSelf == true) AlarmArrow();
-        //MouseSelect();
     }
 
     private void Start()
@@ -211,6 +213,7 @@ public class UIManeger : MonoBehaviour
 
     public void StartGoLobbyUI()
     {
+        goLobbyIndex = 1;
         _goLobbyUI.SetActive(true);
         ToggleTextAllEnable();
     }    
@@ -283,7 +286,6 @@ public class UIManeger : MonoBehaviour
     
     void ToggleTextAllEnable()
     {
-        _lobbyToggle.transform.GetChild(1).gameObject.SetActive(true);
         _retryToggle.transform.GetChild(1).gameObject.SetActive(true);
         _replayToggle.transform.GetChild(1).gameObject.SetActive(true);
     }

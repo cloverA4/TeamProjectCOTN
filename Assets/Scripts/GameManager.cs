@@ -246,7 +246,7 @@ public class GameManager : MonoBehaviour
         StartCoroutine(_uiManeger.FadeOut());
     }
 
-
+    
     public void StageLoad()
     {
         //페이드효과가 끝난 후 로드시작
