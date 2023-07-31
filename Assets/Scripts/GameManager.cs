@@ -319,9 +319,6 @@ public class GameManager : MonoBehaviour
         //GameObject.Find("Fog/FogArea").GetComponent<MakeFog2>().ResetFog();
         //GameObject.Find("Fog/FogArea").GetComponent<MakeFog2>().Stage1F1UpdateFogOfWar();
 
-
-
-
         //몬스터 로드(몬스터 풀 만들고, 현재 생성된 몬스터 다 초기화 후 새로 스폰)
         ResetMonster();
         LoadingMonster();
@@ -337,8 +334,6 @@ public class GameManager : MonoBehaviour
     {
         //페이드아웃이 끝난 후 노래,비트 시작
         //스테이지에 맞는 bpm설정
-        
-
         
         switch (_nowStage)
         {
@@ -374,7 +369,7 @@ public class GameManager : MonoBehaviour
         if (sm != null) StopCoroutine(sm);
 
         //UI호출 - 스테이지 재시작, 로비이동, 다시보기 선택할수있게끔.
-        GetComponent<UIManeger>().StartGoLobbyUI();
+        _uiManeger.StartGoLobbyUI();
     }
 
     #endregion

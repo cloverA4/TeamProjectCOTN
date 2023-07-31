@@ -1,10 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using static UnityEditor.Progress;
 
 public class UIManeger : MonoBehaviour
 {
@@ -15,14 +12,12 @@ public class UIManeger : MonoBehaviour
     [SerializeField] Text _diamondCount;
     public int _gold;
     public int _diamond;
+    int goLobbyIndex = 1;
 
     [SerializeField] Image _shovelImage;
     [SerializeField] Image _armorImage;
     [SerializeField] Image _weaponImage;
     [SerializeField] GameObject _emptyPotion;
-
-    [SerializeField] GameObject NotePrefab;
-    [SerializeField] GameObject NotesPool;
 
     [SerializeField] Image _fade;
 
@@ -42,9 +37,46 @@ public class UIManeger : MonoBehaviour
 
     private void Update()
     {
-        if (_goLobbyUI.activeSelf == true) 
+        if (_goLobbyUI.activeSelf) 
         {
-            GoLobbyArrow();
+            if (Input.GetKeyDown(KeyCode.DownArrow))
+            {
+                goLobbyIndex++;
+                if (goLobbyIndex > 3)
+                {
+                    goLobbyIndex = 1;
+                }
+                SelectToggle();
+            }
+            if (Input.GetKeyDown(KeyCode.UpArrow))
+            {
+                goLobbyIndex--;
+                if (goLobbyIndex < 1)
+                {
+                    goLobbyIndex = 3;
+                }
+                SelectToggle();
+            }
+
+            if (Input.GetKeyDown(KeyCode.Return))
+            {
+                switch (goLobbyIndex)
+                {
+                    case 1:
+                        GameManager.Instance.NowStage = Stage.Lobby;
+                        GameManager.Instance.NowFloor = floor.f1;
+                        StartCoroutine(FadeIn());
+                        endGoLobbyUI();
+                        break;
+                    case 2:
+                        GameManager.Instance.NowFloor = floor.f1;
+                        StartCoroutine(FadeIn());
+                        endGoLobbyUI();
+                        break;
+                    case 3:  // replay 기능 추후 구현
+                        break;
+                }
+            }
         }
         if (_alarmUI.activeSelf == true) AlarmArrow();
     }
@@ -53,7 +85,6 @@ public class UIManeger : MonoBehaviour
     {
         _fade.gameObject.SetActive(true);
         setHP();
-        ToggleTextAllEnable();
     }
     #region HP
     List<GameObject> hearts = new List<GameObject>();
@@ -203,7 +234,6 @@ public class UIManeger : MonoBehaviour
 
     #endregion
 
-
     #region Lobby and Retry UI
 
     public void endGoLobbyUI()
@@ -215,99 +245,75 @@ public class UIManeger : MonoBehaviour
     {
         goLobbyIndex = 1;
         _goLobbyUI.SetActive(true);
-        ToggleTextAllEnable();
-    }    
-
-    int goLobbyIndex = 1;
-    public void GoLobbyArrow()
-    {
-        if (Input.GetKeyDown(KeyCode.DownArrow))
-        {
-            goLobbyIndex++;
-            if (goLobbyIndex > 3)
-            {
-                goLobbyIndex = 1;
-            }
-            if (goLobbyIndex < 1)
-            {
-                goLobbyIndex = 3;
-            }
-
-        }
-        if (Input.GetKeyDown(KeyCode.UpArrow))
-        {
-            goLobbyIndex--;
-            if (goLobbyIndex > 3)
-            {
-                goLobbyIndex = 1;
-            }
-            if (goLobbyIndex < 1)
-            {
-                goLobbyIndex = 3;
-            }
-        }
-        SelectToggle();
+        _lobbyToggle.GetComponent<Toggle>().isOn = true;
+        RetrySelect(false);
+        ReplaySelect(false);
     }
-    public Camera mainCamera;
-    void MouseSelect()
-    {
-    }
+
     void SelectToggle()
     {
         switch (goLobbyIndex)
         {
             case 1:
                 _lobbyToggle.GetComponent<Toggle>().isOn = true;
-                if (Input.GetKeyDown(KeyCode.Return))
-                {
-                    GameManager.Instance.NowStage = Stage.Lobby;
-                    GameManager.Instance.NowFloor = floor.f1;
-                    StartCoroutine(FadeIn());
-                    endGoLobbyUI();
-                }
                 break;
             case 2:
                 _retryToggle.GetComponent<Toggle>().isOn = true;
-                if (Input.GetKeyDown(KeyCode.Return))
-                {
-                    GameManager.Instance.NowFloor = floor.f1;
-                    StartCoroutine(FadeIn());
-                    endGoLobbyUI();
-                }
                 break;
             case 3:  // replay 기능 추후 구현
                 _replayToggle.GetComponent<Toggle>().isOn = true;
                 break;
-            default:
-                break;
         }
     }
 
+    [SerializeField] GameObject toggle1S;
+    [SerializeField] GameObject toggle1L;
+
+    [SerializeField] GameObject toggle2S;
+    [SerializeField] GameObject toggle2L;
+
+    [SerializeField] GameObject toggle3S;
+    [SerializeField] GameObject toggle3L;
     
-    void ToggleTextAllEnable()
-    {
-        _retryToggle.transform.GetChild(1).gameObject.SetActive(true);
-        _replayToggle.transform.GetChild(1).gameObject.SetActive(true);
-    }
     public void GoLobbySelect(bool _bool)
     {
-        if (_bool == true) _lobbyToggle.transform.GetChild(1).gameObject.SetActive(false);
-        else if (_bool == false) _lobbyToggle.transform.GetChild(1).gameObject.SetActive(true);
+        if (_bool)
+        {
+            toggle1L.gameObject.SetActive(true);
+            toggle1S.gameObject.SetActive(false);
+        }
+        else
+        {
+            toggle1L.gameObject.SetActive(false);
+            toggle1S.gameObject.SetActive(true);
+        }
     }
     public void RetrySelect(bool _bool)
     {
-        if (_bool == true) _retryToggle.transform.GetChild(1).gameObject.SetActive(false);
-        else if (_bool == false) _retryToggle.transform.GetChild(1).gameObject.SetActive(true);
+        if (_bool)
+        {
+            toggle2L.gameObject.SetActive(true);
+            toggle2S.gameObject.SetActive(false);
+        }
+        else
+        {
+            toggle2L.gameObject.SetActive(false);
+            toggle2S.gameObject.SetActive(true);
+        }
     }
     public void ReplaySelect(bool _bool)
     {
-        if (_bool == true) _replayToggle.transform.GetChild(1).gameObject.SetActive(false);
-        else if (_bool == false) _replayToggle.transform.GetChild(1).gameObject.SetActive(true);
+        if (_bool)
+        {
+            toggle3L.gameObject.SetActive(true);
+            toggle3S.gameObject.SetActive(false);
+        }
+        else
+        {
+            toggle3L.gameObject.SetActive(false);
+            toggle3S.gameObject.SetActive(true);
+        }
     }
-
-
-
-
 
     #endregion
 
