@@ -12,7 +12,7 @@ public class UIManeger : MonoBehaviour
     [SerializeField] Text _diamondCount;
     public int _gold;
     public int _diamond;
-    int goLobbyIndex = 1;
+    int _goLobbyIndex = 0;
 
     [SerializeField] Image _shovelImage;
     [SerializeField] Image _armorImage;
@@ -41,50 +41,116 @@ public class UIManeger : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.DownArrow))
             {
-                goLobbyIndex++;
-                if (goLobbyIndex > 3)
+                if(_goLobbyIndex == 0)
                 {
-                    goLobbyIndex = 1;
+                    _goLobbyIndex = 1;
+                }
+                else if(_goLobbyIndex == 1)
+                {
+                    _goLobbyIndex = 2;
+                }
+                else if(_goLobbyIndex == 2)
+                {
+                    _goLobbyIndex = 0;
                 }
                 SelectToggle();
             }
             if (Input.GetKeyDown(KeyCode.UpArrow))
             {
-                goLobbyIndex--;
-                if (goLobbyIndex < 1)
+                if (_goLobbyIndex == 0)
                 {
-                    goLobbyIndex = 3;
+                    _goLobbyIndex = 2;
+                }
+                else if (_goLobbyIndex == 1)
+                {
+                    _goLobbyIndex = 0;
+                }
+                else if (_goLobbyIndex == 2)
+                {
+                    _goLobbyIndex = 1;
                 }
                 SelectToggle();
             }
-
-            if (Input.GetKeyDown(KeyCode.Return))
+            if (_lobbyToggle.GetComponent<Toggle>().isOn)
             {
-                switch (goLobbyIndex)
+                _goLobbyIndex = 0;
+            }
+            else if (_retryToggle.GetComponent<Toggle>().isOn)
+            {
+                _goLobbyIndex = 1;
+            }
+            else if (_replayToggle.GetComponent<Toggle>().isOn)
+            {
+                _goLobbyIndex = 2;
+            }
+            
+        }
+        if (_alarmUI.activeSelf)
+        {
+            if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.UpArrow))
+            {
+                if (_alarmIndex == 0) _alarmIndex = 1;
+                else _alarmIndex = 0;
+                SelectToggle();
+            }
+            if (_useDiamondToggle.GetComponent<Toggle>().isOn)
+            {
+                _alarmIndex = 0;
+            }
+            else if (_retryToggle2.GetComponent<Toggle>().isOn)
+            {
+                _alarmIndex = 1;
+            }
+            
+        }
+        if (Input.GetKeyDown(KeyCode.Return))
+        {
+            if (_alarmUI.activeSelf)
+            {
+
+                switch (_alarmIndex)
                 {
+                    case 0:
+                        GameManager.Instance.NowStage = Stage.Lobby;
+                        GameManager.Instance.NowFloor = floor.f1;
+                        StartCoroutine(FadeIn());
+                        Invoke("EndAlarmUI",1f);
+                        break;
                     case 1:
+                        GameManager.Instance.NowFloor = floor.f1;
+                        StartCoroutine(FadeIn());
+                        Invoke("EndAlarmUI", 1f);
+                        break;
+                }
+
+            }
+            if (_goLobbyUI.activeSelf)
+            {
+                switch (_goLobbyIndex)
+                {
+                    case 0:
                         GameManager.Instance.NowStage = Stage.Lobby;
                         GameManager.Instance.NowFloor = floor.f1;
                         StartCoroutine(FadeIn());
                         endGoLobbyUI();
                         break;
-                    case 2:
-                        GameManager.Instance.NowFloor = floor.f1;
-                        StartCoroutine(FadeIn());
+                    case 1:
+                        StartAlarmUI();
                         endGoLobbyUI();
                         break;
-                    case 3:  // replay 기능 추후 구현
+                    case 2:  // replay 기능 추후 구현
                         break;
                 }
             }
         }
-        if (_alarmUI.activeSelf == true) AlarmArrow();
     }
 
     private void Start()
     {
         _fade.gameObject.SetActive(true);
         setHP();
+        _alarmUI.gameObject.SetActive(false);
+        _goLobbyUI.SetActive(false);
     }
     #region HP
     List<GameObject> hearts = new List<GameObject>();
@@ -243,123 +309,96 @@ public class UIManeger : MonoBehaviour
 
     public void StartGoLobbyUI()
     {
-        goLobbyIndex = 1;
+        _goLobbyIndex = 0;
         _goLobbyUI.SetActive(true);
-        _lobbyToggle.GetComponent<Toggle>().isOn = true;
-        RetrySelect(false);
-        ReplaySelect(false);
+        SelectToggle();
     }
 
     void SelectToggle()
     {
-        switch (goLobbyIndex)
+        if (_goLobbyUI.activeSelf)
         {
-            case 1:
-                _lobbyToggle.GetComponent<Toggle>().isOn = true;
-                break;
-            case 2:
-                _retryToggle.GetComponent<Toggle>().isOn = true;
-                break;
-            case 3:  // replay 기능 추후 구현
-                _replayToggle.GetComponent<Toggle>().isOn = true;
-                break;
+            switch (_goLobbyIndex)
+            {
+                case 0:
+                    _lobbyToggle.GetComponent<Toggle>().isOn = true;
+                    break;
+                case 1:
+                    _retryToggle.GetComponent<Toggle>().isOn = true;
+                    break;
+                case 2:  // replay 기능 추후 구현
+                    _replayToggle.GetComponent<Toggle>().isOn = true;
+                    break;
+            }
+           
         }
+        if(_alarmUI.activeSelf)
+        {
+            switch (_alarmIndex)
+            {
+                case 0:
+                    _useDiamondToggle.GetComponent<Toggle>().isOn = true;
+                    break; 
+                case 1:
+                    _retryToggle2.GetComponent<Toggle>().isOn = true;
+                    break;
+            }
+        }
+       
     }
 
     [SerializeField] GameObject toggle1S;
-    [SerializeField] GameObject toggle1L;
 
     [SerializeField] GameObject toggle2S;
-    [SerializeField] GameObject toggle2L;
 
     [SerializeField] GameObject toggle3S;
-    [SerializeField] GameObject toggle3L;
     
     public void GoLobbySelect(bool _bool)
     {
-        if (_bool)
-        {
-            toggle1L.gameObject.SetActive(true);
-            toggle1S.gameObject.SetActive(false);
-        }
-        else
-        {
-            toggle1L.gameObject.SetActive(false);
-            toggle1S.gameObject.SetActive(true);
-        }
+        if (_bool) toggle1S.gameObject.SetActive(false);
+        else toggle1S.gameObject.SetActive(true);
     }
     public void RetrySelect(bool _bool)
     {
-        if (_bool)
-        {
-            toggle2L.gameObject.SetActive(true);
-            toggle2S.gameObject.SetActive(false);
-        }
-        else
-        {
-            toggle2L.gameObject.SetActive(false);
-            toggle2S.gameObject.SetActive(true);
-        }
+        if (_bool) toggle2S.gameObject.SetActive(false);
+        else toggle2S.gameObject.SetActive(true);
     }
     public void ReplaySelect(bool _bool)
     {
-        if (_bool)
-        {
-            toggle3L.gameObject.SetActive(true);
-            toggle3S.gameObject.SetActive(false);
-        }
-        else
-        {
-            toggle3L.gameObject.SetActive(false);
-            toggle3S.gameObject.SetActive(true);
-        }
+        if (_bool) toggle3S.gameObject.SetActive(false);
+        else toggle3S.gameObject.SetActive(true);
     }
 
     #endregion
 
     #region Alarm UI
+    [SerializeField] GameObject alarmText1;
+    [SerializeField] GameObject alarmText2;
+    int _alarmIndex = 0;
     public void StartAlarmUI()
     {
+        _alarmIndex = 0;
         _alarmUI.SetActive(true);
+        alarmText2.gameObject.SetActive(true);
     }
     public void EndAlarmUI()
     {
         _alarmUI.SetActive(false);
+        _alarmIndex = 0;
     }
 
-
-    int alarmCount = 1;
-    public void AlarmArrow()
+    public void UseDiamondSelect(bool _bool)
     {
-        if (Input.GetKeyDown(KeyCode.DownArrow))
-        {
-            alarmCount--;
-            if (alarmCount < 1)
-            {
-                alarmCount = 2;
-            }
-        }
-        if (Input.GetKeyDown(KeyCode.UpArrow))
-        {
-            alarmCount++;
-            if (alarmCount > 2)
-            {
-                alarmCount = 1;
-            }
-        }
-
-        switch (alarmCount)
-        {
-            case 1:
-                _retryToggle2.GetComponent<Toggle>().isOn = true;
-                break;
-            case 2:
-                _useDiamondToggle.GetComponent<Toggle>().isOn = true;
-                break;
-            default:
-                break;
-        }
+        if (_bool) alarmText1.gameObject.SetActive(false);
+        else alarmText1.gameObject.SetActive(true);
     }
+    public void RetrySelect2(bool _bool)
+    {
+        if (_bool) alarmText2.gameObject.SetActive(false);
+        else alarmText2.gameObject.SetActive(true);
+    }
+
+    
 
     #endregion
 
@@ -370,7 +409,6 @@ public class UIManeger : MonoBehaviour
         GameObject temp = Instantiate(_failMessage, _failMessageBase.transform);
         Color tempColor = temp.GetComponent<Image>().color;
         Vector3 tempPos = temp.GetComponent<Transform>().position;
-        Debug.Log("aaa");
         while(true)
         {
             tempColor.a -= Time.deltaTime;
