@@ -516,6 +516,8 @@ public class GameManager : MonoBehaviour
         //유아이호출
         _uiManeger.setHP();
         //체력변경사항 저장 -> 데이터 세이브데이터 쪽 수정
+        SaveData saveData = new SaveData(PlayerController.Instance.NowHP, PlayerController.Instance.MaxHP, PlayerController.Instance.transform.position);
+
     }
 }
 

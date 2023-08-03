@@ -7,22 +7,33 @@ public class Data : MonoBehaviour
     #region 전역변수
 
     ItemTable _itemTable;
+    SaveDataList _saveDataList;
 
     
     #endregion
 
 
-    void LoadData()
+    public void LoadData() // loadingScene에서 호출
     {
+        _saveDataList = new SaveDataList();
         // 로드해야하는 목록
-        // 1. 아이템 데이터 목록 -> 
-        // 2. 캐릭터 HP정보와 가지고있는 아이템 정보 , 위치정보 -> savedata클래스
-        // 3. 스테이지 로드
-        // 
+        // 1. 아이템 데이터 목록 json파일 로드
 
-        TextAsset dataJson = Resources.Load<TextAsset>("TestCase/Json/ItemData");
-        _itemTable = JsonUtility.FromJson<ItemTable>(dataJson.text);
-    } // json 파일 로드 함수
+
+        if(_saveDataList != null)  // 만약에 게임을 처음 시작했고 savedata에 아무런 정보가 없을경우 defult값을 넣어줌
+        {
+            PlayerController.Instance.MaxHP = 4;
+            PlayerController.Instance.NowHP = PlayerController.Instance.MaxHP;
+            GameManager.Instance.NowStage = Stage.Lobby;
+            GameManager.Instance.NowFloor = floor.f1;
+        }
+        else // 캐릭터 HP정보와 가지고있는 아이템 정보 , 마지막으로 캐릭터가 있었던 stage와 floor정보 -> savedata클래스
+        {
+
+        }
+
+        // 3. 스테이지 로드 -> gameManger의 start 함수에서 실행 시켜줌 따로 해줄 필요는 없을듣?
+    } 
 
     private static Data instance = null;
     private void Awake()

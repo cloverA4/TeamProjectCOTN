@@ -147,6 +147,12 @@ public class UIManeger : MonoBehaviour
 
     private void Start()
     {
+        UIInit();
+    }
+
+    public void UIInit()
+    {
+        gameObject.SetActive(true);
         _fade.gameObject.SetActive(true);
         setHP();
         _alarmUI.gameObject.SetActive(false);
