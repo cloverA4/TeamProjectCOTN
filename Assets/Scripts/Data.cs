@@ -12,15 +12,16 @@ public class Data : MonoBehaviour
     #endregion
 
 
-    void LoadDataFromJson()
+    void LoadData()
     {
+        // 로드해야하는 목록
+        // 1. 아이템 데이터 목록 -> 
+        // 2. 캐릭터 HP정보와 가지고있는 아이템 정보 , 위치정보 -> savedata클래스
+        // 3. 스테이지 로드
+        // 
+
         TextAsset dataJson = Resources.Load<TextAsset>("TestCase/Json/ItemData");
-        Debug.Log(dataJson);
         _itemTable = JsonUtility.FromJson<ItemTable>(dataJson.text);
-        foreach (var It in _itemTable.itemTable )
-        {
-            
-        }
     } // json 파일 로드 함수
 
     private static Data instance = null;

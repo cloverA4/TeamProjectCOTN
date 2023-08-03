@@ -113,13 +113,13 @@ public class UIManeger : MonoBehaviour
                     case 0:
                         GameManager.Instance.NowStage = Stage.Lobby;
                         GameManager.Instance.NowFloor = floor.f1;
+                        EndAlarmUI();
                         StartCoroutine(FadeIn());
-                        Invoke("EndAlarmUI",1f);
                         break;
                     case 1:
                         GameManager.Instance.NowFloor = floor.f1;
+                        EndAlarmUI();
                         StartCoroutine(FadeIn());
-                        Invoke("EndAlarmUI", 1f);
                         break;
                 }
 
@@ -402,27 +402,4 @@ public class UIManeger : MonoBehaviour
 
     #endregion
 
-    public IEnumerator FailMessge()
-    { 
-      // 실패 메세지 뜨면 3초동안 올라가고
-      // 점점 희미해지면서 사라짐
-        GameObject temp = Instantiate(_failMessage, _failMessageBase.transform);
-        Color tempColor = temp.GetComponent<Image>().color;
-        Vector3 tempPos = temp.GetComponent<Transform>().position;
-        while(true)
-        {
-            tempColor.a -= Time.deltaTime;
-            temp.GetComponent<Image>().color = tempColor;
-
-            tempPos.y += _speed;
-            temp.GetComponent<Transform>().position = tempPos;
-            yield return null;
-
-            if(tempColor.a <= 0)
-            {
-                break;
-            }
-        }
-        Destroy(temp);
-    }
 }
