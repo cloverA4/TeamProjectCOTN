@@ -176,11 +176,11 @@ public class Monster : MonoBehaviour
                 }
                 else if (transform.position.x > PlayerController.Instance.transform.position.x)
                 {
-                    MoveCheck(Vector3.left);
+                    MoveCheck(Vector3.right);
                 }
                 else if (transform.position.x < PlayerController.Instance.transform.position.x)
                 {
-                    MoveCheck(Vector3.right);
+                    MoveCheck(Vector3.left);
                 }
             }
             else
