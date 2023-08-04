@@ -147,7 +147,7 @@ public class PlayerController : MonoBehaviour
 
     void MoveCharacter(Vector3 vec)
     {
-        Vector3 Temp = transform.position;// + new Vector3(0, -0.5f, 0);
+        Vector3 Temp = transform.position;
         RaycastHit2D hitdata = Physics2D.Raycast(Temp, vec, 1f, _layerMask);
         
 
