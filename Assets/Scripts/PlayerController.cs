@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -146,7 +147,7 @@ public class PlayerController : MonoBehaviour
 
     void MoveCharacter(Vector3 vec)
     {
-        Vector3 Temp = transform.position + new Vector3(0, -0.5f, 0);
+        Vector3 Temp = transform.position;// + new Vector3(0, -0.5f, 0);
         RaycastHit2D hitdata = Physics2D.Raycast(Temp, vec, 1f, _layerMask);
         
 
@@ -178,7 +179,7 @@ public class PlayerController : MonoBehaviour
             }
             else if (hitdata.collider.tag == "Stair")
             {
-                Move(vec);
+                TestmoveWay(vec);
             }
             else if (hitdata.collider.tag == "Monster")
             {
@@ -187,13 +188,20 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            Move(vec);
+            TestmoveWay(vec);
         }
     }
 
     void Move(Vector3 vec)
     {
         transform.position += vec;
+        _MakeFog2.UpdateFogOfWar();
+        GetComponent<SpriteRenderer>().sortingOrder = (int)(transform.position.y - 1) * -1; // 레이어 값변환
+    }
+
+    void TestmoveWay(Vector3 vec)
+    {
+        transform.position = Vector3.Lerp(transform.position, transform.position + vec, 1);
         _MakeFog2.UpdateFogOfWar();
         GetComponent<SpriteRenderer>().sortingOrder = (int)(transform.position.y - 1) * -1; // 레이어 값변환
     }
