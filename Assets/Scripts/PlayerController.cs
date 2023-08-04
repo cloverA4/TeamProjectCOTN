@@ -5,7 +5,8 @@ public class PlayerController : MonoBehaviour
 {
     private static PlayerController instance;
 
-    SpriteRenderer _spriter; // 변수 선언과 초기화하기
+    //priteRenderer _spriter; // 변수 선언과 초기화하기
+    SpriteRenderer _childSpriteRenderer;
     [SerializeField] LayerMask _layerMask;
     [SerializeField] MakeFog2 _MakeFog2;
 
@@ -94,11 +95,16 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    
 
     void Start()
     {
-        _spriter = GetComponent<SpriteRenderer>(); // 마찬가지로 가져오는 함수
+        //_spriter = GetComponent<SpriteRenderer>(); // 마찬가지로 가져오는 함수
+        //_spriter = GetComponentInChildren<SpriteRenderer>();
         
+        _childSpriteRenderer = GetComponentInChildren<SpriteRenderer>();
+
+
     }
 
     // Update is called once per frame
@@ -130,7 +136,7 @@ public class PlayerController : MonoBehaviour
                     if(!GameManager.Instance.IsSuccess()) return;
                 }
                 MoveCharacter(Vector3.right);
-                _spriter.flipX = true;
+                _childSpriteRenderer.flipX = true;
             }
             else if (Input.GetKeyDown(KeyCode.LeftArrow)) // 왼쪽 화살표를 입력 받았을때
             {
@@ -139,7 +145,7 @@ public class PlayerController : MonoBehaviour
                     if(!GameManager.Instance.IsSuccess()) return;
                 }
                 MoveCharacter(Vector3.left);
-                _spriter.flipX = false;
+                _childSpriteRenderer.flipX = false;
             }
         }
     }
