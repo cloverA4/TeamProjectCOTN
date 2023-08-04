@@ -176,16 +176,16 @@ public class Monster : MonoBehaviour
                 }
                 else if (transform.position.x > PlayerController.Instance.transform.position.x)
                 {
-                    MoveCheck(Vector3.right);
+                    MoveCheck(Vector3.left);
                 }
                 else if (transform.position.x < PlayerController.Instance.transform.position.x)
                 {
-                    MoveCheck(Vector3.left);
+                    MoveCheck(Vector3.right);
                 }
             }
             else
             {
-                //공격
+                Debug.Log("공격");
                 if (transform.position.x == PlayerController.Instance.transform.position.x) AttackCheck(Vector3.up);
                 else AttackCheck(Vector3.left);
             }
@@ -241,16 +241,18 @@ public class Monster : MonoBehaviour
 
     void AttackCheck(Vector3 vec)
     {
-        Vector3 Temp = transform.position + vec / 2;
-        RaycastHit2D hitdata = Physics2D.Raycast(Temp, vec, 0.5f);
+        MonsterLook = vec;
+        Vector3 Temp = transform.position + MonsterLook / 2;
+        RaycastHit2D hitdata = Physics2D.Raycast(Temp, MonsterLook, 0.5f);
 
         if (hitdata)
         {
             if (hitdata.collider.tag == "Player") PlayerController.Instance.NowHP -= _monsterDamage;
             else
             {
+                MonsterLook = MonsterLook * -1;
                 //플레이어가 아닌 다른게 있다. 그럼 오른쪽 체크
-                hitdata = Physics2D.Raycast(Temp, vec * -1, 0.5f);
+                hitdata = Physics2D.Raycast(Temp, MonsterLook, 0.5f);
                 if (hitdata)
                 {
                     if (hitdata.collider.tag == "Player") PlayerController.Instance.NowHP -= _monsterDamage;
@@ -259,11 +261,18 @@ public class Monster : MonoBehaviour
         }
         else
         {
+            
+            MonsterLook = MonsterLook * -1;
             //거리는 1안에있는데 x값이 다르다? 근데 왼쪽엔 없다. 그럼 오른쪽 체크
-            hitdata = Physics2D.Raycast(Temp, vec * -1, 0.5f);
+            hitdata = Physics2D.Raycast(Temp, MonsterLook, 0.5f);
             if (hitdata)
             {
-                if (hitdata.collider.tag == "Player") PlayerController.Instance.NowHP -= _monsterDamage;
+                Debug.Log(hitdata.collider.name);
+                if (hitdata.collider.tag == "Player")
+                {
+                    Debug.Log("플레이어 발견");
+                    PlayerController.Instance.NowHP -= _monsterDamage;
+                }
             }
         }
     }
