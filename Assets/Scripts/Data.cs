@@ -1,6 +1,8 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Data : MonoBehaviour
 {
@@ -11,29 +13,6 @@ public class Data : MonoBehaviour
 
     
     #endregion
-
-
-    public void LoadData() // loadingScene에서 호출
-    {
-        _saveDataList = new SaveDataList();
-        // 로드해야하는 목록
-        // 1. 아이템 데이터 목록 json파일 로드
-
-
-        if(_saveDataList != null)  // 만약에 게임을 처음 시작했고 savedata에 아무런 정보가 없을경우 defult값을 넣어줌
-        {
-            PlayerController.Instance.MaxHP = 4;
-            PlayerController.Instance.NowHP = PlayerController.Instance.MaxHP;
-            GameManager.Instance.NowStage = Stage.Lobby;
-            GameManager.Instance.NowFloor = floor.f1;
-        }
-        else // 캐릭터 HP정보와 가지고있는 아이템 정보 , 마지막으로 캐릭터가 있었던 stage와 floor정보 -> savedata클래스
-        {
-
-        }
-
-        // 3. 스테이지 로드 -> gameManger의 start 함수에서 실행 시켜줌 따로 해줄 필요는 없을듣?
-    } 
 
     private static Data instance = null;
     private void Awake()
@@ -67,12 +46,65 @@ public class Data : MonoBehaviour
             return instance;
         }
     }
-    
+
+    private void Start()
+    {
+        StartCoroutine(LoadGame());
+    }
+
+
     public Item SearchItem(int itemID)
     {
         Item _tempItem;
         return null;
     } // 아이템 풀에서 아이템ID를 찾아서 아이템 정보 받아오는 함수
+
+    #region GameDataLoad
+
+    public event EventHandler LoadingEnd;
+    AsyncOperation asyncOperation;
+
+    public IEnumerator LoadGame()
+    {
+        // 게임 진행에 필요한 게임 데이터 함수 순서대로 로드
+
+
+        // 마지막에 필요한 모든 게임데이터를 로드가되면 gmaeScene로드
+        asyncOperation = SceneManager.LoadSceneAsync("GameScene");
+        asyncOperation.allowSceneActivation = false;
+        
+        while(true)
+        {
+            if(asyncOperation.progress >= 0.9f)
+            {
+                yield return new WaitForSeconds(3f);
+                LoadingEnd?.Invoke(this, EventArgs.Empty);
+                break;
+            }
+            yield return null;
+        }
+    }
+
+    public void SceneChange()
+    {
+        StopCoroutine(LoadGame());
+        asyncOperation.allowSceneActivation = true;
+    }
+
+    public void LoadItemData() // loadingScene에서 호출
+    {
+        // 아이템 데이터 json파일 호출
+    }
+
+    void LoadSaveData()
+    {
+        // 세이브 데이타가 있을경우 세이브 데이타 호출 후 씬로드
+
+        // 세이브 데이타가 없을 경우 기본값 설정해주는 함수 호출 후 씬 로드
+    }
+   
+
+    #endregion
 
 }
 
