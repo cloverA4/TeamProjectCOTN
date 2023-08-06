@@ -7,6 +7,7 @@ public class Door : MonoBehaviour
 {
     private int _wallCount;
     private int _WallCountReset = 2;
+    SpriteRenderer _doorSortingOrder;
     //1
     //[SerializeField]
     //LayerMask objectLayer;
@@ -14,7 +15,8 @@ public class Door : MonoBehaviour
     void Start()
     {
         _wallCount = _WallCountReset;
-        GetComponent<SpriteRenderer>().sortingOrder = (int)transform.position.y * -1; // y의 위치를 확인하고 이미지를 정렬시켜주는 구문     
+        _doorSortingOrder = GetComponentsInChildren<SpriteRenderer>()[1];
+        _doorSortingOrder.sortingOrder = (int)transform.position.y * -1; // y의 위치를 확인하고 이미지를 정렬시켜주는 구문     
     }
 
     public void DoorReset()

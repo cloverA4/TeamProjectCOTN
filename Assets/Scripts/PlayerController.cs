@@ -99,12 +99,8 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
-        //_spriter = GetComponent<SpriteRenderer>(); // 마찬가지로 가져오는 함수
-        //_spriter = GetComponentInChildren<SpriteRenderer>();
-        
-        _childSpriteRenderer = GetComponentInChildren<SpriteRenderer>();
-
-
+        //_childSpriteRenderer = GetComponentInChildrens<SpriteRenderer>()[1];
+        _childSpriteRenderer = GetComponentsInChildren<SpriteRenderer>()[1];
     }
 
     // Update is called once per frame

@@ -18,13 +18,13 @@ public class Wall : MonoBehaviour
     //LayerMask objectLayer;
     //public GameObject _gameObject;
 
-
+    
 
     void Start()
     {
         _hp = _wallMaxHp;
-        _spriteRenderer = GetComponent<SpriteRenderer>();
-        GetComponent<SpriteRenderer>().sortingOrder = (int)transform.position.y * -1;
+        _spriteRenderer = GetComponentsInChildren<SpriteRenderer>()[1];
+        _spriteRenderer.GetComponent<SpriteRenderer>().sortingOrder = (int)transform.position.y * -1;
 
         _attackedWall = Resources.Load<Sprite>("Wall/isometric_pixel_flat_0074");
     }
