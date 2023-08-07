@@ -14,6 +14,7 @@ public class PlayerController : MonoBehaviour
     
     bool _isSuccess = true;
     bool _isDubbleClick = true;
+    public bool IsX { get; private set; }
 
     //캐릭터 데이터
     bool _isLive = true;
@@ -101,6 +102,7 @@ public class PlayerController : MonoBehaviour
     {
         //_childSpriteRenderer = GetComponentInChildrens<SpriteRenderer>()[1];
         _childSpriteRenderer = GetComponentsInChildren<SpriteRenderer>()[1];
+        IsX = true;
     }
 
     // Update is called once per frame
@@ -116,6 +118,7 @@ public class PlayerController : MonoBehaviour
                     if(!GameManager.Instance.IsSuccess()) return;
                 }
                 MoveCharacter(Vector3.up);
+                IsX = false;
             }
             else if (Input.GetKeyDown(KeyCode.DownArrow)) // 아래 화살표를 입력 받았을때
             {
@@ -124,6 +127,7 @@ public class PlayerController : MonoBehaviour
                     if(!GameManager.Instance.IsSuccess()) return;
                 }
                 MoveCharacter(Vector3.down);
+                IsX = false;
             }
             else if(Input.GetKeyDown(KeyCode.RightArrow)) // 오른쪽 화살표를 입력 받았을때
             {
@@ -133,6 +137,7 @@ public class PlayerController : MonoBehaviour
                 }
                 MoveCharacter(Vector3.right);
                 _childSpriteRenderer.flipX = true;
+                IsX = true;
             }
             else if (Input.GetKeyDown(KeyCode.LeftArrow)) // 왼쪽 화살표를 입력 받았을때
             {
@@ -142,6 +147,7 @@ public class PlayerController : MonoBehaviour
                 }
                 MoveCharacter(Vector3.left);
                 _childSpriteRenderer.flipX = false;
+                IsX = true;
             }
         }
     }
@@ -151,7 +157,6 @@ public class PlayerController : MonoBehaviour
     {
         Vector3 Temp = transform.position;
         RaycastHit2D hitdata = Physics2D.Raycast(Temp, vec, 1f, _layerMask);
-        
 
         // 왼쪽으로 빔을쏘는         
         if (hitdata)

@@ -161,8 +161,7 @@ public class GameManager : MonoBehaviour
                     break;
                 }
             }
-            //몬스터 이동
-            MosterMoveEnvent?.Invoke(this, EventArgs.Empty);
+            //몬스터 이동            
             yield return new WaitForSeconds(beatTime);
         }
     }
@@ -192,6 +191,9 @@ public class GameManager : MonoBehaviour
     public void RightNoteRemove(GameObject note) //활성노트 리스트에서 제거
     {
         _rightNoteList.Remove(note);
+        //몬스터 행동부분 - 이벤트방식에서 순차방식으로 변경
+        //MosterMoveEnvent?.Invoke(this, EventArgs.Empty);
+        monsterActionStart();
     }
     public void LeftNoteRemove(GameObject note) //활성노트 리스트에서 제거
     {
@@ -199,7 +201,7 @@ public class GameManager : MonoBehaviour
     }
 
     void DeleteJudgementNote()
-    {
+    {    
         _rightNoteList[0].SetActive(false);
         _leftNoteList[0].SetActive(false);
         RightNoteRemove(_rightNoteList[0]);
@@ -375,7 +377,7 @@ public class GameManager : MonoBehaviour
     #endregion
 
     #region 몬스터 제어
-    public event EventHandler MosterMoveEnvent; // 몬스터 행동 이벤트(턴마다1회씩)
+    //public event EventHandler MosterMoveEnvent; // 몬스터 행동 이벤트(턴마다1회씩)
 
     [SerializeField] Transform[] _spawnPoint1s1f; // 방마다 하나씩
     [SerializeField] Transform[] _spawnPoint1s2f;
@@ -417,7 +419,6 @@ public class GameManager : MonoBehaviour
                 break;
         }
     }
-
     void CreateSpawnList(Transform[] vecs)
     {
         for (int i = 0; i < vecs.Length; i++)
@@ -434,10 +435,8 @@ public class GameManager : MonoBehaviour
                 vecs[i].GetComponent<Room>().Roomindex.RemoveAt(r);
             }
         }
-
         SpawnMonster();
     }
-
     void ResetMonster()
     {
         randomSpawnList.Clear();
@@ -446,7 +445,6 @@ public class GameManager : MonoBehaviour
             _monsterPool.transform.GetChild(i).gameObject.SetActive(false);
         }
     }
-
     void SpawnMonster()
     {
         int index = 0;
@@ -462,7 +460,6 @@ public class GameManager : MonoBehaviour
             }
         }
     }
-
     void MonsterPooling(int index)
     {
         int r = UnityEngine.Random.Range(0, randomSpawnList.Count);
@@ -505,6 +502,21 @@ public class GameManager : MonoBehaviour
         {
             go.GetComponent<Monster>().Init(MonsterType.EliteMonster);
             go.transform.position = transform.position;
+        }
+    }
+
+    void monsterActionStart()
+    {
+        for(int i = 0; i < _monsterPool.transform.childCount; i++)
+        {
+            if(_monsterPool.transform.GetChild(i).gameObject.activeSelf)
+            {
+                Monster mo = _monsterPool.GetComponent<Monster>();
+                if(mo != null)
+                {
+                    mo.MonsterMove();
+                }
+            }
         }
     }
 

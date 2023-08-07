@@ -21,7 +21,7 @@ public class Monster : MonoBehaviour
 
     void Start()
     {
-        GameManager.Instance.MosterMoveEnvent += new EventHandler(MonsterMove);
+        //GameManager.Instance.MosterMoveEnvent += new EventHandler(MonsterMove);
     }
 
     public void Init(MonsterType Type) //몬스터 타입 별 기본값 세팅
@@ -63,7 +63,8 @@ public class Monster : MonoBehaviour
         }
     }
 
-    void MonsterMove(object sender, EventArgs s)
+    //void MonsterMove(object sender, EventArgs s)
+    public void MonsterMove()
     {
         if (_aggro == false)
         {
@@ -132,112 +133,65 @@ public class Monster : MonoBehaviour
         
         if (hitdata)
         {
-            //플레이어면 공격하고 아니면 뒤로돌아서 다시검사
+            //플레이어면 공격하고 아니면 뒤로돌고 턴 끝
             if (hitdata.collider.tag == "Player") PlayerController.Instance.NowHP -= _monsterDamage;//플레이어면 공격
             else
             {
                 MonsterLook = MonsterLook * -1;
-                hitdata = Physics2D.Raycast(Temp, MonsterLook, 0.5f);
-                if(hitdata)
-                {
-                    if (hitdata.collider.tag == "Player") PlayerController.Instance.NowHP -= _monsterDamage;//플레이어면 공격
-                }
-                else monsterMove();
             }
         }
-        else monsterMove();
+        else MoveMonster();
     }
-    void monsterMove()
-    {
-        transform.position += MonsterLook;
-        //GetComponent<SpriteRenderer>().sortingOrder = (int)(transform.position.y - 1) * -1;
-    }
-    
+
     void MonsterPattern2()
     {
         //해골패턴
         if (_attackReady)
         {
-            GetComponent<SpriteRenderer>().color = Color.white;
+            Action<Vector3> action;            
             if (Vector2.Distance(transform.position, PlayerController.Instance.transform.position) > 1)
             {
-                //이동
-                if (transform.position.x == PlayerController.Instance.transform.position.x)
-                {
-                    //y축 이동
-                    if (transform.position.y > PlayerController.Instance.transform.position.y)
-                    {
-                        MoveCheck(Vector3.down);
-                    }
-                    else
-                    {
-                        MoveCheck(Vector3.up);
-                    }
-                }
-                else if (transform.position.x > PlayerController.Instance.transform.position.x)
-                {
-                    MoveCheck(Vector3.left);
-                }
-                else if (transform.position.x < PlayerController.Instance.transform.position.x)
-                {
-                    MoveCheck(Vector3.right);
-                }
+                action = MoveMonster2;
             }
             else
             {
-                Debug.Log("공격");
-                if (transform.position.x == PlayerController.Instance.transform.position.x) AttackCheck(Vector3.up);
-                else AttackCheck(Vector3.left);
+                action = AttackCheck;
             }
+
+            if (transform.position.x == PlayerController.Instance.transform.position.x)
+            {
+                if (transform.position.y > PlayerController.Instance.transform.position.y) action(Vector3.down);
+                else action(Vector3.up);
+            }
+            else if (transform.position.y == PlayerController.Instance.transform.position.y)
+            {
+                if (transform.position.x > PlayerController.Instance.transform.position.x) action(Vector3.left);
+                else action(Vector3.right);
+            }
+            else
+            {
+                if (PlayerController.Instance.IsX)
+                {
+                    if (transform.position.x > PlayerController.Instance.transform.position.x) MoveMonsterX(Vector3.left);
+                    else MoveMonsterX(Vector3.right);
+                }
+                else
+                {
+                    if (transform.position.y > PlayerController.Instance.transform.position.y) MoveMonsterY(Vector3.down);
+                    else MoveMonsterY(Vector3.up);
+                }                
+            }
+
+            GetComponentsInChildren<SpriteRenderer>()[1].color = Color.white;
             _attackReady = false;
         }
         else
         {
-            GetComponent<SpriteRenderer>().color = Color.red;
+            GetComponentsInChildren<SpriteRenderer>()[1].color = Color.red;
             _attackReady = true;
         }
     }
-
-    void MoveCheck(Vector3 vec)
-    {
-        Vector3 Temp = transform.position + vec / 2;
-        RaycastHit2D hitdata = Physics2D.Raycast(Temp, vec, 0.5f);
-
-        if (vec == Vector3.left || vec == Vector3.right)
-        {
-            if (hitdata)
-            {
-                hitdata = Physics2D.Raycast(Temp, Vector3.up, 0.5f);
-
-                if (hitdata)
-                {
-                    hitdata = Physics2D.Raycast(Temp, Vector3.down, 0.5f);
-
-                    if (hitdata) transform.position += vec * -1;
-                    else transform.position += Vector3.down;
-                }
-                else transform.position += Vector3.up;
-            }
-            else transform.position += vec;
-        }
-        else if(vec == Vector3.up || vec == Vector3.down)
-        {
-            if (hitdata)
-            {
-                hitdata = Physics2D.Raycast(Temp, Vector3.left, 0.5f);
-
-                if (hitdata)
-                {
-                    hitdata = Physics2D.Raycast(Temp, Vector3.right, 0.5f);
-
-                    if (hitdata) transform.position += vec * -1;
-                    else transform.position += Vector3.right;
-                }
-                else transform.position += Vector3.left;
-            }
-            else transform.position += vec;
-        }
-    }
+        
 
     void AttackCheck(Vector3 vec)
     {
@@ -248,32 +202,6 @@ public class Monster : MonoBehaviour
         if (hitdata)
         {
             if (hitdata.collider.tag == "Player") PlayerController.Instance.NowHP -= _monsterDamage;
-            else
-            {
-                MonsterLook = MonsterLook * -1;
-                //플레이어가 아닌 다른게 있다. 그럼 오른쪽 체크
-                hitdata = Physics2D.Raycast(Temp, MonsterLook, 0.5f);
-                if (hitdata)
-                {
-                    if (hitdata.collider.tag == "Player") PlayerController.Instance.NowHP -= _monsterDamage;
-                }
-            }
-        }
-        else
-        {
-            
-            MonsterLook = MonsterLook * -1;
-            //거리는 1안에있는데 x값이 다르다? 근데 왼쪽엔 없다. 그럼 오른쪽 체크
-            hitdata = Physics2D.Raycast(Temp, MonsterLook, 0.5f);
-            if (hitdata)
-            {
-                Debug.Log(hitdata.collider.name);
-                if (hitdata.collider.tag == "Player")
-                {
-                    Debug.Log("플레이어 발견");
-                    PlayerController.Instance.NowHP -= _monsterDamage;
-                }
-            }
         }
     }
 
@@ -299,7 +227,7 @@ public class Monster : MonoBehaviour
                 if(hitdata.collider.CompareTag("Player")) PlayerController.Instance.NowHP -= _monsterDamage;
             }
 
-            GetComponent<SpriteRenderer>().color = Color.white;
+            GetComponentsInChildren<SpriteRenderer>()[1].color = Color.white;
             _specialAttackCount = 0;
             _attackMoveCount = 0;
             _attackReady = false;
@@ -455,11 +383,84 @@ public class Monster : MonoBehaviour
             MonsterLook = Vector3.left;
         }
         //브레스 차징
-        GetComponent<SpriteRenderer>().color = Color.red;
+        GetComponentsInChildren<SpriteRenderer>()[1].color = Color.red;
         _attackReady = true;
     }
 
-     public void TakeDamage(int damage)
+
+    #region 몬스터 이동함수
+
+    void MoveMonster()
+    {
+        transform.position += MonsterLook;
+        //GetComponent<SpriteRenderer>().sortingOrder = (int)(transform.position.y - 1) * -1;
+    }
+
+    void MoveMonster2(Vector3 vec)
+    {
+        //해당방향으로 레이를 쏘고 이동, 장애물이 있으면 종료
+        MonsterLook = vec;
+        Vector3 Temp = transform.position + MonsterLook / 2;
+        RaycastHit2D hitdata = Physics2D.Raycast(Temp, MonsterLook, 0.5f);
+
+        if (hitdata == false)
+        {
+            MoveMonster();
+        }
+    }
+
+    void MoveMonsterX(Vector3 vec)
+    {
+        MonsterLook = vec;
+        Vector3 Temp = transform.position + MonsterLook / 2;
+        RaycastHit2D hitdata = Physics2D.Raycast(Temp, MonsterLook, 0.5f);
+
+        if (hitdata)
+        {
+            //y값 쪽으로 한번더 검사
+            if (transform.position.y > PlayerController.Instance.transform.position.y)
+            {
+                MoveMonster2(Vector3.down);
+            }
+            else
+            {
+                MoveMonster2(Vector3.up);
+            }
+        }
+        else
+        {
+            MoveMonster();
+        }
+    }
+
+    void MoveMonsterY(Vector3 vec)
+    {
+        MonsterLook = vec;
+        Vector3 Temp = transform.position + MonsterLook / 2;
+        RaycastHit2D hitdata = Physics2D.Raycast(Temp, MonsterLook, 0.5f);
+
+        if (hitdata)
+        {
+            //y값 쪽으로 한번더 검사
+            if (transform.position.x > PlayerController.Instance.transform.position.x)
+            {
+                MoveMonster2(Vector3.left);
+            }
+            else
+            {
+                MoveMonster2(Vector3.right);
+            }
+        }
+        else
+        {
+            MoveMonster();
+        }
+    }
+
+    #endregion
+
+
+    public void TakeDamage(int damage)
     { 
         //체력체크
         _monsterHP -= damage;
