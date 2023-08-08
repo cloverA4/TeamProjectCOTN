@@ -1,6 +1,10 @@
 using UnityEngine;
 using System;
+using System.Collections.Generic;
 using Unity.VisualScripting;
+using Unity.Burst.CompilerServices;
+using System.Net;
+using JetBrains.Annotations;
 
 public class Monster : MonoBehaviour
 {
@@ -201,8 +205,8 @@ public class Monster : MonoBehaviour
         }
     }
 
+    int _attackMoveCount = 0;
     int _specialAttackCount = 0;
-    bool _specialAttackReady = false;
 
     void EliteMonsterPattern()
     {
@@ -211,9 +215,10 @@ public class Monster : MonoBehaviour
 
         _specialAttackCount++;
 
-        if(_specialAttackReady)
+        if(_attackReady)
         {
             //특수공격
+
             Temp = transform.position + MonsterLook / 2;
             hitdata = Physics2D.Raycast(Temp, MonsterLook, 100f, 1 << LayerMask.NameToLayer("Player"));
 
@@ -224,78 +229,91 @@ public class Monster : MonoBehaviour
 
             GetComponentsInChildren<SpriteRenderer>()[1].color = Color.white;
             _specialAttackCount = 0;
+            _attackMoveCount = 0;
             _attackReady = false;
             return;
         }
-
-        if (_attackReady)
+        
+        if (_attackMoveCount >= 1)
         {
-            Action<Vector3> action;
-            if (Vector2.Distance(transform.position, PlayerController.Instance.transform.position) > 1)
-            {
-                action = MoveMonster2;
-            }
-            else
-            {
-                action = AttackCheck;
-            }
-
-            if (transform.position.x == PlayerController.Instance.transform.position.x)
-            {
-                if (transform.position.y > PlayerController.Instance.transform.position.y) action(Vector3.down);
-                else action(Vector3.up);
-            }
-            else if (transform.position.y == PlayerController.Instance.transform.position.y)
-            {
-                if (Vector2.Distance(transform.position, PlayerController.Instance.transform.position) > 1)
+            if(Vector2.Distance(transform.position, PlayerController.Instance.transform.position) < 1)
+            {                
+                //공격
+                if (PlayerController.Instance.transform.position.x == transform.position.x)
                 {
-                    if (_specialAttackCount >= 3) breathCharging();
+                    if(PlayerController.Instance.transform.position.y > transform.position.y)
+                    {
+                        //위에있음
+                        Temp = transform.position + Vector3.up / 2;
+                        hitdata = Physics2D.Raycast(Temp, Vector3.up, 0.5f);
+                    }
                     else
                     {
-                        if (transform.position.x > PlayerController.Instance.transform.position.x) action(Vector3.left);
-                        else action(Vector3.right);
+                        //아래있음
+                        Temp = transform.position + Vector3.down / 2;
+                        hitdata = Physics2D.Raycast(Temp, Vector3.down, 0.5f);
+                    }
+                }
+                else if(PlayerController.Instance.transform.position.y == transform.position.y)
+                {
+                    if (PlayerController.Instance.transform.position.x > transform.position.x)
+                    {
+                        //오른쪽에 있음
+                        Temp = transform.position + Vector3.right / 2;
+                        hitdata = Physics2D.Raycast(Temp, Vector3.right, 0.5f);
+                    }
+                    else
+                    {
+                        //왼쪽에 있음
+                        Temp = transform.position + Vector3.left / 2;
+                        hitdata = Physics2D.Raycast(Temp, Vector3.left, 0.5f);
+                    }
+                }
+
+                if(hitdata)
+                {
+                    if(hitdata.collider.CompareTag("Player"))
+                    {
+                        PlayerController.Instance.NowHP -= _monsterDamage;
                     }
                 }
                 else
                 {
-                    if (transform.position.x > PlayerController.Instance.transform.position.x) action(Vector3.left);
-                    else action(Vector3.right);
+                    Debug.Log("플레이어까지 거리가 1미만인데 상하좌우에 없다????");
                 }
+                _specialAttackCount = 0;
+                _attackMoveCount = 0;
             }
             else
             {
-                if (_specialAttackCount >= 3 && Math.Abs(transform.position.y - PlayerController.Instance.transform.position.y) == 1)
+                //이동
+                if (PlayerController.Instance.transform.position.y == transform.position.y)
                 {
-                    //y값의 차이가 1일때 y값으로 움직이면서 브레스차징
-                    if (transform.position.y > PlayerController.Instance.transform.position.y) MoveMonsterY(Vector3.down);
-                    else MoveMonsterY(Vector3.up);
-                    breathCharging();
-                }
-                else if (PlayerController.Instance.IsX)
-                {
-                    if (transform.position.x > PlayerController.Instance.transform.position.x) MoveMonsterX(Vector3.left);
-                    else MoveMonsterX(Vector3.right);
+                    if (_specialAttackCount >= 3) breathCharging();
+                    else EliteMonsterMove(0);
                 }
                 else
                 {
-                    if (transform.position.y > PlayerController.Instance.transform.position.y) MoveMonsterY(Vector3.down);
-                    else MoveMonsterY(Vector3.up);
+                    if(Math.Abs(PlayerController.Instance.transform.position.y - transform.position.y) == 1)
+                    {
+                        if (_specialAttackCount >= 3)
+                        {
+                            EliteMonsterMove(1);
+                            breathCharging();                            
+                        }
+                        else EliteMonsterMove(0);
+                    }
+                    else EliteMonsterMove(1);
                 }
             }
-            GetComponentsInChildren<SpriteRenderer>()[1].color = Color.white;
-            _attackReady = false;
         }
         else
         {
             if (PlayerController.Instance.transform.position.y == transform.position.y)
             {
                 if (_specialAttackCount >= 3) breathCharging();
-                else _attackReady = true;
             }
-            else
-            {
-                _attackReady = true;
-            }
+            _attackMoveCount++;
         }
         //근접공격가능하면 브레스카운터 초기화 및 근접공격
         //근접공격 불가능할 시 브레스 가능하면 브레스차징
@@ -303,6 +321,55 @@ public class Monster : MonoBehaviour
 
         //브레스카운터는 3턴째 차징 4턴째 발사
         //이동 및 공격은 2턴마다
+    }
+    void EliteMonsterMove(int type)
+    {
+        Vector3 Temp;
+        Vector3 vec;
+        RaycastHit2D hitdata = new RaycastHit2D();
+        if (type == 0)
+        {
+            //x축이동
+            if (PlayerController.Instance.transform.position.x > transform.position.x)
+            {
+                Temp = transform.position + Vector3.right / 2;
+                hitdata = Physics2D.Raycast(Temp, Vector3.right, 0.5f);
+                vec = Vector3.right;
+            }
+            else
+            {
+                Temp = transform.position + Vector3.left / 2;
+                hitdata = Physics2D.Raycast(Temp, Vector3.left, 0.5f);
+                vec = Vector3.left;
+            }
+
+            if (!hitdata)
+            {
+                transform.position += vec;
+            }
+        }
+        else if(type == 1)
+        {
+            //y축이동
+            if (PlayerController.Instance.transform.position.y > transform.position.y)
+            {
+                Temp = transform.position + Vector3.up / 2;
+                hitdata = Physics2D.Raycast(Temp, Vector3.up, 0.5f);
+                vec = Vector3.up;
+            }
+            else
+            {
+                Temp = transform.position + Vector3.down / 2;
+                hitdata = Physics2D.Raycast(Temp, Vector3.down, 0.5f);
+                vec = Vector3.down;
+            }
+
+            if (!hitdata)
+            {
+                transform.position += vec;
+            }
+        }
+
     }
 
     void breathCharging()
@@ -317,7 +384,7 @@ public class Monster : MonoBehaviour
         }
         //브레스 차징
         GetComponentsInChildren<SpriteRenderer>()[1].color = Color.red;
-        _specialAttackReady = true;
+        _attackReady = true;
     }
 
 
