@@ -278,6 +278,7 @@ public class GameManager : MonoBehaviour
         switch (_nowStage)
         {
             case Stage.Lobby:
+                _audio.clip = Resources.Load<AudioClip>("SoundsUpdate/Stage/StageLobby");
                 _stageClear = true;
                 switch (_nowFloor)
                 {
@@ -297,14 +298,17 @@ public class GameManager : MonoBehaviour
                     case floor.f1:                        
                         PlayerController.Instance.transfromUpdate(_stageStartPosition.Stage1F1);
                         _MakeFog2.FogOfWarStageMove();
+                        _audio.clip = Resources.Load<AudioClip>("SoundsUpdate/Stage/Stage1-1");
                         break;
                     case floor.f2:
                         PlayerController.Instance.transfromUpdate(_stageStartPosition.Stage1F2);
                         _MakeFog2.FogOfWarStageMove();
+                        _audio.clip = Resources.Load<AudioClip>("SoundsUpdate/Stage/Stage1-2");
                         break;
                     case floor.f3:
                         PlayerController.Instance.transfromUpdate(_stageStartPosition.Stage1F3);
                         _MakeFog2.FogOfWarStageMove();
+                        _audio.clip = Resources.Load<AudioClip>("SoundsUpdate/Stage/Stage1-3");
                         break;
                     case floor.fBoss:
                         break;
@@ -346,21 +350,19 @@ public class GameManager : MonoBehaviour
     {
         //페이드아웃이 끝난 후 노래,비트 시작
         //스테이지에 맞는 bpm설정
-        
+
         switch (_nowStage)
         {
-            case Stage.Lobby:
+            case Stage.Lobby:                
                 break;
-                case Stage.Stage1:
-                case Stage.Stage2:
-
+            case Stage.Stage1:
+            case Stage.Stage2:                
                 if (mt != null)
                 {
                     StopCoroutine(mt);
                 }
                 mt = Metronom();
                 StartCoroutine(mt);
-
                 break;
         }
 
