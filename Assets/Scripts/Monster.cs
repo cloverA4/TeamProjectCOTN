@@ -468,6 +468,10 @@ public class Monster : MonoBehaviour
         {
             //사망
             gameObject.SetActive(false);
+            if(Type == MonsterType.EliteMonster)
+            {
+                GameManager.Instance.StageClear = true;
+            }
         }        
         //유아이 체력삭제 호출
     }

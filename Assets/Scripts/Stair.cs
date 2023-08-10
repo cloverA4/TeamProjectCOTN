@@ -11,8 +11,6 @@ public class Stair : MonoBehaviour
 
     SpriteRenderer _benStair;
 
-    bool _eliteMonsterLive = true;
-
     private void Start()
     {
         _benStair = GetComponentsInChildren<SpriteRenderer>()[1];
@@ -22,7 +20,6 @@ public class Stair : MonoBehaviour
 
     public void EliteMonsterLive()
     {
-        _eliteMonsterLive = true;
         _benStair.enabled = true;
     }
 
@@ -30,7 +27,6 @@ public class Stair : MonoBehaviour
 
     public void EliteMonsterDied()
     {
-        _eliteMonsterLive = false;
         _benStair.enabled = false;
     }
 
@@ -40,15 +36,15 @@ public class Stair : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
-            if (_eliteMonsterLive)
-            {
-                //ui호출 "엘리트 몬스터를 처치해야합니다!"
-            }
-            else
+            if (GameManager.Instance.StageClear)
             {
                 GameManager.Instance.NowStage = _nowStage;
                 GameManager.Instance.NowFloor = _nowFloor;
                 GameManager.Instance.FaidIn();
+            }
+            else
+            {
+                //ui호출 "엘리트 몬스터를 처치해야합니다!"
             }
         }
     }

@@ -14,6 +14,13 @@ public class GameManager : MonoBehaviour
     //스테이지 데이터
     Stage _nowStage = Stage.Lobby;
     StageStartPosition _stageStartPosition = new StageStartPosition();
+    bool _stageClear = false;
+
+    public bool StageClear
+    {
+        get { return _stageClear; }
+        set { _stageClear = value; }
+    }
 
     public Stage NowStage
     {
@@ -271,6 +278,7 @@ public class GameManager : MonoBehaviour
         switch (_nowStage)
         {
             case Stage.Lobby:
+                _stageClear = true;
                 switch (_nowFloor)
                 {
                     case floor.f1:
@@ -283,6 +291,7 @@ public class GameManager : MonoBehaviour
                 }
                 break;
             case Stage.Stage1:
+                _stageClear = false;
                 switch (_nowFloor)
                 {
                     case floor.f1:                        
@@ -302,6 +311,7 @@ public class GameManager : MonoBehaviour
                 }
                 break;
             case Stage.Stage2:
+                _stageClear = false;
                 switch (_nowFloor)
                 {
                     case floor.f1:
