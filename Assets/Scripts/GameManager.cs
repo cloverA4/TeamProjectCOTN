@@ -279,6 +279,7 @@ public class GameManager : MonoBehaviour
         {
             case Stage.Lobby:
                 _audio.clip = Resources.Load<AudioClip>("SoundsUpdate/Stage/StageLobby");
+                _audio.loop = true;
                 _stageClear = true;
                 switch (_nowFloor)
                 {
@@ -293,6 +294,7 @@ public class GameManager : MonoBehaviour
                 break;
             case Stage.Stage1:
                 _stageClear = false;
+                _audio.loop = false;
                 switch (_nowFloor)
                 {
                     case floor.f1:                        
@@ -316,6 +318,7 @@ public class GameManager : MonoBehaviour
                 break;
             case Stage.Stage2:
                 _stageClear = false;
+                _audio.loop = false;
                 switch (_nowFloor)
                 {
                     case floor.f1:
