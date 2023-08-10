@@ -526,7 +526,7 @@ public class GameManager : MonoBehaviour
         {
             if(_monsterPool.transform.GetChild(i).gameObject.activeSelf)
             {
-                Monster mo = _monsterPool.GetComponent<Monster>();
+                Monster mo = _monsterPool.transform.GetChild(i).GetComponent<Monster>();
                 if(mo != null)
                 {
                     mo.MonsterMove();
