@@ -34,9 +34,13 @@ public class UIManeger : MonoBehaviour
     [SerializeField] GameObject _failMessageBase;
     [SerializeField] int _speed;
 
+    [SerializeField] GameObject _gamePlayingInfo;
+
 
     private void Update()
     {
+        //if (Input.GetKeyDown(KeyCode.P)) 
+        
         if (_goLobbyUI.activeSelf) 
         {
             if (Input.GetKeyDown(KeyCode.DownArrow))
@@ -405,7 +409,18 @@ public class UIManeger : MonoBehaviour
         else alarmText2.gameObject.SetActive(true);
     }
 
-    
+
+
+    #endregion
+
+    #region GamePlayingInfo
+
+    void SetActiveInfoUI()
+    {
+        _gamePlayingInfo.SetActive(true);
+        _gamePlayingInfo.GetComponent<Animator>().SetTrigger("PlayingInfo");
+        _gamePlayingInfo.SetActive(false);
+    }
 
     #endregion
 
