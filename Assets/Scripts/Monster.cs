@@ -299,7 +299,7 @@ public class Monster : MonoBehaviour
                         if (_specialAttackCount >= 3)
                         {
                             EliteMonsterMove(1);
-                            breathCharging();                            
+                            breathCharging();
                         }
                         else EliteMonsterMove(0);
                     }
@@ -470,7 +470,7 @@ public class Monster : MonoBehaviour
             gameObject.SetActive(false);
             if(Type == MonsterType.EliteMonster)
             {
-                GameManager.Instance.StageClear = true;
+                GameManager.Instance.EliteMonsterDie();
             }
         }        
         //유아이 체력삭제 호출

@@ -392,7 +392,7 @@ public class GameManager : MonoBehaviour
     #endregion
 
     #region 몬스터 제어
-    //public event EventHandler MosterMoveEnvent; // 몬스터 행동 이벤트(턴마다1회씩)
+    public event EventHandler EventEliteMonsterDie;
 
     [SerializeField] Transform[] _spawnPoint1s1f; // 방마다 하나씩
     [SerializeField] Transform[] _spawnPoint1s2f;
@@ -533,6 +533,12 @@ public class GameManager : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void EliteMonsterDie()
+    {
+        EventEliteMonsterDie?.Invoke(this, EventArgs.Empty);
+        _stageClear = true;
     }
 
     //몬스터 ai 구현(종류별로 하나씩 추가)
