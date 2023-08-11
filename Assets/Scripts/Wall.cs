@@ -1,10 +1,5 @@
-
-using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UIElements;
+
 
 
 public class Wall : MonoBehaviour
@@ -27,13 +22,13 @@ public class Wall : MonoBehaviour
         _spriteRenderer.GetComponent<SpriteRenderer>().sortingOrder = (int)transform.position.y * -1;
 
         _attackedWall = Resources.Load<Sprite>("Wall/isometric_pixel_flat_0074");
+        _normalWall = Resources.Load<Sprite>("Wall/WeedWallVer3");
     }
 
     
 
     public void WallReset()
     {
-        _normalWall = Resources.Load<Sprite>("Wall/WeedWallVer3");
         _spriteRenderer.sprite = _normalWall;
         _hp = _wallMaxHp;
         gameObject.SetActive(true);

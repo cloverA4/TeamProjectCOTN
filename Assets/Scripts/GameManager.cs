@@ -332,7 +332,7 @@ public class GameManager : MonoBehaviour
         }      
         
         //벽 로드(부서진 벽 등 전부 리셋)
-        GameObject.Find("WallAndDoorManager").GetComponent<WallAndDoorManager>().ResetWallAndDoor();
+        GameObject.Find("MapManager").GetComponent<MapManager>().ResetMapObject();
 
         //안개초기화 및 위치 변경 ,스테이지 이동 후 플레이어 주변으로 안개 걷음
         //GameObject.Find("Fog/FogArea").GetComponent<MakeFog2>().ResetFog();
@@ -537,8 +537,8 @@ public class GameManager : MonoBehaviour
 
     public void EliteMonsterDie()
     {
-        EventEliteMonsterDie?.Invoke(this, EventArgs.Empty);
         _stageClear = true;
+        EventEliteMonsterDie?.Invoke(this, EventArgs.Empty);
     }
 
     //몬스터 ai 구현(종류별로 하나씩 추가)

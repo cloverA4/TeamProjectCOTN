@@ -6,7 +6,7 @@ using UnityEngine.Tilemaps;
 public class Door : MonoBehaviour
 {
     private int _wallCount;
-    private int _WallCountReset = 2;
+    private int _WallCountReset = 2; //주변의 벽 갯수 주변벽이깨지면 문파괴
     SpriteRenderer _doorSortingOrder;
     //1
     //[SerializeField]
