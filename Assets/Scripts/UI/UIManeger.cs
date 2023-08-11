@@ -386,6 +386,7 @@ public class UIManeger : MonoBehaviour
         _alarmIndex = 0;
         _alarmUI.SetActive(true);
         alarmText2.gameObject.SetActive(true);
+        SelectToggle();
     }
     public void EndAlarmUI()
     {
