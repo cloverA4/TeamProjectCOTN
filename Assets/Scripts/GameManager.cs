@@ -200,7 +200,8 @@ public class GameManager : MonoBehaviour
         _rightNoteList.Remove(note);
         //몬스터 행동부분 - 이벤트방식에서 순차방식으로 변경
         //MosterMoveEnvent?.Invoke(this, EventArgs.Empty);
-        monsterActionStart();
+        //monsterActionStart();
+        StartCoroutine(monsterActionStartTset());
     }
     public void LeftNoteRemove(GameObject note) //활성노트 리스트에서 제거
     {
@@ -530,6 +531,22 @@ public class GameManager : MonoBehaviour
                 if(mo != null)
                 {
                     mo.MonsterMove();
+                }
+            }
+        }
+    }
+
+    IEnumerator monsterActionStartTset()
+    {
+        for (int i = 0; i < _monsterPool.transform.childCount; i++)
+        {
+            if (_monsterPool.transform.GetChild(i).gameObject.activeSelf)
+            {
+                Monster mo = _monsterPool.transform.GetChild(i).GetComponent<Monster>();
+                if (mo != null)
+                {
+                    mo.MonsterMove();
+                    yield return null;
                 }
             }
         }

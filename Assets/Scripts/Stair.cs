@@ -54,6 +54,9 @@ public class Stair : MonoBehaviour
 
     private void OnDestroy()
     {
-        GameManager.Instance.EventEliteMonsterDie -= new EventHandler(EliteMonsterDied);
+        if(GameManager.Instance != null)
+        {
+            GameManager.Instance.EventEliteMonsterDie -= new EventHandler(EliteMonsterDied);
+        }
     }
 }
