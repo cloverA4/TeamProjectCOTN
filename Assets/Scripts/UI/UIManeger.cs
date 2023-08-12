@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Pool;
 using UnityEngine.UI;
 
 public class UIManeger : MonoBehaviour
@@ -30,11 +31,8 @@ public class UIManeger : MonoBehaviour
     [SerializeField] GameObject _useDiamondToggle;
     [SerializeField] GameObject _retryToggle2;
 
-    [SerializeField] GameObject _failMessage;
-    [SerializeField] GameObject _failMessageBase;
-    [SerializeField] int _speed;
-
     [SerializeField] GameObject _gamePlayingInfo;
+    [SerializeField] GameObject _InfoBase;
 
 
     private void Update()
@@ -415,12 +413,38 @@ public class UIManeger : MonoBehaviour
 
     #region GamePlayingInfo
 
-    void SetActiveInfoUI()
+    public IObjectPool<Text> InfoPool{ get; private set; }
+    // 처음 게임을 시작할때 10~20개 정도 미리 생성
+
+    // 여러가지 효과를 만들어놓고 기본적으로는 위치는 플레이어하고 같은 위치
+    // 심장 빗나감 또는 박자 놓침이 떴을때는 심장 위치에서 생성
+
+    // 애니메이션은 구현 완료
+    
+    // 각상황에 맞는 텍스트를 받아와서 그때그때마다 Text를 변경해줘서 띄워줘야함
+
+    public void PoolInit()
     {
-        _gamePlayingInfo.SetActive(true);
-        _gamePlayingInfo.GetComponent<Animator>().SetTrigger("PlayingInfo");
-        _gamePlayingInfo.SetActive(false);
+        //InfoPool = new ObjectPool<GameObject>(CreatePool, OnGet, OnReleaseInfo, DestroyInfo, maxSize: 15);
     }
+    private GameObject CreatePool()
+    {
+        return null;
+    }
+
+    private void OnGet(GameObject _info) //  풀 활성화
+    {
+        _info.SetActive(true);
+    }
+    private void OnReleaseInfo(GameObject _info) // 풀 비활성화
+    {
+        _info.SetActive(false);
+    }
+    private void DestroyInfo(GameObject _info) // 풀 삭제
+    {
+        Destroy(_info);
+    }
+
 
     #endregion
 
