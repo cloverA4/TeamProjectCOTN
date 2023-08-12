@@ -181,6 +181,13 @@ public enum ItemType
     Potion,
 }
 
+public enum WeaponType  // 임시방편 만든 이넘타입 설계가 잘못된거라면 삭제요망
+{
+    ShortSword,
+    GreatSword,
+    Spear,
+}
+
 public enum CharacterState
 {
     Live,

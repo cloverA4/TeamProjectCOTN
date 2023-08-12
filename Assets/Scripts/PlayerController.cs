@@ -113,10 +113,25 @@ public class PlayerController : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.UpArrow)) // 위 화살표를 입력 받았을때
             {
-                if(GameManager.Instance.NowStage != Stage.Lobby)
+                if (GameManager.Instance.NowStage != Stage.Lobby)
                 {
-                    if(!GameManager.Instance.IsSuccess()) return;
+                    if (!GameManager.Instance.IsSuccess()) return;
                 }
+                //창 공격
+                //창을 가지고있다면 창스크립트에 있는 범위체크를하고
+                //공격
+                //if (WeaponManager.Instance.NowEquip == WeaponType.ShortSword) // 수정필요!!!!!!! Data에 Enum타입으로 ItemType으로 weapon이
+                //                                                              // 있어서 사용했지만 ShortSword,GreatSword,Spear로 나눠져야함
+                //{
+                //}
+                //if (WeaponManager.Instance.NowEquip == WeaponType.GreatSword)
+                //{
+                //}
+                //if (WeaponManager.Instance.NowEquip == WeaponType.Spear)
+                //{
+                //}
+
+                //아니라면 캐릭터 무브
                 MoveCharacter(Vector3.up);
                 IsX = false;
             }
@@ -124,16 +139,16 @@ public class PlayerController : MonoBehaviour
             {
                 if (GameManager.Instance.NowStage != Stage.Lobby)
                 {
-                    if(!GameManager.Instance.IsSuccess()) return;
+                    if (!GameManager.Instance.IsSuccess()) return;
                 }
                 MoveCharacter(Vector3.down);
                 IsX = false;
             }
-            else if(Input.GetKeyDown(KeyCode.RightArrow)) // 오른쪽 화살표를 입력 받았을때
+            else if (Input.GetKeyDown(KeyCode.RightArrow)) // 오른쪽 화살표를 입력 받았을때
             {
                 if (GameManager.Instance.NowStage != Stage.Lobby)
                 {
-                    if(!GameManager.Instance.IsSuccess()) return;
+                    if (!GameManager.Instance.IsSuccess()) return;
                 }
                 MoveCharacter(Vector3.right);
                 _childSpriteRenderer.flipX = true;
@@ -143,7 +158,7 @@ public class PlayerController : MonoBehaviour
             {
                 if (GameManager.Instance.NowStage != Stage.Lobby)
                 {
-                    if(!GameManager.Instance.IsSuccess()) return;
+                    if (!GameManager.Instance.IsSuccess()) return;
                 }
                 MoveCharacter(Vector3.left);
                 _childSpriteRenderer.flipX = false;
@@ -159,8 +174,9 @@ public class PlayerController : MonoBehaviour
         RaycastHit2D hitdata = Physics2D.Raycast(Temp, vec, 1f, _layerMask);
 
         // 왼쪽으로 빔을쏘는         
+
         if (hitdata)
-        {            
+        {
             if (hitdata.collider.tag == "WeedWall") // weedwall이 힛데이타에 태그로 들어왓다면
             {
                 //Debug.Log(hitdata.collider.gameObject); // 힛데이타콜라이더게임오브젝트에 대한 정보가 출력된다
@@ -173,7 +189,7 @@ public class PlayerController : MonoBehaviour
             {
 
                 hitdata.collider.GetComponent<Door>().OpenDoor();
-                
+
 
             }
             else if (hitdata.collider.tag == "BadRock") // BadRock이 힛데이타에 태그로 들어왓다면
@@ -197,6 +213,7 @@ public class PlayerController : MonoBehaviour
         {
             TestmoveWay(vec);
         }
+        
     }
 
     void Move(Vector3 vec)

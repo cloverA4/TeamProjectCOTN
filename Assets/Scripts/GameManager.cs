@@ -21,7 +21,7 @@ public class GameManager : MonoBehaviour
         get { return _stageClear; }
         set { _stageClear = value; }
     }
-
+    
     public Stage NowStage
     {
         get { return _nowStage; }
