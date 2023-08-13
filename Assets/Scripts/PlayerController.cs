@@ -9,9 +9,7 @@ public class PlayerController : MonoBehaviour
     SpriteRenderer _childSpriteRenderer;
     [SerializeField] LayerMask _layerMask;
     [SerializeField] MakeFog2 _MakeFog2;
-
-    
-    
+        
     bool _isSuccess = true;
     bool _isDubbleClick = true;
     public bool IsX { get; private set; }

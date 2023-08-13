@@ -1,12 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class WeaponManager : MonoBehaviour
 {
     ItemType _nowWeapon = ItemType.Weapon; // Data에 있는 Weapon
-    WeaponType _nowEquip = WeaponType.ShortSword; // 기본장비는 ShortSword를 사용하므로 ShortSword로 정의
-
 
     ShortSword _shortSwordSetting = new ShortSword();
     GreatSword _greatSwordSetting = new GreatSword();
@@ -31,11 +27,6 @@ public class WeaponManager : MonoBehaviour
         set { _nowWeapon = value; }
     }
 
-    public WeaponType NowEquip // 현재장비한 타입
-    {
-        get { return _nowEquip; }
-        set { _nowEquip = value; }
-    }
 
     //public void WeaponAbility()
     //{

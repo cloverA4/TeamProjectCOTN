@@ -16,6 +16,21 @@ public class GameManager : MonoBehaviour
     StageStartPosition _stageStartPosition = new StageStartPosition();
     bool _stageClear = false;
 
+    int _gold = 0;
+    int _dia = 0;
+
+    public int Gold
+    {
+        get { return _gold; }
+        set { _gold = value; }
+    }
+
+    public int Dia
+    {
+        get { return _dia; }
+        set { _dia = value; }
+    }
+
     public bool StageClear
     {
         get { return _stageClear; }
@@ -100,15 +115,6 @@ public class GameManager : MonoBehaviour
         PlayerController.Instance.NowHP = PlayerController.Instance.MaxHP;
     }
 
-    
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
-    
-
     #region 비트
 
     [SerializeField] float _bpm;
@@ -137,8 +143,15 @@ public class GameManager : MonoBehaviour
             yield return new WaitForSeconds(1);
             if (!_audio.isPlaying)
             {
-                //스테이지가 넘어가는 코드 생성
-                //다음스테이지가 없으면?
+                if(_stageClear)
+                {
+                    _nowFloor++;
+                    FaidIn();
+                }
+                else
+                {
+                    PlayerController.Instance.NowHP = 0;
+                }
                 break;
             }
         }
@@ -314,6 +327,9 @@ public class GameManager : MonoBehaviour
                         _audio.clip = Resources.Load<AudioClip>("SoundsUpdate/Stage/Stage1-3");
                         break;
                     case floor.fBoss:
+                        _audio.clip = Resources.Load<AudioClip>("SoundsUpdate/Stage/StageLobby");
+                        _audio.loop = true;
+                        _stageClear = true;
                         break;
                 }
                 break;
@@ -426,8 +442,8 @@ public class GameManager : MonoBehaviour
                         EliteMonsterSpawn(_eliteSpawnPoint1s2f);
                         break;
                     case floor.f3:
-                        CreateSpawnList(_spawnPoint1s2f);
-                        EliteMonsterSpawn(_eliteSpawnPoint1s2f);
+                        CreateSpawnList(_spawnPoint1s3f);
+                        EliteMonsterSpawn(_eliteSpawnPoint1s3f);
                         break;
                 }
                 break;

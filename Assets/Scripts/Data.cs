@@ -8,7 +8,6 @@ public class Data : MonoBehaviour
 {
     #region 전역변수
 
-    ItemTable _itemTable;
     SaveDataList _saveDataList;
 
     
@@ -145,10 +144,6 @@ public class Item
     Sprite _itemImage;
     public ItemType _itemType = ItemType.Null;
 }
-public class ItemTable
-{
-    public List<Item> itemTable;
-}
 
 public class SaveDataList
 {
@@ -179,13 +174,6 @@ public enum ItemType
     Weapon,
     Armor,
     Potion,
-}
-
-public enum WeaponType  // 임시방편 만든 이넘타입 설계가 잘못된거라면 삭제요망
-{
-    ShortSword,
-    GreatSword,
-    Spear,
 }
 
 public enum CharacterState
