@@ -327,6 +327,7 @@ public class GameManager : MonoBehaviour
                         _audio.clip = Resources.Load<AudioClip>("SoundsUpdate/Stage/Stage1-3");
                         break;
                     case floor.fBoss:
+                        PlayerController.Instance.transfromUpdate(_stageStartPosition.Stage1FBoss);
                         _audio.clip = Resources.Load<AudioClip>("SoundsUpdate/Stage/StageLobby");
                         _audio.loop = true;
                         _stageClear = true;

@@ -115,6 +115,7 @@ public class StageStartPosition
     public Vector3 Stage1F1 = new Vector3(-0, 99, 0);
     public Vector3 Stage1F2 = new Vector3(55, 108, 0);
     public Vector3 Stage1F3 = new Vector3(111, 89, 0);
+    public Vector3 Stage1FBoss = new Vector3(169, 86, 0);
 }
 
 [Serializable]
