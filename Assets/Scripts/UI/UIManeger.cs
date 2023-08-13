@@ -31,13 +31,12 @@ public class UIManeger : MonoBehaviour
     [SerializeField] GameObject _useDiamondToggle;
     [SerializeField] GameObject _retryToggle2;
 
-    [SerializeField] GameObject _gamePlayingInfo;
-    [SerializeField] GameObject _InfoBase;
+    [SerializeField] InfoMassege _gamePlayingInfo;
+    [SerializeField] Transform _InfoBase;
 
 
     private void Update()
     {
-        //if (Input.GetKeyDown(KeyCode.P)) 
         
         if (_goLobbyUI.activeSelf) 
         {
@@ -150,6 +149,7 @@ public class UIManeger : MonoBehaviour
     private void Start()
     {
         UIInit();
+        PoolInit();
     }
 
     public void UIInit()
@@ -413,7 +413,7 @@ public class UIManeger : MonoBehaviour
 
     #region GamePlayingInfo
 
-    public IObjectPool<Text> InfoPool{ get; private set; }
+    private IObjectPool<InfoMassege> InfoPool;
     // 처음 게임을 시작할때 10~20개 정도 미리 생성
 
     // 여러가지 효과를 만들어놓고 기본적으로는 위치는 플레이어하고 같은 위치
@@ -425,22 +425,23 @@ public class UIManeger : MonoBehaviour
 
     public void PoolInit()
     {
-        //InfoPool = new ObjectPool<GameObject>(CreatePool, OnGet, OnReleaseInfo, DestroyInfo, maxSize: 15);
+        InfoPool = new ObjectPool<InfoMassege>(CreatePool, OnGet, OnReleaseInfo, DestroyInfo, maxSize: 15);
     }
-    private GameObject CreatePool()
+    private InfoMassege CreatePool()
     {
-        return null;
+        InfoMassege _info = Instantiate(_gamePlayingInfo , _InfoBase);
+        return _info;
     }
 
-    private void OnGet(GameObject _info) //  풀 활성화
+    private void OnGet(InfoMassege _info) //  풀 활성화
     {
-        _info.SetActive(true);
+        _info.gameObject.SetActive(true);
     }
-    private void OnReleaseInfo(GameObject _info) // 풀 비활성화
+    private void OnReleaseInfo(InfoMassege _info) // 풀 비활성화
     {
-        _info.SetActive(false);
+        _info.gameObject.SetActive(false);
     }
-    private void DestroyInfo(GameObject _info) // 풀 삭제
+    private void DestroyInfo(InfoMassege _info) // 풀 삭제
     {
         Destroy(_info);
     }
