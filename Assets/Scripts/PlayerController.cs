@@ -1,4 +1,5 @@
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -7,6 +8,8 @@ public class PlayerController : MonoBehaviour
 
     //priteRenderer _spriter; // 변수 선언과 초기화하기
     SpriteRenderer _childSpriteRenderer;
+    Animator _animator;
+    bool _fixanime = false;
     [SerializeField] LayerMask _layerMask;
     [SerializeField] MakeFog2 _MakeFog2;
         
@@ -99,6 +102,7 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         //_childSpriteRenderer = GetComponentInChildrens<SpriteRenderer>()[1];
+        _animator = GetComponentsInChildren<Animator>()[0];
         _childSpriteRenderer = GetComponentsInChildren<SpriteRenderer>()[1];
         IsX = true;
     }
@@ -148,9 +152,13 @@ public class PlayerController : MonoBehaviour
                 {
                     if (!GameManager.Instance.IsSuccess()) return;
                 }
+                
+                //_animator.SetTrigger("Right1");
                 MoveCharacter(Vector3.right);
                 _childSpriteRenderer.flipX = true;
+                //_animator.SetBool("Right", false);
                 IsX = true;
+
             }
             else if (Input.GetKeyDown(KeyCode.LeftArrow)) // 왼쪽 화살표를 입력 받았을때
             {
@@ -160,6 +168,7 @@ public class PlayerController : MonoBehaviour
                 }
                 MoveCharacter(Vector3.left);
                 _childSpriteRenderer.flipX = false;
+                //_transform.position = Vector3.Lerp(transform.)
                 IsX = true;
             }
         }
@@ -193,6 +202,7 @@ public class PlayerController : MonoBehaviour
             else if (hitdata.collider.tag == "BadRock") // BadRock이 힛데이타에 태그로 들어왓다면
             {
                 //hitdata.collider.GetComponent<Door>().InvincibilityWall();
+
             }
             else if (hitdata.collider.tag == "ShopWall") // ShopWall이 힛데이타에 태그로 들어왓다면
             {
@@ -219,13 +229,34 @@ public class PlayerController : MonoBehaviour
         transform.position += vec;
         _MakeFog2.UpdateFogOfWar();
         GetComponent<SpriteRenderer>().sortingOrder = (int)(transform.position.y - 1) * -1; // 레이어 값변환
+
+
     }
 
     void TestmoveWay(Vector3 vec)
     {
+        //if (_fixanime == true)
+        //{
         transform.position = Vector3.Lerp(transform.position, transform.position + vec, 1);
         _MakeFog2.UpdateFogOfWar();
         GetComponent<SpriteRenderer>().sortingOrder = (int)(transform.position.y - 1) * -1; // 레이어 값변환
+        if (vec == Vector3.left)
+        {
+            _animator.SetTrigger("Left");
+        }
+        else if (vec == Vector3.right)
+        {
+            _animator.SetTrigger("Right");
+        }
+        else if (vec == Vector3.up)
+        {
+            _animator.SetTrigger("Up");
+        }
+        else if (vec == Vector3.down)
+        {
+            _animator.SetTrigger("Down");
+        }
+        //}
     }
 
     public void transfromUpdate(Vector3 vec)

@@ -21,8 +21,8 @@ public class Wall : MonoBehaviour
         _spriteRenderer = GetComponentsInChildren<SpriteRenderer>()[1];
         _spriteRenderer.GetComponent<SpriteRenderer>().sortingOrder = (int)transform.position.y * -1;
 
-        _attackedWall = Resources.Load<Sprite>("Wall/isometric_pixel_flat_0074");
-        _normalWall = Resources.Load<Sprite>("Wall/WeedWallVer3");
+        _attackedWall = Resources.Load<Sprite>("Map/BrokenWeedWall");
+        _normalWall = Resources.Load<Sprite>("Map/WeedWallVer3");
     }
 
     
