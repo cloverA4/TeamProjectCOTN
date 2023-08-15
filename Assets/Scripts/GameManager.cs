@@ -377,13 +377,24 @@ public class GameManager : MonoBehaviour
             case Stage.Lobby:                
                 break;
             case Stage.Stage1:
-            case Stage.Stage2:                
-                if (mt != null)
+            case Stage.Stage2:
+
+                switch (_nowFloor)
                 {
-                    StopCoroutine(mt);
-                }
-                mt = Metronom();
-                StartCoroutine(mt);
+                    case floor.f1:
+                    case floor.f2:
+                    case floor.f3:
+                        if (mt != null)
+                        {
+                            StopCoroutine(mt);
+                        }
+                        mt = Metronom();
+                        StartCoroutine(mt);
+                        break;
+
+                    case floor.fBoss:
+                        break;
+                }                
                 break;
         }
 

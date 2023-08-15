@@ -242,15 +242,15 @@ public class UIManeger : MonoBehaviour
         switch (_item._itemType)
         {
             case ItemType.Weapon:
-                _changeImage = Resources.Load("UI/Item" + _item.ItemID) as Sprite;
+                _changeImage = Resources.Load("UI/Item" + _item._ItemID) as Sprite;
                 _weaponImage.sprite = _changeImage;
                 break;
             case ItemType.Armor:
-                _changeImage = Resources.Load("UI/Item" + _item.ItemID) as Sprite;
+                _changeImage = Resources.Load("UI/Item" + _item._ItemID) as Sprite;
                 _armorImage.sprite = _changeImage;
                 break;
             case ItemType.Shovel:
-                _changeImage = Resources.Load("UI/Item" + _item.ItemID) as Sprite;
+                _changeImage = Resources.Load("UI/Item" + _item._ItemID) as Sprite;
                 _shovelImage.sprite = _changeImage;
                 break;
             case ItemType.Potion:
