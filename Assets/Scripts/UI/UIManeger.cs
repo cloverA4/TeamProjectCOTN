@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
 using UnityEngine.Pool;
 using UnityEngine.UI;
 
@@ -31,13 +32,24 @@ public class UIManeger : MonoBehaviour
     [SerializeField] GameObject _useDiamondToggle;
     [SerializeField] GameObject _retryToggle2;
 
-    [SerializeField] InfoMassege _gamePlayingInfo;
+    [SerializeField] Canvas _infoCanvas;
+    [SerializeField] GameInfoMassege _gameInfoMassege;
+    [SerializeField] Transform _gameInfoBase;
+
+    [SerializeField] GameObject Judgement;
+    [SerializeField] MissInfoMassege _missInfo;
     [SerializeField] Transform _InfoBase;
+    int _maxInfoCount = 10;
+
 
 
     private void Update()
     {
-        
+        if (Input.GetMouseButtonDown(0))
+        {
+            string str = "aaaaaaaa";
+            GamePlayeInfo(str);
+        }
         if (_goLobbyUI.activeSelf) 
         {
             if (Input.GetKeyDown(KeyCode.DownArrow))
@@ -114,6 +126,7 @@ public class UIManeger : MonoBehaviour
                     case 0:
                         GameManager.Instance.NowStage = Stage.Lobby;
                         GameManager.Instance.NowFloor = floor.f1;
+                        GameManager.Instance.Gold = 0;
                         EndAlarmUI();
                         StartCoroutine(FadeIn());
                         break;
@@ -132,6 +145,7 @@ public class UIManeger : MonoBehaviour
                     case 0:
                         GameManager.Instance.NowStage = Stage.Lobby;
                         GameManager.Instance.NowFloor = floor.f1;
+                        GameManager.Instance.Gold = 0;
                         StartCoroutine(FadeIn());
                         endGoLobbyUI();
                         break;
@@ -149,7 +163,10 @@ public class UIManeger : MonoBehaviour
     private void Start()
     {
         UIInit();
-        PoolInit();
+        InfoPool = new ObjectPool<MissInfoMassege>(CreatePool, OnGet, OnReleaseInfo, DestroyInfo, maxSize: 15);
+        GameInfoPool = new ObjectPool<GameInfoMassege>(CreateGameInfoPool, OnGet, OnReleaseInfo, DestroyInfo, maxSize: 15);
+        SpawnInfo();
+        SpawnGameInfo();
     }
 
     public void UIInit()
@@ -411,41 +428,99 @@ public class UIManeger : MonoBehaviour
 
     #endregion
 
-    #region GamePlayingInfo
+    #region JudgementInfo
 
-    private IObjectPool<InfoMassege> InfoPool;
-    // 처음 게임을 시작할때 10~20개 정도 미리 생성
+    private IObjectPool<MissInfoMassege> InfoPool;
 
-    // 여러가지 효과를 만들어놓고 기본적으로는 위치는 플레이어하고 같은 위치
-    // 심장 빗나감 또는 박자 놓침이 떴을때는 심장 위치에서 생성
-
-    // 애니메이션은 구현 완료
-    
-    // 각상황에 맞는 텍스트를 받아와서 그때그때마다 Text를 변경해줘서 띄워줘야함
-
-    public void PoolInit()
+    public List<MissInfoMassege> SpawnInfo()
     {
-        InfoPool = new ObjectPool<InfoMassege>(CreatePool, OnGet, OnReleaseInfo, DestroyInfo, maxSize: 15);
+        List<MissInfoMassege> _infoList = new List<MissInfoMassege> (_maxInfoCount);
+        for(int i = 0; i < _maxInfoCount; i++)
+        {
+            MissInfoMassege info = InfoPool.Get();
+            info.GetComponent<MissInfoMassege>().Init();
+            _infoList.Add(info);
+        }
+        return _infoList;
     }
-    private InfoMassege CreatePool()
+
+    private MissInfoMassege CreatePool()
     {
-        InfoMassege _info = Instantiate(_gamePlayingInfo , _InfoBase);
+        MissInfoMassege _info = Instantiate(_missInfo, _InfoBase);
+        _info.SetPool(InfoPool);
         return _info;
     }
 
-    private void OnGet(InfoMassege _info) //  풀 활성화
+    private void OnGet(MissInfoMassege _info) //  풀 활성화
     {
         _info.gameObject.SetActive(true);
     }
-    private void OnReleaseInfo(InfoMassege _info) // 풀 비활성화
+    private void OnReleaseInfo(MissInfoMassege _info) // 풀 비활성화
     {
         _info.gameObject.SetActive(false);
     }
-    private void DestroyInfo(InfoMassege _info) // 풀 삭제
+    private void DestroyInfo(MissInfoMassege _info) // 풀 삭제
     {
         Destroy(_info);
     }
 
+    public void MissInfo()  // "빗나감!" 텍스트 출력
+    {
+        MissInfoMassege info = InfoPool.Get();
+        info.GetComponent<Text>().text = "빗나감!";
+    }
+    public void MissBeatInfo()  // "박자 놓침!" 텍스트 출력
+    {
+        MissInfoMassege info = InfoPool.Get();
+        info.GetComponent<Text>().text = "박자 놓침!";
+    }
+
+
+    #endregion
+
+    #region PlayingGameInfo
+    private IObjectPool<GameInfoMassege> GameInfoPool;
+
+    public List<GameInfoMassege> SpawnGameInfo()
+    {
+        List<GameInfoMassege> _infoList = new List<GameInfoMassege>(_maxInfoCount);
+        for (int i = 0; i < _maxInfoCount; i++)
+        {
+            GameInfoMassege info = GameInfoPool.Get();
+            info.GetComponent<GameInfoMassege>().Init();
+            _infoList.Add(info);
+        }
+        return _infoList;
+    }
+
+    private GameInfoMassege CreateGameInfoPool()
+    {
+        GameInfoMassege _info = Instantiate(_gameInfoMassege, _gameInfoBase);
+        _info.SetPool(GameInfoPool);
+        return _info;
+    }
+
+    private void OnGet(GameInfoMassege _info) //  풀 활성화
+    {
+        _info.gameObject.SetActive(true);
+    }
+    private void OnReleaseInfo(GameInfoMassege _info) // 풀 비활성화
+    {
+        _info.gameObject.SetActive(false);
+    }
+    private void DestroyInfo(GameInfoMassege _info) // 풀 삭제
+    {
+        Destroy(_info);
+    }
+
+    public void GamePlayeInfo(string str) // 아이템 이름과 같은 텍스트를 넣으면 그에 맞게 출력
+    {
+        GameInfoMassege _info = GameInfoPool.Get();
+        _info.GetComponent<Text>().text = str;
+        Vector3 pos = PlayerController.Instance.GetComponent<Transform>().localPosition;
+        Vector3 screenPos = Camera.main.WorldToScreenPoint(PlayerController.Instance.GetComponent<Transform>().position); 
+        _info.GetComponent<RectTransform>().position = screenPos;
+    }
 
     #endregion
 
