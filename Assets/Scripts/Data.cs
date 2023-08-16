@@ -3,8 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
-using System.Transactions;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -12,11 +10,11 @@ public class Data : MonoBehaviour
 {
     #region 전역변수
 
-    SaveDataList _saveDataList;
     string LINE_SPLIT = @"\r\n|\n\r|\n|\r";
     string SPLIT = ",";
     public int[] UnlockPirceToLevel = new int[3] { 2, 4, 7 };
-    public List<Item> ItemDataList = new List<Item>();
+    List<Item> ItemDataList = new List<Item>();
+    public SaveData CharacterSaveData = new SaveData();
 
     #endregion
 
@@ -58,6 +56,27 @@ public class Data : MonoBehaviour
         StartCoroutine(LoadGame());
     }
 
+    public void SavePlayerData()
+    {
+        CharacterSaveData._gold = GameManager.Instance.Gold;
+        CharacterSaveData._dia = GameManager.Instance.Dia;
+        CharacterSaveData._nowStage = GameManager.Instance.NowStage;
+        CharacterSaveData._nowFloor = GameManager.Instance.NowFloor;
+        CharacterSaveData._nowHP = PlayerController.Instance.NowHP;
+        CharacterSaveData._equipItem = PlayerController.Instance.PlayerEquipItemList;
+
+        string Json = JsonUtility.ToJson(CharacterSaveData);
+
+        string TempPath = Application.persistentDataPath + "/CharacterSaveData.json";
+
+        using (StreamWriter outStream = File.CreateText(TempPath))
+        {
+            outStream.Write(Json);
+        }
+
+        Debug.Log(Json);
+    }
+
     #region GameDataLoad
 
     public event EventHandler LoadingEnd;
@@ -66,7 +85,7 @@ public class Data : MonoBehaviour
     public IEnumerator LoadGame()
     {
         // 게임 진행에 필요한 게임 데이터 함수 순서대로 로드
-        Read();
+        ReadItemData();
         yield return null;
 
         // 마지막에 필요한 모든 게임데이터를 로드가되면 gmaeScene로드
@@ -91,19 +110,39 @@ public class Data : MonoBehaviour
         asyncOperation.allowSceneActivation = true;
     }
 
-    public void LoadItemData() // loadingScene에서 호출
-    {
-        // 아이템 데이터 json파일 호출
-    }
-
     void LoadSaveData()
     {
-        // 세이브 데이타가 있을경우 세이브 데이타 호출 후 씬로드
+        //제이슨파일에서 업그레이드 데이터 읽어오기
+        if (File.Exists(Application.persistentDataPath + "/CharacterSaveData.json"))
+        {
+            string json = "";
+            using (StreamReader inStream = new StreamReader(Application.persistentDataPath + "/CharacterSaveData.json"))
+            {
+                json = inStream.ReadToEnd();
+            }
 
-        // 세이브 데이타가 없을 경우 기본값 설정해주는 함수 호출 후 씬 로드
+            if (string.IsNullOrEmpty(json) == false)
+            {
+                CharacterSaveData = JsonUtility.FromJson<SaveData>(json);
+            }
+            else Debug.Log("내용이 없습니다.");
+        }
+        else
+        {
+            Debug.Log("파일이 없습니다.");
+            CharacterSaveData._gold = 0;
+            CharacterSaveData._dia = 0;
+            CharacterSaveData._nowStage = Stage.Lobby;
+            CharacterSaveData._nowFloor = floor.f1;
+            CharacterSaveData._nowHP = 0;
+            CharacterSaveData._equipItem = null;
+        }
+
+        Debug.Log("로딩완료");
     }
 
-    void Read()
+
+    void ReadItemData()
     {
         string path = Application.dataPath + "/Resources/Datas/csv_ItemList.csv";
         string[] lines;
@@ -200,13 +239,22 @@ public class Data : MonoBehaviour
                             data = ul;
                             break;
                     }
-
                     ItemDataList.Add(data);
                 }
             }
         }
+    }
 
-        Debug.Log(ItemDataList.Count);
+    public Item GetItemInfo(int itemID)
+    {
+        for(int i = 0; i < ItemDataList.Count; i++)
+        {
+            if (ItemDataList[i]._ItemID == itemID)
+            {
+                return ItemDataList[i];
+            }
+        }
+        return null;
     }
 
     #endregion
@@ -276,24 +324,16 @@ public class UnlockItem : Item
 {
     public int MaxUnlockCount;
 }
-
-public class SaveDataList
-{
-    List<SaveData> _saveList = new List<SaveData>();
-}
+[Serializable]
 public class SaveData
 {
     //플레이어 저장
-    float _nowHP;
-    float _maxHP;
-    Vector3 _nowPosition = Vector3.zero;
-
-    public SaveData(float NowHP, float MaxHP, Vector3 vec)
-    {
-        _nowHP = NowHP;
-        _maxHP = MaxHP;
-        _nowPosition = vec;
-    }
+    public int _gold;
+    public int _dia;
+    public int _nowHP;
+    public floor _nowFloor = floor.f1;
+    public Stage _nowStage = Stage.Lobby;
+    public List<Item> _equipItem = new List<Item>();
 }
 
 #endregion

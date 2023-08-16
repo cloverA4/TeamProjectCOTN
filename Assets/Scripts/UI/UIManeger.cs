@@ -115,18 +115,18 @@ public class UIManeger : MonoBehaviour
         {
             if (_alarmUI.activeSelf)
             {
-
                 switch (_alarmIndex)
                 {
                     case 0:
                         GameManager.Instance.NowStage = Stage.Lobby;
                         GameManager.Instance.NowFloor = floor.f1;
-                        GameManager.Instance.Gold = 0;
                         EndAlarmUI();
                         StartCoroutine(FadeIn());
                         break;
                     case 1:
                         GameManager.Instance.NowFloor = floor.f1;
+                        GameManager.Instance.Gold = 0;
+                        PlayerController.Instance.InitEquipItem();
                         EndAlarmUI();
                         StartCoroutine(FadeIn());
                         break;

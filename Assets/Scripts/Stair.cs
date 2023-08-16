@@ -41,6 +41,10 @@ public class Stair : MonoBehaviour
         {
             if (GameManager.Instance.StageClear == true)
             {
+                if(GameManager.Instance.NowStage == Stage.Lobby && _nowStage == Stage.Stage1)
+                {
+                    GameManager.Instance.Dia = 0;
+                }
                 GameManager.Instance.NowStage = _nowStage;
                 GameManager.Instance.NowFloor = _nowFloor;
                 GameManager.Instance.FaidIn();

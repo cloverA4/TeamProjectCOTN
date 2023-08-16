@@ -1,6 +1,5 @@
-using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
+using System.Collections.Generic;
 
 public class PlayerController : MonoBehaviour
 {
@@ -12,7 +11,8 @@ public class PlayerController : MonoBehaviour
     bool _fixanime = false;
     [SerializeField] LayerMask _layerMask;
     [SerializeField] MakeFog2 _MakeFog2;
-        
+    [SerializeField] SaveInfoData UnlockSaveData;
+
     bool _isSuccess = true;
     bool _isDubbleClick = true;
     public bool IsX { get; private set; }
@@ -25,8 +25,8 @@ public class PlayerController : MonoBehaviour
         set { _isLive = value; }
     }
 
-    float _nowHp;
-    public float NowHP
+    int _nowHp;
+    public int NowHP
     {
         get { return _nowHp; }
         set 
@@ -44,14 +44,14 @@ public class PlayerController : MonoBehaviour
         }      
     }
 
-    float _maxHP;
-    public float MaxHP
+    int _maxHP = 0;
+    public int MaxHP
     {
         get { return _maxHP; }
         set { _maxHP = value; }
     }
 
-    int _shovelPower = 1;
+    int _shovelPower = 0;
 
     public int ShovelPower
     {
@@ -59,13 +59,23 @@ public class PlayerController : MonoBehaviour
         set { _shovelPower = value; }
     }
 
-    int _damage = 1;
+    int _damage = 0;
 
     public int Damage
     {
         get { return _damage; }
         set { _damage = value; }
     }
+
+    int _def = 0;
+
+    public int Def
+    {
+        get { return _def; }
+        set { _def = value; }
+    }
+
+    public List<Item> PlayerEquipItemList { private set; get; }
 
     private void Awake()
     {
@@ -97,7 +107,6 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    
 
     void Start()
     {
@@ -229,8 +238,6 @@ public class PlayerController : MonoBehaviour
         transform.position += vec;
         _MakeFog2.UpdateFogOfWar();
         GetComponent<SpriteRenderer>().sortingOrder = (int)(transform.position.y - 1) * -1; // 레이어 값변환
-
-
     }
 
     void TestmoveWay(Vector3 vec)
@@ -263,6 +270,83 @@ public class PlayerController : MonoBehaviour
     {
         transform.position = vec;
     }
+
+    public void InitCharacterData()
+    {
+        //게임메니져에서 각종 데이터 로드가 끝나면, 그때 실행
+
+        //최대체력 
+        _maxHP = 3;
+        for (int i = 0; i < UnlockSaveData.unlockCount.Count; i++)
+        {
+            if (UnlockSaveData.unlockCount[i].name == "HP")
+            {
+                _maxHP += UnlockSaveData.unlockCount[i].count;
+            }
+        }
+        //현재체력
+        if (Data.Instance.CharacterSaveData._nowHP <= 0)
+        {
+            _nowHp = _maxHP;
+        }
+        else _nowHp = Data.Instance.CharacterSaveData._nowHP;
+
+        if(Data.Instance.CharacterSaveData._equipItem == null)
+        {
+            InitEquipItem();
+        }
+        else
+        {
+            PlayerEquipItemList = Data.Instance.CharacterSaveData._equipItem;
+        }
+        
+        //캐릭터 스텟
+        UpdateCharacterState();
+    }
+
+    #region
+
+    void UpdateCharacterState()
+    {
+        _damage = 0;
+        _def = 0;
+        _shovelPower = 0;
+        for (int i = 0; i < PlayerEquipItemList.Count; i++)
+        {
+            //공격력
+            if (PlayerEquipItemList[i]._itemType == ItemType.Weapon)
+            {
+                Weapon wp = (Weapon)PlayerEquipItemList[i];
+                _damage += wp.Attack;
+            }
+            //방어력
+            else if (PlayerEquipItemList[i]._itemType == ItemType.Armor)
+            {
+                Armor wp = (Armor)PlayerEquipItemList[i];
+                _def += wp.Defence;
+            }
+            //삽 공격력
+            else if (PlayerEquipItemList[i]._itemType == ItemType.Shovel)
+            {
+                Shovel wp = (Shovel)PlayerEquipItemList[i];
+                _shovelPower += wp.ShovelPower;
+            }
+        }
+
+        
+
+        //코인배수 - 콤보구현을 어디서 하냐에 따라서 거기에 적용
+        //상자? 게임매니저에 넣어야될듯?
+    }
+
+    public void InitEquipItem()
+    {
+        PlayerEquipItemList.Clear();
+        PlayerEquipItemList = UnlockSaveData.BaseEquipItem;
+    }
+
+    #endregion
+
     void Death()
     {        
         GameManager.Instance.StageFail();

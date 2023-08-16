@@ -102,17 +102,20 @@ public class GameManager : MonoBehaviour
         // 로드전에 초기화
         InitGameData();
         // 로드시작
-        StageLoad();        
+        StageLoad();
     }
 
     void InitGameData()
     {
-        //임시 강제 수정 코드
-        _nowStage = Stage.Lobby;            
-        _nowFloor = floor.f1;
-
-        PlayerController.Instance.MaxHP = 4;
-        PlayerController.Instance.NowHP = PlayerController.Instance.MaxHP;
+        //정리 - 저장할 데이터 (위치정보, 착용아이템(로비면 기본), 골드, 다이아, 현재체력(로비면풀))
+        //1. 저장된 데이터에서 위치정보 불러오기
+        //2. 장소가 로비가 아니면 스테이지 시작할 때 저장해둔 데이터 불러오기 -> 스테이지클리어 후 다음스테이지 입장할때, 정보 저장해야됨.
+        //3. 장소가 로비면 기본장착아이템 착용시키고 다이아만 저장된거 불러오고 현재체력은 그냥 풀로 채워주고
+        _gold = Data.Instance.CharacterSaveData._gold;
+        _dia = Data.Instance.CharacterSaveData._dia;
+        _nowStage = Data.Instance.CharacterSaveData._nowStage;            
+        _nowFloor = Data.Instance.CharacterSaveData._nowFloor;
+        PlayerController.Instance.InitCharacterData();
     }
 
     #region 비트
@@ -311,7 +314,7 @@ public class GameManager : MonoBehaviour
                 _audio.loop = false;
                 switch (_nowFloor)
                 {
-                    case floor.f1:                        
+                    case floor.f1:
                         PlayerController.Instance.transfromUpdate(_stageStartPosition.Stage1F1);
                         _MakeFog2.FogOfWarStageMove();
                         _audio.clip = Resources.Load<AudioClip>("SoundsUpdate/Stage/Stage1-1");
@@ -374,11 +377,13 @@ public class GameManager : MonoBehaviour
 
         switch (_nowStage)
         {
-            case Stage.Lobby:                
+            case Stage.Lobby:
+                _gold = 0;
+                PlayerController.Instance.InitEquipItem();
                 break;
             case Stage.Stage1:
             case Stage.Stage2:
-
+                
                 switch (_nowFloor)
                 {
                     case floor.f1:
@@ -404,6 +409,8 @@ public class GameManager : MonoBehaviour
         }
         sm = StartMusic();
         StartCoroutine(sm);
+
+        Data.Instance.SavePlayerData();
     }
 
 
@@ -594,8 +601,6 @@ public class GameManager : MonoBehaviour
         //유아이호출
         _uiManeger.setHP();
         //체력변경사항 저장 -> 데이터 세이브데이터 쪽 수정
-        SaveData saveData = new SaveData(PlayerController.Instance.NowHP, PlayerController.Instance.MaxHP, PlayerController.Instance.transform.position);
-
     }
 }
 
