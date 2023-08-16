@@ -58,12 +58,18 @@ public class Data : MonoBehaviour
 
     public void SavePlayerData()
     {
+        Debug.Log("세이브!");
         CharacterSaveData._gold = GameManager.Instance.Gold;
         CharacterSaveData._dia = GameManager.Instance.Dia;
         CharacterSaveData._nowStage = GameManager.Instance.NowStage;
         CharacterSaveData._nowFloor = GameManager.Instance.NowFloor;
         CharacterSaveData._nowHP = PlayerController.Instance.NowHP;
-        CharacterSaveData._equipItem = PlayerController.Instance.PlayerEquipItemList;
+        CharacterSaveData._equipItemId.Clear();
+        for (int i = 0; i < PlayerController.Instance.PlayerEquipItemList.Count; i++)
+        {
+            CharacterSaveData._equipItemId.Add(PlayerController.Instance.PlayerEquipItemList[i]._ItemID);
+        }
+        
 
         string Json = JsonUtility.ToJson(CharacterSaveData);
 
@@ -134,7 +140,7 @@ public class Data : MonoBehaviour
             CharacterSaveData._nowStage = Stage.Lobby;
             CharacterSaveData._nowFloor = floor.f1;
             CharacterSaveData._nowHP = 0;
-            CharacterSaveData._equipItem = null;
+            CharacterSaveData._equipItemId = null;
         }
 
         Debug.Log("로딩완료");
@@ -332,7 +338,7 @@ public class SaveData
     public int _nowHP;
     public floor _nowFloor = floor.f1;
     public Stage _nowStage = Stage.Lobby;
-    public List<Item> _equipItem = new List<Item>();
+    public List<int> _equipItemId = new List<int>();
 }
 
 #endregion

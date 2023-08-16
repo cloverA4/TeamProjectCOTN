@@ -296,13 +296,17 @@ public class PlayerController : MonoBehaviour
         else _nowHp = Data.Instance.CharacterSaveData._nowHP;
 
 
-        if(Data.Instance.CharacterSaveData._equipItem == null)
+        if(Data.Instance.CharacterSaveData._equipItemId == null)
         {
             InitEquipItem();
         }
         else
         {
-            PlayerEquipItemList = Data.Instance.CharacterSaveData._equipItem;
+            PlayerEquipItemList.Clear();
+            for(int i = 0; i < Data.Instance.CharacterSaveData._equipItemId.Count; i++)
+            {
+                PlayerEquipItemList.Add(Data.Instance.GetItemInfo(Data.Instance.CharacterSaveData._equipItemId[i]));
+            }
         }
         
         //캐릭터 스텟
@@ -327,14 +331,14 @@ public class PlayerController : MonoBehaviour
             //방어력
             else if (PlayerEquipItemList[i]._itemType == ItemType.Armor)
             {
-                Armor wp = (Armor)PlayerEquipItemList[i];
-                _def += wp.Defence;
+                Armor am = (Armor)PlayerEquipItemList[i];
+                _def += am.Defence;
             }
             //삽 공격력
             else if (PlayerEquipItemList[i]._itemType == ItemType.Shovel)
             {
-                Shovel wp = (Shovel)PlayerEquipItemList[i];
-                _shovelPower += wp.ShovelPower;
+                Shovel sv = (Shovel)PlayerEquipItemList[i];
+                _shovelPower += sv.ShovelPower;
             }
         }
 

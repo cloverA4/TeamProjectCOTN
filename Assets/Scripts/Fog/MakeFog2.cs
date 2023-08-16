@@ -1,11 +1,4 @@
-using JetBrains.Annotations;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Rendering;
-using UnityEngine.UIElements;
 
 public class MakeFog2 : MonoBehaviour
 {
@@ -25,8 +18,7 @@ public class MakeFog2 : MonoBehaviour
 
     GameObject _Player;
 
-
-    private void Start()
+    private void Awake()
     {
         _Player = PlayerController.Instance.gameObject;
     }
