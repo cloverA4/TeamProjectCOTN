@@ -298,6 +298,7 @@ public class PlayerController : MonoBehaviour
 
         if(Data.Instance.CharacterSaveData._equipItemId == null)
         {
+            Debug.Log("기본아이템 장착");
             InitEquipItem();
         }
         else
@@ -305,6 +306,7 @@ public class PlayerController : MonoBehaviour
             PlayerEquipItemList.Clear();
             for(int i = 0; i < Data.Instance.CharacterSaveData._equipItemId.Count; i++)
             {
+                Debug.Log($"저장된 아이템아이디 {Data.Instance.CharacterSaveData._equipItemId[i]}");
                 PlayerEquipItemList.Add(Data.Instance.GetItemInfo(Data.Instance.CharacterSaveData._equipItemId[i]));
             }
         }

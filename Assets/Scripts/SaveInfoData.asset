@@ -21,14 +21,7 @@ MonoBehaviour:
     NeedDia: 7
   unlockCount:
   - name: HP
-    count: 2
-  BaseEquipItem:
-  - _ItemID: 301
-    _Name: "\uB2E8\uAC80"
-    _itemType: 2
-  - _ItemID: 201
-    _Name: "\uC0BD"
-    _itemType: 1
+    count: 0
   unlockItemInfo:
   - Itemid: 302
     IsUnlocked: 0
