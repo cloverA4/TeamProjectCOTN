@@ -8,7 +8,6 @@ public class SaveInfoData : ScriptableObject //ScriptableObject¸¦ »ó¼Ó
 {
     public List<UnlockNeedDia> unlockNeedDias;
     public List<UnlockCount> unlockCount;
-    public List<Item> BaseEquipItem;
     public List<UnlockItemInfo> unlockItemInfo;
 }
 

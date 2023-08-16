@@ -73,8 +73,6 @@ public class Data : MonoBehaviour
         {
             outStream.Write(Json);
         }
-
-        Debug.Log(Json);
     }
 
     #region GameDataLoad
@@ -86,6 +84,7 @@ public class Data : MonoBehaviour
     {
         // 게임 진행에 필요한 게임 데이터 함수 순서대로 로드
         ReadItemData();
+        LoadSaveData();
         yield return null;
 
         // 마지막에 필요한 모든 게임데이터를 로드가되면 gmaeScene로드
@@ -161,7 +160,7 @@ public class Data : MonoBehaviour
                     string[] values = Regex.Split(lines[i], SPLIT);
                     if (values.Length == 0 || values[0] == "") continue;
 
-                    Item data = new Item();
+                    Item data = null;
                     switch ((ItemType)(int.Parse(values[2])))
                     {
                         case ItemType.Currency:

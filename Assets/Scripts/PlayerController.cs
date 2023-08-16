@@ -76,6 +76,7 @@ public class PlayerController : MonoBehaviour
     }
 
     public List<Item> PlayerEquipItemList { private set; get; }
+    public List<Item> BaseEquipItem = new List<Item>();
 
     private void Awake()
     {
@@ -112,6 +113,7 @@ public class PlayerController : MonoBehaviour
     {
         //_childSpriteRenderer = GetComponentInChildrens<SpriteRenderer>()[1];
         _animator = GetComponentsInChildren<Animator>()[0];
+        PlayerEquipItemList = new List<Item>();
         _childSpriteRenderer = GetComponentsInChildren<SpriteRenderer>()[1];
         IsX = true;
     }
@@ -274,6 +276,8 @@ public class PlayerController : MonoBehaviour
     public void InitCharacterData()
     {
         //게임메니져에서 각종 데이터 로드가 끝나면, 그때 실행
+        BaseEquipItem.Add(Data.Instance.GetItemInfo(201));
+        BaseEquipItem.Add(Data.Instance.GetItemInfo(301));
 
         //최대체력 
         _maxHP = 3;
@@ -290,6 +294,7 @@ public class PlayerController : MonoBehaviour
             _nowHp = _maxHP;
         }
         else _nowHp = Data.Instance.CharacterSaveData._nowHP;
+
 
         if(Data.Instance.CharacterSaveData._equipItem == null)
         {
@@ -333,8 +338,6 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        
-
         //코인배수 - 콤보구현을 어디서 하냐에 따라서 거기에 적용
         //상자? 게임매니저에 넣어야될듯?
     }
@@ -342,7 +345,7 @@ public class PlayerController : MonoBehaviour
     public void InitEquipItem()
     {
         PlayerEquipItemList.Clear();
-        PlayerEquipItemList = UnlockSaveData.BaseEquipItem;
+        PlayerEquipItemList = BaseEquipItem;
     }
 
     #endregion
