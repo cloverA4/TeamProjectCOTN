@@ -45,11 +45,6 @@ public class UIManeger : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0))
-        {
-            string str = "aaaaaaaa";
-            GamePlayeInfo(str);
-        }
         if (_goLobbyUI.activeSelf) 
         {
             if (Input.GetKeyDown(KeyCode.DownArrow))
