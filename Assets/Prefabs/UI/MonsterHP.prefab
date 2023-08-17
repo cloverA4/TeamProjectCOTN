@@ -11,8 +11,9 @@ GameObject:
   - component: {fileID: 263784059632456266}
   - component: {fileID: 7766357425884458919}
   - component: {fileID: 1935838674458375639}
+  - component: {fileID: 5354090030650615707}
   m_Layer: 5
-  m_Name: Heart
+  m_Name: MonsterHP
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -78,6 +79,20 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &5354090030650615707
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 288670616336958740}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d44c15359f07454abc0dcce7cc91d53, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _fullHeart: {fileID: 4880727015027801819}
+  _halfHeart: {fileID: 1554749376005725787}
 --- !u!1 &1554749376005725787
 GameObject:
   m_ObjectHideFlags: 0
@@ -171,7 +186,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1807682366396645424
 RectTransform:
   m_ObjectHideFlags: 0

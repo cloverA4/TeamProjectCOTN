@@ -8,6 +8,7 @@ using JetBrains.Annotations;
 
 public class Monster : MonoBehaviour
 {
+    [SerializeField] MonsterHPUI _monsterHPUI;
     MonsterType _type;
     public MonsterType Type { get { return _type; } }
 
@@ -61,6 +62,7 @@ public class Monster : MonoBehaviour
                 _monsterDamage = 2;
                 break;
         }
+        //_monsterHPUI.Init(_monsterHP);
     }
 
     //void MonsterMove(object sender, EventArgs s)
@@ -464,6 +466,7 @@ public class Monster : MonoBehaviour
     { 
         //체력체크
         _monsterHP -= damage;
+        //_monsterHPUI.MonsterHPUpdata(_monsterHP);
         if (_monsterHP <= 0)
         {
             //사망
