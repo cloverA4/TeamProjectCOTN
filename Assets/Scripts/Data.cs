@@ -64,7 +64,7 @@ public class Data : MonoBehaviour
         CharacterSaveData._nowStage = GameManager.Instance.NowStage;
         CharacterSaveData._nowFloor = GameManager.Instance.NowFloor;
         CharacterSaveData._nowHP = PlayerController.Instance.NowHP;
-        CharacterSaveData._equipItemId.Clear();
+        CharacterSaveData._equipItemId = new List<int>();
         for (int i = 0; i < PlayerController.Instance.PlayerEquipItemList.Count; i++)
         {
             CharacterSaveData._equipItemId.Add(PlayerController.Instance.PlayerEquipItemList[i]._ItemID);

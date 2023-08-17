@@ -116,6 +116,7 @@ public class GameManager : MonoBehaviour
         _nowStage = Data.Instance.CharacterSaveData._nowStage;            
         _nowFloor = Data.Instance.CharacterSaveData._nowFloor;
         PlayerController.Instance.InitCharacterData();
+        _uiManeger.setHP();
     }
 
     #region ∫Ò∆Æ
