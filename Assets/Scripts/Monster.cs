@@ -1,10 +1,5 @@
 using UnityEngine;
 using System;
-using System.Collections.Generic;
-using Unity.VisualScripting;
-using Unity.Burst.CompilerServices;
-using System.Net;
-using JetBrains.Annotations;
 
 public class Monster : MonoBehaviour
 {
@@ -470,6 +465,7 @@ public class Monster : MonoBehaviour
         if (_monsterHP <= 0)
         {
             //사망
+            ItemDrop();
             gameObject.SetActive(false);
             if(Type == MonsterType.EliteMonster)
             {
@@ -477,6 +473,17 @@ public class Monster : MonoBehaviour
             }
         }        
         //유아이 체력삭제 호출
+    }
+
+    void ItemDrop()
+    {
+        GameObject go = Instantiate(Data.Instance.ItemPrefab);
+        go.transform.position = transform.position;
+        int dropCount = UnityEngine.Random.Range(3, 5);
+
+        Currency cr = (Currency)Data.Instance.GetItemInfo(102);
+        cr.Count = dropCount;
+        go.GetComponent<DropItem>().Init(cr);
     }
 }
 
