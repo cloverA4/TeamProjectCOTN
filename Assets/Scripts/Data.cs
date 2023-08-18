@@ -58,7 +58,6 @@ public class Data : MonoBehaviour
 
     public void SavePlayerData()
     {
-        Debug.Log("세이브!");
         CharacterSaveData._gold = GameManager.Instance.Gold;
         CharacterSaveData._dia = GameManager.Instance.Dia;
         CharacterSaveData._nowStage = GameManager.Instance.NowStage;
@@ -129,6 +128,10 @@ public class Data : MonoBehaviour
             if (string.IsNullOrEmpty(json) == false)
             {
                 CharacterSaveData = JsonUtility.FromJson<SaveData>(json);
+                if(CharacterSaveData._equipItemId.Count <= 0)
+                {
+                    CharacterSaveData._equipItemId = null;
+                }
             }
             else Debug.Log("내용이 없습니다.");
         }
