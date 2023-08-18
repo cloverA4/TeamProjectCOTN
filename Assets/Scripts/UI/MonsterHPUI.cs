@@ -21,17 +21,18 @@ public class MonsterHPUI : MonoBehaviour
         for (int i = 0; i < _maxHP; i++)
         {
             GameObject temp = Instantiate(_heart, _hpBase);
-            _heart.GetComponent<HeartPrefeb>().FullHeartActive();
+            _heart.GetComponent<MonsterHeart>().FullHeartActive();
             _hearts.Add(temp);
         }
     }
 
     public void MonsterHPUpdata(int nowHP)
     {
+        _nowHP = _maxHP - nowHP;
         if (gameObject.activeSelf == false) gameObject.SetActive(true);
-        for(int i = 0; i < nowHP; i++)
+        for(int i = 0; i < _nowHP; i++)
         {
-            _hearts[i].GetComponent<HeartPrefeb>().EmptyHeartActive();
+            _hearts[i].GetComponent<MonsterHeart>().EmptyHeartActive();
         }
     }
 }
