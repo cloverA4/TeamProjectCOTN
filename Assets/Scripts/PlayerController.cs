@@ -343,7 +343,7 @@ public class PlayerController : MonoBehaviour
                 _shovelPower += sv.ShovelPower;
             }
         }
-        Debug.Log(_damage);
+        Debug.Log($"현재 공격력" + _damage);
         //코인배수 - 콤보구현을 어디서 하냐에 따라서 거기에 적용
         //상자? 게임매니저에 넣어야될듯?
     }

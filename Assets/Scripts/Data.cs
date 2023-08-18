@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -9,6 +10,12 @@ using UnityEngine.SceneManagement;
 public class Data : MonoBehaviour
 {
     #region 전역변수
+    [SerializeField] GameObject _ItemPrefab;
+    public GameObject ItemPrefab
+    {
+        private set {  _ItemPrefab = value; }
+        get { return _ItemPrefab; }
+    }
 
     string LINE_SPLIT = @"\r\n|\n\r|\n|\r";
     string SPLIT = ",";
@@ -64,6 +71,7 @@ public class Data : MonoBehaviour
         CharacterSaveData._nowFloor = GameManager.Instance.NowFloor;
         CharacterSaveData._nowHP = PlayerController.Instance.NowHP;
         CharacterSaveData._equipItemId = new List<int>();
+        Debug.Log($"착용중인 아이템  {PlayerController.Instance.PlayerEquipItemList.Count} 개 저장");
         for (int i = 0; i < PlayerController.Instance.PlayerEquipItemList.Count; i++)
         {
             CharacterSaveData._equipItemId.Add(PlayerController.Instance.PlayerEquipItemList[i]._ItemID);
@@ -247,6 +255,7 @@ public class Data : MonoBehaviour
                             data = ul;
                             break;
                     }
+                    data._ItemIcon = Resources.Load<Sprite>("Item/Item" + data._ItemID);
                     ItemDataList.Add(data);
                 }
             }
@@ -286,6 +295,7 @@ public class Item
     public int _ItemID;
     public string _Name;
     public ItemType _itemType = ItemType.Currency;
+    public Sprite _ItemIcon;
 }
 
 [Serializable]
