@@ -1,5 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System.Collections;
+using Unity.VisualScripting;
 
 public class PlayerController : MonoBehaviour
 {
@@ -178,17 +180,55 @@ public class PlayerController : MonoBehaviour
                     if (!GameManager.Instance.IsSuccess()) return;
                 }
                 MoveCharacter(Vector3.left);
+
                 _childSpriteRenderer.flipX = false;
+                
+                //_isMove = false;
                 //_transform.position = Vector3.Lerp(transform.)
                 IsX = true;
             }
+
+           
+            
+            
+
+
+
         }
     }
 
+    private float moveSpeed = 10f;
+    private bool isMoving = false;
+
+    IEnumerator SmoothMove(Vector3 targetPosition)
+    {
+        if (isMoving == true)
+        {
+            yield break;
+        }
+        isMoving = true;
+        float startTime = Time.time;
+        Vector3 startPosition = transform.position;
+
+        while (Time.time < startTime + 1 / moveSpeed)
+        {
+            float t = (Time.time - startTime) * moveSpeed;
+            transform.position = Vector3.MoveTowards(startPosition, targetPosition, t);
+            yield return null;
+        }
+
+        transform.position = targetPosition;
+        isMoving = false;
+        if (isMoving == false) 
+        {
+            _MakeFog2.UpdateFogOfWar();
+        }
+    }
 
     void MoveCharacter(Vector3 vec)
     {
         Vector3 Temp = transform.position;
+        Vector3 targetPosition = Temp + vec;
         RaycastHit2D hitdata = Physics2D.Raycast(Temp, vec, 1f, _layerMask);
 
         // 왼쪽으로 빔을쏘는         
@@ -205,15 +245,11 @@ public class PlayerController : MonoBehaviour
             }
             else if (hitdata.collider.tag == "Door") // Door이(가) 힛데이타에 태그로 들어왓다면
             {
-
                 hitdata.collider.GetComponent<Door>().OpenDoor();
-
-
             }
             else if (hitdata.collider.tag == "BadRock") // BadRock이 힛데이타에 태그로 들어왓다면
             {
                 //hitdata.collider.GetComponent<Door>().InvincibilityWall();
-
             }
             else if (hitdata.collider.tag == "ShopWall") // ShopWall이 힛데이타에 태그로 들어왓다면
             {
@@ -221,7 +257,9 @@ public class PlayerController : MonoBehaviour
             }
             else if (hitdata.collider.tag == "Stair")
             {
-                TestmoveWay(vec);
+                _animator.SetTrigger("MoveX");
+                _childSpriteRenderer.sortingOrder = (int)(transform.position.y - 1) * -1; // 레이어 값변환
+                StartCoroutine(SmoothMove(targetPosition));
             }
             else if (hitdata.collider.tag == "Monster")
             {
@@ -230,43 +268,50 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            TestmoveWay(vec);
+            //TestmoveWay(vec,0);
+            _animator.SetTrigger("MoveX");
+            _childSpriteRenderer.sortingOrder = (int)(transform.position.y - 1) * -1; // 레이어 값변환
+            StartCoroutine(SmoothMove(targetPosition));
+            
         }
-        
+        _MakeFog2.UpdateFogOfWar();
+
     }
 
-    void Move(Vector3 vec)
-    {
-        transform.position += vec;
-        _MakeFog2.UpdateFogOfWar();
-        GetComponent<SpriteRenderer>().sortingOrder = (int)(transform.position.y - 1) * -1; // 레이어 값변환
-    }
+   
 
-    void TestmoveWay(Vector3 vec)
-    {
-        //if (_fixanime == true)
-        //{
-        transform.position = Vector3.Lerp(transform.position, transform.position + vec, 1);
-        _MakeFog2.UpdateFogOfWar();
-        GetComponent<SpriteRenderer>().sortingOrder = (int)(transform.position.y - 1) * -1; // 레이어 값변환
-        if (vec == Vector3.left)
-        {
-            _animator.SetTrigger("Left");
-        }
-        else if (vec == Vector3.right)
-        {
-            _animator.SetTrigger("Right");
-        }
-        else if (vec == Vector3.up)
-        {
-            _animator.SetTrigger("Up");
-        }
-        else if (vec == Vector3.down)
-        {
-            _animator.SetTrigger("Down");
-        }
-        //}
-    }
+    //void Move(Vector3 vec)
+    //{
+    //    transform.position += vec;
+    //    _MakeFog2.UpdateFogOfWar();
+    //    GetComponent<SpriteRenderer>().sortingOrder = (int)(transform.position.y - 1) * -1; // 레이어 값변환
+    //}
+
+    //void TestmoveWay(Vector3 vec ,float t)
+    //{
+    //    t += Time.deltaTime;
+    //    transform.position = Vector3.MoveTowards(transform.position, transform.position + vec, t);
+
+
+    //    _MakeFog2.UpdateFogOfWar();
+    //    GetComponent<SpriteRenderer>().sortingOrder = (int)(transform.position.y - 1) * -1; // 레이어 값변환
+    //    //if (vec == Vector3.left)
+    //    //{
+    //    //    _animator.SetTrigger("Left");
+    //    //}
+    //    //else if (vec == Vector3.right)
+    //    //{
+    //    //    _animator.SetTrigger("Right");
+    //    //}
+    //    //else if (vec == Vector3.up)
+    //    //{
+    //    //    _animator.SetTrigger("Up");
+    //    //}
+    //    //else if (vec == Vector3.down)
+    //    //{
+    //    //    _animator.SetTrigger("Down");
+    //    //}
+    //}
 
     public void transfromUpdate(Vector3 vec)
     {
