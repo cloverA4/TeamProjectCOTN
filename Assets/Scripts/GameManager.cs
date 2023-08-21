@@ -22,13 +22,21 @@ public class GameManager : MonoBehaviour
     public int Gold
     {
         get { return _gold; }
-        set { _gold = value; }
+        set
+        {
+            _gold = value;
+            _uiManeger.UpdateGold(_gold);
+        }
     }
 
     public int Dia
     {
         get { return _dia; }
-        set { _dia = value; }
+        set 
+        {
+            _dia = value; 
+            _uiManeger.UpdataDiamond(_dia);
+        }
     }
 
     public bool StageClear
@@ -117,6 +125,7 @@ public class GameManager : MonoBehaviour
         _nowFloor = Data.Instance.CharacterSaveData._nowFloor;
         PlayerController.Instance.InitCharacterData();
         _uiManeger.setHP();
+        _uiManeger.Equipment();
     }
 
     #region ∫Ò∆Æ

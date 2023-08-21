@@ -12,8 +12,7 @@ public class UIManeger : MonoBehaviour
 
     [SerializeField] Text _goldCount;
     [SerializeField] Text _diamondCount;
-    public int _gold;
-    public int _diamond;
+
     int _goLobbyIndex = 0;
 
     [SerializeField] Image _shovelImage;
@@ -168,7 +167,6 @@ public class UIManeger : MonoBehaviour
     {
         gameObject.SetActive(true);
         _fade.gameObject.SetActive(true);
-        setHP();
         _alarmUI.gameObject.SetActive(false);
         _goLobbyUI.SetActive(false);
     }
@@ -219,58 +217,53 @@ public class UIManeger : MonoBehaviour
     #endregion
 
     #region Wealth
-    void UpdateGold(int _count)
+    public void UpdateGold(int _count)
     {
-        _gold += _count;
-
-        _goldCount.text = "X " + _gold;
+        _goldCount.text = "X " + _count;
     }
 
-    void UpdataDiamond(int _count)
+    public void UpdataDiamond(int _count)
     {
-        _diamond += _count;
-
-        _diamondCount.text = "X " + _diamond;
-    }
-
-    void ResetGold()
-    {
-        _gold = 0;
-        _goldCount.text = "X " + _gold;
-    }
-    void RestDiamond()
-    {
-        _diamond = 0;
-        _diamondCount.text = "X " + _diamond;
+        _diamondCount.text = "X " + _count;
     }
 
     #endregion
 
     #region Equipment
 
-    public void Equipment(Item _item)
+    public void Equipment()  // 아이템을 회득했을때나 아이템이 바뀔때 선언
     {
-        Sprite _changeImage;
-        switch (_item._itemType)
+        // 처음에 모든 아이콘을 꺼주면서 초기화
+        // 아이템 장착 리스트를 전부 검사하면서 어떤 아이템 유무 확인
+        // 장착이 돼어있는 아이템은 아이템 이미지를 켜주고 장착 아이템에 맞게 이미지 교체
+        EquipmentInit();
+        var temp = PlayerController.Instance.PlayerEquipItemList;
+        for (int i = 0; i < temp.Count; i++)
         {
-            case ItemType.Weapon:
-                _changeImage = Resources.Load("UI/Item" + _item._ItemID) as Sprite;
-                _weaponImage.sprite = _changeImage;
-                break;
-            case ItemType.Armor:
-                _changeImage = Resources.Load("UI/Item" + _item._ItemID) as Sprite;
-                _armorImage.sprite = _changeImage;
-                break;
-            case ItemType.Shovel:
-                _changeImage = Resources.Load("UI/Item" + _item._ItemID) as Sprite;
-                _shovelImage.sprite = _changeImage;
-                break;
-            case ItemType.Potion:
-                break;
-            default:
-                break;
+            if (temp[i]._itemType == ItemType.Weapon)
+            {
+                _weaponImage.GetComponent<Image>().sprite = temp[i]._ItemIcon;
+                _weaponImage.gameObject.SetActive(true);
+            }
+            else if (temp[i]._itemType == ItemType.Armor)
+            {
+                _armorImage.GetComponent<Image>().sprite = temp[i]._ItemIcon;
+                _armorImage.gameObject.SetActive(true);
+            }
+            else if (temp[i]._itemType == ItemType.Shovel)
+            {
+                _shovelImage.GetComponent<Image>().sprite = temp[i]._ItemIcon;
+                _shovelImage.gameObject.SetActive(true);
+            }
         }
 
+    }
+
+    public void EquipmentInit()
+    {
+        _shovelImage.gameObject.SetActive(false);
+        _weaponImage.gameObject.SetActive(false);
+        _armorImage.gameObject.SetActive(false);
     }
 
     public void PotionCount(bool _potion)
@@ -518,5 +511,7 @@ public class UIManeger : MonoBehaviour
     }
 
     #endregion
+
+
 
 }
