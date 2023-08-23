@@ -235,6 +235,7 @@ public class PlayerController : MonoBehaviour
 
         if (hitdata)
         {
+            Debug.Log(hitdata.collider.tag);
             if (hitdata.collider.tag == "WeedWall") // weedwall이 힛데이타에 태그로 들어왓다면
             {
                 //Debug.Log(hitdata.collider.gameObject); // 힛데이타콜라이더게임오브젝트에 대한 정보가 출력된다
@@ -265,6 +266,34 @@ public class PlayerController : MonoBehaviour
             {
                 hitdata.collider.GetComponent<Monster>().TakeDamage(_damage);
             }
+            else if(hitdata.collider.tag == "Item")
+            {
+                _animator.SetTrigger("MoveX");
+                _childSpriteRenderer.sortingOrder = (int)(transform.position.y - 1) * -1; // 레이어 값변환
+                StartCoroutine(SmoothMove(targetPosition));
+
+                DropItem dropItem = hitdata.collider.GetComponent<DropItem>();
+                switch (dropItem.Item._itemType)
+                {
+                    case ItemType.Currency:
+                        //해당하는 재화를 상승 시키고 드랍아이템 삭제
+                        Currency cr = (Currency)dropItem.Item;
+                        if (cr._ItemID == 101) GameManager.Instance.Dia += cr.Count;
+                        else if(cr._ItemID == 102) GameManager.Instance.Dia += cr.Count;
+                        break;
+                    case ItemType.Shovel:
+                    case ItemType.Weapon:
+                    case ItemType.Armor:
+                    case ItemType.Potion:
+                        GetItem(dropItem);
+                        UpdateCharacterState();
+                        break;
+                    case ItemType.Unlock:
+                        //해당 아이템의 해금가격 만큼의 재화가 있는지 검사 후 구매 진행
+                        //구매 시 해금데이터를 변경하고, 드랍아이템을 삭제 후 재화 변경
+                        break;
+                }
+            }
         }
         else
         {
@@ -276,6 +305,76 @@ public class PlayerController : MonoBehaviour
         }
         _MakeFog2.UpdateFogOfWar();
 
+    }
+
+    void GetItem(DropItem dropItem)
+    {
+        for (int i = 0; i < PlayerEquipItemList.Count; i++)
+        {
+            switch (dropItem.Item._itemType)
+            {
+                case ItemType.Shovel:
+                    Shovel shovel = (Shovel)dropItem.Item;
+                    Debug.Log($"먹을 아이템 {dropItem.Item._ItemID}");
+                    if (PlayerEquipItemList[i]._itemType == ItemType.Weapon)
+                    {
+                        Shovel temp = new Shovel();
+                        temp = (Shovel)PlayerEquipItemList[i];
+                        PlayerEquipItemList[i] = shovel;
+                        dropItem.ChangeItem(temp);
+
+                        Debug.Log($"착용한 아이템 {PlayerEquipItemList[i]._ItemID}");
+                        Debug.Log($"버려진 아이템 {dropItem.Item._ItemID}");
+                        return;
+                    }
+                    break;
+                case ItemType.Weapon:
+                    Weapon weapon = (Weapon)dropItem.Item;
+                    Debug.Log($"먹을 아이템 {dropItem.Item._ItemID}");
+                    if (PlayerEquipItemList[i]._itemType == ItemType.Weapon)
+                    {
+                        Weapon temp = new Weapon();
+                        temp = (Weapon)PlayerEquipItemList[i];
+                        PlayerEquipItemList[i] = weapon;
+                        dropItem.ChangeItem(temp);
+
+                        Debug.Log($"착용한 아이템 {PlayerEquipItemList[i]._ItemID}");
+                        Debug.Log($"버려진 아이템 {dropItem.Item._ItemID}");
+                        return;
+                    }                   
+                    break;
+                case ItemType.Armor:
+                    Armor armor = (Armor)dropItem.Item;
+                    Debug.Log($"먹을 아이템 {dropItem.Item._ItemID}");
+                    if (PlayerEquipItemList[i]._itemType == ItemType.Weapon)
+                    {
+                        Armor temp = new Armor();
+                        temp = (Armor)PlayerEquipItemList[i];
+                        PlayerEquipItemList[i] = armor;
+                        dropItem.ChangeItem(temp);
+                        
+                        Debug.Log($"착용한 아이템 {PlayerEquipItemList[i]._ItemID}");
+                        Debug.Log($"버려진 아이템 {dropItem.Item._ItemID}");
+                    }
+                    return;
+                case ItemType.Potion:
+                    Potion potion = (Potion)dropItem.Item;
+                    Debug.Log($"먹을 아이템 {dropItem.Item._ItemID}");
+                    if (PlayerEquipItemList[i]._itemType == ItemType.Weapon)
+                    {
+                        Weapon temp = new Weapon();
+                        temp = (Weapon)PlayerEquipItemList[i];
+                        PlayerEquipItemList[i] = potion;
+                        dropItem.ChangeItem(temp);
+
+                        Debug.Log($"착용한 아이템 {PlayerEquipItemList[i]._ItemID}");
+                        Debug.Log($"버려진 아이템 {dropItem.Item._ItemID}");
+                        return;
+                    }
+                    break;
+            }
+        }
+        dropItem.DeleteDropItem();
     }
 
    

@@ -17,4 +17,15 @@ public class DropItem : MonoBehaviour
         _ItemIcon.sprite = _item._ItemIcon;
         _isShopItem = shop;
     }
+
+    public void ChangeItem(Item Changeitem)
+    {
+        _item = Changeitem;
+        _ItemIcon.sprite = _item._ItemIcon;
+    }
+
+    public void DeleteDropItem()
+    {
+        Destroy(gameObject);
+    }
 }
