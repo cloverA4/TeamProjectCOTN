@@ -176,27 +176,22 @@ public class UIManeger : MonoBehaviour
     {
         ResetHP();
 
-        for (int i = 0; i < PlayerController.Instance.MaxHP; i++) // 맥스 HP값
+        for (int i = 0; i < PlayerController.Instance.MaxHP / 2; i++) // 맥스 HP값
         {
             var temp =Instantiate(_heart, _HeartBase);
             hearts.Add(temp);
         }
-        for(int i = 0; i< (int)PlayerController.Instance.NowHP; i++)  // 현재 HP값
+        for(int i = 0; i< PlayerController.Instance.NowHP / 2; i++)  // 현재 HP값
         {
-            var temp = hearts[i].gameObject.transform.GetChild(0);
-            temp.gameObject.SetActive(true);
-            if(i > PlayerController.Instance.MaxHP)
+            hearts[i].GetComponent<HeartPrefeb>().FullHeartActive();
+            if(i > PlayerController.Instance.MaxHP/2)
             {
                 return;
             }
         }
-        if((PlayerController.Instance.NowHP - (int)PlayerController.Instance.NowHP) > 0)  // 반칸 하트 구현
+        if(PlayerController.Instance.NowHP / 2 == 1)  // 반칸 하트 구현
         {
-            var temp = hearts[(int)PlayerController.Instance.NowHP].gameObject.transform.GetChild(1);
-            var temp1 = hearts[(int)PlayerController.Instance.NowHP].gameObject.transform.GetChild(0);
-
-            temp1.gameObject.SetActive(false);
-            temp.gameObject.SetActive(true);
+            //hearts[PlayerController.Instance.NowHP/2].GetComponent<HeartPrefeb>().HalfHeartActive();
         }
     }
 
