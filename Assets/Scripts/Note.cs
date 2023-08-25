@@ -41,6 +41,7 @@ public class Note : MonoBehaviour
             {
                 gameObject.SetActive(false);
                 GameManager.Instance.LeftNoteRemove(gameObject);
+                GameManager.Instance.MissBeat();
             }
         }
         else

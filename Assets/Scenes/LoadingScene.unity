@@ -408,6 +408,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac5656cdd91f8ca48bf1de1bb7332a01, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _ItemPrefab: {fileID: 988309420317089772, guid: 68b92b1418822bf4b835e2f62e058cf9,
+    type: 3}
+  UnlockPirceToLevel: 020000000400000007000000
+  CharacterSaveData:
+    _gold: 0
+    _dia: 0
+    _nowHP: 0
+    _nowFloor: 0
+    _nowStage: 0
+    _equipItemId: 
 --- !u!4 &283436410
 Transform:
   m_ObjectHideFlags: 0

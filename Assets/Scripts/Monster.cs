@@ -132,6 +132,7 @@ public class Monster : MonoBehaviour
         {
             //플레이어면 공격하고 아니면 뒤로돌고 턴 끝
             if (hitdata.collider.tag == "Player") PlayerController.Instance.NowHP -= _monsterDamage;//플레이어면 공격
+            else if(hitdata.collider.tag == "Item") MoveMonster();
             else
             {
                 MonsterLook = MonsterLook * -1;
@@ -401,6 +402,10 @@ public class Monster : MonoBehaviour
         RaycastHit2D hitdata = Physics2D.Raycast(Temp, MonsterLook, 0.5f);
 
         if (hitdata == false)
+        {
+            MoveMonster();
+        }
+        else if(hitdata.collider.tag == "Item")
         {
             MoveMonster();
         }

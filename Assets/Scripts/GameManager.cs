@@ -2,8 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-using UnityEditor.Rendering;
-using UnityEditor;
 
 public class GameManager : MonoBehaviour
 {
@@ -120,8 +118,8 @@ public class GameManager : MonoBehaviour
         //1. 저장된 데이터에서 위치정보 불러오기
         //2. 장소가 로비가 아니면 스테이지 시작할 때 저장해둔 데이터 불러오기 -> 스테이지클리어 후 다음스테이지 입장할때, 정보 저장해야됨.
         //3. 장소가 로비면 기본장착아이템 착용시키고 다이아만 저장된거 불러오고 현재체력은 그냥 풀로 채워주고
-        _gold = Data.Instance.CharacterSaveData._gold;
-        _dia = Data.Instance.CharacterSaveData._dia;
+        Gold = Data.Instance.CharacterSaveData._gold;
+        Dia = Data.Instance.CharacterSaveData._dia;
         _nowStage = Data.Instance.CharacterSaveData._nowStage;            
         _nowFloor = Data.Instance.CharacterSaveData._nowFloor;
         PlayerController.Instance.InitCharacterData();
@@ -250,6 +248,7 @@ public class GameManager : MonoBehaviour
         if (_rightNoteList.Count <= 0)
         {
             //실패
+            _uiManeger.MissInfo();
             return isSuccess;
         }
 
@@ -263,6 +262,11 @@ public class GameManager : MonoBehaviour
 
         //실패
         return isSuccess;
+    }
+
+    public void MissBeat()
+    {
+        _uiManeger.MissBeatInfo();
     }
 
     #endregion
@@ -609,6 +613,11 @@ public class GameManager : MonoBehaviour
 
     //몬스터 ai 구현(종류별로 하나씩 추가)
     #endregion
+
+    public void GetEquipItem()
+    {
+        _uiManeger.Equipment();
+    }
 
     public void PlayerHPUpdate()
     {

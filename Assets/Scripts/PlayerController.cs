@@ -132,21 +132,7 @@ public class PlayerController : MonoBehaviour
                 {
                     if (!GameManager.Instance.IsSuccess()) return;
                 }
-                //창 공격
-                //창을 가지고있다면 창스크립트에 있는 범위체크를하고
-                //공격
-                //if (WeaponManager.Instance.NowEquip == WeaponType.ShortSword) // 수정필요!!!!!!! Data에 Enum타입으로 ItemType으로 weapon이
-                //                                                              // 있어서 사용했지만 ShortSword,GreatSword,Spear로 나눠져야함
-                //{
-                //}
-                //if (WeaponManager.Instance.NowEquip == WeaponType.GreatSword)
-                //{
-                //}
-                //if (WeaponManager.Instance.NowEquip == WeaponType.Spear)
-                //{
-                //}
 
-                //아니라면 캐릭터 무브
                 MoveCharacter(Vector3.up);
                 IsX = false;
             }
@@ -187,13 +173,6 @@ public class PlayerController : MonoBehaviour
                 //_transform.position = Vector3.Lerp(transform.)
                 IsX = true;
             }
-
-           
-            
-            
-
-
-
         }
     }
 
@@ -227,9 +206,8 @@ public class PlayerController : MonoBehaviour
 
     void MoveCharacter(Vector3 vec)
     {
-        Vector3 Temp = transform.position;
-        Vector3 targetPosition = Temp + vec;
-        RaycastHit2D hitdata = Physics2D.Raycast(Temp, vec, 1f, _layerMask);
+        Vector3 Temp = transform.position + vec/2;
+        RaycastHit2D hitdata = Physics2D.Raycast(Temp, vec, 0.5f, _layerMask);
 
         // 왼쪽으로 빔을쏘는         
 
@@ -272,14 +250,15 @@ public class PlayerController : MonoBehaviour
                 _childSpriteRenderer.sortingOrder = (int)(transform.position.y - 1) * -1; // 레이어 값변환
                 Move(vec);
 
-                DropItem dropItem = hitdata.collider.GetComponent<DropItem>();
+                DropItem dropItem = hitdata.collider.GetComponent<DropItem>();               
                 switch (dropItem.Item._itemType)
                 {
                     case ItemType.Currency:
                         //해당하는 재화를 상승 시키고 드랍아이템 삭제
                         Currency cr = (Currency)dropItem.Item;
                         if (cr._ItemID == 101) GameManager.Instance.Dia += cr.Count;
-                        else if(cr._ItemID == 102) GameManager.Instance.Dia += cr.Count;
+                        else if(cr._ItemID == 102) GameManager.Instance.Gold += cr.Count;
+                        dropItem.DeleteDropItem();
                         break;
                     case ItemType.Shovel:
                     case ItemType.Weapon:
@@ -287,6 +266,7 @@ public class PlayerController : MonoBehaviour
                     case ItemType.Potion:
                         GetItem(dropItem);
                         UpdateCharacterState();
+                        GameManager.Instance.GetEquipItem();
                         break;
                     case ItemType.Unlock:
                         //해당 아이템의 해금가격 만큼의 재화가 있는지 검사 후 구매 진행

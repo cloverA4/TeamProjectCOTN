@@ -4,18 +4,25 @@ public class DropItem : MonoBehaviour
 {
     [SerializeField] SpriteRenderer _ItemIcon;
     Item _item;
-    bool _isShopItem = false;
+    DropItemType _type;
+
+    public DropItemType ItemType
+    {
+        private set { _type = value; }
+        get { return _type; }
+    }
+
     public Item Item 
     {
         private set { _item = value; }
         get { return _item; }
     }
 
-    public void Init(Item item, bool shop = false)
+    public void Init(Item item, DropItemType type = DropItemType.Drop)
     {
         _item = item;
         _ItemIcon.sprite = _item._ItemIcon;
-        _isShopItem = shop;
+        _type = type;
     }
 
     public void ChangeItem(Item Changeitem)
@@ -28,4 +35,12 @@ public class DropItem : MonoBehaviour
     {
         Destroy(gameObject);
     }
+}
+
+
+public enum DropItemType
+{
+    Drop,
+    Shop,
+    UnlockShop,
 }
