@@ -200,6 +200,7 @@ public class Data : MonoBehaviour
                                 else if (header[j] == "1") sv.ShovelPower = int.Parse(values[j]);
                                 else if (header[j] == "2") sv.UnlockPrice = int.Parse(values[j]);
                                 else if (header[j] == "3") sv.Price = int.Parse(values[j]);
+                                else if (header[j] == "4") sv.ItemInfo = values[j];
                             }
                             data = sv;
                             break;
@@ -214,6 +215,7 @@ public class Data : MonoBehaviour
                                 else if (header[j] == "2") wp.weaponType = (WeaponType)int.Parse(values[j]);
                                 else if (header[j] == "3") wp.UnlockPrice = int.Parse(values[j]);
                                 else if (header[j] == "4") wp.Price = int.Parse(values[j]);
+                                else if (header[j] == "5") wp.ItemInfo = values[j];
                             }
                             data = wp;
                             break;
@@ -227,6 +229,7 @@ public class Data : MonoBehaviour
                                 else if (header[j] == "1") pt.Heal = int.Parse(values[j]);
                                 else if (header[j] == "2") pt.UnlockPrice = int.Parse(values[j]);
                                 else if (header[j] == "3") pt.Price = int.Parse(values[j]);
+                                else if (header[j] == "4") pt.ItemInfo = values[j];
                             }
                             data = pt;
                             break;
@@ -240,6 +243,7 @@ public class Data : MonoBehaviour
                                 else if (header[j] == "1") ar.Defence = int.Parse(values[j]);
                                 else if (header[j] == "2") ar.UnlockPrice = int.Parse(values[j]);
                                 else if (header[j] == "3") ar.Price = int.Parse(values[j]);
+                                else if (header[j] == "4") ar.ItemInfo = values[j];
                             }
                             data = ar;
                             break;
@@ -251,6 +255,7 @@ public class Data : MonoBehaviour
                                 else if (header[j] == "Name") ul._Name = values[j];
                                 else if (header[j] == "ItemType") ul._itemType = (ItemType)(int.Parse(values[j]));
                                 else if (header[j] == "1") ul.MaxUnlockCount = int.Parse(values[j]);
+                                else if (header[j] == "2") ul.ItemInfo = values[j];
                             }
                             data = ul;
                             break;
@@ -310,6 +315,7 @@ public class Shovel : Item
     public int ShovelPower;
     public int UnlockPrice;
     public int Price;
+    public String ItemInfo;
 }
 
 [Serializable]
@@ -319,6 +325,7 @@ public class Weapon : Item
     public WeaponType weaponType;
     public int UnlockPrice;
     public int Price;
+    public String ItemInfo;
 }
 
 [Serializable]
@@ -327,6 +334,7 @@ public class Armor : Item
     public int Defence;
     public int UnlockPrice;
     public int Price;
+    public String ItemInfo;
 }
 
 [Serializable]
@@ -335,12 +343,14 @@ public class Potion : Item
     public int Heal;
     public int UnlockPrice;
     public int Price;
+    public String ItemInfo;
 }
 
 [Serializable]
 public class UnlockItem : Item
 {
     public int MaxUnlockCount;
+    public String ItemInfo;
 }
 [Serializable]
 public class SaveData
