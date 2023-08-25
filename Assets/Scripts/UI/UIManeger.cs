@@ -449,8 +449,11 @@ public class UIManeger : MonoBehaviour
 
     public void MissInfo()  // "빗나감!" 텍스트 출력
     {
-        MissInfoMassege info = InfoPool.Get();
-        info.GetComponent<Text>().text = "빗나감!";
+        if(_goLobbyUI.activeSelf == false && _alarmUI.activeSelf == false)
+        {
+            MissInfoMassege info = InfoPool.Get();
+            info.GetComponent<Text>().text = "빗나감!";
+        }
     }
     public void MissBeatInfo()  // "박자 놓침!" 텍스트 출력
     {
