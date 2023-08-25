@@ -200,30 +200,30 @@ public class PlayerController : MonoBehaviour
     private float moveSpeed = 10f;
     private bool isMoving = false;
 
-    IEnumerator SmoothMove(Vector3 targetPosition)
-    {
-        if (isMoving == true)
-        {
-            yield break;
-        }
-        isMoving = true;
-        float startTime = Time.time;
-        Vector3 startPosition = transform.position;
+    //IEnumerator SmoothMove(Vector3 targetPosition) // 충돌체가 먼저 앞에 있어야하므로 이구문은 사용x
+    //{
+    //    if (isMoving == true)
+    //    {
+    //        yield break;
+    //    }
+    //    isMoving = true;
+    //    float startTime = Time.time;
+    //    Vector3 startPosition = transform.position;
 
-        while (Time.time < startTime + 1 / moveSpeed)
-        {
-            float t = (Time.time - startTime) * moveSpeed;
-            transform.position = Vector3.MoveTowards(startPosition, targetPosition, t);
-            yield return null;
-        }
+    //    while (Time.time < startTime + 1 / moveSpeed)
+    //    {
+    //        float t = (Time.time - startTime) * moveSpeed;
+    //        transform.position = Vector3.MoveTowards(startPosition, targetPosition, t);
+    //        yield return null;
+    //    }
 
-        transform.position = targetPosition;
-        isMoving = false;
-        if (isMoving == false) 
-        {
-            _MakeFog2.UpdateFogOfWar();
-        }
-    }
+    //    transform.position = targetPosition;
+    //    isMoving = false;
+    //    if (isMoving == false) 
+    //    {
+    //        _MakeFog2.UpdateFogOfWar();
+    //    }
+    //}
 
     void MoveCharacter(Vector3 vec)
     {
@@ -260,7 +260,7 @@ public class PlayerController : MonoBehaviour
             {
                 _animator.SetTrigger("MoveX");
                 _childSpriteRenderer.sortingOrder = (int)(transform.position.y - 1) * -1; // 레이어 값변환
-                StartCoroutine(SmoothMove(targetPosition));
+                Move(vec);
             }
             else if (hitdata.collider.tag == "Monster")
             {
@@ -270,7 +270,7 @@ public class PlayerController : MonoBehaviour
             {
                 _animator.SetTrigger("MoveX");
                 _childSpriteRenderer.sortingOrder = (int)(transform.position.y - 1) * -1; // 레이어 값변환
-                StartCoroutine(SmoothMove(targetPosition));
+                Move(vec);
 
                 DropItem dropItem = hitdata.collider.GetComponent<DropItem>();
                 switch (dropItem.Item._itemType)
@@ -300,8 +300,8 @@ public class PlayerController : MonoBehaviour
             //TestmoveWay(vec,0);
             _animator.SetTrigger("MoveX");
             _childSpriteRenderer.sortingOrder = (int)(transform.position.y - 1) * -1; // 레이어 값변환
-            StartCoroutine(SmoothMove(targetPosition));
-            
+            Move(vec);
+
         }
         _MakeFog2.UpdateFogOfWar();
 
@@ -377,40 +377,32 @@ public class PlayerController : MonoBehaviour
         dropItem.DeleteDropItem();
     }
 
+
+
    
 
-    //void Move(Vector3 vec)
-    //{
-    //    transform.position += vec;
-    //    _MakeFog2.UpdateFogOfWar();
-    //    GetComponent<SpriteRenderer>().sortingOrder = (int)(transform.position.y - 1) * -1; // 레이어 값변환
-    //}
-
-    //void TestmoveWay(Vector3 vec ,float t)
-    //{
-    //    t += Time.deltaTime;
-    //    transform.position = Vector3.MoveTowards(transform.position, transform.position + vec, t);
-
-
-    //    _MakeFog2.UpdateFogOfWar();
-    //    GetComponent<SpriteRenderer>().sortingOrder = (int)(transform.position.y - 1) * -1; // 레이어 값변환
-    //    //if (vec == Vector3.left)
-    //    //{
-    //    //    _animator.SetTrigger("Left");
-    //    //}
-    //    //else if (vec == Vector3.right)
-    //    //{
-    //    //    _animator.SetTrigger("Right");
-    //    //}
-    //    //else if (vec == Vector3.up)
-    //    //{
-    //    //    _animator.SetTrigger("Up");
-    //    //}
-    //    //else if (vec == Vector3.down)
-    //    //{
-    //    //    _animator.SetTrigger("Down");
-    //    //}
-    //}
+    void Move(Vector3 vec)
+    {
+        transform.position += vec;
+        _MakeFog2.UpdateFogOfWar();
+        GetComponent<SpriteRenderer>().sortingOrder = (int)(transform.position.y - 1) * -1; // 레이어 값변환
+        if (vec == Vector3.left)
+        {
+            _animator.SetTrigger("Left");
+        }
+        else if (vec == Vector3.right)
+        {
+            _animator.SetTrigger("Right");
+        }
+        else if (vec == Vector3.up)
+        {
+            _animator.SetTrigger("Up");
+        }
+        else if (vec == Vector3.down)
+        {
+            _animator.SetTrigger("Down");
+        }
+    }
 
     public void transfromUpdate(Vector3 vec)
     {
