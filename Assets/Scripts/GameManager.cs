@@ -258,9 +258,11 @@ public class GameManager : MonoBehaviour
             //성공
             DeleteJudgementNote();
             isSuccess = true;
+            return isSuccess;
         }
 
         //실패
+        _uiManeger.MissInfo();
         return isSuccess;
     }
 
