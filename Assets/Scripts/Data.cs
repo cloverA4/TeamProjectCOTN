@@ -61,6 +61,7 @@ public class Data : MonoBehaviour
     private void Start()
     {
         StartCoroutine(LoadGame());
+        
     }
 
     public void SavePlayerData()
@@ -136,8 +137,9 @@ public class Data : MonoBehaviour
             if (string.IsNullOrEmpty(json) == false)
             {
                 CharacterSaveData = JsonUtility.FromJson<SaveData>(json);
-                if(CharacterSaveData._equipItemId.Count <= 0)
+                if (CharacterSaveData._equipItemId.Count <= 0)
                 {
+                    
                     CharacterSaveData._equipItemId = null;
                 }
             }

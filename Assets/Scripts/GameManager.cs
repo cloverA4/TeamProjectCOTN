@@ -287,6 +287,7 @@ public class GameManager : MonoBehaviour
     {
         //페이드아웃 효과 호출(밝아지게)
         StartCoroutine(_uiManeger.FadeOut());
+        
     }
 
     
@@ -321,7 +322,7 @@ public class GameManager : MonoBehaviour
                         PlayerController.Instance.transfromUpdate(_stageStartPosition.LobbyPosition);
                         GameObject go = Instantiate(_dropItem);
                         go.transform.position = new Vector3(-25, 100, 0);
-                        go.GetComponent<DropItem>().Init(Data.Instance.GetItemInfo(302));
+                        go.GetComponent<DropItem>().Init(Data.Instance.GetItemInfo(304));
                         break;
                     case floor.f2:
                     case floor.f3:

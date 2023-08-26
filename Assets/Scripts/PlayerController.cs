@@ -2,6 +2,8 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
 using Unity.VisualScripting;
+using static UnityEditor.Progress;
+using UnityEditor.Experimental.GraphView;
 
 public class PlayerController : MonoBehaviour
 {
@@ -17,6 +19,9 @@ public class PlayerController : MonoBehaviour
 
     bool _isSuccess = true;
     bool _isDubbleClick = true;
+
+    float _lobbyMoveDelay = 0f;
+
     public bool IsX { get; private set; }
 
     //캐릭터 데이터
@@ -31,19 +36,19 @@ public class PlayerController : MonoBehaviour
     public int NowHP
     {
         get { return _nowHp; }
-        set 
+        set
         {
-            if(value <= _maxHP)
+            if (value <= _maxHP)
             {
                 _nowHp = value;
-            }            
+            }
             GameManager.Instance.PlayerHPUpdate();
             if (_nowHp <= 0)
             {
                 _isLive = false;
                 GameManager.Instance.StageFail();
             }
-        }      
+        }
     }
 
     int _maxHP = 0;
@@ -76,6 +81,8 @@ public class PlayerController : MonoBehaviour
         get { return _def; }
         set { _def = value; }
     }
+
+
 
     public List<Item> PlayerEquipItemList { private set; get; }
     public List<Item> BaseEquipItem = new List<Item>();
@@ -118,22 +125,38 @@ public class PlayerController : MonoBehaviour
         PlayerEquipItemList = new List<Item>();
         _childSpriteRenderer = GetComponentsInChildren<SpriteRenderer>()[1];
         IsX = true;
+        //Debug.Log(GameManager.Instance.NowStage); 스테이지확인
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (GameManager.Instance.NowStage == Stage.Lobby)
+        {
+            _lobbyMoveDelay += Time.deltaTime;
+        }
+
         //if (Data.Instance.Player.State == CharacterState.Live && _isSuccess && _isDubbleClick)
         if (_isSuccess && _isDubbleClick)
         {
+            
+
             if (Input.GetKeyDown(KeyCode.UpArrow)) // 위 화살표를 입력 받았을때
             {
                 if (GameManager.Instance.NowStage != Stage.Lobby)
                 {
                     if (!GameManager.Instance.IsSuccess()) return;
+                    MoveCharacter(Vector3.up);
+                }
+                else if (GameManager.Instance.NowStage == Stage.Lobby)
+                {
+                    if (_lobbyMoveDelay >= 0.4f)
+                    {
+                        MoveCharacter(Vector3.up);
+                        _lobbyMoveDelay = 0f;
+                    }
                 }
 
-                MoveCharacter(Vector3.up);
                 IsX = false;
             }
             else if (Input.GetKeyDown(KeyCode.DownArrow)) // 아래 화살표를 입력 받았을때
@@ -141,8 +164,16 @@ public class PlayerController : MonoBehaviour
                 if (GameManager.Instance.NowStage != Stage.Lobby)
                 {
                     if (!GameManager.Instance.IsSuccess()) return;
+                    MoveCharacter(Vector3.down);
                 }
-                MoveCharacter(Vector3.down);
+                else if (GameManager.Instance.NowStage == Stage.Lobby)
+                {
+                    if (_lobbyMoveDelay >= 0.4f)
+                    {
+                        MoveCharacter(Vector3.down);
+                        _lobbyMoveDelay = 0f;
+                    }
+                }
                 IsX = false;
             }
             else if (Input.GetKeyDown(KeyCode.RightArrow)) // 오른쪽 화살표를 입력 받았을때
@@ -150,27 +181,35 @@ public class PlayerController : MonoBehaviour
                 if (GameManager.Instance.NowStage != Stage.Lobby)
                 {
                     if (!GameManager.Instance.IsSuccess()) return;
+                    MoveCharacter(Vector3.right);
                 }
-                
-                //_animator.SetTrigger("Right1");
-                MoveCharacter(Vector3.right);
+                else if (GameManager.Instance.NowStage == Stage.Lobby)
+                {
+                    if (_lobbyMoveDelay >= 0.4f)
+                    {
+                        MoveCharacter(Vector3.right);
+                        _lobbyMoveDelay = 0f;
+                    }
+                }
                 _childSpriteRenderer.flipX = true;
-                //_animator.SetBool("Right", false);
                 IsX = true;
-
             }
             else if (Input.GetKeyDown(KeyCode.LeftArrow)) // 왼쪽 화살표를 입력 받았을때
             {
                 if (GameManager.Instance.NowStage != Stage.Lobby)
                 {
                     if (!GameManager.Instance.IsSuccess()) return;
+                    MoveCharacter(Vector3.left);
                 }
-                MoveCharacter(Vector3.left);
-
+                else if (GameManager.Instance.NowStage == Stage.Lobby)
+                {
+                    if (_lobbyMoveDelay >= 0.4f)
+                    {
+                        MoveCharacter(Vector3.left);
+                        _lobbyMoveDelay = 0f;
+                    }
+                }
                 _childSpriteRenderer.flipX = false;
-                
-                //_isMove = false;
-                //_transform.position = Vector3.Lerp(transform.)
                 IsX = true;
             }
         }
@@ -206,10 +245,37 @@ public class PlayerController : MonoBehaviour
 
     void MoveCharacter(Vector3 vec)
     {
-        Vector3 Temp = transform.position + vec/2;
+        Vector3 Temp = transform.position + vec / 2;
         RaycastHit2D hitdata = Physics2D.Raycast(Temp, vec, 0.5f, _layerMask);
-
         // 왼쪽으로 빔을쏘는         
+        foreach (Item item in PlayerEquipItemList)
+        {
+            if (item._itemType == ItemType.Weapon)
+            {
+                Weapon weapon = (Weapon)item;
+                switch (weapon.weaponType)
+                {
+                    case WeaponType.Dagger:
+                        // Dagger 무기의 범위 설정 및 동작
+                        if (hitdata)
+                        {
+                            if (hitdata.collider.tag == "WeedWall")
+                            {
+                                
+                            }
+                        }
+                        break;
+                    case WeaponType.GreatSword:
+                        GreatSwordAttack(vec);
+                        // GreatSword 무기의 범위 설정 및 동작
+                        break;
+                    case WeaponType.Spear:
+                        // Spear 무기의 범위 설정 및 동작
+                        break;
+
+                }
+            }
+        }
 
         if (hitdata)
         {
@@ -236,7 +302,6 @@ public class PlayerController : MonoBehaviour
             }
             else if (hitdata.collider.tag == "Stair")
             {
-                _animator.SetTrigger("MoveX");
                 _childSpriteRenderer.sortingOrder = (int)(transform.position.y - 1) * -1; // 레이어 값변환
                 Move(vec);
             }
@@ -244,20 +309,20 @@ public class PlayerController : MonoBehaviour
             {
                 hitdata.collider.GetComponent<Monster>().TakeDamage(_damage);
             }
-            else if(hitdata.collider.tag == "Item")
+            else if (hitdata.collider.tag == "Item")
             {
-                _animator.SetTrigger("MoveX");
                 _childSpriteRenderer.sortingOrder = (int)(transform.position.y - 1) * -1; // 레이어 값변환
                 Move(vec);
+                
 
-                DropItem dropItem = hitdata.collider.GetComponent<DropItem>();               
+                DropItem dropItem = hitdata.collider.GetComponent<DropItem>();
                 switch (dropItem.Item._itemType)
                 {
                     case ItemType.Currency:
                         //해당하는 재화를 상승 시키고 드랍아이템 삭제
                         Currency cr = (Currency)dropItem.Item;
                         if (cr._ItemID == 101) GameManager.Instance.Dia += cr.Count;
-                        else if(cr._ItemID == 102) GameManager.Instance.Gold += cr.Count;
+                        else if (cr._ItemID == 102) GameManager.Instance.Gold += cr.Count;
                         dropItem.DeleteDropItem();
                         break;
                     case ItemType.Shovel:
@@ -277,15 +342,73 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            //TestmoveWay(vec,0);
-            _animator.SetTrigger("MoveX");
             _childSpriteRenderer.sortingOrder = (int)(transform.position.y - 1) * -1; // 레이어 값변환
             Move(vec);
-
         }
         _MakeFog2.UpdateFogOfWar();
 
     }
+
+
+    void GreatSwordAttack(Vector3 direction)
+    {
+        Vector3 swordCenter = (Vector3)transform.position + direction; // 대검의 중심 위치 계산
+
+        if (direction == Vector3.down)
+        {
+            Vector3 boxSize = new Vector3(0.5f, 1.5f, 0);
+            Collider2D[] colliders = Physics2D.OverlapBoxAll(swordCenter, boxSize, 0f, _layerMask);
+            foreach (Collider2D collider in colliders)
+            {
+                if (collider.CompareTag("Enemy"))
+                {
+                    collider.GetComponent<Monster>().TakeDamage(_damage);
+                }
+            }
+        }
+        if (direction == Vector3.up)
+        {
+            Vector3 boxSize = new Vector3(0.5f, 1.5f,0f);
+            Collider2D[] colliders = Physics2D.OverlapBoxAll(swordCenter, boxSize, 0f, _layerMask);
+            foreach (Collider2D collider in colliders)
+            {
+                if (collider.CompareTag("Enemy"))
+                {
+                    collider.GetComponent<Monster>().TakeDamage(_damage);
+                }
+            }
+        }
+        if (direction == Vector3.left)
+        {
+            Vector3 boxSize = new Vector3(1.5f, 0.5f,0f);
+            Collider2D[] colliders = Physics2D.OverlapBoxAll(swordCenter, boxSize, 0f, _layerMask);
+            foreach (Collider2D collider in colliders)
+            {
+                if (collider.CompareTag("Enemy"))
+                {
+                    collider.GetComponent<Monster>().TakeDamage(_damage);
+                }
+            }
+        }
+        if (direction == Vector3.right)
+        {
+            Vector3 boxSize = new Vector3(1.5f, 0.5f,0);
+            Collider2D[] colliders = Physics2D.OverlapBoxAll(swordCenter, boxSize, 0f, _layerMask);
+            foreach (Collider2D collider in colliders)
+            {
+                if (collider.CompareTag("Enemy"))
+                {
+                    collider.GetComponent<Monster>().TakeDamage(_damage);
+                }
+            }
+        }
+
+        // 대검 범위 내에 있는 모든 콜라이더들을 검출
+
+
+
+    }
+
 
     void GetItem(DropItem dropItem)
     {
@@ -321,7 +444,7 @@ public class PlayerController : MonoBehaviour
                         Debug.Log($"착용한 아이템 {PlayerEquipItemList[i]._ItemID}");
                         Debug.Log($"버려진 아이템 {dropItem.Item._ItemID}");
                         return;
-                    }                   
+                    }
                     break;
                 case ItemType.Armor:
                     Armor armor = (Armor)dropItem.Item;
@@ -332,7 +455,7 @@ public class PlayerController : MonoBehaviour
                         temp = (Armor)PlayerEquipItemList[i];
                         PlayerEquipItemList[i] = armor;
                         dropItem.ChangeItem(temp);
-                        
+
                         Debug.Log($"착용한 아이템 {PlayerEquipItemList[i]._ItemID}");
                         Debug.Log($"버려진 아이템 {dropItem.Item._ItemID}");
                     }
@@ -359,7 +482,7 @@ public class PlayerController : MonoBehaviour
 
 
 
-   
+
 
     void Move(Vector3 vec)
     {
@@ -394,6 +517,8 @@ public class PlayerController : MonoBehaviour
         //게임메니져에서 각종 데이터 로드가 끝나면, 그때 실행
         BaseEquipItem.Add(Data.Instance.GetItemInfo(201));
         BaseEquipItem.Add(Data.Instance.GetItemInfo(301));
+        
+        
 
         //최대체력 
         _maxHP = 3;
@@ -412,21 +537,22 @@ public class PlayerController : MonoBehaviour
         else _nowHp = Data.Instance.CharacterSaveData._nowHP;
 
 
-        if(Data.Instance.CharacterSaveData._equipItemId == null)
+        if (Data.Instance.CharacterSaveData._equipItemId == null)
         {
             Debug.Log("기본아이템 장착");
             InitEquipItem();
+            Debug.Log(BaseEquipItem.Count+"이닛함수 밑");
         }
         else
         {
             PlayerEquipItemList.Clear();
-            for(int i = 0; i < Data.Instance.CharacterSaveData._equipItemId.Count; i++)
+            for (int i = 0; i < Data.Instance.CharacterSaveData._equipItemId.Count; i++)
             {
                 Debug.Log($"저장된 아이템아이디 {Data.Instance.CharacterSaveData._equipItemId[i]}");
                 PlayerEquipItemList.Add(Data.Instance.GetItemInfo(Data.Instance.CharacterSaveData._equipItemId[i]));
             }
         }
-        
+
         //캐릭터 스텟
         UpdateCharacterState();
     }
@@ -465,15 +591,19 @@ public class PlayerController : MonoBehaviour
     }
 
     public void InitEquipItem()
-    {
+    {   
         PlayerEquipItemList.Clear();
-        PlayerEquipItemList = BaseEquipItem;
+        for (int i = 0; i < BaseEquipItem.Count; i++)
+        {
+            PlayerEquipItemList.Add(BaseEquipItem[i]);
+        }
+        
     }
 
     #endregion
 
     void Death()
-    {        
+    {
         GameManager.Instance.StageFail();
     }
 }
