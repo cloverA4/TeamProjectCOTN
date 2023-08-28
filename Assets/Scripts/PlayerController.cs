@@ -419,7 +419,7 @@ public class PlayerController : MonoBehaviour
                 case ItemType.Shovel:
                     Shovel shovel = (Shovel)dropItem.Item;
                     Debug.Log($"먹을 아이템 {dropItem.Item._ItemID}");
-                    if (PlayerEquipItemList[i]._itemType == ItemType.Weapon)
+                    if (PlayerEquipItemList[i]._itemType == ItemType.Shovel)
                     {
                         Shovel temp = new Shovel();
                         temp = (Shovel)PlayerEquipItemList[i];
@@ -449,7 +449,7 @@ public class PlayerController : MonoBehaviour
                 case ItemType.Armor:
                     Armor armor = (Armor)dropItem.Item;
                     Debug.Log($"먹을 아이템 {dropItem.Item._ItemID}");
-                    if (PlayerEquipItemList[i]._itemType == ItemType.Weapon)
+                    if (PlayerEquipItemList[i]._itemType == ItemType.Armor)
                     {
                         Armor temp = new Armor();
                         temp = (Armor)PlayerEquipItemList[i];
@@ -458,15 +458,16 @@ public class PlayerController : MonoBehaviour
 
                         Debug.Log($"착용한 아이템 {PlayerEquipItemList[i]._ItemID}");
                         Debug.Log($"버려진 아이템 {dropItem.Item._ItemID}");
+                        return;
                     }
-                    return;
+                    break;
                 case ItemType.Potion:
                     Potion potion = (Potion)dropItem.Item;
                     Debug.Log($"먹을 아이템 {dropItem.Item._ItemID}");
-                    if (PlayerEquipItemList[i]._itemType == ItemType.Weapon)
+                    if (PlayerEquipItemList[i]._itemType == ItemType.Potion)
                     {
-                        Weapon temp = new Weapon();
-                        temp = (Weapon)PlayerEquipItemList[i];
+                        Potion temp = new Potion();
+                        temp = (Potion)PlayerEquipItemList[i];
                         PlayerEquipItemList[i] = potion;
                         dropItem.ChangeItem(temp);
 
@@ -475,14 +476,57 @@ public class PlayerController : MonoBehaviour
                         return;
                     }
                     break;
+                case ItemType.Unlock:
+                    UnlockItem Unlock = (UnlockItem)dropItem.Item;
+                    int level = 0;
+                    switch(Unlock._ItemID)
+                    {
+                        case 601:
+                            if (PlayerPrefs.HasKey("PlayerHPUpgradeLevel")) level = PlayerPrefs.GetInt("PlayerHPUpgradeLevel");
+                            break;
+                        case 602:
+                            if (PlayerPrefs.HasKey("TreasureBoxUpgradeLevel")) level = PlayerPrefs.GetInt("TreasureBoxUpgradeLevel");
+                            break;
+                        case 603:
+                            if (PlayerPrefs.HasKey("ComboUpgradeLevel")) level = PlayerPrefs.GetInt("ComboUpgradeLevel");
+                            break;
+                    }
+                    int needDia = -1;
+                    for (int j = 0; j < UnlockSaveData.unlockNeedDias.Count; j++)
+                    {
+                        if (UnlockSaveData.unlockNeedDias[j].level == level)
+                        {
+                            needDia = UnlockSaveData.unlockNeedDias[j].NeedDia;
+                        }
+                    }
+
+                    if(needDia != -1 && GameManager.Instance.Dia >= needDia)
+                    {
+                        GameManager.Instance.Dia -= needDia;
+
+                        switch (Unlock._ItemID)
+                        {
+                            case 601:
+                                PlayerPrefs.SetInt("PlayerHPUpgradeLevel", level + 1);
+                                break;
+                            case 602:
+                                PlayerPrefs.SetInt("TreasureBoxUpgradeLevel", level + 1);
+                                break;
+                            case 603:
+                                PlayerPrefs.SetInt("ComboUpgradeLevel", level + 1);
+                                break;
+                        }
+                        Data.Instance.SavePlayerData();
+                        UpdateCharacterState();
+                    }
+                    dropItem.DeleteDropItem();
+                    return;
             }
         }
+
+        PlayerEquipItemList.Add(dropItem.Item);
         dropItem.DeleteDropItem();
     }
-
-
-
-
 
     void Move(Vector3 vec)
     {
@@ -517,25 +561,6 @@ public class PlayerController : MonoBehaviour
         //게임메니져에서 각종 데이터 로드가 끝나면, 그때 실행
         BaseEquipItem.Add(Data.Instance.GetItemInfo(201));
         BaseEquipItem.Add(Data.Instance.GetItemInfo(301));
-        
-        
-
-        //최대체력 
-        _maxHP = 3;
-        for (int i = 0; i < UnlockSaveData.unlockCount.Count; i++)
-        {
-            if (UnlockSaveData.unlockCount[i].name == "HP")
-            {
-                _maxHP += UnlockSaveData.unlockCount[i].count;
-            }
-        }
-        //현재체력
-        if (Data.Instance.CharacterSaveData._nowHP <= 0)
-        {
-            _nowHp = _maxHP;
-        }
-        else _nowHp = Data.Instance.CharacterSaveData._nowHP;
-
 
         if (Data.Instance.CharacterSaveData._equipItemId == null)
         {
@@ -564,6 +589,20 @@ public class PlayerController : MonoBehaviour
         _damage = 0;
         _def = 0;
         _shovelPower = 0;
+
+        //최대체력 
+        _maxHP = 6;
+        if (PlayerPrefs.HasKey("PlayerHPUpgradeLevel"))
+        {
+            _maxHP += PlayerPrefs.GetInt("PlayerHPUpgradeLevel") * 2;
+        }
+        //현재체력
+        if (Data.Instance.CharacterSaveData._nowHP <= 0)
+        {
+            _nowHp = _maxHP;
+        }
+        else _nowHp = Data.Instance.CharacterSaveData._nowHP;
+
         for (int i = 0; i < PlayerEquipItemList.Count; i++)
         {
             //공격력

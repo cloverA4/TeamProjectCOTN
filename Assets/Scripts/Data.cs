@@ -23,6 +23,9 @@ public class Data : MonoBehaviour
     List<Item> ItemDataList = new List<Item>();
     public SaveData CharacterSaveData = new SaveData();
 
+
+    List<int> _lockItemIdList = new List<int>();
+    public List<int> LockItemIdList { get { return _lockItemIdList; } }
     #endregion
 
     private static Data instance = null;
@@ -61,7 +64,6 @@ public class Data : MonoBehaviour
     private void Start()
     {
         StartCoroutine(LoadGame());
-        
     }
 
     public void SavePlayerData()
@@ -76,8 +78,7 @@ public class Data : MonoBehaviour
         for (int i = 0; i < PlayerController.Instance.PlayerEquipItemList.Count; i++)
         {
             CharacterSaveData._equipItemId.Add(PlayerController.Instance.PlayerEquipItemList[i]._ItemID);
-        }
-        
+        }        
 
         string Json = JsonUtility.ToJson(CharacterSaveData);
 
@@ -99,6 +100,7 @@ public class Data : MonoBehaviour
         // 게임 진행에 필요한 게임 데이터 함수 순서대로 로드
         ReadItemData();
         LoadSaveData();
+        CreateUnlockList();
         yield return null;
 
         // 마지막에 필요한 모든 게임데이터를 로드가되면 gmaeScene로드
@@ -139,8 +141,12 @@ public class Data : MonoBehaviour
                 CharacterSaveData = JsonUtility.FromJson<SaveData>(json);
                 if (CharacterSaveData._equipItemId.Count <= 0)
                 {
-                    
                     CharacterSaveData._equipItemId = null;
+                }
+
+                if(CharacterSaveData._unlockItemId.Count <= 0)
+                {
+                    BaseUnlockItemAdd();
                 }
             }
             else Debug.Log("내용이 없습니다.");
@@ -154,11 +160,86 @@ public class Data : MonoBehaviour
             CharacterSaveData._nowFloor = floor.f1;
             CharacterSaveData._nowHP = 0;
             CharacterSaveData._equipItemId = null;
+            BaseUnlockItemAdd();
         }
 
         Debug.Log("로딩완료");
     }
 
+    void BaseUnlockItemAdd()
+    {
+        CharacterSaveData._unlockItemId.Clear();
+        CharacterSaveData._unlockItemId.Add(201);
+        CharacterSaveData._unlockItemId.Add(301);
+        CharacterSaveData._unlockItemId.Add(303);
+        CharacterSaveData._unlockItemId.Add(305);
+        CharacterSaveData._unlockItemId.Add(401);
+        CharacterSaveData._unlockItemId.Add(501);
+    }
+
+    void CreateUnlockList()
+    {
+        for(int i = 0; i < ItemDataList.Count; i++)
+        {
+            if (ItemDataList[i]._itemType == ItemType.Currency) continue;
+            if (ItemDataList[i]._itemType == ItemType.Unlock) continue;
+
+            bool _isUnlocked = false;
+            for(int j = 0; j < CharacterSaveData._unlockItemId.Count; j++)
+            {
+                if (ItemDataList[i]._ItemID == CharacterSaveData._unlockItemId[j])
+                {
+                    _isUnlocked = true;
+                    break;
+                }
+            }
+
+            if(_isUnlocked == false)
+            {
+                _lockItemIdList.Add(ItemDataList[i]._ItemID);
+            }
+        }
+
+        if(PlayerPrefs.HasKey("PlayerHPUpgradeLevel"))
+        {
+            UnlockItem ul = (UnlockItem)GetItemInfo(601);
+            if (ul.MaxUnlockCount < PlayerPrefs.GetInt("PlayerHPUpgradeLevel"))
+            {
+                _lockItemIdList.Add(601);
+            }
+        }
+        else
+        {
+            _lockItemIdList.Add(601);
+        }
+
+        if (PlayerPrefs.HasKey("TreasureBoxUpgradeLevel"))
+        {
+            UnlockItem ul = (UnlockItem)GetItemInfo(602);
+            if (ul.MaxUnlockCount < PlayerPrefs.GetInt("TreasureBoxUpgradeLevel"))
+            {
+                _lockItemIdList.Add(602);
+            }
+        }
+        else
+        {
+            _lockItemIdList.Add(602);
+        }
+
+        if (PlayerPrefs.HasKey("ComboUpgradeLevel"))
+        {
+            UnlockItem ul = (UnlockItem)GetItemInfo(603);
+            if (ul.MaxUnlockCount < PlayerPrefs.GetInt("ComboUpgradeLevel"))
+            {
+                _lockItemIdList.Add(603);
+            }
+        }
+        else
+        {
+            _lockItemIdList.Add(603);
+        }
+        Debug.Log("잠금아이템 리스트 생성 완료");
+    }
 
     void ReadItemData()
     {
@@ -364,6 +445,7 @@ public class SaveData
     public floor _nowFloor = floor.f1;
     public Stage _nowStage = Stage.Lobby;
     public List<int> _equipItemId = new List<int>();
+    public List<int> _unlockItemId = new List<int>();
 }
 
 #endregion

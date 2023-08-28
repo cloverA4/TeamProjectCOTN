@@ -13,15 +13,9 @@ MonoBehaviour:
   m_Name: SaveInfoData
   m_EditorClassIdentifier: 
   unlockNeedDias:
-  - level: 1
+  - level: 0
     NeedDia: 2
-  - level: 2
+  - level: 1
     NeedDia: 4
-  - level: 3
+  - level: 2
     NeedDia: 7
-  unlockCount:
-  - name: HP
-    count: 0
-  unlockItemInfo:
-  - Itemid: 302
-    IsUnlocked: 0
