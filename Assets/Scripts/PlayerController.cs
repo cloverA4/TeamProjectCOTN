@@ -248,34 +248,34 @@ public class PlayerController : MonoBehaviour
         Vector3 Temp = transform.position + vec / 2;
         RaycastHit2D hitdata = Physics2D.Raycast(Temp, vec, 0.5f, _layerMask);
         // 왼쪽으로 빔을쏘는         
-        foreach (Item item in PlayerEquipItemList)
-        {
-            if (item._itemType == ItemType.Weapon)
-            {
-                Weapon weapon = (Weapon)item;
-                switch (weapon.weaponType)
-                {
-                    case WeaponType.Dagger:
-                        // Dagger 무기의 범위 설정 및 동작
-                        if (hitdata)
-                        {
-                            if (hitdata.collider.tag == "WeedWall")
-                            {
+        //foreach (Item item in PlayerEquipItemList)
+        //{
+        //    if (item._itemType == ItemType.Weapon)
+        //    {
+        //        Weapon weapon = (Weapon)item;
+        //        switch (weapon.weaponType)
+        //        {
+        //            case WeaponType.Dagger:
+        //                // Dagger 무기의 범위 설정 및 동작
+        //                if (hitdata)
+        //                {
+        //                    if (hitdata.collider.tag == "WeedWall")
+        //                    {
                                 
-                            }
-                        }
-                        break;
-                    case WeaponType.GreatSword:
-                        GreatSwordAttack(vec);
-                        // GreatSword 무기의 범위 설정 및 동작
-                        break;
-                    case WeaponType.Spear:
-                        // Spear 무기의 범위 설정 및 동작
-                        break;
+        //                    }
+        //                }
+        //                break;
+        //            case WeaponType.GreatSword:
+        //                GreatSwordAttack(vec);
+        //                // GreatSword 무기의 범위 설정 및 동작
+        //                break;
+        //            case WeaponType.Spear:
+        //                // Spear 무기의 범위 설정 및 동작
+        //                break;
 
-                }
-            }
-        }
+        //        }
+        //    }
+        //}
 
         if (hitdata)
         {
