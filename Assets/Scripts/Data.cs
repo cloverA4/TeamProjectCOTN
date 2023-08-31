@@ -24,8 +24,12 @@ public class Data : MonoBehaviour
     public SaveData CharacterSaveData = new SaveData();
 
 
-    List<int> _lockItemIdList = new List<int>();
-    public List<int> LockItemIdList { get { return _lockItemIdList; } }
+    List<int> _lockEquipItemIDList = new List<int>();
+    List<int> _lockPotionList = new List<int>();
+    List<int> _lockPassivesList = new List<int>();
+    public List<int> LockEquipItemIDList { get { return _lockEquipItemIDList; } }
+    public List<int> LockPotionList { get { return _lockPotionList; } }
+    public List<int> LockPassivesList { get { return _lockPassivesList; } }
     #endregion
 
     private static Data instance = null;
@@ -100,7 +104,7 @@ public class Data : MonoBehaviour
         // 게임 진행에 필요한 게임 데이터 함수 순서대로 로드
         ReadItemData();
         LoadSaveData();
-        CreateUnlockList();
+        UPdatelockList();
         yield return null;
 
         // 마지막에 필요한 모든 게임데이터를 로드가되면 gmaeScene로드
@@ -177,9 +181,12 @@ public class Data : MonoBehaviour
         CharacterSaveData._unlockItemId.Add(501);
     }
 
-    void CreateUnlockList()
+    public void UPdatelockList() //해금한경우 호출해서 새로만들것
     {
-        for(int i = 0; i < ItemDataList.Count; i++)
+        _lockEquipItemIDList.Clear();
+        _lockPotionList.Clear();
+        _lockPassivesList.Clear();
+        for (int i = 0; i < ItemDataList.Count; i++)
         {
             if (ItemDataList[i]._itemType == ItemType.Currency) continue;
             if (ItemDataList[i]._itemType == ItemType.Unlock) continue;
@@ -196,21 +203,32 @@ public class Data : MonoBehaviour
 
             if(_isUnlocked == false)
             {
-                _lockItemIdList.Add(ItemDataList[i]._ItemID);
+                if (ItemDataList[i]._itemType == ItemType.Weapon || ItemDataList[i]._itemType == ItemType.Armor)
+                {
+                    _lockEquipItemIDList.Add(ItemDataList[i]._ItemID);
+                }
+                else if(ItemDataList[i]._itemType == ItemType.Potion)
+                {
+                    _lockPotionList.Add(ItemDataList[i]._ItemID);
+                }
             }
         }
+        UpdateLockPassivesList();
+    }
 
-        if(PlayerPrefs.HasKey("PlayerHPUpgradeLevel"))
+    void UpdateLockPassivesList()
+    {
+        if (PlayerPrefs.HasKey("PlayerHPUpgradeLevel"))
         {
             UnlockItem ul = (UnlockItem)GetItemInfo(601);
             if (ul.MaxUnlockCount < PlayerPrefs.GetInt("PlayerHPUpgradeLevel"))
             {
-                _lockItemIdList.Add(601);
+                _lockPassivesList.Add(601);
             }
         }
         else
         {
-            _lockItemIdList.Add(601);
+            _lockPassivesList.Add(601);
         }
 
         if (PlayerPrefs.HasKey("TreasureBoxUpgradeLevel"))
@@ -218,12 +236,12 @@ public class Data : MonoBehaviour
             UnlockItem ul = (UnlockItem)GetItemInfo(602);
             if (ul.MaxUnlockCount < PlayerPrefs.GetInt("TreasureBoxUpgradeLevel"))
             {
-                _lockItemIdList.Add(602);
+                _lockPassivesList.Add(602);
             }
         }
         else
         {
-            _lockItemIdList.Add(602);
+            _lockPassivesList.Add(602);
         }
 
         if (PlayerPrefs.HasKey("ComboUpgradeLevel"))
@@ -231,12 +249,12 @@ public class Data : MonoBehaviour
             UnlockItem ul = (UnlockItem)GetItemInfo(603);
             if (ul.MaxUnlockCount < PlayerPrefs.GetInt("ComboUpgradeLevel"))
             {
-                _lockItemIdList.Add(603);
+                _lockPassivesList.Add(603);
             }
         }
         else
         {
-            _lockItemIdList.Add(603);
+            _lockPassivesList.Add(603);
         }
         Debug.Log("잠금아이템 리스트 생성 완료");
     }

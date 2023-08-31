@@ -448,6 +448,51 @@ public class GameManager : MonoBehaviour
 
     #endregion
 
+    #region 아이템 스폰
+
+    void LobbyShopItemSpawn()
+    {
+        //장비샵
+
+        //소모품샵
+
+        //패시브샵
+    }
+
+    void StageShopItemSpawn()
+    {
+        switch(_nowStage)
+        {
+            case Stage.Stage1:
+                switch(_nowFloor)
+                {
+                    case floor.f1:
+                        break;
+                    case floor.f2:
+                        break;
+                    case floor.f3:
+                        break;
+                    case floor.fBoss:
+                        break;
+                }
+                break;
+            case Stage.Stage2:
+                switch (_nowFloor)
+                {
+                    case floor.f1:
+                        break;
+                    case floor.f2:
+                        break;
+                    case floor.f3:
+                        break;
+                    case floor.fBoss:
+                        break;
+                }
+                break;
+        }
+    }
+    #endregion
+
     #region 몬스터 제어
     public event EventHandler EventEliteMonsterDie;
 
@@ -459,8 +504,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] Transform _eliteSpawnPoint1s2f;
     [SerializeField] Transform _eliteSpawnPoint1s3f;
 
-    [SerializeField] GameObject[] _monster;
-    [SerializeField] GameObject _eliteMonster;
+    [SerializeField] GameObject[] _monsterPreFabs;
+    [SerializeField] GameObject _eliteMonsterPrefab;
     [SerializeField] GameObject _monsterPool;
 
 
@@ -526,7 +571,7 @@ public class GameManager : MonoBehaviour
             MonsterPooling(index);
             index++;
 
-            if(index >= _monster.Length)
+            if(index >= _monsterPreFabs.Length)
             {
                 index = 0;
             }
@@ -546,7 +591,7 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        go = Instantiate(_monster[index], _monsterPool.transform);
+        go = Instantiate(_monsterPreFabs[index], _monsterPool.transform);
 
         if (go != null)
         {
@@ -568,7 +613,7 @@ public class GameManager : MonoBehaviour
             }
         }
         //엘리트몬스터 스폰
-        go = Instantiate(_eliteMonster, _monsterPool.transform);
+        go = Instantiate(_eliteMonsterPrefab, _monsterPool.transform);
 
         if (go != null)
         {
