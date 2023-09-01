@@ -77,12 +77,27 @@ public class Data : MonoBehaviour
         CharacterSaveData._nowStage = GameManager.Instance.NowStage;
         CharacterSaveData._nowFloor = GameManager.Instance.NowFloor;
         CharacterSaveData._nowHP = PlayerController.Instance.NowHP;
-        CharacterSaveData._equipItemId = new List<int>();
-        Debug.Log($"착용중인 아이템  {PlayerController.Instance.PlayerEquipItemList.Count} 개 저장");
-        for (int i = 0; i < PlayerController.Instance.PlayerEquipItemList.Count; i++)
+
+        if (PlayerController.Instance.EquipShovel != null)
         {
-            CharacterSaveData._equipItemId.Add(PlayerController.Instance.PlayerEquipItemList[i]._ItemID);
-        }        
+            CharacterSaveData._equipShovelID = PlayerController.Instance.EquipShovel._ItemID;
+        }
+
+        if (PlayerController.Instance.EquipWeapon != null)
+        {
+            CharacterSaveData._equipWeaponID = PlayerController.Instance.EquipWeapon._ItemID;
+        }
+
+        if (PlayerController.Instance.EquipArmor != null)
+        {
+            CharacterSaveData._equipArmorID = PlayerController.Instance.EquipArmor._ItemID;
+        }
+
+        if (PlayerController.Instance.EquipPotion != null)
+        {
+            CharacterSaveData._equipPotionID = PlayerController.Instance.EquipPotion._ItemID;
+        }
+
 
         string Json = JsonUtility.ToJson(CharacterSaveData);
 
@@ -143,11 +158,7 @@ public class Data : MonoBehaviour
             if (string.IsNullOrEmpty(json) == false)
             {
                 CharacterSaveData = JsonUtility.FromJson<SaveData>(json);
-                if (CharacterSaveData._equipItemId.Count <= 0)
-                {
-                    CharacterSaveData._equipItemId = null;
-                }
-
+                
                 if(CharacterSaveData._unlockItemId.Count <= 0)
                 {
                     BaseUnlockItemAdd();
@@ -163,7 +174,7 @@ public class Data : MonoBehaviour
             CharacterSaveData._nowStage = Stage.Lobby;
             CharacterSaveData._nowFloor = floor.f1;
             CharacterSaveData._nowHP = 0;
-            CharacterSaveData._equipItemId = null;
+
             BaseUnlockItemAdd();
         }
 
@@ -462,7 +473,10 @@ public class SaveData
     public int _nowHP;
     public floor _nowFloor = floor.f1;
     public Stage _nowStage = Stage.Lobby;
-    public List<int> _equipItemId = new List<int>();
+    public int _equipShovelID = 0;
+    public int _equipWeaponID = 0;
+    public int _equipArmorID = 0;
+    public int _equipPotionID = 0;    
     public List<int> _unlockItemId = new List<int>();
 }
 

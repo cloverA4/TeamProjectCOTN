@@ -125,7 +125,7 @@ public class GameManager : MonoBehaviour
         _nowFloor = Data.Instance.CharacterSaveData._nowFloor;
         PlayerController.Instance.InitCharacterData();
         _uiManeger.setHP();
-        _uiManeger.Equipment();
+        //_uiManeger.Equipment();
     }
 
     #region ∫Ò∆Æ
@@ -396,7 +396,7 @@ public class GameManager : MonoBehaviour
         {
             case Stage.Lobby:
                 _gold = 0;
-                PlayerController.Instance.InitEquipItem();
+                PlayerController.Instance.BaseItemEquip();
                 break;
             case Stage.Stage1:
             case Stage.Stage2:
@@ -728,7 +728,7 @@ public class GameManager : MonoBehaviour
 
     public void GetEquipItem()
     {
-        _uiManeger.Equipment();
+        //_uiManeger.Equipment();
     }
 
     public void PlayerHPUpdate()

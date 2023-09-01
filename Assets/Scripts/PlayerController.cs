@@ -84,10 +84,15 @@ public class PlayerController : MonoBehaviour
         set { _def = value; }
     }
 
-
-
-    public List<Item> PlayerEquipItemList { private set; get; }
-    public List<Item> BaseEquipItem = new List<Item>();
+        
+    Shovel _equipShovel;
+    public Shovel EquipShovel { get { return _equipShovel; } }
+    Weapon _equipWeapon;
+    public Weapon EquipWeapon { get { return _equipWeapon; } }
+    Armor _equipArmor;
+    public Armor EquipArmor { get { return _equipArmor; } }
+    Potion _equipPotion;
+    public Potion EquipPotion { get { return _equipPotion; } }
 
     private void Awake()
     {
@@ -124,7 +129,6 @@ public class PlayerController : MonoBehaviour
     {
         //_childSpriteRenderer = GetComponentInChildrens<SpriteRenderer>()[1];
         _animator = GetComponentsInChildren<Animator>()[0];
-        PlayerEquipItemList = new List<Item>();
         _childSpriteRenderer = GetComponentsInChildren<SpriteRenderer>()[1];
         IsX = true;
         //Debug.Log(GameManager.Instance.NowStage); 스테이지확인
@@ -423,119 +427,133 @@ public class PlayerController : MonoBehaviour
 
     void GetItem(DropItem dropItem)
     {
-        for (int i = 0; i < PlayerEquipItemList.Count; i++)
+        switch (dropItem.Item._itemType)
         {
-            switch (dropItem.Item._itemType)
-            {
-                case ItemType.Shovel:
-                    Shovel shovel = (Shovel)dropItem.Item;
-                    Debug.Log($"먹을 아이템 {dropItem.Item._ItemID}");
-                    if (PlayerEquipItemList[i]._itemType == ItemType.Shovel)
-                    {
-                        Shovel temp = new Shovel();
-                        temp = (Shovel)PlayerEquipItemList[i];
-                        PlayerEquipItemList[i] = shovel;
-                        dropItem.ChangeItem(temp);
+            case ItemType.Shovel:
+                Shovel shovel = (Shovel)dropItem.Item;
+                Debug.Log($"먹을 아이템 {dropItem.Item._ItemID}");
 
-                        Debug.Log($"착용한 아이템 {PlayerEquipItemList[i]._ItemID}");
-                        Debug.Log($"버려진 아이템 {dropItem.Item._ItemID}");
-                        return;
-                    }
-                    break;
-                case ItemType.Weapon:
-                    Weapon weapon = (Weapon)dropItem.Item;
-                    Debug.Log($"먹을 아이템 {dropItem.Item._ItemID}");
-                    if (PlayerEquipItemList[i]._itemType == ItemType.Weapon)
-                    {
-                        Weapon temp = new Weapon();
-                        temp = (Weapon)PlayerEquipItemList[i];
-                        PlayerEquipItemList[i] = weapon;
-                        dropItem.ChangeItem(temp);
+                if(_equipShovel != null)
+                {
+                    //장착중인 삽이 있으면
+                    Shovel temp = new Shovel();
+                    temp = _equipShovel;
+                    _equipShovel = shovel;
+                    dropItem.ChangeItem(temp);
+                    Debug.Log($"착용한 아이템 {_equipShovel._ItemID}");
+                    Debug.Log($"버려진 아이템 {dropItem.Item._ItemID}");
+                    return;
+                }
+                else
+                {
+                    _equipShovel = shovel;
+                }
+                break;
+            case ItemType.Weapon:
+                Weapon weapon = (Weapon)dropItem.Item;
+                Debug.Log($"먹을 아이템 {dropItem.Item._ItemID}");
 
-                        Debug.Log($"착용한 아이템 {PlayerEquipItemList[i]._ItemID}");
-                        Debug.Log($"버려진 아이템 {dropItem.Item._ItemID}");
-                        return;
-                    }
-                    break;
-                case ItemType.Armor:
-                    Armor armor = (Armor)dropItem.Item;
-                    Debug.Log($"먹을 아이템 {dropItem.Item._ItemID}");
-                    if (PlayerEquipItemList[i]._itemType == ItemType.Armor)
-                    {
-                        Armor temp = new Armor();
-                        temp = (Armor)PlayerEquipItemList[i];
-                        PlayerEquipItemList[i] = armor;
-                        dropItem.ChangeItem(temp);
+                if(_equipWeapon != null)
+                {
+                    Weapon temp = new Weapon();
+                    temp = _equipWeapon;
+                    _equipWeapon = weapon;
+                    dropItem.ChangeItem(temp);
 
-                        Debug.Log($"착용한 아이템 {PlayerEquipItemList[i]._ItemID}");
-                        Debug.Log($"버려진 아이템 {dropItem.Item._ItemID}");
-                        return;
-                    }
-                    break;
-                case ItemType.Potion:
-                    Potion potion = (Potion)dropItem.Item;
-                    Debug.Log($"먹을 아이템 {dropItem.Item._ItemID}");
-                    if (PlayerEquipItemList[i]._itemType == ItemType.Potion)
-                    {
-                        Potion temp = new Potion();
-                        temp = (Potion)PlayerEquipItemList[i];
-                        PlayerEquipItemList[i] = potion;
-                        dropItem.ChangeItem(temp);
+                    Debug.Log($"착용한 아이템 {_equipWeapon._ItemID}");
+                    Debug.Log($"버려진 아이템 {dropItem.Item._ItemID}");
+                    return;
+                }
+                else
+                {
+                    _equipWeapon = weapon;
+                }
+                break;
+            case ItemType.Armor:
+                Armor armor = (Armor)dropItem.Item;
+                Debug.Log($"먹을 아이템 {dropItem.Item._ItemID}");
+                if (_equipArmor != null)
+                {
+                    Armor temp = new Armor();
+                    temp = _equipArmor;
+                    _equipArmor = armor;
+                    dropItem.ChangeItem(temp);
 
-                        Debug.Log($"착용한 아이템 {PlayerEquipItemList[i]._ItemID}");
-                        Debug.Log($"버려진 아이템 {dropItem.Item._ItemID}");
-                        return;
+                    Debug.Log($"착용한 아이템 {_equipArmor._ItemID}");
+                    Debug.Log($"버려진 아이템 {dropItem.Item._ItemID}");
+                    return;
+                }
+                else
+                {
+                    _equipArmor = armor;
+                }
+                break;
+            case ItemType.Potion:
+                Potion potion = (Potion)dropItem.Item;
+                Debug.Log($"먹을 아이템 {dropItem.Item._ItemID}");
+                if (_equipPotion != null)
+                {
+                    Potion temp = new Potion();
+                    temp = _equipPotion;
+                    _equipPotion = potion;
+                    dropItem.ChangeItem(temp);
+
+                    Debug.Log($"착용한 아이템 {_equipPotion._ItemID}");
+                    Debug.Log($"버려진 아이템 {dropItem.Item._ItemID}");
+                    return;
+                }
+                else
+                {
+                    _equipPotion = potion;
+                }
+                break;
+            case ItemType.Unlock:
+                UnlockItem Unlock = (UnlockItem)dropItem.Item;
+                int level = 0;
+                switch (Unlock._ItemID)
+                {
+                    case 601:
+                        if (PlayerPrefs.HasKey("PlayerHPUpgradeLevel")) level = PlayerPrefs.GetInt("PlayerHPUpgradeLevel");
+                        break;
+                    case 602:
+                        if (PlayerPrefs.HasKey("TreasureBoxUpgradeLevel")) level = PlayerPrefs.GetInt("TreasureBoxUpgradeLevel");
+                        break;
+                    case 603:
+                        if (PlayerPrefs.HasKey("ComboUpgradeLevel")) level = PlayerPrefs.GetInt("ComboUpgradeLevel");
+                        break;
+                }
+                int needDia = -1;
+                for (int j = 0; j < UnlockSaveData.unlockNeedDias.Count; j++)
+                {
+                    if (UnlockSaveData.unlockNeedDias[j].level == level)
+                    {
+                        needDia = UnlockSaveData.unlockNeedDias[j].NeedDia;
                     }
-                    break;
-                case ItemType.Unlock:
-                    UnlockItem Unlock = (UnlockItem)dropItem.Item;
-                    int level = 0;
-                    switch(Unlock._ItemID)
+                }
+
+                if (needDia != -1 && GameManager.Instance.Dia >= needDia)
+                {
+                    GameManager.Instance.Dia -= needDia;
+
+                    switch (Unlock._ItemID)
                     {
                         case 601:
-                            if (PlayerPrefs.HasKey("PlayerHPUpgradeLevel")) level = PlayerPrefs.GetInt("PlayerHPUpgradeLevel");
+                            PlayerPrefs.SetInt("PlayerHPUpgradeLevel", level + 1);
                             break;
                         case 602:
-                            if (PlayerPrefs.HasKey("TreasureBoxUpgradeLevel")) level = PlayerPrefs.GetInt("TreasureBoxUpgradeLevel");
+                            PlayerPrefs.SetInt("TreasureBoxUpgradeLevel", level + 1);
                             break;
                         case 603:
-                            if (PlayerPrefs.HasKey("ComboUpgradeLevel")) level = PlayerPrefs.GetInt("ComboUpgradeLevel");
+                            PlayerPrefs.SetInt("ComboUpgradeLevel", level + 1);
                             break;
                     }
-                    int needDia = -1;
-                    for (int j = 0; j < UnlockSaveData.unlockNeedDias.Count; j++)
-                    {
-                        if (UnlockSaveData.unlockNeedDias[j].level == level)
-                        {
-                            needDia = UnlockSaveData.unlockNeedDias[j].NeedDia;
-                        }
-                    }
-
-                    if(needDia != -1 && GameManager.Instance.Dia >= needDia)
-                    {
-                        GameManager.Instance.Dia -= needDia;
-
-                        switch (Unlock._ItemID)
-                        {
-                            case 601:
-                                PlayerPrefs.SetInt("PlayerHPUpgradeLevel", level + 1);
-                                break;
-                            case 602:
-                                PlayerPrefs.SetInt("TreasureBoxUpgradeLevel", level + 1);
-                                break;
-                            case 603:
-                                PlayerPrefs.SetInt("ComboUpgradeLevel", level + 1);
-                                break;
-                        }
-                        Data.Instance.SavePlayerData();
-                        UpdateCharacterState();
-                    }
-                    dropItem.DeleteDropItem();
-                    return;
-            }
+                    Data.Instance.SavePlayerData();
+                    UpdateCharacterState();
+                }
+                dropItem.DeleteDropItem();
+                return;
         }
 
-        PlayerEquipItemList.Add(dropItem.Item);
         dropItem.DeleteDropItem();
     }
 
@@ -570,23 +588,45 @@ public class PlayerController : MonoBehaviour
     public void InitCharacterData()
     {
         //게임메니져에서 각종 데이터 로드가 끝나면, 그때 실행
-        BaseEquipItem.Add(Data.Instance.GetItemInfo(201));
-        BaseEquipItem.Add(Data.Instance.GetItemInfo(301));
 
-        if (Data.Instance.CharacterSaveData._equipItemId == null)
+        if (Data.Instance.CharacterSaveData._equipShovelID != 0)
         {
-            Debug.Log("기본아이템 장착");
-            InitEquipItem();
-            Debug.Log(BaseEquipItem.Count+"이닛함수 밑");
+            _equipShovel = (Shovel)Data.Instance.GetItemInfo(Data.Instance.CharacterSaveData._equipShovelID);
         }
         else
         {
-            PlayerEquipItemList.Clear();
-            for (int i = 0; i < Data.Instance.CharacterSaveData._equipItemId.Count; i++)
-            {
-                Debug.Log($"저장된 아이템아이디 {Data.Instance.CharacterSaveData._equipItemId[i]}");
-                PlayerEquipItemList.Add(Data.Instance.GetItemInfo(Data.Instance.CharacterSaveData._equipItemId[i]));
-            }
+            Debug.Log("기본삽 장착");
+            _equipShovel = (Shovel)Data.Instance.GetItemInfo(201);
+        }
+
+
+        if (Data.Instance.CharacterSaveData._equipWeaponID != 0)
+        {
+            _equipWeapon = (Weapon)Data.Instance.GetItemInfo(Data.Instance.CharacterSaveData._equipShovelID);
+        }
+        else
+        {
+            Debug.Log("기본무기 장착");
+            _equipWeapon = (Weapon)Data.Instance.GetItemInfo(301);
+        }
+
+
+        if (Data.Instance.CharacterSaveData._equipArmorID != 0)
+        {
+            _equipArmor = (Armor)Data.Instance.GetItemInfo(Data.Instance.CharacterSaveData._equipShovelID);
+        }
+        else
+        {
+            _equipArmor = null;
+        }
+
+        if (Data.Instance.CharacterSaveData._equipPotionID != 0)
+        {
+            _equipPotion = (Potion)Data.Instance.GetItemInfo(Data.Instance.CharacterSaveData._equipShovelID);
+        }
+        else
+        {
+            _equipArmor = null;
         }
 
         //캐릭터 스텟
@@ -614,40 +654,35 @@ public class PlayerController : MonoBehaviour
         }
         else _nowHp = Data.Instance.CharacterSaveData._nowHP;
 
-        for (int i = 0; i < PlayerEquipItemList.Count; i++)
+        //공격력
+        if (_equipWeapon != null)
         {
-            //공격력
-            if (PlayerEquipItemList[i]._itemType == ItemType.Weapon)
-            {
-                Weapon wp = (Weapon)PlayerEquipItemList[i];
-                _damage += wp.Attack;
-            }
-            //방어력
-            else if (PlayerEquipItemList[i]._itemType == ItemType.Armor)
-            {
-                Armor am = (Armor)PlayerEquipItemList[i];
-                _def += am.Defence;
-            }
-            //삽 공격력
-            else if (PlayerEquipItemList[i]._itemType == ItemType.Shovel)
-            {
-                Shovel sv = (Shovel)PlayerEquipItemList[i];
-                _shovelPower += sv.ShovelPower;
-            }
+            _damage += _equipWeapon.Attack;
         }
         Debug.Log($"현재 공격력" + _damage);
+
+        //방어력
+        if (_equipArmor != null)
+        {
+            _def += _equipArmor.Defence;
+        }
+
+        //삽 공격력
+        if(_equipShovel != null)
+        {
+            _shovelPower += _equipShovel.ShovelPower;
+        }
+       
         //코인배수 - 콤보구현을 어디서 하냐에 따라서 거기에 적용
         //상자? 게임매니저에 넣어야될듯?
     }
 
-    public void InitEquipItem()
-    {   
-        PlayerEquipItemList.Clear();
-        for (int i = 0; i < BaseEquipItem.Count; i++)
-        {
-            PlayerEquipItemList.Add(BaseEquipItem[i]);
-        }
-        
+    public void BaseItemEquip()
+    {
+        _equipShovel = (Shovel)Data.Instance.GetItemInfo(201);
+        _equipWeapon = (Weapon)Data.Instance.GetItemInfo(301);
+        _equipArmor = null;
+        _equipPotion = null;
     }
 
     #endregion

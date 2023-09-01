@@ -125,7 +125,7 @@ public class UIManeger : MonoBehaviour
                     case 1:
                         GameManager.Instance.NowFloor = floor.f1;
                         GameManager.Instance.Gold = 0;
-                        PlayerController.Instance.InitEquipItem();
+                        PlayerController.Instance.BaseItemEquip();
                         EndAlarmUI();
                         StartCoroutine(FadeIn());
                         break;
@@ -225,7 +225,7 @@ public class UIManeger : MonoBehaviour
     #endregion
 
     #region Equipment
-
+    /*
     public void Equipment()  // 아이템을 회득했을때나 아이템이 바뀔때 선언
     {
         // 처음에 모든 아이콘을 꺼주면서 초기화
@@ -251,9 +251,8 @@ public class UIManeger : MonoBehaviour
                 _shovelImage.gameObject.SetActive(true);
             }
         }
-
     }
-
+    */
     public void EquipmentInit()
     {
         _shovelImage.gameObject.SetActive(false);
