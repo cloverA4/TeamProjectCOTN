@@ -119,7 +119,7 @@ GameObject:
   - component: {fileID: 4892436740632470794}
   - component: {fileID: 4892436740632470793}
   - component: {fileID: 4892436740632470792}
-  m_Layer: 20
+  m_Layer: 19
   m_Name: COTN_Type4_Monster_Goblin_Base
   m_TagString: Monster
   m_Icon: {fileID: 0}

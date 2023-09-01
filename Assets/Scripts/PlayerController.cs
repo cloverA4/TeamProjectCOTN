@@ -4,6 +4,8 @@ using System.Collections;
 using Unity.VisualScripting;
 using static UnityEditor.Progress;
 using UnityEditor.Experimental.GraphView;
+using System.Drawing;
+using Color = UnityEngine.Color;
 
 public class PlayerController : MonoBehaviour
 {
@@ -247,7 +249,8 @@ public class PlayerController : MonoBehaviour
     {
         Vector3 Temp = transform.position + vec / 2;
         RaycastHit2D hitdata = Physics2D.Raycast(Temp, vec, 0.5f, _layerMask);
-        // 왼쪽으로 빔을쏘는         
+
+
         //foreach (Item item in PlayerEquipItemList)
         //{
         //    if (item._itemType == ItemType.Weapon)
@@ -257,21 +260,21 @@ public class PlayerController : MonoBehaviour
         //        {
         //            case WeaponType.Dagger:
         //                // Dagger 무기의 범위 설정 및 동작
-        //                if (hitdata)
-        //                {
-        //                    if (hitdata.collider.tag == "WeedWall")
-        //                    {
-                                
-        //                    }
-        //                }
+        //                // hitdata = Physics2D.Raycast(Temp, vec, 0.5f, _layerMask);
+
         //                break;
         //            case WeaponType.GreatSword:
-        //                GreatSwordAttack(vec);
+        //                //GreatSwordAttack(vec);
         //                // GreatSword 무기의 범위 설정 및 동작
         //                break;
         //            case WeaponType.Spear:
         //                // Spear 무기의 범위 설정 및 동작
-        //                break;
+        //                hitdata = Physics2D.Raycast(Temp, vec + vec, 0.5f, _layerMask);
+        //                if (hitdata.collider.tag == "Monster")
+        //                {
+        //                    hitdata.collider.GetComponent<Monster>().TakeDamage(_damage);
+        //                }
+        //                return;
 
         //        }
         //    }
@@ -280,6 +283,7 @@ public class PlayerController : MonoBehaviour
         if (hitdata)
         {
             Debug.Log(hitdata.collider.tag);
+            
             if (hitdata.collider.tag == "WeedWall") // weedwall이 힛데이타에 태그로 들어왓다면
             {
                 //Debug.Log(hitdata.collider.gameObject); // 힛데이타콜라이더게임오브젝트에 대한 정보가 출력된다
@@ -287,6 +291,10 @@ public class PlayerController : MonoBehaviour
                 //setActive활용해서 벽부수는 표현해보기
                 hitdata.collider.GetComponent<Wall>().DamageWall(_shovelPower);
 
+            }
+            else if (hitdata.collider.tag == "Monster")
+            {
+                hitdata.collider.GetComponent<Monster>().TakeDamage(_damage);
             }
             else if (hitdata.collider.tag == "Door") // Door이(가) 힛데이타에 태그로 들어왓다면
             {
@@ -305,10 +313,7 @@ public class PlayerController : MonoBehaviour
                 _childSpriteRenderer.sortingOrder = (int)(transform.position.y - 1) * -1; // 레이어 값변환
                 Move(vec);
             }
-            else if (hitdata.collider.tag == "Monster")
-            {
-                hitdata.collider.GetComponent<Monster>().TakeDamage(_damage);
-            }
+            
             else if (hitdata.collider.tag == "Item")
             {
                 _childSpriteRenderer.sortingOrder = (int)(transform.position.y - 1) * -1; // 레이어 값변환
@@ -349,6 +354,12 @@ public class PlayerController : MonoBehaviour
 
     }
 
+    void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireCube(transform.position + new Vector3(+1, 0, 0), new Vector3(0, 3, 0));
+
+    }
 
     void GreatSwordAttack(Vector3 direction)
     {
@@ -368,7 +379,7 @@ public class PlayerController : MonoBehaviour
         }
         if (direction == Vector3.up)
         {
-            Vector3 boxSize = new Vector3(0.5f, 1.5f,0f);
+            Vector3 boxSize = new Vector3(0.5f, 1.5f, 0f);
             Collider2D[] colliders = Physics2D.OverlapBoxAll(swordCenter, boxSize, 0f, _layerMask);
             foreach (Collider2D collider in colliders)
             {
@@ -380,7 +391,7 @@ public class PlayerController : MonoBehaviour
         }
         if (direction == Vector3.left)
         {
-            Vector3 boxSize = new Vector3(1.5f, 0.5f,0f);
+            Vector3 boxSize = new Vector3(1.5f, 0.5f, 0f);
             Collider2D[] colliders = Physics2D.OverlapBoxAll(swordCenter, boxSize, 0f, _layerMask);
             foreach (Collider2D collider in colliders)
             {
@@ -392,7 +403,7 @@ public class PlayerController : MonoBehaviour
         }
         if (direction == Vector3.right)
         {
-            Vector3 boxSize = new Vector3(1.5f, 0.5f,0);
+            Vector3 boxSize = new Vector3(1.5f, 0.5f, 0);
             Collider2D[] colliders = Physics2D.OverlapBoxAll(swordCenter, boxSize, 0f, _layerMask);
             foreach (Collider2D collider in colliders)
             {

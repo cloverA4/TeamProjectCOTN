@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5946822696153007949}
   - component: {fileID: 8183459870555522455}
   - component: {fileID: 1338338560280806116}
-  m_Layer: 20
+  m_Layer: 19
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -126,7 +126,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8034792485189588935}
   - component: {fileID: 1488804180729823042}
-  m_Layer: 20
+  m_Layer: 19
   m_Name: HPBase
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -190,7 +190,7 @@ GameObject:
   - component: {fileID: 7259199321893285418}
   - component: {fileID: 7259199321893285419}
   - component: {fileID: 7259199321893285416}
-  m_Layer: 20
+  m_Layer: 19
   m_Name: COTN_EliteMonster_Goblin_Base
   m_TagString: Monster
   m_Icon: {fileID: 0}
@@ -338,7 +338,7 @@ GameObject:
   - component: {fileID: 7259199323109967665}
   - component: {fileID: 7259199323109967664}
   - component: {fileID: 7259199323109967667}
-  m_Layer: 0
+  m_Layer: 19
   m_Name: GameObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -296,7 +296,7 @@ GameObject:
   - component: {fileID: 6665929299737311019}
   - component: {fileID: 6665929299737311018}
   - component: {fileID: 6665929299737311189}
-  m_Layer: 20
+  m_Layer: 19
   m_Name: COTN_Type3_Monster_Cow_Base
   m_TagString: Monster
   m_Icon: {fileID: 0}

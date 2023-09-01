@@ -31,11 +31,11 @@ TagManager:
   - 
   - 
   - 
-  - 
   - Player
+  - Wall
   - Monster
   - RayCheck
-  - 
+  - Stair
   - 
   - 
   - 

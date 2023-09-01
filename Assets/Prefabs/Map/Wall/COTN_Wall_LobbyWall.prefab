@@ -96,7 +96,7 @@ GameObject:
   - component: {fileID: 5522800037378619190}
   - component: {fileID: 5522800037378619177}
   - component: {fileID: 5522800037378619176}
-  m_Layer: 20
+  m_Layer: 18
   m_Name: COTN_Wall_LobbyWall
   m_TagString: BadRock
   m_Icon: {fileID: 0}
