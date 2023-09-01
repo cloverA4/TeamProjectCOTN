@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using System.Linq;
 
 public class GameManager : MonoBehaviour
 {
@@ -287,7 +288,6 @@ public class GameManager : MonoBehaviour
     {
         //페이드아웃 효과 호출(밝아지게)
         StartCoroutine(_uiManeger.FadeOut());
-        
     }
 
     
@@ -376,16 +376,12 @@ public class GameManager : MonoBehaviour
         //벽 로드(부서진 벽 등 전부 리셋)
         GameObject.Find("MapManager").GetComponent<MapManager>().ResetMapObject();
 
-        //안개초기화 및 위치 변경 ,스테이지 이동 후 플레이어 주변으로 안개 걷음
-        //GameObject.Find("Fog/FogArea").GetComponent<MakeFog2>().ResetFog();
-        //GameObject.Find("Fog/FogArea").GetComponent<MakeFog2>().Stage1F1UpdateFogOfWar();
-
         //몬스터 로드(몬스터 풀 만들고, 현재 생성된 몬스터 다 초기화 후 새로 스폰)
         ResetMonster();
         LoadingMonster();
 
-        //아이템 로드(기획 후 작업)
-        //재화 초기화
+        //아이템 로드
+        StageShopItemSpawn();
 
         //로드가 끝나면 페이드아웃 호출        
         FaidOut();
@@ -450,27 +446,78 @@ public class GameManager : MonoBehaviour
 
     #region 아이템 스폰
 
+    //로비 스폰 포인트
+    [SerializeField] GameObject _equipShop;
+    [SerializeField] GameObject _potionShop;
+    [SerializeField] GameObject _passivesShop;
+    [SerializeField] GameObject _1stage2floorShop;
+    [SerializeField] GameObject _1stage3floorShop;
+
     void LobbyShopItemSpawn()
     {
         //장비샵
+        List<int> EquipTemp = Data.Instance.LockEquipItemIDList.ToList();
 
+        for(int i = 0; i < _equipShop.transform.childCount; i++)
+        {
+            if(i < Data.Instance.LockEquipItemIDList.Count)
+            {
+                int random = UnityEngine.Random.Range(0, EquipTemp.Count);
+                GameObject SpawnItem = Instantiate(Data.Instance.ItemPrefab);
+                SpawnItem.GetComponent<DropItem>().Init(Data.Instance.GetItemInfo(EquipTemp[random]), DropItemType.UnlockShop);
+                SpawnItem.transform.position = _equipShop.transform.GetChild(i).position;
+                EquipTemp.RemoveAt(random);
+            }
+        }
         //소모품샵
+        List<int> PotionTemp = Data.Instance.LockPotionList.ToList();
+
+        for (int i = 0; i < _potionShop.transform.childCount; i++)
+        {
+            if (i < Data.Instance.LockPotionList.Count)
+            {
+                int random = UnityEngine.Random.Range(0, PotionTemp.Count);
+                GameObject SpawnItem = Instantiate(Data.Instance.ItemPrefab);
+                SpawnItem.GetComponent<DropItem>().Init(Data.Instance.GetItemInfo(PotionTemp[random]), DropItemType.UnlockShop);
+                SpawnItem.transform.position = _potionShop.transform.GetChild(i).position;
+                PotionTemp.RemoveAt(random);
+            }
+        }
 
         //패시브샵
+        List<int> PassivesTemp = Data.Instance.LockPassivesList.ToList();
+
+        for (int i = 0; i < _passivesShop.transform.childCount; i++)
+        {
+            if (i < Data.Instance.LockPassivesList.Count)
+            {
+                int random = UnityEngine.Random.Range(0, PassivesTemp.Count);
+                GameObject SpawnItem = Instantiate(Data.Instance.ItemPrefab);
+                SpawnItem.GetComponent<DropItem>().Init(Data.Instance.GetItemInfo(PassivesTemp[random]), DropItemType.UnlockShop);
+                SpawnItem.transform.position = _passivesShop.transform.GetChild(i).position;
+                PassivesTemp.RemoveAt(random);
+            }
+        }
     }
 
     void StageShopItemSpawn()
     {
         switch(_nowStage)
         {
+            case Stage.Lobby:
+                LobbyShopItemSpawn();
+                break;
             case Stage.Stage1:
                 switch(_nowFloor)
                 {
                     case floor.f1:
+                        //상점이 없음
                         break;
                     case floor.f2:
+                        stageShop(_1stage2floorShop);
                         break;
                     case floor.f3:
+                        stageShop(_1stage3floorShop);
                         break;
                     case floor.fBoss:
                         break;
@@ -489,6 +536,23 @@ public class GameManager : MonoBehaviour
                         break;
                 }
                 break;
+        }
+    }
+
+    void stageShop(GameObject stageShopPosition)
+    {
+        List<int> GoldShopTemp = Data.Instance.CharacterSaveData._unlockItemId.ToList();
+
+        for (int i = 0; i < stageShopPosition.transform.childCount; i++)
+        {
+            if (i < Data.Instance.CharacterSaveData._unlockItemId.Count)
+            {
+                int random = UnityEngine.Random.Range(0, GoldShopTemp.Count);
+                GameObject SpawnItem = Instantiate(Data.Instance.ItemPrefab);
+                SpawnItem.GetComponent<DropItem>().Init(Data.Instance.GetItemInfo(GoldShopTemp[random]), DropItemType.Shop);
+                SpawnItem.transform.position = stageShopPosition.transform.GetChild(i).position;
+                GoldShopTemp.RemoveAt(random);
+            }
         }
     }
     #endregion
