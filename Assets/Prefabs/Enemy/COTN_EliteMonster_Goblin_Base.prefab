@@ -190,7 +190,7 @@ GameObject:
   - component: {fileID: 7259199321893285418}
   - component: {fileID: 7259199321893285419}
   - component: {fileID: 7259199321893285416}
-  m_Layer: 19
+  m_Layer: 23
   m_Name: COTN_EliteMonster_Goblin_Base
   m_TagString: Monster
   m_Icon: {fileID: 0}

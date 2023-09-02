@@ -119,7 +119,7 @@ GameObject:
   - component: {fileID: 6646631000249888117}
   - component: {fileID: 6646631000249888116}
   - component: {fileID: 6646631000249888119}
-  m_Layer: 19
+  m_Layer: 23
   m_Name: COTN_Type2_Monster_Zombie_Base
   m_TagString: Monster
   m_Icon: {fileID: 0}

@@ -36,8 +36,8 @@ TagManager:
   - Monster
   - RayCheck
   - Stair
-  - 
-  - 
+  - Npc
+  - PriorityCheck
   - 
   - 
   - 

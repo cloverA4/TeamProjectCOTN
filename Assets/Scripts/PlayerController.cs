@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour
     Animator _animator;
     bool _fixanime = false;
     [SerializeField] LayerMask _layerMask;
+    [SerializeField] LayerMask _prioritylayer;
     [SerializeField] MakeFog2 _MakeFog2;
     [SerializeField] SaveInfoData UnlockSaveData;
 
@@ -145,10 +146,10 @@ public class PlayerController : MonoBehaviour
         //if (Data.Instance.Player.State == CharacterState.Live && _isSuccess && _isDubbleClick)
         if (_isSuccess && _isDubbleClick)
         {
-            
-
+         
             if (Input.GetKeyDown(KeyCode.UpArrow)) // 위 화살표를 입력 받았을때
             {
+                Debug.Log(_equipWeapon.weaponType);
                 if (GameManager.Instance.NowStage != Stage.Lobby)
                 {
                     if (!GameManager.Instance.IsSuccess()) return;
@@ -252,37 +253,44 @@ public class PlayerController : MonoBehaviour
     void MoveCharacter(Vector3 vec)
     {
         Vector3 Temp = transform.position + vec / 2;
-        RaycastHit2D hitdata = Physics2D.Raycast(Temp, vec, 0.5f, _layerMask);
+        RaycastHit2D hitdata2 = Physics2D.Raycast(Temp, vec, 2f, _prioritylayer);
 
-
-        //foreach (Item item in PlayerEquipItemList)
+        //switch (_equipWeapon.weaponType)
         //{
-        //    if (item._itemType == ItemType.Weapon)
-        //    {
-        //        Weapon weapon = (Weapon)item;
-        //        switch (weapon.weaponType)
+        //    case WeaponType.Dagger:
+        //        hitdata2 = Physics2D.Raycast(Temp, vec, 0.5f, _prioritylayer);
+        //        if (hitdata2.collider.tag == "WeedWall")
         //        {
-        //            case WeaponType.Dagger:
-        //                // Dagger 무기의 범위 설정 및 동작
-        //                // hitdata = Physics2D.Raycast(Temp, vec, 0.5f, _layerMask);
-
-        //                break;
-        //            case WeaponType.GreatSword:
-        //                //GreatSwordAttack(vec);
-        //                // GreatSword 무기의 범위 설정 및 동작
-        //                break;
-        //            case WeaponType.Spear:
-        //                // Spear 무기의 범위 설정 및 동작
-        //                hitdata = Physics2D.Raycast(Temp, vec + vec, 0.5f, _layerMask);
-        //                if (hitdata.collider.tag == "Monster")
-        //                {
-        //                    hitdata.collider.GetComponent<Monster>().TakeDamage(_damage);
-        //                }
-        //                return;
-
+        //            hitdata2.collider.GetComponent<Wall>().DamageWall(_shovelPower);
         //        }
-        //    }
+        //        else if (hitdata2.collider.tag == "Monster")
+        //        {
+        //            hitdata2.collider.GetComponent<Monster>().TakeDamage(_damage);
+        //        }
+        //        break;
+        //    case WeaponType.Spear:
+        //        if (hitdata2.collider.tag == "WeedWall")
+        //        {
+        //            hitdata2.collider.GetComponent<Wall>().DamageWall(_shovelPower);
+        //        }
+        //        else if (hitdata2.collider.tag == "Monster")
+        //        {
+        //            hitdata2.collider.GetComponent<Monster>().TakeDamage(_damage);
+        //        }
+        //        break;
+        //    case WeaponType.GreatSword:
+        //        if (hitdata2.collider.tag == "WeedWall")
+        //        {
+        //            hitdata2.collider.GetComponent<Wall>().DamageWall(_shovelPower);
+        //        }
+        //        else if (hitdata2.collider.tag == "Monster")
+        //        {
+        //            hitdata2.collider.GetComponent<Monster>().TakeDamage(_damage);
+        //        }
+        //        break;
         //}
+
+        RaycastHit2D hitdata = Physics2D.Raycast(Temp, vec, 0.5f, _layerMask);
 
         if (hitdata)
         {
@@ -602,7 +610,7 @@ public class PlayerController : MonoBehaviour
 
         if (Data.Instance.CharacterSaveData._equipWeaponID != 0)
         {
-            _equipWeapon = (Weapon)Data.Instance.GetItemInfo(Data.Instance.CharacterSaveData._equipShovelID);
+            _equipWeapon = (Weapon)Data.Instance.GetItemInfo(Data.Instance.CharacterSaveData._equipWeaponID);
         }
         else
         {
@@ -613,7 +621,7 @@ public class PlayerController : MonoBehaviour
 
         if (Data.Instance.CharacterSaveData._equipArmorID != 0)
         {
-            _equipArmor = (Armor)Data.Instance.GetItemInfo(Data.Instance.CharacterSaveData._equipShovelID);
+            _equipArmor = (Armor)Data.Instance.GetItemInfo(Data.Instance.CharacterSaveData._equipArmorID);
         }
         else
         {
@@ -622,7 +630,7 @@ public class PlayerController : MonoBehaviour
 
         if (Data.Instance.CharacterSaveData._equipPotionID != 0)
         {
-            _equipPotion = (Potion)Data.Instance.GetItemInfo(Data.Instance.CharacterSaveData._equipShovelID);
+            _equipPotion = (Potion)Data.Instance.GetItemInfo(Data.Instance.CharacterSaveData._equipPotionID);
         }
         else
         {
