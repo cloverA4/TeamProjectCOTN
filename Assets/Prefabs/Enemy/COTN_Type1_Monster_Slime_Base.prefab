@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2403509474068611973}
   - component: {fileID: 2403509474068611974}
   - component: {fileID: 2403509474068611975}
-  m_Layer: 23
+  m_Layer: 19
   m_Name: COTN_Type1_Monster_Slime_Base
   m_TagString: Monster
   m_Icon: {fileID: 0}

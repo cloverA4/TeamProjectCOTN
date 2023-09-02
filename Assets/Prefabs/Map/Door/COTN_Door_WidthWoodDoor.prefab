@@ -96,7 +96,7 @@ GameObject:
   - component: {fileID: 3035738238513831114}
   - component: {fileID: 4182391834114352682}
   - component: {fileID: 2142681897824850724}
-  m_Layer: 20
+  m_Layer: 18
   m_Name: COTN_Door_WidthWoodDoor
   m_TagString: Door
   m_Icon: {fileID: 0}

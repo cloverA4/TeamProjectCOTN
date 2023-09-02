@@ -322,7 +322,7 @@ public class GameManager : MonoBehaviour
                         PlayerController.Instance.transfromUpdate(_stageStartPosition.LobbyPosition);
                         GameObject go = Instantiate(_dropItem);
                         go.transform.position = new Vector3(-25, 100, 0);
-                        go.GetComponent<DropItem>().Init(Data.Instance.GetItemInfo(304));
+                        go.GetComponent<DropItem>().Init(Data.Instance.GetItemInfo(305));
                         break;
                     case floor.f2:
                     case floor.f3:

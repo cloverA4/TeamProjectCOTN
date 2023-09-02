@@ -96,7 +96,7 @@ GameObject:
   - component: {fileID: 4307174205589162063}
   - component: {fileID: 4307174205589162062}
   - component: {fileID: 4307174205589162061}
-  m_Layer: 20
+  m_Layer: 18
   m_Name: COTN_Door_LobbyDoor
   m_TagString: Door
   m_Icon: {fileID: 0}

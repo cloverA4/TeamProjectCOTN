@@ -6,6 +6,8 @@ using static UnityEditor.Progress;
 using UnityEditor.Experimental.GraphView;
 using System.Drawing;
 using Color = UnityEngine.Color;
+using System.Net;
+using Unity.Burst.CompilerServices;
 
 public class PlayerController : MonoBehaviour
 {
@@ -15,8 +17,9 @@ public class PlayerController : MonoBehaviour
     SpriteRenderer _childSpriteRenderer;
     Animator _animator;
     bool _fixanime = false;
-    [SerializeField] LayerMask _layerMask;
-    [SerializeField] LayerMask _prioritylayer;
+    LayerMask _normalLayerMask;
+    LayerMask _weaponCheckLayerMask;
+    
     [SerializeField] MakeFog2 _MakeFog2;
     [SerializeField] SaveInfoData UnlockSaveData;
 
@@ -133,6 +136,14 @@ public class PlayerController : MonoBehaviour
         _childSpriteRenderer = GetComponentsInChildren<SpriteRenderer>()[1];
         IsX = true;
         //Debug.Log(GameManager.Instance.NowStage); 스테이지확인
+        _normalLayerMask =
+                  (1 << LayerMask.NameToLayer("Wall")) |
+                  (1 << LayerMask.NameToLayer("Npc")) |
+                  (1 << LayerMask.NameToLayer("Stair"));
+
+        _weaponCheckLayerMask =
+                  (1 << LayerMask.NameToLayer("Wall")) |
+                  (1 << LayerMask.NameToLayer("Monster"));
     }
 
     // Update is called once per frame
@@ -250,47 +261,56 @@ public class PlayerController : MonoBehaviour
     //    }
     //}
 
+  
+
+
     void MoveCharacter(Vector3 vec)
     {
         Vector3 Temp = transform.position + vec / 2;
-        RaycastHit2D hitdata2 = Physics2D.Raycast(Temp, vec, 2f, _prioritylayer);
+        RaycastHit2D hitdata2 = Physics2D.Raycast(Temp, vec, 2f, _weaponCheckLayerMask);
 
-        //switch (_equipWeapon.weaponType)
-        //{
-        //    case WeaponType.Dagger:
-        //        hitdata2 = Physics2D.Raycast(Temp, vec, 0.5f, _prioritylayer);
-        //        if (hitdata2.collider.tag == "WeedWall")
-        //        {
-        //            hitdata2.collider.GetComponent<Wall>().DamageWall(_shovelPower);
-        //        }
-        //        else if (hitdata2.collider.tag == "Monster")
-        //        {
-        //            hitdata2.collider.GetComponent<Monster>().TakeDamage(_damage);
-        //        }
-        //        break;
-        //    case WeaponType.Spear:
-        //        if (hitdata2.collider.tag == "WeedWall")
-        //        {
-        //            hitdata2.collider.GetComponent<Wall>().DamageWall(_shovelPower);
-        //        }
-        //        else if (hitdata2.collider.tag == "Monster")
-        //        {
-        //            hitdata2.collider.GetComponent<Monster>().TakeDamage(_damage);
-        //        }
-        //        break;
-        //    case WeaponType.GreatSword:
-        //        if (hitdata2.collider.tag == "WeedWall")
-        //        {
-        //            hitdata2.collider.GetComponent<Wall>().DamageWall(_shovelPower);
-        //        }
-        //        else if (hitdata2.collider.tag == "Monster")
-        //        {
-        //            hitdata2.collider.GetComponent<Monster>().TakeDamage(_damage);
-        //        }
-        //        break;
-        //}
+        if (hitdata2)
+        {
+            switch (_equipWeapon.weaponType)
+            {
+                case WeaponType.Dagger:
+                    hitdata2 = Physics2D.Raycast(Temp, vec, 0.5f, _weaponCheckLayerMask);
+                    if (hitdata2.collider.tag == "WeedWall")
+                    {
+                        break;
+                    }
+                    else if (hitdata2.collider.tag == "Monster")
+                    {
+                        hitdata2.collider.GetComponent<Monster>().TakeDamage(_damage);
+                        return;
+                    }
+                    break;
+                case WeaponType.Spear:
+                    if (hitdata2.collider.tag == "WeedWall")
+                    {
+                        break;
+                    }
+                    else if (hitdata2.collider.tag == "Monster")
+                    {
+                        Debug.Log(hitdata2.collider.tag);
+                        hitdata2.collider.GetComponent<Monster>().TakeDamage(_damage);
+                        return;
+                    }
+                    break;
+                case WeaponType.GreatSword:
+                    if (hitdata2.collider.tag == "WeedWall")
+                    {
+                        hitdata2.collider.GetComponent<Wall>().DamageWall(_shovelPower);
+                    }
+                    else if (hitdata2.collider.tag == "Monster")
+                    {
+                        hitdata2.collider.GetComponent<Monster>().TakeDamage(_damage);
+                    }
+                    break;
+            }
+        }
 
-        RaycastHit2D hitdata = Physics2D.Raycast(Temp, vec, 0.5f, _layerMask);
+        RaycastHit2D hitdata = Physics2D.Raycast(Temp, vec, 0.5f, _normalLayerMask);
 
         if (hitdata)
         {
@@ -303,10 +323,6 @@ public class PlayerController : MonoBehaviour
                 //setActive활용해서 벽부수는 표현해보기
                 hitdata.collider.GetComponent<Wall>().DamageWall(_shovelPower);
 
-            }
-            else if (hitdata.collider.tag == "Monster")
-            {
-                hitdata.collider.GetComponent<Monster>().TakeDamage(_damage);
             }
             else if (hitdata.collider.tag == "Door") // Door이(가) 힛데이타에 태그로 들어왓다면
             {
@@ -366,12 +382,12 @@ public class PlayerController : MonoBehaviour
 
     }
 
-    void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireCube(transform.position + new Vector3(+1, 0, 0), new Vector3(0, 3, 0));
+    //void OnDrawGizmos()
+    //{
+    //    Gizmos.color = Color.red;
+    //    Gizmos.DrawWireCube(transform.position + new Vector3(+1, 0, 0), new Vector3(0, 3, 0));
 
-    }
+    //}
 
     void GreatSwordAttack(Vector3 direction)
     {
@@ -380,7 +396,7 @@ public class PlayerController : MonoBehaviour
         if (direction == Vector3.down)
         {
             Vector3 boxSize = new Vector3(0.5f, 1.5f, 0);
-            Collider2D[] colliders = Physics2D.OverlapBoxAll(swordCenter, boxSize, 0f, _layerMask);
+            Collider2D[] colliders = Physics2D.OverlapBoxAll(swordCenter, boxSize, 0f, _weaponCheckLayerMask);
             foreach (Collider2D collider in colliders)
             {
                 if (collider.CompareTag("Enemy"))
@@ -392,7 +408,7 @@ public class PlayerController : MonoBehaviour
         if (direction == Vector3.up)
         {
             Vector3 boxSize = new Vector3(0.5f, 1.5f, 0f);
-            Collider2D[] colliders = Physics2D.OverlapBoxAll(swordCenter, boxSize, 0f, _layerMask);
+            Collider2D[] colliders = Physics2D.OverlapBoxAll(swordCenter, boxSize, 0f, _weaponCheckLayerMask);
             foreach (Collider2D collider in colliders)
             {
                 if (collider.CompareTag("Enemy"))
@@ -404,7 +420,7 @@ public class PlayerController : MonoBehaviour
         if (direction == Vector3.left)
         {
             Vector3 boxSize = new Vector3(1.5f, 0.5f, 0f);
-            Collider2D[] colliders = Physics2D.OverlapBoxAll(swordCenter, boxSize, 0f, _layerMask);
+            Collider2D[] colliders = Physics2D.OverlapBoxAll(swordCenter, boxSize, 0f, _weaponCheckLayerMask);
             foreach (Collider2D collider in colliders)
             {
                 if (collider.CompareTag("Enemy"))
@@ -416,7 +432,7 @@ public class PlayerController : MonoBehaviour
         if (direction == Vector3.right)
         {
             Vector3 boxSize = new Vector3(1.5f, 0.5f, 0);
-            Collider2D[] colliders = Physics2D.OverlapBoxAll(swordCenter, boxSize, 0f, _layerMask);
+            Collider2D[] colliders = Physics2D.OverlapBoxAll(swordCenter, boxSize, 0f, _weaponCheckLayerMask);
             foreach (Collider2D collider in colliders)
             {
                 if (collider.CompareTag("Enemy"))

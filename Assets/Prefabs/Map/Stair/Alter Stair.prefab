@@ -96,7 +96,7 @@ GameObject:
   - component: {fileID: 7768886401337025165}
   - component: {fileID: 7768886401337025164}
   - component: {fileID: -5540872498159071263}
-  m_Layer: 21
+  m_Layer: 18
   m_Name: Alter Stair
   m_TagString: Stair
   m_Icon: {fileID: 0}

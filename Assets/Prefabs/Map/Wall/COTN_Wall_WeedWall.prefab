@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 894370643231865619}
   - component: {fileID: -6795789995287914618}
   - component: {fileID: 894370643231865630}
-  m_Layer: 23
+  m_Layer: 18
   m_Name: COTN_Wall_WeedWall
   m_TagString: WeedWall
   m_Icon: {fileID: 0}
