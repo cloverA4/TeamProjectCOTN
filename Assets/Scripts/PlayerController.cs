@@ -8,6 +8,7 @@ using System.Drawing;
 using Color = UnityEngine.Color;
 using System.Net;
 using Unity.Burst.CompilerServices;
+using System.Runtime.InteropServices.WindowsRuntime;
 
 public class PlayerController : MonoBehaviour
 {
@@ -139,7 +140,9 @@ public class PlayerController : MonoBehaviour
         _normalLayerMask =
                   (1 << LayerMask.NameToLayer("Wall")) |
                   (1 << LayerMask.NameToLayer("Npc")) |
-                  (1 << LayerMask.NameToLayer("Stair"));
+                  (1 << LayerMask.NameToLayer("Stair")) |
+                  (1 << LayerMask.NameToLayer("Monster")) |
+                  (1 << LayerMask.NameToLayer("DropItem"));
 
         _weaponCheckLayerMask =
                   (1 << LayerMask.NameToLayer("Wall")) |
@@ -267,62 +270,121 @@ public class PlayerController : MonoBehaviour
     void MoveCharacter(Vector3 vec)
     {
         Vector3 Temp = transform.position + vec / 2;
-        RaycastHit2D hitdata2 = Physics2D.Raycast(Temp, vec, 2f, _weaponCheckLayerMask);
+        
 
-        if (hitdata2)
+        //if (hitdata2)
+        //{
+        //}
+
+        switch (_equipWeapon.weaponType)
         {
-            switch (_equipWeapon.weaponType)
-            {
-                case WeaponType.Dagger:
-                    hitdata2 = Physics2D.Raycast(Temp, vec, 0.5f, _weaponCheckLayerMask);
-                    if (hitdata2.collider.tag == "WeedWall")
+            case WeaponType.Dagger:
+                RaycastHit2D hitdataTypeDagger = Physics2D.Raycast(Temp, vec, 0.5f, _weaponCheckLayerMask);
+                if (hitdataTypeDagger)
+                {
+                    if (hitdataTypeDagger.collider.tag == "Monster")
                     {
-                        break;
-                    }
-                    else if (hitdata2.collider.tag == "Monster")
-                    {
-                        hitdata2.collider.GetComponent<Monster>().TakeDamage(_damage);
+                        hitdataTypeDagger.collider.GetComponent<Monster>().TakeDamage(_damage);
                         return;
                     }
                     break;
-                case WeaponType.Spear:
-                    if (hitdata2.collider.tag == "WeedWall")
+                }
+                break;
+
+            case WeaponType.Spear:
+                RaycastHit2D hitdataTypeSpear = Physics2D.Raycast(Temp, vec, 2f, _weaponCheckLayerMask);
+                if (hitdataTypeSpear)
+                {
+                    if (hitdataTypeSpear.collider.tag == "WeedWall")
                     {
                         break;
                     }
-                    else if (hitdata2.collider.tag == "Monster")
+                    else if (hitdataTypeSpear.collider.tag == "Monster")
                     {
-                        Debug.Log(hitdata2.collider.tag);
-                        hitdata2.collider.GetComponent<Monster>().TakeDamage(_damage);
+                        Debug.Log(hitdataTypeSpear.collider.tag);
+                        hitdataTypeSpear.collider.GetComponent<Monster>().TakeDamage(_damage);
                         return;
                     }
-                    break;
-                case WeaponType.GreatSword:
-                    if (hitdata2.collider.tag == "WeedWall")
+                }
+                break;
+
+            case WeaponType.GreatSword:
+                Vector3 swordCenter = (Vector3)transform.position + vec; // 대검의 중심 위치 계산
+                Vector3 boxSize = new Vector3(0f, 0f, 0);
+                Collider2D[] colliders = Physics2D.OverlapBoxAll(swordCenter, boxSize, 0f, _weaponCheckLayerMask);
+
+                if (colliders != null)
+                {
+                    if (vec == Vector3.down)
                     {
-                        hitdata2.collider.GetComponent<Wall>().DamageWall(_shovelPower);
+                        boxSize = new Vector3(2f, 1f, 0);
+                        colliders = Physics2D.OverlapBoxAll(swordCenter, boxSize, 0f, _weaponCheckLayerMask);
+                        foreach (Collider2D collider in colliders)
+                        {
+                            if (collider.CompareTag("Monster"))
+                            {
+                                collider.GetComponent<Monster>().TakeDamage(_damage);
+                                return;
+                            }
+                        }
+                        break;
                     }
-                    else if (hitdata2.collider.tag == "Monster")
+                    else if (vec == Vector3.up)
                     {
-                        hitdata2.collider.GetComponent<Monster>().TakeDamage(_damage);
+                        boxSize = new Vector3(2f, 1f, 0);
+                        colliders = Physics2D.OverlapBoxAll(swordCenter, boxSize, 0f, _weaponCheckLayerMask);
+                        foreach (Collider2D collider in colliders)
+                        {
+                            if (collider.CompareTag("Monster"))
+                            {
+                                collider.GetComponent<Monster>().TakeDamage(_damage);
+                                return;
+                            }
+                        }
+                        break;
                     }
-                    break;
-            }
+                    else if (vec == Vector3.left)
+                    {
+                        boxSize = new Vector3(1f, 2f, 0f);
+                        colliders = Physics2D.OverlapBoxAll(swordCenter, boxSize, 0f, _weaponCheckLayerMask);
+                        foreach (Collider2D collider in colliders)
+                        {
+                            if (collider.CompareTag("Monster"))
+                            {
+                                collider.GetComponent<Monster>().TakeDamage(_damage);
+                                return;
+                            }
+                        }
+                        break;
+                    }
+                    else if (vec  == Vector3.right)
+                    {
+                        boxSize = new Vector3(1f, 2f, 0f);
+                        colliders = Physics2D.OverlapBoxAll(swordCenter, boxSize, 0f, _weaponCheckLayerMask);
+                        foreach (Collider2D collider in colliders)
+                        {
+                            if (collider.CompareTag("Monster"))
+                            {
+                                collider.GetComponent<Monster>().TakeDamage(_damage);
+                                return;
+                            }
+                        }
+                    }
+                }
+                // 공격할때 오른쪽을 간다면 오른쪽 오른쪽위 오른쪽아래를 채크해서 몬스터가 하나라도 있으면 공격
+                break;                 
         }
 
         RaycastHit2D hitdata = Physics2D.Raycast(Temp, vec, 0.5f, _normalLayerMask);
 
         if (hitdata)
-        {
-            Debug.Log(hitdata.collider.tag);
-            
+        {   
             if (hitdata.collider.tag == "WeedWall") // weedwall이 힛데이타에 태그로 들어왓다면
             {
                 //Debug.Log(hitdata.collider.gameObject); // 힛데이타콜라이더게임오브젝트에 대한 정보가 출력된다
                 //Destroy(hitdata.collider.gameObject); // 힛데이타콜라이더게임오브젝트를 파괴한다
                 //setActive활용해서 벽부수는 표현해보기
                 hitdata.collider.GetComponent<Wall>().DamageWall(_shovelPower);
-
             }
             else if (hitdata.collider.tag == "Door") // Door이(가) 힛데이타에 태그로 들어왓다면
             {
@@ -382,65 +444,11 @@ public class PlayerController : MonoBehaviour
 
     }
 
-    //void OnDrawGizmos()
-    //{
-    //    Gizmos.color = Color.red;
-    //    Gizmos.DrawWireCube(transform.position + new Vector3(+1, 0, 0), new Vector3(0, 3, 0));
 
-    //}
 
     void GreatSwordAttack(Vector3 direction)
     {
-        Vector3 swordCenter = (Vector3)transform.position + direction; // 대검의 중심 위치 계산
-
-        if (direction == Vector3.down)
-        {
-            Vector3 boxSize = new Vector3(0.5f, 1.5f, 0);
-            Collider2D[] colliders = Physics2D.OverlapBoxAll(swordCenter, boxSize, 0f, _weaponCheckLayerMask);
-            foreach (Collider2D collider in colliders)
-            {
-                if (collider.CompareTag("Enemy"))
-                {
-                    collider.GetComponent<Monster>().TakeDamage(_damage);
-                }
-            }
-        }
-        if (direction == Vector3.up)
-        {
-            Vector3 boxSize = new Vector3(0.5f, 1.5f, 0f);
-            Collider2D[] colliders = Physics2D.OverlapBoxAll(swordCenter, boxSize, 0f, _weaponCheckLayerMask);
-            foreach (Collider2D collider in colliders)
-            {
-                if (collider.CompareTag("Enemy"))
-                {
-                    collider.GetComponent<Monster>().TakeDamage(_damage);
-                }
-            }
-        }
-        if (direction == Vector3.left)
-        {
-            Vector3 boxSize = new Vector3(1.5f, 0.5f, 0f);
-            Collider2D[] colliders = Physics2D.OverlapBoxAll(swordCenter, boxSize, 0f, _weaponCheckLayerMask);
-            foreach (Collider2D collider in colliders)
-            {
-                if (collider.CompareTag("Enemy"))
-                {
-                    collider.GetComponent<Monster>().TakeDamage(_damage);
-                }
-            }
-        }
-        if (direction == Vector3.right)
-        {
-            Vector3 boxSize = new Vector3(1.5f, 0.5f, 0);
-            Collider2D[] colliders = Physics2D.OverlapBoxAll(swordCenter, boxSize, 0f, _weaponCheckLayerMask);
-            foreach (Collider2D collider in colliders)
-            {
-                if (collider.CompareTag("Enemy"))
-                {
-                    collider.GetComponent<Monster>().TakeDamage(_damage);
-                }
-            }
-        }
+       
 
         // 대검 범위 내에 있는 모든 콜라이더들을 검출
 
