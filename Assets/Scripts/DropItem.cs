@@ -29,6 +29,7 @@ public class DropItem : MonoBehaviour
     {
         _item = Changeitem;
         _ItemIcon.sprite = _item._ItemIcon;
+        _type = DropItemType.Drop;
     }
 
     public void DeleteDropItem()

@@ -1,14 +1,4 @@
 using UnityEngine;
-using System.Collections.Generic;
-using System.Collections;
-using Unity.VisualScripting;
-using static UnityEditor.Progress;
-using UnityEditor.Experimental.GraphView;
-using System.Drawing;
-using Color = UnityEngine.Color;
-using System.Net;
-using Unity.Burst.CompilerServices;
-using System.Runtime.InteropServices.WindowsRuntime;
 
 public class PlayerController : MonoBehaviour
 {
@@ -23,9 +13,6 @@ public class PlayerController : MonoBehaviour
     
     [SerializeField] MakeFog2 _MakeFog2;
     [SerializeField] SaveInfoData UnlockSaveData;
-
-    bool _isSuccess = true;
-    bool _isDubbleClick = true;
 
     float _lobbyMoveDelay = 0f;
 
@@ -99,6 +86,9 @@ public class PlayerController : MonoBehaviour
     Potion _equipPotion;
     public Potion EquipPotion { get { return _equipPotion; } }
 
+    private float moveSpeed = 10f;
+    private bool isMoving = false;
+
     private void Awake()
     {
         if (null == instance)
@@ -157,10 +147,27 @@ public class PlayerController : MonoBehaviour
             _lobbyMoveDelay += Time.deltaTime;
         }
 
-        //if (Data.Instance.Player.State == CharacterState.Live && _isSuccess && _isDubbleClick)
-        if (_isSuccess && _isDubbleClick)
+        if (Input.GetKey(KeyCode.LeftShift))
         {
-         
+            //특수기능들 구현
+
+            //물약
+            if(Input.GetKeyDown(KeyCode.UpArrow))
+            {
+                if (_equipPotion == null) return;
+                else
+                {
+                    if (GameManager.Instance.NowStage != Stage.Lobby)
+                    {
+                        if (!GameManager.Instance.IsSuccess()) return;
+                        UsePotion();
+                    }
+                }
+            }
+        }
+        else
+        {
+
             if (Input.GetKeyDown(KeyCode.UpArrow)) // 위 화살표를 입력 받았을때
             {
                 Debug.Log(_equipWeapon.weaponType);
@@ -236,8 +243,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private float moveSpeed = 10f;
-    private bool isMoving = false;
+  
 
     //IEnumerator SmoothMove(Vector3 targetPosition) // 충돌체가 먼저 앞에 있어야하므로 이구문은 사용x
     //{
@@ -263,8 +269,6 @@ public class PlayerController : MonoBehaviour
     //        _MakeFog2.UpdateFogOfWar();
     //    }
     //}
-
-  
 
 
     void MoveCharacter(Vector3 vec)
@@ -368,29 +372,47 @@ public class PlayerController : MonoBehaviour
             {
                 _childSpriteRenderer.sortingOrder = (int)(transform.position.y - 1) * -1; // 레이어 값변환
                 Move(vec);
-                
 
                 DropItem dropItem = hitdata.collider.GetComponent<DropItem>();
-                switch (dropItem.Item._itemType)
+                switch(dropItem.ItemType)
                 {
-                    case ItemType.Currency:
-                        //해당하는 재화를 상승 시키고 드랍아이템 삭제
-                        Currency cr = (Currency)dropItem.Item;
-                        if (cr._ItemID == 101) GameManager.Instance.Dia += cr.Count;
-                        else if (cr._ItemID == 102) GameManager.Instance.Gold += cr.Count;
-                        dropItem.DeleteDropItem();
+                    case DropItemType.Drop:
+                        switch (dropItem.Item._itemType)
+                        {
+                            case ItemType.Currency:
+                                //해당하는 재화를 상승 시키고 드랍아이템 삭제
+                                Currency cr = (Currency)dropItem.Item;
+                                if (cr._ItemID == 101) GameManager.Instance.Dia += cr.Count;
+                                else if (cr._ItemID == 102) GameManager.Instance.Gold += cr.Count;
+                                dropItem.DeleteDropItem();
+                                break;
+                            case ItemType.Shovel:
+                            case ItemType.Weapon:
+                            case ItemType.Armor:
+                            case ItemType.Potion:
+                                GetItem(dropItem);
+                                UpdateCharacterState();
+                                GameManager.Instance.GetEquipItem();
+                                break;
+                        }
                         break;
-                    case ItemType.Shovel:
-                    case ItemType.Weapon:
-                    case ItemType.Armor:
-                    case ItemType.Potion:
-                        GetItem(dropItem);
-                        UpdateCharacterState();
-                        GameManager.Instance.GetEquipItem();
+                    case DropItemType.Shop:                        
+                        BuyGoldItem(dropItem);
                         break;
-                    case ItemType.Unlock:
-                        //해당 아이템의 해금가격 만큼의 재화가 있는지 검사 후 구매 진행
-                        //구매 시 해금데이터를 변경하고, 드랍아이템을 삭제 후 재화 변경
+                    case DropItemType.UnlockShop:
+
+                        switch (dropItem.Item._itemType)
+                        {
+                            case ItemType.Shovel:
+                            case ItemType.Weapon:
+                            case ItemType.Armor:
+                            case ItemType.Potion:
+                                UnlockEquipItem(dropItem);
+                                break;
+                            case ItemType.Unlock:
+                                UnlockPassiveItem(dropItem);
+                                break;
+                        }                        
                         break;
                 }
             }
@@ -499,53 +521,133 @@ public class PlayerController : MonoBehaviour
                     _equipPotion = potion;
                 }
                 break;
-            case ItemType.Unlock:
-                UnlockItem Unlock = (UnlockItem)dropItem.Item;
-                int level = 0;
-                switch (Unlock._ItemID)
-                {
-                    case 601:
-                        if (PlayerPrefs.HasKey("PlayerHPUpgradeLevel")) level = PlayerPrefs.GetInt("PlayerHPUpgradeLevel");
-                        break;
-                    case 602:
-                        if (PlayerPrefs.HasKey("TreasureBoxUpgradeLevel")) level = PlayerPrefs.GetInt("TreasureBoxUpgradeLevel");
-                        break;
-                    case 603:
-                        if (PlayerPrefs.HasKey("ComboUpgradeLevel")) level = PlayerPrefs.GetInt("ComboUpgradeLevel");
-                        break;
-                }
-                int needDia = -1;
-                for (int j = 0; j < UnlockSaveData.unlockNeedDias.Count; j++)
-                {
-                    if (UnlockSaveData.unlockNeedDias[j].level == level)
-                    {
-                        needDia = UnlockSaveData.unlockNeedDias[j].NeedDia;
-                    }
-                }
+        }
+        dropItem.DeleteDropItem();
+    }
 
-                if (needDia != -1 && GameManager.Instance.Dia >= needDia)
-                {
-                    GameManager.Instance.Dia -= needDia;
-
-                    switch (Unlock._ItemID)
-                    {
-                        case 601:
-                            PlayerPrefs.SetInt("PlayerHPUpgradeLevel", level + 1);
-                            break;
-                        case 602:
-                            PlayerPrefs.SetInt("TreasureBoxUpgradeLevel", level + 1);
-                            break;
-                        case 603:
-                            PlayerPrefs.SetInt("ComboUpgradeLevel", level + 1);
-                            break;
-                    }
-                    Data.Instance.SavePlayerData();
-                    UpdateCharacterState();
-                }
-                dropItem.DeleteDropItem();
-                return;
+    void BuyGoldItem(DropItem dropItem)
+    {
+        //골드체크를 하고 골드가충분하면, 골드를 차감하고 저장한다음에 습득 호출
+        int needGold = -1;
+        switch (dropItem.Item._itemType)
+        {
+            case ItemType.Shovel:
+                Shovel sv = (Shovel)Data.Instance.GetItemInfo(dropItem.Item._ItemID);
+                needGold = sv.Price;
+                break;
+            case ItemType.Weapon:
+                Weapon wp = (Weapon)Data.Instance.GetItemInfo(dropItem.Item._ItemID);
+                needGold = wp.Price;
+                break;
+            case ItemType.Armor:
+                Armor ar = (Armor)Data.Instance.GetItemInfo(dropItem.Item._ItemID);
+                needGold = ar.Price;
+                break;
+            case ItemType.Potion:
+                Potion po = (Potion)Data.Instance.GetItemInfo(dropItem.Item._ItemID);
+                needGold = po.Price;
+                break;
         }
 
+        if (needGold <= GameManager.Instance.Gold)
+        {
+            //자원이 충분하면 구매
+            GameManager.Instance.Gold -= needGold;
+            //Data.Instance.SavePlayerData();
+
+            GetItem(dropItem);
+            UpdateCharacterState();
+            GameManager.Instance.GetEquipItem(); // 유아이 관련 호출
+        }
+        else
+        {
+            //골드부족!
+        }
+    }
+
+    void UnlockEquipItem(DropItem dropItem)
+    {
+        int needDia = -1;
+        switch (dropItem.Item._itemType)
+        {
+            case ItemType.Shovel:
+                Shovel sv = (Shovel)Data.Instance.GetItemInfo(dropItem.Item._ItemID);
+                needDia = sv.UnlockPrice;
+                break;
+            case ItemType.Weapon:
+                Weapon wp = (Weapon)Data.Instance.GetItemInfo(dropItem.Item._ItemID);
+                needDia = wp.UnlockPrice;
+                break;
+            case ItemType.Armor:
+                Armor ar = (Armor)Data.Instance.GetItemInfo(dropItem.Item._ItemID);
+                needDia = ar.UnlockPrice;
+                break;
+            case ItemType.Potion:
+                Potion po = (Potion)Data.Instance.GetItemInfo(dropItem.Item._ItemID);
+                needDia = po.UnlockPrice;
+                break;
+        }
+
+        if (needDia <= GameManager.Instance.Dia)
+        {
+            GameManager.Instance.Dia -= needDia;            
+            Data.Instance.CharacterSaveData._unlockItemId.Add(dropItem.Item._ItemID); //언락리스트에 아이템아이디 추가
+            Data.Instance.SavePlayerData();
+
+            GetItem(dropItem);
+            UpdateCharacterState();
+            GameManager.Instance.GetEquipItem(); // 유아이 관련 호출
+        }
+        else
+        {
+            //다이아 부족!!
+        }
+    }
+
+    void UnlockPassiveItem(DropItem dropItem)
+    {
+        UnlockItem Unlock = (UnlockItem)dropItem.Item;
+        int level = 0;
+        switch (Unlock._ItemID)
+        {
+            case 601:
+                if (PlayerPrefs.HasKey("PlayerHPUpgradeLevel")) level = PlayerPrefs.GetInt("PlayerHPUpgradeLevel");
+                break;
+            case 602:
+                if (PlayerPrefs.HasKey("TreasureBoxUpgradeLevel")) level = PlayerPrefs.GetInt("TreasureBoxUpgradeLevel");
+                break;
+            case 603:
+                if (PlayerPrefs.HasKey("ComboUpgradeLevel")) level = PlayerPrefs.GetInt("ComboUpgradeLevel");
+                break;
+        }
+        int needDia = -1;
+        for (int j = 0; j < UnlockSaveData.unlockNeedDias.Count; j++)
+        {
+            if (UnlockSaveData.unlockNeedDias[j].level == level)
+            {
+                needDia = UnlockSaveData.unlockNeedDias[j].NeedDia;
+            }
+        }
+
+        if (needDia != -1 && GameManager.Instance.Dia >= needDia)
+        {
+            GameManager.Instance.Dia -= needDia;
+
+            switch (Unlock._ItemID)
+            {
+                case 601:
+                    PlayerPrefs.SetInt("PlayerHPUpgradeLevel", level + 1);
+                    break;
+                case 602:
+                    PlayerPrefs.SetInt("TreasureBoxUpgradeLevel", level + 1);
+                    break;
+                case 603:
+                    PlayerPrefs.SetInt("ComboUpgradeLevel", level + 1);
+                    break;
+            }
+            Data.Instance.SavePlayerData();
+            UpdateCharacterState();
+        }
         dropItem.DeleteDropItem();
     }
 
@@ -575,6 +677,13 @@ public class PlayerController : MonoBehaviour
     public void transfromUpdate(Vector3 vec)
     {
         transform.position = vec;
+    }
+
+    void UsePotion()
+    {
+        if (NowHP < MaxHP) NowHP += _equipPotion.Heal;
+        _equipPotion = null;
+        //유아이 업데이트
     }
 
     public void InitCharacterData()
@@ -625,8 +734,6 @@ public class PlayerController : MonoBehaviour
         UpdateCharacterState();
     }
 
-    #region
-
     void UpdateCharacterState()
     {
         _damage = 0;
@@ -676,8 +783,6 @@ public class PlayerController : MonoBehaviour
         _equipArmor = null;
         _equipPotion = null;
     }
-
-    #endregion
 
     void Death()
     {
