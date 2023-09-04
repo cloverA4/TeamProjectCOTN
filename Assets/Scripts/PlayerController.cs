@@ -312,58 +312,31 @@ public class PlayerController : MonoBehaviour
                 Vector3 swordCenter = (Vector3)transform.position + vec; // 대검의 중심 위치 계산
                 Vector3 boxSize;
                 Collider2D[] colliders;
-                if (vec == Vector3.down)
+                if (vec == Vector3.down || vec == Vector3.up)
                 {
                     boxSize = new Vector3(2f, 1f, 0);
-                    colliders = Physics2D.OverlapBoxAll(swordCenter, boxSize, 0f, _weaponCheckLayerMask);
-                    foreach (Collider2D collider in colliders)
-                    {
-                        if (collider.CompareTag("Monster"))
-                        {
-                            collider.GetComponent<Monster>().TakeDamage(_damage);
-                        }
-                    }
-                    return;
                 }
-                else if (vec == Vector3.up)
-                {
-                    boxSize = new Vector3(2f, 1f, 0);
-                    colliders = Physics2D.OverlapBoxAll(swordCenter, boxSize, 0f, _weaponCheckLayerMask);
-                    foreach (Collider2D collider in colliders)
-                    {
-                        if (collider.CompareTag("Monster"))
-                        {
-                            collider.GetComponent<Monster>().TakeDamage(_damage);
-                        }
-                    }
-                    return;
-                }
-                else if (vec == Vector3.left)
+                else if (vec == Vector3.left || vec == Vector3.right)
                 {
                     boxSize = new Vector3(1f, 2f, 0f);
-                    colliders = Physics2D.OverlapBoxAll(swordCenter, boxSize, 0f, _weaponCheckLayerMask);
-                    foreach (Collider2D collider in colliders)
-                    {
-                        if (collider.CompareTag("Monster"))
-                        {
-                            collider.GetComponent<Monster>().TakeDamage(_damage);
-                        }
-                    }
-                    return;
                 }
-                else if (vec == Vector3.right)
+                else
                 {
-                    boxSize = new Vector3(1f, 2f, 0f);
-                    colliders = Physics2D.OverlapBoxAll(swordCenter, boxSize, 0f, _weaponCheckLayerMask);
-                    foreach (Collider2D collider in colliders)
-                    {
-                        if (collider.CompareTag("Monster"))
-                        {
-                            collider.GetComponent<Monster>().TakeDamage(_damage);
-                        }
-                    }
                     return;
                 }
+
+                colliders = Physics2D.OverlapBoxAll(swordCenter, boxSize, 0f, _weaponCheckLayerMask);
+                bool IsMonster = false;
+                foreach (Collider2D collider in colliders)
+                {
+                    if (collider.CompareTag("Monster"))
+                    {
+                        collider.GetComponent<Monster>().TakeDamage(_damage);
+                        IsMonster = true;
+                    }
+                }
+
+                if (IsMonster) return;
                 break;
         }
 
