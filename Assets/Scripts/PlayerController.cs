@@ -270,7 +270,7 @@ public class PlayerController : MonoBehaviour
     void MoveCharacter(Vector3 vec)
     {
         Vector3 Temp = transform.position + vec / 2;
-        
+
 
         //if (hitdata2)
         //{
@@ -310,69 +310,61 @@ public class PlayerController : MonoBehaviour
 
             case WeaponType.GreatSword:
                 Vector3 swordCenter = (Vector3)transform.position + vec; // 대검의 중심 위치 계산
-                Vector3 boxSize = new Vector3(0f, 0f, 0);
-                Collider2D[] colliders = Physics2D.OverlapBoxAll(swordCenter, boxSize, 0f, _weaponCheckLayerMask);
-
-                if (colliders != null)
+                Vector3 boxSize;
+                Collider2D[] colliders;
+                if (vec == Vector3.down)
                 {
-                    if (vec == Vector3.down)
+                    boxSize = new Vector3(2f, 1f, 0);
+                    colliders = Physics2D.OverlapBoxAll(swordCenter, boxSize, 0f, _weaponCheckLayerMask);
+                    foreach (Collider2D collider in colliders)
                     {
-                        boxSize = new Vector3(2f, 1f, 0);
-                        colliders = Physics2D.OverlapBoxAll(swordCenter, boxSize, 0f, _weaponCheckLayerMask);
-                        foreach (Collider2D collider in colliders)
+                        if (collider.CompareTag("Monster"))
                         {
-                            if (collider.CompareTag("Monster"))
-                            {
-                                collider.GetComponent<Monster>().TakeDamage(_damage);
-                                return;
-                            }
-                        }
-                        break;
-                    }
-                    else if (vec == Vector3.up)
-                    {
-                        boxSize = new Vector3(2f, 1f, 0);
-                        colliders = Physics2D.OverlapBoxAll(swordCenter, boxSize, 0f, _weaponCheckLayerMask);
-                        foreach (Collider2D collider in colliders)
-                        {
-                            if (collider.CompareTag("Monster"))
-                            {
-                                collider.GetComponent<Monster>().TakeDamage(_damage);
-                                return;
-                            }
-                        }
-                        break;
-                    }
-                    else if (vec == Vector3.left)
-                    {
-                        boxSize = new Vector3(1f, 2f, 0f);
-                        colliders = Physics2D.OverlapBoxAll(swordCenter, boxSize, 0f, _weaponCheckLayerMask);
-                        foreach (Collider2D collider in colliders)
-                        {
-                            if (collider.CompareTag("Monster"))
-                            {
-                                collider.GetComponent<Monster>().TakeDamage(_damage);
-                                return;
-                            }
-                        }
-                        break;
-                    }
-                    else if (vec  == Vector3.right)
-                    {
-                        boxSize = new Vector3(1f, 2f, 0f);
-                        colliders = Physics2D.OverlapBoxAll(swordCenter, boxSize, 0f, _weaponCheckLayerMask);
-                        foreach (Collider2D collider in colliders)
-                        {
-                            if (collider.CompareTag("Monster"))
-                            {
-                                collider.GetComponent<Monster>().TakeDamage(_damage);
-                                return;
-                            }
+                            collider.GetComponent<Monster>().TakeDamage(_damage);
                         }
                     }
+                    return;
                 }
-                // 공격할때 오른쪽을 간다면 오른쪽 오른쪽위 오른쪽아래를 채크해서 몬스터가 하나라도 있으면 공격
-                break;                 
+                else if (vec == Vector3.up)
+                {
+                    boxSize = new Vector3(2f, 1f, 0);
+                    colliders = Physics2D.OverlapBoxAll(swordCenter, boxSize, 0f, _weaponCheckLayerMask);
+                    foreach (Collider2D collider in colliders)
+                    {
+                        if (collider.CompareTag("Monster"))
+                        {
+                            collider.GetComponent<Monster>().TakeDamage(_damage);
+                        }
+                    }
+                    return;
+                }
+                else if (vec == Vector3.left)
+                {
+                    boxSize = new Vector3(1f, 2f, 0f);
+                    colliders = Physics2D.OverlapBoxAll(swordCenter, boxSize, 0f, _weaponCheckLayerMask);
+                    foreach (Collider2D collider in colliders)
+                    {
+                        if (collider.CompareTag("Monster"))
+                        {
+                            collider.GetComponent<Monster>().TakeDamage(_damage);
+                        }
+                    }
+                    return;
+                }
+                else if (vec == Vector3.right)
+                {
+                    boxSize = new Vector3(1f, 2f, 0f);
+                    colliders = Physics2D.OverlapBoxAll(swordCenter, boxSize, 0f, _weaponCheckLayerMask);
+                    foreach (Collider2D collider in colliders)
+                    {
+                        if (collider.CompareTag("Monster"))
+                        {
+                            collider.GetComponent<Monster>().TakeDamage(_damage);
+                        }
+                    }
+                    return;
+                }
+                break;
         }
 
         RaycastHit2D hitdata = Physics2D.Raycast(Temp, vec, 0.5f, _normalLayerMask);
