@@ -295,11 +295,7 @@ public class PlayerController : MonoBehaviour
                 RaycastHit2D hitdataTypeSpear = Physics2D.Raycast(Temp, vec, 2f, _weaponCheckLayerMask);
                 if (hitdataTypeSpear)
                 {
-                    if (hitdataTypeSpear.collider.tag == "WeedWall")
-                    {
-                        break;
-                    }
-                    else if (hitdataTypeSpear.collider.tag == "Monster")
+                    if (hitdataTypeSpear.collider.tag == "Monster")
                     {
                         Debug.Log(hitdataTypeSpear.collider.tag);
                         hitdataTypeSpear.collider.GetComponent<Monster>().TakeDamage(_damage);
@@ -367,8 +363,7 @@ public class PlayerController : MonoBehaviour
             {
                 _childSpriteRenderer.sortingOrder = (int)(transform.position.y - 1) * -1; // 레이어 값변환
                 Move(vec);
-            }
-            
+            }            
             else if (hitdata.collider.tag == "Item")
             {
                 _childSpriteRenderer.sortingOrder = (int)(transform.position.y - 1) * -1; // 레이어 값변환
