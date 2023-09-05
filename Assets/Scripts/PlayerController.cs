@@ -157,7 +157,7 @@ public class PlayerController : MonoBehaviour
                 if (_equipPotion == null) return;
                 else
                 {
-                    if (GameManager.Instance.NowStage != Stage.Lobby || GameManager.Instance.NowFloor != floor.fBoss)
+                    if (GameManager.Instance.NowStage != Stage.Lobby && GameManager.Instance.NowFloor != floor.fBoss)
                     {
                         if (!GameManager.Instance.IsSuccess()) return;
                         UsePotion();
@@ -171,7 +171,7 @@ public class PlayerController : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.UpArrow)) // 위 화살표를 입력 받았을때
             {
                 Debug.Log(_equipWeapon.weaponType);
-                if (GameManager.Instance.NowStage != Stage.Lobby || GameManager.Instance.NowFloor != floor.fBoss)
+                if (GameManager.Instance.NowStage != Stage.Lobby && GameManager.Instance.NowFloor != floor.fBoss)
                 {
                     if (!GameManager.Instance.IsSuccess()) return;
                     MoveCharacter(Vector3.up);
@@ -189,7 +189,7 @@ public class PlayerController : MonoBehaviour
             }
             else if (Input.GetKeyDown(KeyCode.DownArrow)) // 아래 화살표를 입력 받았을때
             {
-                if (GameManager.Instance.NowStage != Stage.Lobby || GameManager.Instance.NowFloor != floor.fBoss)
+                if (GameManager.Instance.NowStage != Stage.Lobby && GameManager.Instance.NowFloor != floor.fBoss)
                 {
                     if (!GameManager.Instance.IsSuccess()) return;
                     MoveCharacter(Vector3.down);
@@ -206,7 +206,7 @@ public class PlayerController : MonoBehaviour
             }
             else if (Input.GetKeyDown(KeyCode.RightArrow)) // 오른쪽 화살표를 입력 받았을때
             {
-                if (GameManager.Instance.NowStage != Stage.Lobby || GameManager.Instance.NowFloor != floor.fBoss)
+                if (GameManager.Instance.NowStage != Stage.Lobby && GameManager.Instance.NowFloor != floor.fBoss)
                 {
                     if (!GameManager.Instance.IsSuccess()) return;
                     MoveCharacter(Vector3.right);
@@ -224,7 +224,7 @@ public class PlayerController : MonoBehaviour
             }
             else if (Input.GetKeyDown(KeyCode.LeftArrow)) // 왼쪽 화살표를 입력 받았을때
             {
-                if (GameManager.Instance.NowStage != Stage.Lobby || GameManager.Instance.NowFloor != floor.fBoss)
+                if (GameManager.Instance.NowStage != Stage.Lobby && GameManager.Instance.NowFloor != floor.fBoss)
                 {
                     if (!GameManager.Instance.IsSuccess()) return;
                     MoveCharacter(Vector3.left);
