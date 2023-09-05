@@ -728,7 +728,7 @@ public class GameManager : MonoBehaviour
 
     public void GetEquipItem()
     {
-        _uiManeger.EquipmentUpdata();
+
     }
 
     public void PlayerHPUpdate()

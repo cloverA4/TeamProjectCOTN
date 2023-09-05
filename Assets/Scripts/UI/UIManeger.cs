@@ -165,6 +165,7 @@ public class UIManeger : MonoBehaviour
         GameInfoPool = new ObjectPool<GameInfoMassege>(CreateGameInfoPool, OnGet, OnReleaseInfo, DestroyInfo, maxSize: 15);
         SpawnInfo();
         SpawnGameInfo();
+        EquipmentAllDisabel();
     }
 
     public void UIInit()
@@ -217,33 +218,49 @@ public class UIManeger : MonoBehaviour
     #endregion
 
     #region Equipment
-
-    public void EquipmentUpdata()
+    public void UpdataShovel()
     {
-        EquipmentInit();
-        if(PlayerController.Instance.EquipArmor != null)
-        {
-            _armorImage.GetComponent<Image>().sprite = PlayerController.Instance.EquipArmor._ItemIcon;
-            _armorSlot.gameObject.SetActive(true);
-        }
         if (PlayerController.Instance.EquipShovel != null)
         {
             _shovelImage.GetComponent<Image>().sprite = PlayerController.Instance.EquipShovel._ItemIcon;
             _shovelSlot.gameObject.SetActive(true);
+            return;
         }
+        _shovelSlot.gameObject.SetActive(false);
+
+    }
+    public void UpdataWeapon()
+    {
         if (PlayerController.Instance.EquipWeapon != null)
         {
             _weaponImage.GetComponent<Image>().sprite = PlayerController.Instance.EquipWeapon._ItemIcon;
             _weaponSlot.gameObject.SetActive(true);
+            return;
         }
+        _weaponSlot.gameObject.SetActive(false);
+    }
+    public void EquipmentArmor()
+    {
         if (PlayerController.Instance.EquipPotion != null)
+        {
+            _armorImage.GetComponent<Image>().sprite = PlayerController.Instance.EquipArmor._ItemIcon;
+            _armorSlot.gameObject.SetActive(true);
+            return;
+        }
+        _armorSlot.gameObject.SetActive(false);
+    }
+    public void EquipmentPotion()
+    {
+        if(PlayerController.Instance.EquipPotion != null)
         {
             _potionImage.GetComponent<Image>().sprite = PlayerController.Instance.EquipPotion._ItemIcon;
             _potionSlot.gameObject.SetActive(true);
+            return;
         }
-
+        _potionSlot.gameObject.SetActive(false);
     }
-    public void EquipmentInit()
+
+    public void EquipmentAllDisabel()
     {
         _shovelSlot.gameObject.SetActive(false);
         _weaponSlot.gameObject.SetActive(false);
