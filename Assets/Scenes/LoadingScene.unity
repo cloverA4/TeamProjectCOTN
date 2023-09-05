@@ -417,7 +417,11 @@ MonoBehaviour:
     _nowHP: 0
     _nowFloor: 0
     _nowStage: 0
-    _equipItemId: 
+    _equipShovelID: 0
+    _equipWeaponID: 0
+    _equipArmorID: 0
+    _equipPotionID: 0
+    _unlockItemId: 
 --- !u!4 &283436410
 Transform:
   m_ObjectHideFlags: 0

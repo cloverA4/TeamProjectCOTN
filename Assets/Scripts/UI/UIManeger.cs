@@ -7,8 +7,8 @@ using UnityEngine.UI;
 
 public class UIManeger : MonoBehaviour
 {
-    [SerializeField] GameObject _heart;
-    [SerializeField] Transform _HeartBase;
+    [SerializeField]
+    GameObject[] Hearts;
 
     [SerializeField] Text _goldCount;
     [SerializeField] Text _diamondCount;
@@ -18,7 +18,11 @@ public class UIManeger : MonoBehaviour
     [SerializeField] Image _shovelImage;
     [SerializeField] Image _armorImage;
     [SerializeField] Image _weaponImage;
-    [SerializeField] GameObject _emptyPotion;
+    [SerializeField] Image _potionImage;
+    [SerializeField] GameObject _shovelSlot;
+    [SerializeField] GameObject _armorSlot;
+    [SerializeField] GameObject _weaponSlot;
+    [SerializeField] GameObject _potionSlot;
 
     [SerializeField] Image _fade;
 
@@ -171,42 +175,30 @@ public class UIManeger : MonoBehaviour
         _goLobbyUI.SetActive(false);
     }
     #region HP
-    List<GameObject> hearts = new List<GameObject>();
     public void setHP()
     {
+        PlayerController pc = PlayerController.Instance;
         ResetHP();
-
-        for (int i = 0; i < PlayerController.Instance.MaxHP / 2; i++) // 맥스 HP값
+        for(int i = 0; i< pc.MaxHP; i++)
         {
-            var temp =Instantiate(_heart, _HeartBase);
-            hearts.Add(temp);
+            Hearts[i].gameObject.SetActive(true);
         }
-        for(int i = 0; i< PlayerController.Instance.NowHP / 2; i++)  // 현재 HP값
+        for(int i =0;i< pc.NowHP; i++)
         {
-            hearts[i].GetComponent<HeartPrefeb>().FullHeartActive();
-            if(i > PlayerController.Instance.MaxHP/2)
-            {
-                return;
-            }
+            Hearts[i].transform.Find("FullHeart").gameObject.SetActive(true);
         }
-        if(PlayerController.Instance.NowHP / 2 == 1)  // 반칸 하트 구현
+        if(pc.NowHP / 2 == 1)
         {
-            //hearts[PlayerController.Instance.NowHP/2].GetComponent<HeartPrefeb>().HalfHeartActive();
+            Hearts[pc.NowHP - 1].transform.Find("HalfHeart").gameObject.SetActive(true);
         }
     }
 
     void ResetHP()
     {
-        int index = hearts.Count;
-        if (hearts != null)
+        for (int i = 0; i < Hearts.Length; i++) 
         {
-            for (int i = 0; i < index; i++)
-            {
-                Destroy(hearts[0]);
-                hearts.RemoveAt(0);
-            }
-        }
-        else return;
+            Hearts[i].gameObject.SetActive(false);
+        } 
     }
 
     #endregion
@@ -225,45 +217,38 @@ public class UIManeger : MonoBehaviour
     #endregion
 
     #region Equipment
-    /*
-    public void Equipment()  // 아이템을 회득했을때나 아이템이 바뀔때 선언
+
+    public void EquipmentUpdata()
     {
-        // 처음에 모든 아이콘을 꺼주면서 초기화
-        // 아이템 장착 리스트를 전부 검사하면서 어떤 아이템 유무 확인
-        // 장착이 돼어있는 아이템은 아이템 이미지를 켜주고 장착 아이템에 맞게 이미지 교체
         EquipmentInit();
-        var temp = PlayerController.Instance.PlayerEquipItemList;
-        for (int i = 0; i < temp.Count; i++)
+        if(PlayerController.Instance.EquipArmor != null)
         {
-            if (temp[i]._itemType == ItemType.Weapon)
-            {
-                _weaponImage.GetComponent<Image>().sprite = temp[i]._ItemIcon;
-                _weaponImage.gameObject.SetActive(true);
-            }
-            else if (temp[i]._itemType == ItemType.Armor)
-            {
-                _armorImage.GetComponent<Image>().sprite = temp[i]._ItemIcon;
-                _armorImage.gameObject.SetActive(true);
-            }
-            else if (temp[i]._itemType == ItemType.Shovel)
-            {
-                _shovelImage.GetComponent<Image>().sprite = temp[i]._ItemIcon;
-                _shovelImage.gameObject.SetActive(true);
-            }
+            _armorImage.GetComponent<Image>().sprite = PlayerController.Instance.EquipArmor._ItemIcon;
+            _armorSlot.gameObject.SetActive(true);
         }
+        if (PlayerController.Instance.EquipShovel != null)
+        {
+            _shovelImage.GetComponent<Image>().sprite = PlayerController.Instance.EquipShovel._ItemIcon;
+            _shovelSlot.gameObject.SetActive(true);
+        }
+        if (PlayerController.Instance.EquipWeapon != null)
+        {
+            _weaponImage.GetComponent<Image>().sprite = PlayerController.Instance.EquipWeapon._ItemIcon;
+            _weaponSlot.gameObject.SetActive(true);
+        }
+        if (PlayerController.Instance.EquipPotion != null)
+        {
+            _potionImage.GetComponent<Image>().sprite = PlayerController.Instance.EquipPotion._ItemIcon;
+            _potionSlot.gameObject.SetActive(true);
+        }
+
     }
-    */
     public void EquipmentInit()
     {
-        _shovelImage.gameObject.SetActive(false);
-        _weaponImage.gameObject.SetActive(false);
-        _armorImage.gameObject.SetActive(false);
-    }
-
-    public void PotionCount(bool _potion)
-    {
-        if (_potion == true) _emptyPotion.SetActive(false);
-        else _emptyPotion.SetActive(true);
+        _shovelSlot.gameObject.SetActive(false);
+        _weaponSlot.gameObject.SetActive(false);
+        _armorSlot.gameObject.SetActive(false);
+        _potionSlot.gameObject.SetActive(false);
     }
 
     #endregion

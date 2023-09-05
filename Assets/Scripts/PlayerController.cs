@@ -454,6 +454,7 @@ public class PlayerController : MonoBehaviour
                     temp = _equipShovel;
                     _equipShovel = shovel;
                     dropItem.ChangeItem(temp);
+                    GameManager.Instance.GetEquipItem();
                     Debug.Log($"착용한 아이템 {_equipShovel._ItemID}");
                     Debug.Log($"버려진 아이템 {dropItem.Item._ItemID}");
                     return;
@@ -473,6 +474,7 @@ public class PlayerController : MonoBehaviour
                     temp = _equipWeapon;
                     _equipWeapon = weapon;
                     dropItem.ChangeItem(temp);
+                    GameManager.Instance.GetEquipItem();
 
                     Debug.Log($"착용한 아이템 {_equipWeapon._ItemID}");
                     Debug.Log($"버려진 아이템 {dropItem.Item._ItemID}");
@@ -492,6 +494,7 @@ public class PlayerController : MonoBehaviour
                     temp = _equipArmor;
                     _equipArmor = armor;
                     dropItem.ChangeItem(temp);
+                    GameManager.Instance.GetEquipItem();
 
                     Debug.Log($"착용한 아이템 {_equipArmor._ItemID}");
                     Debug.Log($"버려진 아이템 {dropItem.Item._ItemID}");
@@ -511,6 +514,7 @@ public class PlayerController : MonoBehaviour
                     temp = _equipPotion;
                     _equipPotion = potion;
                     dropItem.ChangeItem(temp);
+                    GameManager.Instance.GetEquipItem();
 
                     Debug.Log($"착용한 아이템 {_equipPotion._ItemID}");
                     Debug.Log($"버려진 아이템 {dropItem.Item._ItemID}");

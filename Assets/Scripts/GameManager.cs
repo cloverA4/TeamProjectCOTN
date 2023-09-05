@@ -125,7 +125,7 @@ public class GameManager : MonoBehaviour
         _nowFloor = Data.Instance.CharacterSaveData._nowFloor;
         PlayerController.Instance.InitCharacterData();
         _uiManeger.setHP();
-        //_uiManeger.Equipment();
+        GetEquipItem();
     }
 
     #region ∫Ò∆Æ
@@ -728,7 +728,7 @@ public class GameManager : MonoBehaviour
 
     public void GetEquipItem()
     {
-        //_uiManeger.Equipment();
+        _uiManeger.EquipmentUpdata();
     }
 
     public void PlayerHPUpdate()

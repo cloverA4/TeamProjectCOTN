@@ -3,6 +3,7 @@ using UnityEngine;
 public class DropItem : MonoBehaviour
 {
     [SerializeField] SpriteRenderer _ItemIcon;
+    [SerializeField] ItemUI _itemUI;
     Item _item;
     DropItemType _type;
 
