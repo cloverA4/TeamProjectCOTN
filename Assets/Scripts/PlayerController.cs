@@ -142,7 +142,7 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (GameManager.Instance.NowStage == Stage.Lobby)
+        if (GameManager.Instance.NowStage == Stage.Lobby || GameManager.Instance.NowFloor == floor.fBoss)
         {
             _lobbyMoveDelay += Time.deltaTime;
         }
