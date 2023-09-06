@@ -654,7 +654,8 @@ public class PlayerController : MonoBehaviour
     void Move(Vector3 vec)
     {
         transform.position += vec;
-        _MakeFog2.UpdateFogOfWar();
+        
+        
         GetComponent<SpriteRenderer>().sortingOrder = (int)(transform.position.y - 1) * -1; // 레이어 값변환
         if (vec == Vector3.left)
         {
@@ -672,6 +673,12 @@ public class PlayerController : MonoBehaviour
         {
             _animator.SetTrigger("Down");
         }
+
+        if (GameManager.Instance.NowStage == Stage.Lobby || GameManager.Instance.NowFloor == floor.fBoss)
+        {
+            return;
+        }
+        _MakeFog2.UpdateFogOfWar();
     }
 
     public void transfromUpdate(Vector3 vec)
