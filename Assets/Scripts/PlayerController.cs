@@ -422,7 +422,7 @@ public class PlayerController : MonoBehaviour
             _childSpriteRenderer.sortingOrder = (int)(transform.position.y - 1) * -1; // 레이어 값변환
             Move(vec);
         }
-        _MakeFog2.UpdateFogOfWar();
+        //_MakeFog2.UpdateFogOfWar();
 
     }
 
