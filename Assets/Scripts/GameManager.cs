@@ -9,7 +9,11 @@ public class GameManager : MonoBehaviour
     private static GameManager instance = null;
     [SerializeField] GameObject _dropItem;
     [SerializeField] MakeFog2 _MakeFog2;
+    [SerializeField] GameObject _itemPool;
+    [SerializeField] GameObject _clearBox;
+    [SerializeField] GameObject _ClearBoxPos;
 
+    public GameObject ItemPool { get { return _itemPool; } }
 
     //스테이지 데이터
     Stage _nowStage = Stage.Lobby;
@@ -77,12 +81,6 @@ public class GameManager : MonoBehaviour
             //그래서 이미 전역변수인 instance에 인스턴스가 존재한다면 자신을 삭제해준다.
             Destroy(this.gameObject);
         }
-    }
-
-    void CreateItem(Transform tf)
-    {
-        GameObject creatrItem = Instantiate(_dropItem, tf);
-        //creatrItem.GetComponent<DropItem>().Init();
     }
 
     //게임 매니저 인스턴스에 접근할 수 있는 프로퍼티. static이므로 다른 클래스에서 맘껏 호출할 수 있다.
@@ -304,6 +302,7 @@ public class GameManager : MonoBehaviour
         }
 
         //초기화 및 로드
+        ItemClear();
         resetNote();
         if(mt != null) StopCoroutine(mt);
         if(sm != null) StopCoroutine(sm);
@@ -320,7 +319,7 @@ public class GameManager : MonoBehaviour
                 {
                     case floor.f1:
                         PlayerController.Instance.transfromUpdate(_stageStartPosition.LobbyPosition);
-                        GameObject go = Instantiate(_dropItem);
+                        GameObject go = Instantiate(_dropItem, _itemPool.transform);
                         go.transform.position = new Vector3(-25, 100, 0);
                         go.GetComponent<DropItem>().Init(Data.Instance.GetItemInfo(305));
                         break;
@@ -354,7 +353,6 @@ public class GameManager : MonoBehaviour
                         PlayerController.Instance.transfromUpdate(_stageStartPosition.Stage1FBoss);
                         _audio.clip = Resources.Load<AudioClip>("SoundsUpdate/Stage/StageLobby");
                         _audio.loop = true;
-                        _stageClear = true;
                         break;
                 }
                 break;
@@ -453,6 +451,14 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject _1stage2floorShop;
     [SerializeField] GameObject _1stage3floorShop;
 
+    void ItemClear()
+    {
+        for(int i = 0; i < _itemPool.transform.childCount; i++)
+        {
+            Destroy(_itemPool.transform.GetChild(i).gameObject);
+        }
+    }
+
     void LobbyShopItemSpawn()
     {
         //장비샵
@@ -463,7 +469,7 @@ public class GameManager : MonoBehaviour
             if(i < Data.Instance.LockEquipItemIDList.Count)
             {
                 int random = UnityEngine.Random.Range(0, EquipTemp.Count);
-                GameObject SpawnItem = Instantiate(Data.Instance.ItemPrefab);
+                GameObject SpawnItem = Instantiate(Data.Instance.ItemPrefab, _itemPool.transform);
                 SpawnItem.GetComponent<DropItem>().Init(Data.Instance.GetItemInfo(EquipTemp[random]), DropItemType.UnlockShop);
                 SpawnItem.transform.position = _equipShop.transform.GetChild(i).position;
                 EquipTemp.RemoveAt(random);
@@ -477,7 +483,7 @@ public class GameManager : MonoBehaviour
             if (i < Data.Instance.LockPotionList.Count)
             {
                 int random = UnityEngine.Random.Range(0, PotionTemp.Count);
-                GameObject SpawnItem = Instantiate(Data.Instance.ItemPrefab);
+                GameObject SpawnItem = Instantiate(Data.Instance.ItemPrefab, _itemPool.transform);
                 SpawnItem.GetComponent<DropItem>().Init(Data.Instance.GetItemInfo(PotionTemp[random]), DropItemType.UnlockShop);
                 SpawnItem.transform.position = _potionShop.transform.GetChild(i).position;
                 PotionTemp.RemoveAt(random);
@@ -492,7 +498,7 @@ public class GameManager : MonoBehaviour
             if (i < Data.Instance.LockPassivesList.Count)
             {
                 int random = UnityEngine.Random.Range(0, PassivesTemp.Count);
-                GameObject SpawnItem = Instantiate(Data.Instance.ItemPrefab);
+                GameObject SpawnItem = Instantiate(Data.Instance.ItemPrefab, _itemPool.transform);
                 SpawnItem.GetComponent<DropItem>().Init(Data.Instance.GetItemInfo(PassivesTemp[random]), DropItemType.UnlockShop);
                 SpawnItem.transform.position = _passivesShop.transform.GetChild(i).position;
                 PassivesTemp.RemoveAt(random);
@@ -548,7 +554,7 @@ public class GameManager : MonoBehaviour
             if (i < Data.Instance.CharacterSaveData._unlockItemId.Count)
             {
                 int random = UnityEngine.Random.Range(0, GoldShopTemp.Count);
-                GameObject SpawnItem = Instantiate(Data.Instance.ItemPrefab);
+                GameObject SpawnItem = Instantiate(Data.Instance.ItemPrefab, _itemPool.transform);
                 SpawnItem.GetComponent<DropItem>().Init(Data.Instance.GetItemInfo(GoldShopTemp[random]), DropItemType.Shop);
                 SpawnItem.transform.position = stageShopPosition.transform.GetChild(i).position;
                 GoldShopTemp.RemoveAt(random);
@@ -593,6 +599,9 @@ public class GameManager : MonoBehaviour
                     case floor.f3:
                         CreateSpawnList(_spawnPoint1s3f);
                         EliteMonsterSpawn(_eliteSpawnPoint1s3f);
+                        break;
+                    case floor.fBoss:
+                        ClearBoxSpawn();
                         break;
                 }
                 break;
@@ -722,6 +731,14 @@ public class GameManager : MonoBehaviour
         _stageClear = true;
         EventEliteMonsterDie?.Invoke(this, EventArgs.Empty);
     }
+
+    void ClearBoxSpawn()
+    {
+        GameObject ClearBox = Instantiate(_clearBox);
+        ClearBox.transform.position = _ClearBoxPos.transform.position;
+        ClearBox.GetComponent<Box>().InitBox(BoxType.Clear);
+    }
+
 
     //몬스터 ai 구현(종류별로 하나씩 추가)
     #endregion

@@ -482,7 +482,7 @@ public class Monster : MonoBehaviour
 
     void ItemDrop()
     {
-        GameObject go = Instantiate(Data.Instance.ItemPrefab);
+        GameObject go = Instantiate(Data.Instance.ItemPrefab, GameManager.Instance.ItemPool.transform);
         go.transform.position = transform.position;
         int dropCount = UnityEngine.Random.Range(3, 5);
 

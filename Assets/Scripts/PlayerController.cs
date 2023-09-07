@@ -354,6 +354,7 @@ public class PlayerController : MonoBehaviour
             else if (hitdata.collider.tag == "Box")
             {
                 //상자 아이템 기능구현
+                hitdata.collider.GetComponent<Box>().OpenBox();
             }
             else if (hitdata.collider.tag == "Door") // Door이(가) 힛데이타에 태그로 들어왓다면
             {

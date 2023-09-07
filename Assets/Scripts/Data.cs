@@ -521,6 +521,12 @@ public enum floor
     fBoss = 3,
 }
 
+public enum BoxType
+{
+    Normal,
+    Clear,
+}
+
 #endregion
 
 
