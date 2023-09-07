@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 
 public class ItemUI : MonoBehaviour
 {
@@ -9,13 +10,10 @@ public class ItemUI : MonoBehaviour
     [SerializeField] GameObject _itemInfo;
     [SerializeField] GameObject _itemName;
 
-    void Start()
-    {
-        ItemUIInit();
-    }
 
-    void ItemUIInit()
+    public void ItemUIInit()
     {
+        gameObject.SetActive(true);
         _itemInfo.SetActive(false);
         _itemName.SetActive(false);
         _itemPrice.SetActive(false);
@@ -24,15 +22,23 @@ public class ItemUI : MonoBehaviour
     public void ActiveItemPrice(int price)
     {
         _itemPrice.GetComponent<Text>().text = price.ToString();
+        _itemPrice.gameObject.SetActive(true);
     }
 
     // 아이템을 먹을 경우 아이템 이름 애니메이션 출력
 
-    public void ActiveItemInfo(string info)
+    public void ActiveItemName(string itemName)
     {
-        _itemInfo.GetComponent<Text>().text = info;
+        _itemName.GetComponent<Text>().text = itemName;
+        _itemName.gameObject.SetActive(true);
     }
 
     // 아이템 기준 십자 위치에 플레이어가 있을경우 아이템 설명 유아이 출력
+
+    public void ActiveItemInfo(String info)
+    {
+        _itemInfo.GetComponent<Text>().text = info;
+        _itemInfo.gameObject.SetActive(true);
+    }
 
 }

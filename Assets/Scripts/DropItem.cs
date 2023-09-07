@@ -7,6 +7,11 @@ public class DropItem : MonoBehaviour
     Item _item;
     DropItemType _type;
 
+    private void Start()
+    {
+        _itemUI.ItemUIInit();
+    }
+
     public DropItemType ItemType
     {
         private set { _type = value; }
