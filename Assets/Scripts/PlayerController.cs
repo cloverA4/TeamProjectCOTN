@@ -343,13 +343,17 @@ public class PlayerController : MonoBehaviour
         RaycastHit2D hitdata = Physics2D.Raycast(Temp, vec, 0.5f, _normalLayerMask);
 
         if (hitdata)
-        {   
+        {
             if (hitdata.collider.tag == "WeedWall") // weedwall이 힛데이타에 태그로 들어왓다면
             {
                 //Debug.Log(hitdata.collider.gameObject); // 힛데이타콜라이더게임오브젝트에 대한 정보가 출력된다
                 //Destroy(hitdata.collider.gameObject); // 힛데이타콜라이더게임오브젝트를 파괴한다
                 //setActive활용해서 벽부수는 표현해보기
                 hitdata.collider.GetComponent<Wall>().DamageWall(_shovelPower);
+            }
+            else if (hitdata.collider.tag == "Box")
+            {
+                //상자 아이템 기능구현
             }
             else if (hitdata.collider.tag == "Door") // Door이(가) 힛데이타에 태그로 들어왓다면
             {
@@ -367,14 +371,14 @@ public class PlayerController : MonoBehaviour
             {
                 _childSpriteRenderer.sortingOrder = (int)(transform.position.y - 1) * -1; // 레이어 값변환
                 Move(vec);
-            }            
+            }
             else if (hitdata.collider.tag == "Item")
             {
                 _childSpriteRenderer.sortingOrder = (int)(transform.position.y - 1) * -1; // 레이어 값변환
                 Move(vec);
 
                 DropItem dropItem = hitdata.collider.GetComponent<DropItem>();
-                switch(dropItem.ItemType)
+                switch (dropItem.ItemType)
                 {
                     case DropItemType.Drop:
                         switch (dropItem.Item._itemType)
@@ -396,7 +400,7 @@ public class PlayerController : MonoBehaviour
                                 break;
                         }
                         break;
-                    case DropItemType.Shop:                        
+                    case DropItemType.Shop:
                         BuyGoldItem(dropItem);
                         break;
                     case DropItemType.UnlockShop:
@@ -412,7 +416,7 @@ public class PlayerController : MonoBehaviour
                             case ItemType.Unlock:
                                 UnlockPassiveItem(dropItem);
                                 break;
-                        }                        
+                        }
                         break;
                 }
             }
@@ -425,19 +429,6 @@ public class PlayerController : MonoBehaviour
         //_MakeFog2.UpdateFogOfWar();
 
     }
-
-
-
-    void GreatSwordAttack(Vector3 direction)
-    {
-       
-
-        // 대검 범위 내에 있는 모든 콜라이더들을 검출
-
-
-
-    }
-
 
     void GetItem(DropItem dropItem)
     {
