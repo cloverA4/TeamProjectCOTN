@@ -1,3 +1,4 @@
+using Unity.Burst.CompilerServices;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -10,6 +11,7 @@ public class PlayerController : MonoBehaviour
     bool _fixanime = false;
     LayerMask _normalLayerMask;
     LayerMask _weaponCheckLayerMask;
+    LayerMask _itemCheckLayerMask;
     
     [SerializeField] MakeFog2 _MakeFog2;
     [SerializeField] SaveInfoData UnlockSaveData;
@@ -127,6 +129,9 @@ public class PlayerController : MonoBehaviour
         _childSpriteRenderer = GetComponentsInChildren<SpriteRenderer>()[1];
         IsX = true;
         //Debug.Log(GameManager.Instance.NowStage); 스테이지확인
+
+        
+
         _normalLayerMask =
                   (1 << LayerMask.NameToLayer("Wall")) |
                   (1 << LayerMask.NameToLayer("Npc")) |
@@ -137,6 +142,9 @@ public class PlayerController : MonoBehaviour
         _weaponCheckLayerMask =
                   (1 << LayerMask.NameToLayer("Wall")) |
                   (1 << LayerMask.NameToLayer("Monster"));
+
+        _itemCheckLayerMask =
+                  (1 << LayerMask.NameToLayer("DropItem"));
     }
 
     // Update is called once per frame
@@ -170,7 +178,6 @@ public class PlayerController : MonoBehaviour
 
             if (Input.GetKeyDown(KeyCode.UpArrow)) // 위 화살표를 입력 받았을때
             {
-                Debug.Log(_equipWeapon.weaponType);
                 if (GameManager.Instance.NowStage != Stage.Lobby && GameManager.Instance.NowFloor != floor.fBoss)
                 {
                     if (!GameManager.Instance.IsSuccess()) return;
@@ -243,7 +250,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-  
+
 
     //IEnumerator SmoothMove(Vector3 targetPosition) // 충돌체가 먼저 앞에 있어야하므로 이구문은 사용x
     //{
@@ -270,15 +277,41 @@ public class PlayerController : MonoBehaviour
     //    }
     //}
 
+    private void OnDrawGizmos() //확인용
+    {
+        Vector2[] UDLR = { Vector2.up, Vector2.down, Vector2.left, Vector2.right };
+        foreach (Vector2 urdr in UDLR)
+        {
+            RaycastHit2D hit = Physics2D.Raycast(transform.position, urdr, 1f, _itemCheckLayerMask);
+            if (hit)
+            {
+                Debug.DrawLine(transform.position, hit.point, Color.green);
+                // 충돌한 물체가 "Item" 태그를 가진 경우
+            }
+        }
+    }
 
     void MoveCharacter(Vector3 vec)
     {
         Vector3 Temp = transform.position + vec / 2;
 
+        Vector2[] UDLR = { Vector2.up, Vector2.down, Vector2.left, Vector2.right };
 
-        //if (hitdata2)
-        //{
-        //}
+        foreach (Vector2 urdr in UDLR)
+        {
+            RaycastHit2D NearItemCheck = Physics2D.Raycast(transform.position, urdr, 1f, _itemCheckLayerMask);
+            if (NearItemCheck)
+            {
+                // 충돌한 물체가 "Item" 태그를 가진 경우
+                if (NearItemCheck.collider.CompareTag("Item"))
+                {
+                    Debug.Log("레이가 'item' 태그를 가진 물체와 충돌했습니다: " + NearItemCheck.collider.gameObject.name);
+                    // ui기능 호출.
+                }
+            }
+        }
+
+
 
         switch (_equipWeapon.weaponType)
         {
