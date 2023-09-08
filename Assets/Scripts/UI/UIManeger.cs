@@ -278,15 +278,6 @@ public class UIManeger : MonoBehaviour
 
     #endregion
 
-    #region NoteCreate
-
-    void createNote()
-    {
-
-    }
-
-    #endregion
-
     #region FadeIn , FadeOut
     public IEnumerator FadeIn()
     {

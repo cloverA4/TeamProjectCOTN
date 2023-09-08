@@ -1,7 +1,9 @@
 using UnityEngine;
+using static UnityEditor.Progress;
 
 public class DropItem : MonoBehaviour
 {
+    [SerializeField] GameObject _ItemNameCanvas;
     [SerializeField] SpriteRenderer _ItemIcon;
     [SerializeField] ItemUI _itemUI;
     Item _item;
@@ -78,8 +80,45 @@ public class DropItem : MonoBehaviour
         }
     }
 
+    public void OpenItemInfo()
+    {
+        switch (_item._itemType)
+        {
+            case ItemType.Currency:
+                Currency cr = (Currency)_item;
+                _itemUI.ActiveItemInfo(cr._Name);
+                break;
+            case ItemType.Shovel:
+                Shovel sv = (Shovel)_item;
+                _itemUI.ActiveItemInfo(sv.ItemInfo);
+                break;
+            case ItemType.Weapon:
+                Weapon wp = (Weapon)_item;
+                _itemUI.ActiveItemInfo(wp.ItemInfo);
+                break;
+            case ItemType.Armor:
+                Armor ar = (Armor)_item;
+                _itemUI.ActiveItemInfo(ar.ItemInfo);
+                break;
+            case ItemType.Potion:
+                Potion po = (Potion)_item;
+                _itemUI.ActiveItemInfo(po.ItemInfo);
+                break;
+            case ItemType.Unlock:
+                UnlockItem ul = (UnlockItem)_item;
+                _itemUI.ActiveItemInfo(ul.ItemInfo);
+                break;
+        }
+    }
+
+    public void CloseItemInfo()
+    {
+        _itemUI.CloseInfo();
+    }
+
     public void ChangeItem(Item Changeitem)
     {
+        CreateItemNameUI();
         _item = Changeitem;
         _ItemIcon.sprite = _item._ItemIcon;
         _dropItemType = DropItemType.Drop;
@@ -87,7 +126,15 @@ public class DropItem : MonoBehaviour
 
     public void DeleteDropItem()
     {
+        CreateItemNameUI();
         Destroy(gameObject);
+    }
+
+    public void CreateItemNameUI()
+    {
+        GameObject go = Instantiate(_ItemNameCanvas);
+        go.transform.position = transform.position;
+        go.GetComponent<ItemNameCanvas>().InitItemNameUI(_item._Name);
     }
 }
 
@@ -98,3 +145,5 @@ public enum DropItemType
     Shop,
     UnlockShop,
 }
+
+

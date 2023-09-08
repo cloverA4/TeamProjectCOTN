@@ -127,6 +127,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89ba88d4110661d4982e269133120495, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _ItemNameCanvas: {fileID: 9104242054623225975, guid: 31dbefbc0189eac4bbb4b3628059903a,
+    type: 3}
   _ItemIcon: {fileID: 3911639001723662455}
   _itemUI: {fileID: 2313280323686534934}
 --- !u!61 &-3985946709388796626

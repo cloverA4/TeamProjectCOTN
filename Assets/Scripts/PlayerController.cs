@@ -19,6 +19,8 @@ public class PlayerController : MonoBehaviour
 
     float _lobbyMoveDelay = 0f;
 
+    [SerializeField] UIManeger _uiManeger;
+
     public bool IsX { get; private set; }
 
     //캐릭터 데이터
@@ -81,13 +83,45 @@ public class PlayerController : MonoBehaviour
 
         
     Shovel _equipShovel;
-    public Shovel EquipShovel { get { return _equipShovel; } }
+    public Shovel EquipShovel 
+    { 
+        get { return _equipShovel; }
+        set 
+        {
+            _equipShovel = value;
+            _uiManeger.UpdataShovel();
+        }
+    }
     Weapon _equipWeapon;
-    public Weapon EquipWeapon { get { return _equipWeapon; } }
+    public Weapon EquipWeapon 
+    {
+        get { return _equipWeapon; }
+        set
+        {
+            _equipWeapon = value;
+            _uiManeger.UpdataWeapon();
+        }
+    }
     Armor _equipArmor;
-    public Armor EquipArmor { get { return _equipArmor; } }
+    public Armor EquipArmor 
+    {
+        get { return _equipArmor; }
+        set
+        {
+            _equipArmor = value;
+            _uiManeger.UpdateArmor();
+        }
+    }
     Potion _equipPotion;
-    public Potion EquipPotion { get { return _equipPotion; } }
+    public Potion EquipPotion 
+    { 
+        get { return _equipPotion; }
+        set
+        {
+            _equipPotion = value;
+            _uiManeger.UpdatePotion();
+        }
+    }
 
     private float moveSpeed = 10f;
     private bool isMoving = false;
@@ -163,7 +197,7 @@ public class PlayerController : MonoBehaviour
             //물약
             if(Input.GetKeyDown(KeyCode.UpArrow))
             {
-                if (_equipPotion == null) return;
+                if (EquipPotion == null) return;
                 else
                 {
                     if (GameManager.Instance.NowStage != Stage.Lobby && GameManager.Instance.NowFloor != floor.fBoss)
@@ -296,7 +330,7 @@ public class PlayerController : MonoBehaviour
     {
         Vector3 Temp = transform.position + vec / 2;
 
-        switch (_equipWeapon.weaponType)
+        switch (EquipWeapon.weaponType)
         {
             case WeaponType.Dagger:
                 RaycastHit2D hitdataTypeDagger = Physics2D.Raycast(Temp, vec, 0.5f, _weaponCheckLayerMask);
@@ -455,78 +489,78 @@ public class PlayerController : MonoBehaviour
                 Shovel shovel = (Shovel)dropItem.Item;
                 Debug.Log($"먹을 아이템 {dropItem.Item._ItemID}");
 
-                if(_equipShovel != null)
+                if(EquipShovel != null)
                 {
                     //장착중인 삽이 있으면
                     Shovel temp = new Shovel();
-                    temp = _equipShovel;
-                    _equipShovel = shovel;
+                    temp = EquipShovel;
+                    EquipShovel = shovel;
                     dropItem.ChangeItem(temp);
-                    Debug.Log($"착용한 아이템 {_equipShovel._ItemID}");
+                    Debug.Log($"착용한 아이템 {EquipShovel._ItemID}");
                     Debug.Log($"버려진 아이템 {dropItem.Item._ItemID}");
                     return;
                 }
                 else
                 {
-                    _equipShovel = shovel;
+                    EquipShovel = shovel;
                 }
                 break;
             case ItemType.Weapon:
                 Weapon weapon = (Weapon)dropItem.Item;
                 Debug.Log($"먹을 아이템 {dropItem.Item._ItemID}");
 
-                if(_equipWeapon != null)
+                if(EquipWeapon != null)
                 {
                     Weapon temp = new Weapon();
-                    temp = _equipWeapon;
-                    _equipWeapon = weapon;
+                    temp = EquipWeapon;
+                    EquipWeapon = weapon;
                     dropItem.ChangeItem(temp);
 
-                    Debug.Log($"착용한 아이템 {_equipWeapon._ItemID}");
+                    Debug.Log($"착용한 아이템 {EquipWeapon._ItemID}");
                     Debug.Log($"버려진 아이템 {dropItem.Item._ItemID}");
                     return;
                 }
                 else
                 {
-                    _equipWeapon = weapon;
+                    EquipWeapon = weapon;
                 }
                 break;
             case ItemType.Armor:
                 Armor armor = (Armor)dropItem.Item;
                 Debug.Log($"먹을 아이템 {dropItem.Item._ItemID}");
-                if (_equipArmor != null)
+                if (EquipArmor != null)
                 {
                     Armor temp = new Armor();
-                    temp = _equipArmor;
-                    _equipArmor = armor;
+                    temp = EquipArmor;
+                    EquipArmor = armor;
                     dropItem.ChangeItem(temp);
 
-                    Debug.Log($"착용한 아이템 {_equipArmor._ItemID}");
+                    Debug.Log($"착용한 아이템 {EquipArmor._ItemID}");
                     Debug.Log($"버려진 아이템 {dropItem.Item._ItemID}");
                     return;
                 }
                 else
                 {
-                    _equipArmor = armor;
+                    EquipArmor = armor;
                 }
                 break;
             case ItemType.Potion:
                 Potion potion = (Potion)dropItem.Item;
                 Debug.Log($"먹을 아이템 {dropItem.Item._ItemID}");
-                if (_equipPotion != null)
+                if (EquipPotion != null)
                 {
                     Potion temp = new Potion();
-                    temp = _equipPotion;
-                    _equipPotion = potion;
+                    temp = EquipPotion;
+                    EquipPotion = potion;
                     dropItem.ChangeItem(temp);
 
-                    Debug.Log($"착용한 아이템 {_equipPotion._ItemID}");
+                    Debug.Log($"착용한 아이템 {EquipPotion._ItemID}");
                     Debug.Log($"버려진 아이템 {dropItem.Item._ItemID}");
                     return;
                 }
                 else
                 {
-                    _equipPotion = potion;
+                    EquipPotion = potion;
                 }
                 break;
         }
@@ -714,8 +748,8 @@ public class PlayerController : MonoBehaviour
 
     void UsePotion()
     {
-        if (NowHP < MaxHP) NowHP += _equipPotion.Heal;
-        _equipPotion = null;
+        if (NowHP < MaxHP) NowHP += EquipPotion.Heal;
+        EquipPotion = null;
         //유아이 업데이트
     }
 
@@ -725,42 +759,42 @@ public class PlayerController : MonoBehaviour
 
         if (Data.Instance.CharacterSaveData._equipShovelID != 0)
         {
-            _equipShovel = (Shovel)Data.Instance.GetItemInfo(Data.Instance.CharacterSaveData._equipShovelID);
+            EquipShovel = (Shovel)Data.Instance.GetItemInfo(Data.Instance.CharacterSaveData._equipShovelID);
         }
         else
         {
             Debug.Log("기본삽 장착");
-            _equipShovel = (Shovel)Data.Instance.GetItemInfo(201);
+            EquipShovel = (Shovel)Data.Instance.GetItemInfo(201);
         }
 
 
         if (Data.Instance.CharacterSaveData._equipWeaponID != 0)
         {
-            _equipWeapon = (Weapon)Data.Instance.GetItemInfo(Data.Instance.CharacterSaveData._equipWeaponID);
+            EquipWeapon = (Weapon)Data.Instance.GetItemInfo(Data.Instance.CharacterSaveData._equipWeaponID);
         }
         else
         {
             Debug.Log("기본무기 장착");
-            _equipWeapon = (Weapon)Data.Instance.GetItemInfo(301);
+            EquipWeapon = (Weapon)Data.Instance.GetItemInfo(301);
         }
 
 
         if (Data.Instance.CharacterSaveData._equipArmorID != 0)
         {
-            _equipArmor = (Armor)Data.Instance.GetItemInfo(Data.Instance.CharacterSaveData._equipArmorID);
+            EquipArmor = (Armor)Data.Instance.GetItemInfo(Data.Instance.CharacterSaveData._equipArmorID);
         }
         else
         {
-            _equipArmor = null;
+            EquipArmor = null;
         }
 
         if (Data.Instance.CharacterSaveData._equipPotionID != 0)
         {
-            _equipPotion = (Potion)Data.Instance.GetItemInfo(Data.Instance.CharacterSaveData._equipPotionID);
+            EquipPotion = (Potion)Data.Instance.GetItemInfo(Data.Instance.CharacterSaveData._equipPotionID);
         }
         else
         {
-            _equipArmor = null;
+            EquipArmor = null;
         }
 
         //캐릭터 스텟
@@ -787,22 +821,22 @@ public class PlayerController : MonoBehaviour
         else _nowHp = Data.Instance.CharacterSaveData._nowHP;
 
         //공격력
-        if (_equipWeapon != null)
+        if (EquipWeapon != null)
         {
-            _damage += _equipWeapon.Attack;
+            _damage += EquipWeapon.Attack;
         }
         Debug.Log($"현재 공격력" + _damage);
 
         //방어력
-        if (_equipArmor != null)
+        if (EquipArmor != null)
         {
-            _def += _equipArmor.Defence;
+            _def += EquipArmor.Defence;
         }
 
         //삽 공격력
-        if(_equipShovel != null)
+        if(EquipShovel != null)
         {
-            _shovelPower += _equipShovel.ShovelPower;
+            _shovelPower += EquipShovel.ShovelPower;
         }
        
         //코인배수 - 콤보구현을 어디서 하냐에 따라서 거기에 적용
@@ -811,10 +845,10 @@ public class PlayerController : MonoBehaviour
 
     public void BaseItemEquip()
     {
-        _equipShovel = (Shovel)Data.Instance.GetItemInfo(201);
-        _equipWeapon = (Weapon)Data.Instance.GetItemInfo(301);
-        _equipArmor = null;
-        _equipPotion = null;
+        EquipShovel = (Shovel)Data.Instance.GetItemInfo(201);
+        EquipWeapon = (Weapon)Data.Instance.GetItemInfo(301);
+        EquipArmor = null;
+        EquipPotion = null;
     }
 
     void Death()

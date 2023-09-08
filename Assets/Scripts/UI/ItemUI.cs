@@ -30,6 +30,11 @@ public class ItemUI : MonoBehaviour
         //다이아상점
     }
 
+    public void CloseInfo()
+    {
+        //정보 끄기
+    }
+
     // 아이템을 먹을 경우 아이템 이름 애니메이션 출력
 
     public void ActiveItemName(string itemName)
