@@ -235,7 +235,6 @@ public class UIManeger : MonoBehaviour
             return;
         }
         _shovelSlot.gameObject.SetActive(false);
-
     }
     public void UpdataWeapon()
     {
