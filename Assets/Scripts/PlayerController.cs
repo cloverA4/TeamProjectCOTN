@@ -179,7 +179,8 @@ public class PlayerController : MonoBehaviour
                   (1 << LayerMask.NameToLayer("Monster"));
 
         _itemCheckLayerMask =
-                  (1 << LayerMask.NameToLayer("DropItem"));
+                  (1 << LayerMask.NameToLayer("DropItem")) |
+                  (1 << LayerMask.NameToLayer("ExitItemCheck"));
     }
 
     // Update is called once per frame
@@ -723,9 +724,10 @@ public class PlayerController : MonoBehaviour
 
         Vector2[] UDLR = { Vector2.up, Vector2.down, Vector2.left, Vector2.right };
 
-        foreach (Vector2 urdr in UDLR)
+        foreach (Vector3 urdr in UDLR)
         {
-            RaycastHit2D NearItemCheck = Physics2D.Raycast(transform.position, urdr, 1f, _itemCheckLayerMask);
+            Vector3 temp = transform.position + urdr / 2;
+            RaycastHit2D NearItemCheck = Physics2D.Raycast(transform.position, temp, 0.5f, _itemCheckLayerMask);
             if (NearItemCheck)
             {
                 // 충돌한 물체가 "Item" 태그를 가진 경우
@@ -733,17 +735,24 @@ public class PlayerController : MonoBehaviour
                 {
                     Debug.Log("레이가 'item' 태그를 가진 물체와 충돌했습니다: " + NearItemCheck.collider.gameObject.name);
                     // ui기능 호출.
+                    NearItemCheck.collider.GetComponent<DropItem>().OpenItemInfo();
                 }
+                else if (NearItemCheck.collider.CompareTag("ExitItemCheck"))
+                {
+                    Debug.Log("'item' 태그를 가진 물체와 멀어졌습니다");
+                    NearItemCheck.collider.GetComponentInParent<DropItem>().CloseItemInfo();
+                }
+
             }
         }
 
-        PlayerMoveEvent?.Invoke(this, EventArgs.Empty);
+        //PlayerMoveEvent?.Invoke(this, EventArgs.Empty);
     }
-    public event EventHandler PlayerMoveEvent;
+    //public event EventHandler PlayerMoveEvent;
     public void transfromUpdate(Vector3 vec)
     {
         transform.position = vec;
-        PlayerMoveEvent?.Invoke(this, EventArgs.Empty);
+        //PlayerMoveEvent?.Invoke(this, EventArgs.Empty);
     }
 
     void UsePotion()
