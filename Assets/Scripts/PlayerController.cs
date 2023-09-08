@@ -1,4 +1,4 @@
-using Unity.Burst.CompilerServices;
+using System;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -14,7 +14,8 @@ public class PlayerController : MonoBehaviour
     LayerMask _itemCheckLayerMask;
     
     [SerializeField] MakeFog2 _MakeFog2;
-    [SerializeField] SaveInfoData UnlockSaveData;
+    [SerializeField] SaveInfoData _unlockSaveData;
+    public SaveInfoData UnlockSaveData { get { return _unlockSaveData; } }
 
     float _lobbyMoveDelay = 0f;
 
@@ -295,24 +296,6 @@ public class PlayerController : MonoBehaviour
     {
         Vector3 Temp = transform.position + vec / 2;
 
-        Vector2[] UDLR = { Vector2.up, Vector2.down, Vector2.left, Vector2.right };
-
-        foreach (Vector2 urdr in UDLR)
-        {
-            RaycastHit2D NearItemCheck = Physics2D.Raycast(transform.position, urdr, 1f, _itemCheckLayerMask);
-            if (NearItemCheck)
-            {
-                // 충돌한 물체가 "Item" 태그를 가진 경우
-                if (NearItemCheck.collider.CompareTag("Item"))
-                {
-                    Debug.Log("레이가 'item' 태그를 가진 물체와 충돌했습니다: " + NearItemCheck.collider.gameObject.name);
-                    // ui기능 호출.
-                }
-            }
-        }
-
-
-
         switch (_equipWeapon.weaponType)
         {
             case WeaponType.Dagger:
@@ -412,7 +395,7 @@ public class PlayerController : MonoBehaviour
                 Move(vec);
 
                 DropItem dropItem = hitdata.collider.GetComponent<DropItem>();
-                switch (dropItem.ItemType)
+                switch (dropItem.DropItemType)
                 {
                     case DropItemType.Drop:
                         switch (dropItem.Item._itemType)
@@ -646,11 +629,11 @@ public class PlayerController : MonoBehaviour
                 break;
         }
         int needDia = -1;
-        for (int j = 0; j < UnlockSaveData.unlockNeedDias.Count; j++)
+        for (int j = 0; j < _unlockSaveData.unlockNeedDias.Count; j++)
         {
-            if (UnlockSaveData.unlockNeedDias[j].level == level)
+            if (_unlockSaveData.unlockNeedDias[j].level == level)
             {
-                needDia = UnlockSaveData.unlockNeedDias[j].NeedDia;
+                needDia = _unlockSaveData.unlockNeedDias[j].NeedDia;
             }
         }
 
@@ -699,16 +682,34 @@ public class PlayerController : MonoBehaviour
             _animator.SetTrigger("Down");
         }
 
-        if (GameManager.Instance.NowStage == Stage.Lobby || GameManager.Instance.NowFloor == floor.fBoss)
+        if (GameManager.Instance.NowStage != Stage.Lobby && GameManager.Instance.NowFloor != floor.fBoss)
         {
-            return;
+            _MakeFog2.UpdateFogOfWar();
         }
-        _MakeFog2.UpdateFogOfWar();
-    }
 
+        Vector2[] UDLR = { Vector2.up, Vector2.down, Vector2.left, Vector2.right };
+
+        foreach (Vector2 urdr in UDLR)
+        {
+            RaycastHit2D NearItemCheck = Physics2D.Raycast(transform.position, urdr, 1f, _itemCheckLayerMask);
+            if (NearItemCheck)
+            {
+                // 충돌한 물체가 "Item" 태그를 가진 경우
+                if (NearItemCheck.collider.CompareTag("Item"))
+                {
+                    Debug.Log("레이가 'item' 태그를 가진 물체와 충돌했습니다: " + NearItemCheck.collider.gameObject.name);
+                    // ui기능 호출.
+                }
+            }
+        }
+
+        PlayerMoveEvent?.Invoke(this, EventArgs.Empty);
+    }
+    public event EventHandler PlayerMoveEvent;
     public void transfromUpdate(Vector3 vec)
     {
         transform.position = vec;
+        PlayerMoveEvent?.Invoke(this, EventArgs.Empty);
     }
 
     void UsePotion()
