@@ -15,9 +15,14 @@ public class Monster : MonoBehaviour
     bool _attackReady;
     Vector3 MonsterLook = Vector3.zero;
 
+    Animator _animator;
+    SpriteRenderer _childSpriteRenderer;
+
     void Start()
     {
         //GameManager.Instance.MosterMoveEnvent += new EventHandler(MonsterMove);
+        _animator = GetComponentsInChildren<Animator>()[0];
+        _childSpriteRenderer = GetComponentsInChildren<SpriteRenderer>()[1];
     }
 
     public void Init(MonsterType Type) //몬스터 타입 별 기본값 세팅
@@ -158,13 +163,25 @@ public class Monster : MonoBehaviour
 
             if (transform.position.x == PlayerController.Instance.transform.position.x)
             {
-                if (transform.position.y > PlayerController.Instance.transform.position.y) action(Vector3.down);
-                else action(Vector3.up);
+                if (transform.position.y > PlayerController.Instance.transform.position.y)
+                {
+                    action(Vector3.down);
+                }
+                else
+                {
+                    action(Vector3.up);
+                }
             }
             else if (transform.position.y == PlayerController.Instance.transform.position.y)
             {
-                if (transform.position.x > PlayerController.Instance.transform.position.x) action(Vector3.left);
-                else action(Vector3.right);
+                if (transform.position.x > PlayerController.Instance.transform.position.x)
+                {
+                    action(Vector3.left);
+                }
+                else
+                {
+                    action(Vector3.right);
+                }
             }
             else
             {
@@ -333,12 +350,14 @@ public class Monster : MonoBehaviour
                 Temp = transform.position + Vector3.right / 2;
                 hitdata = Physics2D.Raycast(Temp, Vector3.right, 0.5f);
                 vec = Vector3.right;
+                _animator.SetTrigger("Right");
             }
             else
             {
                 Temp = transform.position + Vector3.left / 2;
                 hitdata = Physics2D.Raycast(Temp, Vector3.left, 0.5f);
                 vec = Vector3.left;
+                _animator.SetTrigger("Left");
             }
 
             if (!hitdata)
@@ -354,12 +373,14 @@ public class Monster : MonoBehaviour
                 Temp = transform.position + Vector3.up / 2;
                 hitdata = Physics2D.Raycast(Temp, Vector3.up, 0.5f);
                 vec = Vector3.up;
+                _animator.SetTrigger("Up");
             }
             else
             {
                 Temp = transform.position + Vector3.down / 2;
                 hitdata = Physics2D.Raycast(Temp, Vector3.down, 0.5f);
                 vec = Vector3.down;
+                _animator.SetTrigger("Down");
             }
 
             if (!hitdata)
@@ -391,7 +412,26 @@ public class Monster : MonoBehaviour
     void MoveMonster()
     {
         transform.position += MonsterLook;
-        //GetComponent<SpriteRenderer>().sortingOrder = (int)(transform.position.y - 1) * -1;
+        if (MonsterLook == Vector3.right)
+        {
+            _animator.SetTrigger("Right");
+            _childSpriteRenderer.flipX = true;
+        }
+        else if (MonsterLook == Vector3.left)
+        {
+            _animator.SetTrigger("Left");
+            _childSpriteRenderer.flipX = false;
+        }
+        else if (MonsterLook == Vector3.up)
+        {
+            _animator.SetTrigger("Up");
+        }
+        else if (MonsterLook == Vector3.down)
+        {
+            _animator.SetTrigger("Down");
+        }
+        // 자식스프라이트 Layer값 이동시 바꾸기
+        _childSpriteRenderer.sortingOrder = (int)(transform.position.y - 1) * -1;
     }
 
     void MoveMonster2(Vector3 vec)
