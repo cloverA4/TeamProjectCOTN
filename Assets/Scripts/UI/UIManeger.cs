@@ -44,7 +44,7 @@ public class UIManeger : MonoBehaviour
     [SerializeField] Transform _InfoBase;
     int _maxInfoCount = 10;
 
-
+    [SerializeField] EquipmentIconMove _equipmentIconMove;
 
     private void Update()
     {
@@ -510,5 +510,8 @@ public class UIManeger : MonoBehaviour
     #endregion
 
 
-
+    public void IconMove(Item _item)
+    {
+        //_equipmentIconMove.ItemIconMove(_item);
+    }
 }

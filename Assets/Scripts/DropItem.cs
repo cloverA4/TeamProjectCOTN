@@ -126,15 +126,13 @@ public class DropItem : MonoBehaviour
 
     public void DeleteDropItem()
     {
-        CreateItemNameUI();
         Destroy(gameObject);
     }
 
     public void CreateItemNameUI()
     {
-        GameObject go = Instantiate(_ItemNameCanvas);
-        go.transform.position = transform.position;
-        go.GetComponent<ItemNameCanvas>().InitItemNameUI(_item._Name);
+        GameObject go = Instantiate(_ItemNameCanvas, transform);
+        go.GetComponent<ItemNameCanvas>().InitItemName(Item._Name);
     }
 }
 
