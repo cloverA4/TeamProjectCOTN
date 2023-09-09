@@ -313,19 +313,7 @@ public class PlayerController : MonoBehaviour
     //    }
     //}
 
-    private void OnDrawGizmos() //확인용
-    {
-        Vector2[] UDLR = { Vector2.up, Vector2.down, Vector2.left, Vector2.right };
-        foreach (Vector2 urdr in UDLR)
-        {
-            RaycastHit2D hit = Physics2D.Raycast(transform.position, urdr, 1f, _itemCheckLayerMask);
-            if (hit)
-            {
-                Debug.DrawLine(transform.position, hit.point, Color.green);
-                // 충돌한 물체가 "Item" 태그를 가진 경우
-            }
-        }
-    }
+    
 
     void MoveCharacter(Vector3 vec)
     {
@@ -694,6 +682,22 @@ public class PlayerController : MonoBehaviour
         dropItem.DeleteDropItem();
     }
 
+    private void OnDrawGizmos() //확인용
+    {
+        Vector2[] UDLR = { Vector2.up, Vector2.down, Vector2.left, Vector2.right };
+        
+        foreach (Vector3 urdr in UDLR)
+        {
+            Vector3 temp = transform.position + urdr / 2;
+            RaycastHit2D hit = Physics2D.Raycast(transform.position, temp, 0.5f, _itemCheckLayerMask);
+            if (hit)
+            {
+                Debug.DrawLine(transform.position, hit.point, Color.green);
+                // 충돌한 물체가 "Item" 태그를 가진 경우
+            }
+        }
+    }
+
     void Move(Vector3 vec)
     {
         transform.position += vec;
@@ -727,7 +731,7 @@ public class PlayerController : MonoBehaviour
         foreach (Vector3 urdr in UDLR)
         {
             Vector3 temp = transform.position + urdr / 2;
-            RaycastHit2D NearItemCheck = Physics2D.Raycast(transform.position, temp, 0.5f, _itemCheckLayerMask);
+            RaycastHit2D NearItemCheck = Physics2D.Raycast(temp, urdr, 0.5f, _itemCheckLayerMask);
             if (NearItemCheck)
             {
                 // 충돌한 물체가 "Item" 태그를 가진 경우
@@ -740,7 +744,7 @@ public class PlayerController : MonoBehaviour
                 else if (NearItemCheck.collider.CompareTag("ExitItemCheck"))
                 {
                     Debug.Log("'item' 태그를 가진 물체와 멀어졌습니다");
-                    NearItemCheck.collider.GetComponentInParent<DropItem>().CloseItemInfo();
+                    NearItemCheck.collider.GetComponentsInParent<DropItem>()[0].CloseItemInfo();
                 }
 
             }
