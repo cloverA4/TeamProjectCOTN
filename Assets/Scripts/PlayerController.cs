@@ -726,29 +726,29 @@ public class PlayerController : MonoBehaviour
             _MakeFog2.UpdateFogOfWar();
         }
 
-        Vector2[] UDLR = { Vector2.up, Vector2.down, Vector2.left, Vector2.right };
-
-        foreach (Vector3 urdr in UDLR)
+        
+        Vector2[] directions = { Vector2.up, Vector2.down, Vector2.left, Vector2.right };
+        foreach (Vector2 direction in directions)
         {
-            Vector3 temp = transform.position + urdr / 2;
-            RaycastHit2D NearItemCheck = Physics2D.Raycast(temp, urdr, 0.5f, _itemCheckLayerMask);
-            if (NearItemCheck)
-            {
-                // 충돌한 물체가 "Item" 태그를 가진 경우
-                if (NearItemCheck.collider.CompareTag("Item"))
-                {
-                    Debug.Log("레이가 'item' 태그를 가진 물체와 충돌했습니다: " + NearItemCheck.collider.gameObject.name);
-                    // ui기능 호출.
-                    NearItemCheck.collider.GetComponent<DropItem>().OpenItemInfo();
-                }
-                else if (NearItemCheck.collider.CompareTag("ExitItemCheck"))
-                {
-                    Debug.Log("'item' 태그를 가진 물체와 멀어졌습니다");
-                    NearItemCheck.collider.GetComponentsInParent<DropItem>()[0].CloseItemInfo();
-                }
+            Vector2 temp = (Vector2)transform.position + direction / 2f;
+            RaycastHit2D[] NearItemCheck = Physics2D.RaycastAll(temp, direction, 0.5f, _itemCheckLayerMask);
 
+            foreach (RaycastHit2D hit in NearItemCheck)
+            {
+                if (hit.collider.CompareTag("Item"))
+                {
+                    Debug.Log("레이가 'Item' 태그를 가진 물체와 충돌했습니다: " + hit.collider.gameObject.name);
+                    // UI 기능 호출
+                    hit.collider.GetComponent<DropItem>().OpenItemInfo();
+                }
+                else if (hit.collider.CompareTag("ExitItemCheck"))
+                {
+                    Debug.Log("'Item' 태그를 가진 물체와 멀어졌습니다");
+                    hit.collider.GetComponentInParent<DropItem>().CloseItemInfo();
+                }
             }
         }
+        
 
         //PlayerMoveEvent?.Invoke(this, EventArgs.Empty);
     }
