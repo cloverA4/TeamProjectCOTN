@@ -512,6 +512,6 @@ public class UIManeger : MonoBehaviour
 
     public void IconMove(Item _item)
     {
-        //_equipmentIconMove.ItemIconMove(_item);
+        _equipmentIconMove.ItemIconMove(_item);
     }
 }
