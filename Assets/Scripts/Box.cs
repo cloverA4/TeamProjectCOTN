@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Box : MonoBehaviour
@@ -15,6 +16,14 @@ public class Box : MonoBehaviour
         switch (_type)
         {
             case BoxType.Normal:
+                //해금된 모든 아이템 중 랜덤?
+
+                int random = UnityEngine.Random.Range(0, Data.Instance.CharacterSaveData._unlockItemId.Count);
+                int ItemID = Data.Instance.CharacterSaveData._unlockItemId[random];
+                
+                GameObject SpawnItem = Instantiate(Data.Instance.ItemPrefab, GameManager.Instance.ItemPool.transform);
+                SpawnItem.GetComponent<DropItem>().Init(Data.Instance.GetItemInfo(ItemID), DropItemType.Drop);
+                SpawnItem.transform.position = transform.position;
                 break;
             case BoxType.Clear:
 

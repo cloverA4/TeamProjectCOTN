@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using System.Linq;
+using UnityEditor.ShaderGraph.Internal;
 
 public class GameManager : MonoBehaviour
 {
@@ -10,8 +11,15 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject _dropItem;
     [SerializeField] MakeFog2 _MakeFog2;
     [SerializeField] GameObject _itemPool;
+
+    //박스 리젠용 변수들
     [SerializeField] GameObject _clearBox;
     [SerializeField] GameObject _ClearBoxPos;
+
+    [SerializeField] GameObject[] _boxSpawnPoint;
+
+    [SerializeField] GameObject _normalBox;
+    [SerializeField] GameObject _boxPool;
 
     public GameObject ItemPool { get { return _itemPool; } }
 
@@ -208,7 +216,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    void resetNote() // 노래중지, 노트전부 끄기
+    void ResetNote() // 노래중지, 노트전부 끄기
     {
         _audio.Stop();
         for (int i = 0; i < _pools.Count; i++)
@@ -303,8 +311,9 @@ public class GameManager : MonoBehaviour
 
         //초기화 및 로드
         ItemClear();
-        resetNote();
-        if(mt != null) StopCoroutine(mt);
+        ResetNote();
+        ResetBox();
+        if (mt != null) StopCoroutine(mt);
         if(sm != null) StopCoroutine(sm);
         //스테이지 배경음 설정
 
@@ -432,7 +441,7 @@ public class GameManager : MonoBehaviour
     public void StageFail()
     {
         //노래와 비트 중지
-        resetNote();
+        ResetNote();
         if (mt != null) StopCoroutine(mt);
         if (sm != null) StopCoroutine(sm);
 
@@ -453,7 +462,8 @@ public class GameManager : MonoBehaviour
 
     void ItemClear()
     {
-        for(int i = 0; i < _itemPool.transform.childCount; i++)
+        diaSpawnList.Clear();
+        for (int i = 0; i < _itemPool.transform.childCount; i++)
         {
             Destroy(_itemPool.transform.GetChild(i).gameObject);
         }
@@ -578,8 +588,10 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject _eliteMonsterPrefab;
     [SerializeField] GameObject _monsterPool;
 
+    
 
     List<Vector3> randomSpawnList = new List<Vector3>();
+    List<Vector3> diaSpawnList = new List<Vector3>();
     //몬스터 풀링/스폰 구현
     void LoadingMonster()
     {
@@ -618,15 +630,34 @@ public class GameManager : MonoBehaviour
 
         for (int i = 0; i < vecs.Length; i++)
         {
-            for(int j = 0; j < 4; j++)
+            for(int j = 0; j < vecs[i].GetComponent<Room>().Roomindex.Count; j++)
             {
-                int r = UnityEngine.Random.Range(0, vecs[i].GetComponent<Room>().Roomindex.Count);
-                randomSpawnList.Add(vecs[i].GetComponent<Room>().Roomindex[r]);
-                vecs[i].GetComponent<Room>().Roomindex.RemoveAt(r);
+                if(j < 4)
+                {
+                    int r = UnityEngine.Random.Range(0, vecs[i].GetComponent<Room>().Roomindex.Count);
+                    randomSpawnList.Add(vecs[i].GetComponent<Room>().Roomindex[r]);
+                    vecs[i].GetComponent<Room>().Roomindex.RemoveAt(r);
+                }
+                else
+                {
+                    diaSpawnList.Add(vecs[i].GetComponent<Room>().Roomindex[j-4]);
+                }
             }
         }
         SpawnMonster();
+        SpawnDropDia();
     }
+
+    void SpawnDropDia()
+    {
+        GameObject go = Instantiate(Data.Instance.ItemPrefab, GameManager.Instance.ItemPool.transform);
+        int randomIndex = UnityEngine.Random.Range(0, diaSpawnList.Count);
+        go.transform.position = diaSpawnList[randomIndex];
+
+        Currency cr = (Currency)Data.Instance.GetItemInfo(101);
+        cr.Count = 1;
+    }
+
     void ResetMonster()
     {
         randomSpawnList.Clear();
@@ -734,9 +765,33 @@ public class GameManager : MonoBehaviour
 
     void ClearBoxSpawn()
     {
-        GameObject ClearBox = Instantiate(_clearBox);
+        GameObject ClearBox = Instantiate(_clearBox, _boxPool.transform);
         ClearBox.transform.position = _ClearBoxPos.transform.position;
         ClearBox.GetComponent<Box>().InitBox(BoxType.Clear);
+    }
+
+    void NormalBoxSpawn()
+    {
+        switch (_nowStage)
+        {
+            case Stage.Stage1:
+                for (int i = 0; i < _boxSpawnPoint[(int)_nowFloor].transform.childCount; i++)
+                {
+                    GameObject go = Instantiate(_normalBox, _boxPool.transform);
+                    go.GetComponent<Box>().InitBox(BoxType.Normal);
+                }
+                break;
+            case Stage.Stage2:
+                break;
+        }
+    }
+
+    private void ResetBox()
+    {
+        for (int i = 0; i < _boxPool.transform.childCount; i++)
+        {
+            Destroy(_boxPool.transform.GetChild(i));
+        }
     }
 
 
