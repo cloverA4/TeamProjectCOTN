@@ -198,12 +198,14 @@ public class Monster : MonoBehaviour
                 }                
             }
 
-            GetComponentsInChildren<SpriteRenderer>()[1].color = Color.white;
+            //GetComponentsInChildren<SpriteRenderer>()[1].color = Color.white;
+            _animator.SetTrigger("Idle");
             _attackReady = false;
         }
         else
         {
-            GetComponentsInChildren<SpriteRenderer>()[1].color = Color.red;
+            //GetComponentsInChildren<SpriteRenderer>()[1].color = Color.red;
+            _animator.SetTrigger("AttackMotion");
             _attackReady = true;
         }
     }
