@@ -25,6 +25,7 @@ public class Box : MonoBehaviour
                 Currency cr = (Currency)Data.Instance.GetItemInfo(101);
                 cr.Count = dropCount;
                 go.GetComponent<DropItem>().Init(cr);
+                go.GetComponent<DropItem>().OpenItemInfo();
 
                 GameManager.Instance.EliteMonsterDie();
 

@@ -1,5 +1,6 @@
 using UnityEngine;
 using System;
+using System.Collections;
 
 public class Monster : MonoBehaviour
 {
@@ -512,11 +513,12 @@ public class Monster : MonoBehaviour
             //사망
             ItemDrop();
             gameObject.SetActive(false);
-            if(Type == MonsterType.EliteMonster)
+
+            if (Type == MonsterType.EliteMonster)
             {
                 GameManager.Instance.EliteMonsterDie();
             }
-        }        
+        }
         //유아이 체력삭제 호출
     }
 
@@ -528,7 +530,11 @@ public class Monster : MonoBehaviour
 
         Currency cr = (Currency)Data.Instance.GetItemInfo(102);
         cr.Count = dropCount;
+
         go.GetComponent<DropItem>().Init(cr);
+
+        if(Vector3.Distance(transform.position, PlayerController.Instance.transform.position) <= 1)
+        go.GetComponent<DropItem>().OpenItemInfo();
     }
 }
 

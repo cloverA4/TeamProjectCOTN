@@ -12,7 +12,7 @@ public class PlayerController : MonoBehaviour
     LayerMask _normalLayerMask;
     LayerMask _weaponCheckLayerMask;
     LayerMask _itemCheckLayerMask;
-    
+
     [SerializeField] MakeFog2 _MakeFog2;
     [SerializeField] SaveInfoData _unlockSaveData;
     public SaveInfoData UnlockSaveData { get { return _unlockSaveData; } }
@@ -81,19 +81,19 @@ public class PlayerController : MonoBehaviour
         set { _def = value; }
     }
 
-        
+
     Shovel _equipShovel;
-    public Shovel EquipShovel 
-    { 
+    public Shovel EquipShovel
+    {
         get { return _equipShovel; }
-        set 
+        set
         {
             _equipShovel = value;
             _uiManeger.UpdataShovel();
         }
     }
     Weapon _equipWeapon;
-    public Weapon EquipWeapon 
+    public Weapon EquipWeapon
     {
         get { return _equipWeapon; }
         set
@@ -103,7 +103,7 @@ public class PlayerController : MonoBehaviour
         }
     }
     Armor _equipArmor;
-    public Armor EquipArmor 
+    public Armor EquipArmor
     {
         get { return _equipArmor; }
         set
@@ -113,8 +113,8 @@ public class PlayerController : MonoBehaviour
         }
     }
     Potion _equipPotion;
-    public Potion EquipPotion 
-    { 
+    public Potion EquipPotion
+    {
         get { return _equipPotion; }
         set
         {
@@ -165,7 +165,7 @@ public class PlayerController : MonoBehaviour
         IsX = true;
         //Debug.Log(GameManager.Instance.NowStage); 스테이지확인
 
-        
+
 
         _normalLayerMask =
                   (1 << LayerMask.NameToLayer("Wall")) |
@@ -196,7 +196,7 @@ public class PlayerController : MonoBehaviour
             //특수기능들 구현
 
             //물약
-            if(Input.GetKeyDown(KeyCode.UpArrow))
+            if (Input.GetKeyDown(KeyCode.UpArrow))
             {
                 if (EquipPotion == null) return;
                 else
@@ -313,7 +313,7 @@ public class PlayerController : MonoBehaviour
     //    }
     //}
 
-    
+
 
     void MoveCharacter(Vector3 vec)
     {
@@ -478,7 +478,7 @@ public class PlayerController : MonoBehaviour
                 Shovel shovel = (Shovel)dropItem.Item;
                 Debug.Log($"먹을 아이템 {dropItem.Item._ItemID}");
 
-                if(EquipShovel != null)
+                if (EquipShovel != null)
                 {
                     //장착중인 삽이 있으면
                     Shovel temp = new Shovel();
@@ -498,7 +498,7 @@ public class PlayerController : MonoBehaviour
                 Weapon weapon = (Weapon)dropItem.Item;
                 Debug.Log($"먹을 아이템 {dropItem.Item._ItemID}");
 
-                if(EquipWeapon != null)
+                if (EquipWeapon != null)
                 {
                     Weapon temp = new Weapon();
                     temp = EquipWeapon;
@@ -622,7 +622,7 @@ public class PlayerController : MonoBehaviour
 
         if (needDia <= GameManager.Instance.Dia)
         {
-            GameManager.Instance.Dia -= needDia;            
+            GameManager.Instance.Dia -= needDia;
             Data.Instance.CharacterSaveData._unlockItemId.Add(dropItem.Item._ItemID); //언락리스트에 아이템아이디 추가
             Data.Instance.SavePlayerData();
 
@@ -686,7 +686,7 @@ public class PlayerController : MonoBehaviour
     private void OnDrawGizmos() //확인용
     {
         Vector2[] UDLR = { Vector2.up, Vector2.down, Vector2.left, Vector2.right };
-        
+
         foreach (Vector3 urdr in UDLR)
         {
             Vector3 temp = transform.position + urdr / 2;
@@ -702,8 +702,8 @@ public class PlayerController : MonoBehaviour
     void Move(Vector3 vec)
     {
         transform.position += vec;
-        
-        
+
+
         GetComponent<SpriteRenderer>().sortingOrder = (int)(transform.position.y - 1) * -1; // 레이어 값변환
         if (vec == Vector3.left)
         {
@@ -727,11 +727,21 @@ public class PlayerController : MonoBehaviour
             _MakeFog2.UpdateFogOfWar();
         }
 
-        
+        CheckItmeInfo(transform);
+    
+
+
+        //PlayerMoveEvent?.Invoke(this, EventArgs.Empty);
+    }
+    //public event EventHandler PlayerMoveEvent;
+
+
+    public void CheckItmeInfo(Transform Player)
+    {
         Vector2[] directions = { Vector2.up, Vector2.down, Vector2.left, Vector2.right };
         foreach (Vector2 direction in directions)
         {
-            Vector2 temp = (Vector2)transform.position + direction / 2f;
+            Vector2 temp = (Vector2)Player.position + direction / 2f;
             RaycastHit2D[] NearItemCheck = Physics2D.RaycastAll(temp, direction, 0.5f, _itemCheckLayerMask);
 
             foreach (RaycastHit2D hit in NearItemCheck)
@@ -749,10 +759,12 @@ public class PlayerController : MonoBehaviour
                 }
             }
         }
-        
-
-        //PlayerMoveEvent?.Invoke(this, EventArgs.Empty);
     }
+
+
+
+    //PlayerMoveEvent?.Invoke(this, EventArgs.Empty);
+
     //public event EventHandler PlayerMoveEvent;
     public void transfromUpdate(Vector3 vec)
     {
