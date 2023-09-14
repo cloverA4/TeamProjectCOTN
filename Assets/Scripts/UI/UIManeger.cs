@@ -510,7 +510,7 @@ public class UIManeger : MonoBehaviour
     #endregion
 
 
-    public void IconMove(Item _item)
+    public void IconMove(Item _item)  // 아이템 아이콘 애니메이션 함수 따로 어떤 무기인지 구분할 필요 없이 아이템만 넣으면됌
     {
         _equipmentIconMove.ItemIconMove(_item);
     }

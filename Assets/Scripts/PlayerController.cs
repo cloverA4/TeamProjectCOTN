@@ -504,7 +504,6 @@ public class PlayerController : MonoBehaviour
                     temp = EquipWeapon;
                     EquipWeapon = weapon;
                     dropItem.ChangeItem(temp);
-                    _uiManeger.IconMove(temp);
 
                     Debug.Log($"착용한 아이템 {EquipWeapon._ItemID}");
                     Debug.Log($"버려진 아이템 {dropItem.Item._ItemID}");
