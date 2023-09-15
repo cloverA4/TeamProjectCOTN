@@ -1,6 +1,5 @@
 using UnityEngine;
 using System;
-using System.Collections;
 
 public class Monster : MonoBehaviour
 {
@@ -44,30 +43,30 @@ public class Monster : MonoBehaviour
             case MonsterType.Monster1: // 가만히 있고 체력1. 골드파밍용 몬스터
                 _maxTrunCount = 0;
                 _monsterHP = 1;
-                _monsterDamage = 1;
+                _monsterDamage = 2;
                 break;
             case MonsterType.Monster2: // 위아래로만 움직이고 체력2
                 _maxTrunCount = 2;
                 _monsterHP = 2;
-                _monsterDamage = 1;
+                _monsterDamage = 2;
                 MonsterLook = new Vector3(0, 1, 0);
                 break; 
             case MonsterType.Monster3: // 좌우로만 움직이고 체력2
                 _maxTrunCount = 2;
                 _monsterHP = 2;
-                _monsterDamage = 1;
+                _monsterDamage = 2;
                 MonsterLook = new Vector3(1, 0, 0);
                 break;
             case MonsterType.Monster4: // 턴에 진입했을때 공격준비 상태면 -> 공격 또는 이동 -> 공격준비해제
                                         //턴에 진입했을때 공격준비 상태가 아니면->공격준비
                 _maxTrunCount = 1;
                 _monsterHP = 2;
-                _monsterDamage = 1;
+                _monsterDamage = 2;
                 break;
             case MonsterType.EliteMonster:
                 _maxTrunCount = 1;
                 _monsterHP = 6;
-                _monsterDamage = 2;
+                _monsterDamage = 4;
                 break;
         }
         _monsterHPUI.Init(_monsterHP);
