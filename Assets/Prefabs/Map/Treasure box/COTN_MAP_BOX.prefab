@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4563759080341464087}
   - component: {fileID: 6796100989786894909}
   - component: {fileID: -1971745894920845062}
+  - component: {fileID: -461288208544175676}
   m_Layer: 19
   m_Name: COTN_MAP_BOX
   m_TagString: Box
@@ -111,3 +112,15 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &-461288208544175676
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3645823530714225194}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2578b7a515783664da631091118e1bfd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

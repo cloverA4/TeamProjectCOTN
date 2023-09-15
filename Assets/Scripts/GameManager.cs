@@ -588,10 +588,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject _eliteMonsterPrefab;
     [SerializeField] GameObject _monsterPool;
 
-    
-
     List<Vector3> randomSpawnList = new List<Vector3>();
     List<Vector3> diaSpawnList = new List<Vector3>();
+
     //몬스터 풀링/스폰 구현
     void LoadingMonster()
     {
@@ -656,6 +655,7 @@ public class GameManager : MonoBehaviour
 
         Currency cr = (Currency)Data.Instance.GetItemInfo(101);
         cr.Count = 1;
+        go.GetComponent<DropItem>().Init(cr);
     }
 
     void ResetMonster()
