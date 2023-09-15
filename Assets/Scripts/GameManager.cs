@@ -131,7 +131,6 @@ public class GameManager : MonoBehaviour
         _nowFloor = Data.Instance.CharacterSaveData._nowFloor;
         PlayerController.Instance.InitCharacterData();
         _uiManeger.setHP();
-        GetEquipItem();
     }
 
     #region 비트
@@ -804,10 +803,6 @@ public class GameManager : MonoBehaviour
     //몬스터 ai 구현(종류별로 하나씩 추가)
     #endregion
 
-    public void GetEquipItem()
-    {
-
-    }
 
     public void PlayerHPUpdate()
     {

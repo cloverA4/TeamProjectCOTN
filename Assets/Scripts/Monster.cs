@@ -15,6 +15,7 @@ public class Monster : MonoBehaviour
     bool _aggro = false;
     bool _attackReady;
     Vector3 MonsterLook = Vector3.zero;
+    LayerMask _normalLayerMask;
 
     Animator _animator;
     SpriteRenderer _childSpriteRenderer;
@@ -24,6 +25,12 @@ public class Monster : MonoBehaviour
         //GameManager.Instance.MosterMoveEnvent += new EventHandler(MonsterMove);
         _animator = GetComponentsInChildren<Animator>()[0];
         _childSpriteRenderer = GetComponentsInChildren<SpriteRenderer>()[1];
+
+        _normalLayerMask =
+                  (1 << LayerMask.NameToLayer("Wall")) |
+                  (1 << LayerMask.NameToLayer("Npc")) |
+                  (1 << LayerMask.NameToLayer("Monster")) |
+                  (1 << LayerMask.NameToLayer("Player"));
     }
 
     public void Init(MonsterType Type) //몬스터 타입 별 기본값 세팅
@@ -113,7 +120,7 @@ public class Monster : MonoBehaviour
         float maxDistance = 0.5f;
         RaycastHit hit;
         // Physics.Raycast (레이저를 발사할 위치, 발사 방향, 충돌 결과, 최대 거리)
-        bool isHit = Physics.Raycast(transform.position + MonsterLook/2, MonsterLook, out hit, maxDistance);
+        bool isHit = Physics.Raycast(transform.position + MonsterLook/2, MonsterLook, out hit, maxDistance, _normalLayerMask);
 
         Gizmos.color = Color.red;
         if (isHit)
@@ -131,14 +138,13 @@ public class Monster : MonoBehaviour
         //어느정도 해결은 했는데 서로 같은칸을 보고 동시에 비었다고 판단하고 움직이면 겹쳐버림
         
         //위아래로 또는 좌우로만 움직이고 체력2 - 이니셜라이즈에서 방향 정해짐
-        Vector3 Temp = transform.position + MonsterLook/2;        
-        RaycastHit2D hitdata = Physics2D.Raycast(Temp, MonsterLook, 0.5f);
+        Vector3 Temp = transform.position + MonsterLook/2;
+        RaycastHit2D hitdata = Physics2D.Raycast(Temp, MonsterLook, 0.5f, _normalLayerMask);
         
         if (hitdata)
         {
             //플레이어면 공격하고 아니면 뒤로돌고 턴 끝
             if (hitdata.collider.tag == "Player") PlayerController.Instance.NowHP -= _monsterDamage;//플레이어면 공격
-            else if(hitdata.collider.tag == "Item") MoveMonster();
             else
             {
                 MonsterLook = MonsterLook * -1;
@@ -215,7 +221,7 @@ public class Monster : MonoBehaviour
     {
         MonsterLook = vec;
         Vector3 Temp = transform.position + MonsterLook / 2;
-        RaycastHit2D hitdata = Physics2D.Raycast(Temp, MonsterLook, 0.5f);
+        RaycastHit2D hitdata = Physics2D.Raycast(Temp, MonsterLook, 0.5f, _normalLayerMask);
 
         if (hitdata)
         {
@@ -238,7 +244,7 @@ public class Monster : MonoBehaviour
             //특수공격
 
             Temp = transform.position + MonsterLook / 2;
-            hitdata = Physics2D.Raycast(Temp, MonsterLook, 100f, 1 << LayerMask.NameToLayer("Player"));
+            hitdata = Physics2D.Raycast(Temp, MonsterLook, 100f, _normalLayerMask);
 
             if(hitdata)
             {
@@ -263,13 +269,13 @@ public class Monster : MonoBehaviour
                     {
                         //위에있음
                         Temp = transform.position + Vector3.up / 2;
-                        hitdata = Physics2D.Raycast(Temp, Vector3.up, 0.5f);
+                        hitdata = Physics2D.Raycast(Temp, Vector3.up, 0.5f, _normalLayerMask);
                     }
                     else
                     {
                         //아래있음
                         Temp = transform.position + Vector3.down / 2;
-                        hitdata = Physics2D.Raycast(Temp, Vector3.down, 0.5f);
+                        hitdata = Physics2D.Raycast(Temp, Vector3.down, 0.5f, _normalLayerMask);
                     }
                 }
                 else if(PlayerController.Instance.transform.position.y == transform.position.y)
@@ -278,13 +284,13 @@ public class Monster : MonoBehaviour
                     {
                         //오른쪽에 있음
                         Temp = transform.position + Vector3.right / 2;
-                        hitdata = Physics2D.Raycast(Temp, Vector3.right, 0.5f);
+                        hitdata = Physics2D.Raycast(Temp, Vector3.right, 0.5f, _normalLayerMask);
                     }
                     else
                     {
                         //왼쪽에 있음
                         Temp = transform.position + Vector3.left / 2;
-                        hitdata = Physics2D.Raycast(Temp, Vector3.left, 0.5f);
+                        hitdata = Physics2D.Raycast(Temp, Vector3.left, 0.5f, _normalLayerMask);
                     }
                 }
 
@@ -351,14 +357,14 @@ public class Monster : MonoBehaviour
             if (PlayerController.Instance.transform.position.x > transform.position.x)
             {
                 Temp = transform.position + Vector3.right / 2;
-                hitdata = Physics2D.Raycast(Temp, Vector3.right, 0.5f);
+                hitdata = Physics2D.Raycast(Temp, Vector3.right, 0.5f, _normalLayerMask);
                 vec = Vector3.right;
                 _animator.SetTrigger("Right");
             }
             else
             {
                 Temp = transform.position + Vector3.left / 2;
-                hitdata = Physics2D.Raycast(Temp, Vector3.left, 0.5f);
+                hitdata = Physics2D.Raycast(Temp, Vector3.left, 0.5f, _normalLayerMask);
                 vec = Vector3.left;
                 _animator.SetTrigger("Left");
             }
@@ -374,14 +380,14 @@ public class Monster : MonoBehaviour
             if (PlayerController.Instance.transform.position.y > transform.position.y)
             {
                 Temp = transform.position + Vector3.up / 2;
-                hitdata = Physics2D.Raycast(Temp, Vector3.up, 0.5f);
+                hitdata = Physics2D.Raycast(Temp, Vector3.up, 0.5f, _normalLayerMask);
                 vec = Vector3.up;
                 _animator.SetTrigger("Up");
             }
             else
             {
                 Temp = transform.position + Vector3.down / 2;
-                hitdata = Physics2D.Raycast(Temp, Vector3.down, 0.5f);
+                hitdata = Physics2D.Raycast(Temp, Vector3.down, 0.5f, _normalLayerMask);
                 vec = Vector3.down;
                 _animator.SetTrigger("Down");
             }
@@ -442,13 +448,9 @@ public class Monster : MonoBehaviour
         //해당방향으로 레이를 쏘고 이동, 장애물이 있으면 종료
         MonsterLook = vec;
         Vector3 Temp = transform.position + MonsterLook / 2;
-        RaycastHit2D hitdata = Physics2D.Raycast(Temp, MonsterLook, 0.5f);
+        RaycastHit2D hitdata = Physics2D.Raycast(Temp, MonsterLook, 0.5f, _normalLayerMask);
 
         if (hitdata == false)
-        {
-            MoveMonster();
-        }
-        else if(hitdata.collider.tag == "Item")
         {
             MoveMonster();
         }
@@ -458,7 +460,7 @@ public class Monster : MonoBehaviour
     {
         MonsterLook = vec;
         Vector3 Temp = transform.position + MonsterLook / 2;
-        RaycastHit2D hitdata = Physics2D.Raycast(Temp, MonsterLook, 0.5f);
+        RaycastHit2D hitdata = Physics2D.Raycast(Temp, MonsterLook, 0.5f, _normalLayerMask);
 
         if (hitdata)
         {
@@ -482,7 +484,7 @@ public class Monster : MonoBehaviour
     {
         MonsterLook = vec;
         Vector3 Temp = transform.position + MonsterLook / 2;
-        RaycastHit2D hitdata = Physics2D.Raycast(Temp, MonsterLook, 0.5f);
+        RaycastHit2D hitdata = Physics2D.Raycast(Temp, MonsterLook, 0.5f, _normalLayerMask);
 
         if (hitdata)
         {

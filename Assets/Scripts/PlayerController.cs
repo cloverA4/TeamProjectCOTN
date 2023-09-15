@@ -440,7 +440,6 @@ public class PlayerController : MonoBehaviour
                             case ItemType.Potion:
                                 GetItem(dropItem);
                                 UpdateCharacterState();
-                                GameManager.Instance.GetEquipItem();
                                 break;
                         }
                         break;
