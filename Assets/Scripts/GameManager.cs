@@ -331,6 +331,12 @@ public class GameManager : MonoBehaviour
                         GameObject go = Instantiate(_dropItem, _itemPool.transform);
                         go.transform.position = new Vector3(-25, 100, 0);
                         go.GetComponent<DropItem>().Init(Data.Instance.GetItemInfo(303));
+                        go = Instantiate(_dropItem, _itemPool.transform);
+                        go.transform.position = new Vector3(-26, 100, 0);
+                        go.GetComponent<DropItem>().Init(Data.Instance.GetItemInfo(501));
+                        go = Instantiate(_dropItem, _itemPool.transform);
+                        go.transform.position = new Vector3(-24, 100, 0);
+                        go.GetComponent<DropItem>().Init(Data.Instance.GetItemInfo(401));
                         break;
                     case floor.f2:
                     case floor.f3:
