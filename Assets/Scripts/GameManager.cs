@@ -324,6 +324,8 @@ public class GameManager : MonoBehaviour
                 _audio.clip = Resources.Load<AudioClip>("SoundsUpdate/Stage/StageLobby");
                 _audio.loop = true;
                 _stageClear = true;
+                _gold = 0;
+                PlayerController.Instance.BaseItemEquip();
                 switch (_nowFloor)
                 {
                     case floor.f1:
@@ -408,8 +410,6 @@ public class GameManager : MonoBehaviour
         switch (_nowStage)
         {
             case Stage.Lobby:
-                _gold = 0;
-                PlayerController.Instance.BaseItemEquip();
                 break;
             case Stage.Stage1:
             case Stage.Stage2:

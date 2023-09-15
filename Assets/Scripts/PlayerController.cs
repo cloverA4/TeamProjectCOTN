@@ -426,7 +426,11 @@ public class PlayerController : MonoBehaviour
                             case ItemType.Currency:
                                 //해당하는 재화를 상승 시키고 드랍아이템 삭제
                                 Currency cr = (Currency)dropItem.Item;
-                                if (cr._ItemID == 101) GameManager.Instance.Dia += cr.Count;
+                                if (cr._ItemID == 101)
+                                {
+                                    GameManager.Instance.Dia += cr.Count;
+                                    _uiManeger.IconMove(cr);
+                                }
                                 else if (cr._ItemID == 102) GameManager.Instance.Gold += cr.Count;
                                 dropItem.DeleteDropItem();
                                 break;
@@ -485,6 +489,7 @@ public class PlayerController : MonoBehaviour
                     temp = EquipShovel;
                     EquipShovel = shovel;
                     dropItem.ChangeItem(temp);
+                    _uiManeger.IconMove(EquipShovel);
                     Debug.Log($"착용한 아이템 {EquipShovel._ItemID}");
                     Debug.Log($"버려진 아이템 {dropItem.Item._ItemID}");
                     return;
@@ -492,6 +497,7 @@ public class PlayerController : MonoBehaviour
                 else
                 {
                     EquipShovel = shovel;
+                    _uiManeger.IconMove(EquipShovel);
                 }
                 break;
             case ItemType.Weapon:
@@ -504,7 +510,7 @@ public class PlayerController : MonoBehaviour
                     temp = EquipWeapon;
                     EquipWeapon = weapon;
                     dropItem.ChangeItem(temp);
-
+                    _uiManeger.IconMove(EquipWeapon);
                     Debug.Log($"착용한 아이템 {EquipWeapon._ItemID}");
                     Debug.Log($"버려진 아이템 {dropItem.Item._ItemID}");
                     return;
@@ -512,6 +518,7 @@ public class PlayerController : MonoBehaviour
                 else
                 {
                     EquipWeapon = weapon;
+                    _uiManeger.IconMove(EquipWeapon);
                 }
                 break;
             case ItemType.Armor:
@@ -523,7 +530,7 @@ public class PlayerController : MonoBehaviour
                     temp = EquipArmor;
                     EquipArmor = armor;
                     dropItem.ChangeItem(temp);
-
+                    _uiManeger.IconMove(EquipArmor);
                     Debug.Log($"착용한 아이템 {EquipArmor._ItemID}");
                     Debug.Log($"버려진 아이템 {dropItem.Item._ItemID}");
                     return;
@@ -531,6 +538,7 @@ public class PlayerController : MonoBehaviour
                 else
                 {
                     EquipArmor = armor;
+                    _uiManeger.IconMove(EquipArmor);
                 }
                 break;
             case ItemType.Potion:
@@ -542,7 +550,7 @@ public class PlayerController : MonoBehaviour
                     temp = EquipPotion;
                     EquipPotion = potion;
                     dropItem.ChangeItem(temp);
-
+                    _uiManeger.IconMove(EquipPotion);
                     Debug.Log($"착용한 아이템 {EquipPotion._ItemID}");
                     Debug.Log($"버려진 아이템 {dropItem.Item._ItemID}");
                     return;
@@ -550,6 +558,7 @@ public class PlayerController : MonoBehaviour
                 else
                 {
                     EquipPotion = potion;
+                    _uiManeger.IconMove(EquipPotion);
                 }
                 break;
         }
@@ -588,7 +597,6 @@ public class PlayerController : MonoBehaviour
 
             GetItem(dropItem);
             UpdateCharacterState();
-            GameManager.Instance.GetEquipItem(); // 유아이 관련 호출
         }
         else
         {
@@ -627,7 +635,6 @@ public class PlayerController : MonoBehaviour
 
             GetItem(dropItem);
             UpdateCharacterState();
-            GameManager.Instance.GetEquipItem(); // 유아이 관련 호출
         }
         else
         {

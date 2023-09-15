@@ -248,7 +248,7 @@ public class UIManeger : MonoBehaviour
     }
     public void UpdateArmor()
     {
-        if (PlayerController.Instance.EquipPotion != null)
+        if (PlayerController.Instance.EquipArmor != null)
         {
             _armorImage.GetComponent<Image>().sprite = PlayerController.Instance.EquipArmor._ItemIcon;
             _armorSlot.gameObject.SetActive(true);
