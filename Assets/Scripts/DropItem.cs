@@ -24,6 +24,7 @@ public class DropItem : MonoBehaviour
 
     public void Init(Item item, DropItemType type = DropItemType.Drop)
     {
+        GetComponentInChildren<SpriteRenderer>().sortingOrder = (int)(transform.position.y - 1) * -1; // 레이어 값변환
         _item = item;
         _ItemIcon.sprite = _item._ItemIcon;
         _dropItemType = type;

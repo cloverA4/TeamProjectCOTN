@@ -8,6 +8,7 @@ public class Box : MonoBehaviour
     public BoxType _type { get; private set; }
     public void InitBox(BoxType type)
     {
+        GetComponent<SpriteRenderer>().sortingOrder = (int)(transform.position.y - 1) * -1; // 레이어 값변환
         _type = type;
     }
 
@@ -22,8 +23,10 @@ public class Box : MonoBehaviour
                 int ItemID = Data.Instance.CharacterSaveData._unlockItemId[random];
                 
                 GameObject SpawnItem = Instantiate(Data.Instance.ItemPrefab, GameManager.Instance.ItemPool.transform);
-                SpawnItem.GetComponent<DropItem>().Init(Data.Instance.GetItemInfo(ItemID), DropItemType.Drop);
                 SpawnItem.transform.position = transform.position;
+                SpawnItem.GetComponent<DropItem>().Init(Data.Instance.GetItemInfo(ItemID));
+                SpawnItem.GetComponent<DropItem>().OpenItemInfo();
+                
                 break;
             case BoxType.Clear:
 
@@ -37,10 +40,10 @@ public class Box : MonoBehaviour
                 go.GetComponent<DropItem>().OpenItemInfo();
 
                 GameManager.Instance.EliteMonsterDie();
-
-                DestroyBox();
                 break;
         }
+
+        DestroyBox();
     }
 
     public void DestroyBox()

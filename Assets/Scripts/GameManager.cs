@@ -311,7 +311,7 @@ public class GameManager : MonoBehaviour
         //초기화 및 로드
         ItemClear();
         ResetNote();
-        ResetBox();
+        NormalBoxSpawn(); //박스 초기화 후 새로 생성
         if (mt != null) StopCoroutine(mt);
         if(sm != null) StopCoroutine(sm);
         //스테이지 배경음 설정
@@ -777,12 +777,20 @@ public class GameManager : MonoBehaviour
 
     void NormalBoxSpawn()
     {
+        ResetBox();
+        int BoxCount = 0;
+        if (PlayerPrefs.HasKey("TreasureBoxUpgradeLevel"))
+        {
+            BoxCount = PlayerPrefs.GetInt("TreasureBoxUpgradeLevel");
+        }
+
         switch (_nowStage)
         {
             case Stage.Stage1:
-                for (int i = 0; i < _boxSpawnPoint[(int)_nowFloor].transform.childCount; i++)
+                for (int i = 0; i < BoxCount; i++)
                 {
                     GameObject go = Instantiate(_normalBox, _boxPool.transform);
+                    go.transform.position = _boxSpawnPoint[(int)_nowFloor].transform.GetChild(i).transform.position;
                     go.GetComponent<Box>().InitBox(BoxType.Normal);
                 }
                 break;
@@ -795,7 +803,7 @@ public class GameManager : MonoBehaviour
     {
         for (int i = 0; i < _boxPool.transform.childCount; i++)
         {
-            Destroy(_boxPool.transform.GetChild(i));
+            Destroy(_boxPool.transform.GetChild(i).gameObject);
         }
     }
 
