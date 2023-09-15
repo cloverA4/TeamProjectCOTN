@@ -91,6 +91,13 @@ public class Monster : MonoBehaviour
                 switch (_type)
                 {
                     case MonsterType.Monster1: //아무패턴도 존재하지 않음
+                        _childSpriteRenderer.sortingOrder = (int)(transform.position.y - 1) * -1;
+                        if (PlayerController.Instance.gameObject.transform.position.x > gameObject.transform.position.x){
+                            _childSpriteRenderer.flipX = true;
+                        }
+                        else{
+                            _childSpriteRenderer.flipX = false;
+                        }
                         break;
                     case MonsterType.Monster2:
                         MonsterPattern();
