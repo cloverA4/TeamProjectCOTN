@@ -1,5 +1,6 @@
-using System;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Pool;
 
 public class PlayerController : MonoBehaviour
 {
@@ -12,6 +13,17 @@ public class PlayerController : MonoBehaviour
     LayerMask _normalLayerMask;
     LayerMask _weaponCheckLayerMask;
     LayerMask _itemCheckLayerMask;
+
+    NormalDaggerEffectPool _normalDaggerEffectPool;
+    TitaniumDaggerEffectPool _titaniumDaggerEffectPool;
+
+    NormalSpearEffectPool _normalSpearEffectPool;
+    TitaniumSpearEffectPool _titaniumSpearEffectPool;
+
+    NormalGreatSwordEffectPool _normalGreatSwordEffectPool;
+    TitaniumGreatSwordEffectPool _titaniumGreatSwordEffectPool;
+
+
 
     [SerializeField] MakeFog2 _MakeFog2;
     [SerializeField] SaveInfoData _unlockSaveData;
@@ -159,9 +171,21 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
+        
         //_childSpriteRenderer = GetComponentInChildrens<SpriteRenderer>()[1];
         _animator = GetComponentsInChildren<Animator>()[0];
         _childSpriteRenderer = GetComponentsInChildren<SpriteRenderer>()[1];
+
+        _normalDaggerEffectPool = GetComponent<NormalDaggerEffectPool>();
+        _titaniumDaggerEffectPool = GetComponent<TitaniumDaggerEffectPool>();
+
+        _normalSpearEffectPool = GetComponent<NormalSpearEffectPool>();
+        _titaniumSpearEffectPool = GetComponent<TitaniumSpearEffectPool>();
+
+        _normalGreatSwordEffectPool = GetComponent<NormalGreatSwordEffectPool>();
+        _titaniumGreatSwordEffectPool = GetComponent<TitaniumGreatSwordEffectPool>();
+
+
         IsX = true;
         //Debug.Log(GameManager.Instance.NowStage); 스테이지확인
 
@@ -181,6 +205,8 @@ public class PlayerController : MonoBehaviour
         _itemCheckLayerMask =
                   (1 << LayerMask.NameToLayer("DropItem")) |
                   (1 << LayerMask.NameToLayer("ExitItemCheck"));
+
+        
     }
 
     // Update is called once per frame
@@ -284,7 +310,10 @@ public class PlayerController : MonoBehaviour
                 IsX = true;
             }
         }
+
+        
     }
+
 
 
 
@@ -313,12 +342,12 @@ public class PlayerController : MonoBehaviour
     //    }
     //}
 
-
+   
 
     void MoveCharacter(Vector3 vec)
     {
         Vector3 Temp = transform.position + vec / 2;
-
+        
         switch (EquipWeapon.weaponType)
         {
             case WeaponType.Dagger:
@@ -327,23 +356,23 @@ public class PlayerController : MonoBehaviour
                 {
                     if (hitdataTypeDagger.collider.tag == "Monster")
                     {
+                        if (EquipWeapon._ItemID == 301)
+                        {
+                            WeaponEffectObject weaponEffectObject = _normalDaggerEffectPool.WeaponEffectPool.Get();
+                            weaponEffectObject.transform.position = transform.position;
+                            weaponEffectObject.Swing(vec);
+                        }
+                        else if (EquipWeapon._ItemID == 302)
+                        {
+                            WeaponEffectObject weaponEffectObject = _titaniumDaggerEffectPool.WeaponEffectPool.Get();
+                            weaponEffectObject.transform.position = transform.position;
+                            weaponEffectObject.Swing(vec);
+                        }
+
                         hitdataTypeDagger.collider.GetComponent<Monster>().TakeDamage(_damage);
                         return;
                     }
                     break;
-                }
-                break;
-
-            case WeaponType.Spear:
-                RaycastHit2D hitdataTypeSpear = Physics2D.Raycast(Temp, vec, 2f, _weaponCheckLayerMask);
-                if (hitdataTypeSpear)
-                {
-                    if (hitdataTypeSpear.collider.tag == "Monster")
-                    {
-                        Debug.Log(hitdataTypeSpear.collider.tag);
-                        hitdataTypeSpear.collider.GetComponent<Monster>().TakeDamage(_damage);
-                        return;
-                    }
                 }
                 break;
 
@@ -370,6 +399,18 @@ public class PlayerController : MonoBehaviour
                 {
                     if (collider.CompareTag("Monster"))
                     {
+                        if (EquipWeapon._ItemID == 303)
+                        {
+                            WeaponEffectObject weaponEffectObject = _normalGreatSwordEffectPool.WeaponEffectPool.Get();
+                            weaponEffectObject.transform.position = transform.position;
+                            weaponEffectObject.Swing(vec);
+                        }
+                        else if (EquipWeapon._ItemID == 304)
+                        {
+                            WeaponEffectObject weaponEffectObject = _titaniumGreatSwordEffectPool.WeaponEffectPool.Get();
+                            weaponEffectObject.transform.position = transform.position;
+                            weaponEffectObject.Swing(vec);
+                        }
                         collider.GetComponent<Monster>().TakeDamage(_damage);
                         IsMonster = true;
                     }
@@ -377,6 +418,35 @@ public class PlayerController : MonoBehaviour
 
                 if (IsMonster) return;
                 break;
+
+            case WeaponType.Spear:
+                RaycastHit2D hitdataTypeSpear = Physics2D.Raycast(Temp, vec, 2f, _weaponCheckLayerMask);
+                if (hitdataTypeSpear)
+                {
+                    if (hitdataTypeSpear.collider.tag == "Monster")
+                    {
+                        if (EquipWeapon._ItemID == 305)
+                        {
+                            WeaponEffectObject weaponEffectObject = _normalSpearEffectPool.WeaponEffectPool.Get();
+                            weaponEffectObject.transform.position = transform.position;
+                            weaponEffectObject.Swing(vec);
+                        }
+                        else if (EquipWeapon._ItemID == 306)
+                        {
+                            WeaponEffectObject weaponEffectObject = _titaniumSpearEffectPool.WeaponEffectPool.Get();
+                            weaponEffectObject.transform.position = transform.position;
+                            weaponEffectObject.Swing(vec);
+                        }
+
+
+                        Debug.Log(hitdataTypeSpear.collider.tag);
+                        hitdataTypeSpear.collider.GetComponent<Monster>().TakeDamage(_damage);
+                        return;
+                    }
+                }
+                break;
+
+            
         }
 
         RaycastHit2D hitdata = Physics2D.Raycast(Temp, vec, 0.5f, _normalLayerMask);
@@ -436,6 +506,34 @@ public class PlayerController : MonoBehaviour
                                 break;
                             case ItemType.Shovel:
                             case ItemType.Weapon:
+                                //// 무기에 따라 이펙트 변경
+                                //Weapon wp = (Weapon)dropItem.Item;
+                                //if (wp._ItemID == 301) // 단검
+                                //{
+                                //    _normalDaggerEffectPool;
+                                //}
+                                //else if (wp._ItemID == 302) // 티타늄 단검
+                                //{
+                                //    _weaponEffectPrefab = _titaniumDaggerEffectPrefab; 
+                                //}
+                                //else if (wp._ItemID == 303) // 대검
+                                //{
+                                //    _weaponEffectPrefab = _normalGreatSwordEffectPrefab;
+                                //}
+                                //else if (wp._ItemID == 304) // 티타늄 대검
+                                //{
+                                //    _weaponEffectPrefab = _titaniumGreatSwordEffectPrefab;
+                                //}
+                                //else if (wp._ItemID == 305) // 창
+                                //{
+                                //    _weaponEffectPrefab = _normalSpearEffectPrefab;
+                                //}
+                                //else if (wp._ItemID == 306) // 티타늄 창
+                                //{
+                                //    _weaponEffectPrefab = _titaniumSpearEffectPrefab;
+                                //}
+                                //_weaponEffectPool = new ObjectPool<WeaponEffectObject>(CreateWeaponEffect, maxSize:5);
+                                break;
                             case ItemType.Armor:
                             case ItemType.Potion:
                                 GetItem(dropItem);
@@ -472,6 +570,8 @@ public class PlayerController : MonoBehaviour
         //_MakeFog2.UpdateFogOfWar();
 
     }
+
+   
 
     void GetItem(DropItem dropItem)
     {
@@ -519,6 +619,7 @@ public class PlayerController : MonoBehaviour
                     EquipWeapon = weapon;
                     _uiManeger.IconMove(EquipWeapon);
                 }
+                
                 break;
             case ItemType.Armor:
                 Armor armor = (Armor)dropItem.Item;
@@ -561,6 +662,7 @@ public class PlayerController : MonoBehaviour
                 }
                 break;
         }
+
         dropItem.DeleteDropItem();
     }
 

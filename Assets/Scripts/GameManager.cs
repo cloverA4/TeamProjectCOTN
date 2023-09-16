@@ -329,15 +329,15 @@ public class GameManager : MonoBehaviour
                 {
                     case floor.f1:
                         PlayerController.Instance.transfromUpdate(_stageStartPosition.LobbyPosition);
-                        GameObject go = Instantiate(_dropItem, _itemPool.transform);
-                        go.transform.position = new Vector3(-25, 100, 0);
-                        go.GetComponent<DropItem>().Init(Data.Instance.GetItemInfo(303));
-                        go = Instantiate(_dropItem, _itemPool.transform);
-                        go.transform.position = new Vector3(-26, 100, 0);
-                        go.GetComponent<DropItem>().Init(Data.Instance.GetItemInfo(501));
-                        go = Instantiate(_dropItem, _itemPool.transform);
-                        go.transform.position = new Vector3(-24, 100, 0);
-                        go.GetComponent<DropItem>().Init(Data.Instance.GetItemInfo(401));
+                        GameObject Item = Instantiate(_dropItem, _itemPool.transform);
+                        Item.transform.position = new Vector3(-25, 100, 0);
+                        Item.GetComponent<DropItem>().Init(Data.Instance.GetItemInfo(305));
+                        Item = Instantiate(_dropItem, _itemPool.transform);
+                        Item.transform.position = new Vector3(-26, 100, 0);
+                        Item.GetComponent<DropItem>().Init(Data.Instance.GetItemInfo(501));
+                        Item = Instantiate(_dropItem, _itemPool.transform);
+                        Item.transform.position = new Vector3(-24, 100, 0);
+                        Item.GetComponent<DropItem>().Init(Data.Instance.GetItemInfo(401));
                         break;
                     case floor.f2:
                     case floor.f3:
@@ -810,6 +810,8 @@ public class GameManager : MonoBehaviour
 
     //몬스터 ai 구현(종류별로 하나씩 추가)
     #endregion
+
+   
 
 
     public void PlayerHPUpdate()
