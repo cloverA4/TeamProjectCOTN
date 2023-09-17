@@ -150,7 +150,7 @@ public class Monster : MonoBehaviour
         if (hitdata)
         {
             //플레이어면 공격하고 아니면 뒤로돌고 턴 끝
-            if (hitdata.collider.tag == "Player") PlayerController.Instance.NowHP -= _monsterDamage;//플레이어면 공격
+            if (hitdata.collider.tag == "Player") PlayerController.Instance.TakeDamage(_monsterDamage);//플레이어면 공격
             else
             {
                 MonsterLook = MonsterLook * -1;
@@ -231,7 +231,7 @@ public class Monster : MonoBehaviour
 
         if (hitdata)
         {
-            if (hitdata.collider.tag == "Player") PlayerController.Instance.NowHP -= _monsterDamage;
+            if (hitdata.collider.tag == "Player") PlayerController.Instance.TakeDamage(_monsterDamage);
         }
     }
 
@@ -254,7 +254,7 @@ public class Monster : MonoBehaviour
 
             if(hitdata)
             {
-                if(hitdata.collider.CompareTag("Player")) PlayerController.Instance.NowHP -= _monsterDamage;
+                if(hitdata.collider.CompareTag("Player")) PlayerController.Instance.TakeDamage(_monsterDamage);
             }
 
             GetComponentsInChildren<SpriteRenderer>()[1].color = Color.white;
@@ -304,7 +304,7 @@ public class Monster : MonoBehaviour
                 {
                     if(hitdata.collider.CompareTag("Player"))
                     {
-                        PlayerController.Instance.NowHP -= _monsterDamage;
+                        PlayerController.Instance.TakeDamage(_monsterDamage);
                     }
                 }
                 else

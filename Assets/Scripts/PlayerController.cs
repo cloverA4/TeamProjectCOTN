@@ -1,6 +1,4 @@
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Pool;
 
 public class PlayerController : MonoBehaviour
 {
@@ -982,6 +980,20 @@ public class PlayerController : MonoBehaviour
         EquipWeapon = (Weapon)Data.Instance.GetItemInfo(301);
         EquipArmor = null;
         EquipPotion = null;
+    }
+
+    public void TakeDamage(int dmg)
+    {
+        int damage = dmg - Def;
+        if(damage > 1)
+        {
+            NowHP -= damage;
+        }
+        else
+        {
+            NowHP -= 1;
+        }
+         
     }
 
     void Death()
