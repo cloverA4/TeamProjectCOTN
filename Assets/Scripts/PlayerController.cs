@@ -12,6 +12,9 @@ public class PlayerController : MonoBehaviour
     LayerMask _weaponCheckLayerMask;
     LayerMask _itemCheckLayerMask;
 
+    
+
+
     NormalDaggerEffectPool _normalDaggerEffectPool;
     TitaniumDaggerEffectPool _titaniumDaggerEffectPool;
 
@@ -20,6 +23,10 @@ public class PlayerController : MonoBehaviour
 
     NormalGreatSwordEffectPool _normalGreatSwordEffectPool;
     TitaniumGreatSwordEffectPool _titaniumGreatSwordEffectPool;
+
+    
+
+    
 
 
 
@@ -68,7 +75,6 @@ public class PlayerController : MonoBehaviour
     }
 
     int _shovelPower = 0;
-
     public int ShovelPower
     {
         get { return _shovelPower; }
@@ -76,7 +82,6 @@ public class PlayerController : MonoBehaviour
     }
 
     int _damage = 0;
-
     public int Damage
     {
         get { return _damage; }
@@ -84,13 +89,11 @@ public class PlayerController : MonoBehaviour
     }
 
     int _def = 0;
-
     public int Def
     {
         get { return _def; }
         set { _def = value; }
     }
-
 
     Shovel _equipShovel;
     public Shovel EquipShovel
@@ -102,6 +105,7 @@ public class PlayerController : MonoBehaviour
             _uiManeger.UpdataShovel();
         }
     }
+
     Weapon _equipWeapon;
     public Weapon EquipWeapon
     {
@@ -112,6 +116,7 @@ public class PlayerController : MonoBehaviour
             _uiManeger.UpdataWeapon();
         }
     }
+
     Armor _equipArmor;
     public Armor EquipArmor
     {
@@ -122,6 +127,7 @@ public class PlayerController : MonoBehaviour
             _uiManeger.UpdateArmor();
         }
     }
+
     Potion _equipPotion;
     public Potion EquipPotion
     {
@@ -356,15 +362,11 @@ public class PlayerController : MonoBehaviour
                     {
                         if (EquipWeapon._ItemID == 301)
                         {
-                            WeaponEffectObject weaponEffectObject = _normalDaggerEffectPool.WeaponEffectPool.Get();
-                            weaponEffectObject.transform.position = transform.position;
-                            weaponEffectObject.Swing(vec);
+                            NDWeaponEffectPos(vec);
                         }
                         else if (EquipWeapon._ItemID == 302)
                         {
-                            WeaponEffectObject weaponEffectObject = _titaniumDaggerEffectPool.WeaponEffectPool.Get();
-                            weaponEffectObject.transform.position = transform.position;
-                            weaponEffectObject.Swing(vec);
+                            TDWeaponEffectPos(vec);
                         }
 
                         hitdataTypeDagger.collider.GetComponent<Monster>().TakeDamage(_damage);
@@ -399,15 +401,11 @@ public class PlayerController : MonoBehaviour
                     {
                         if (EquipWeapon._ItemID == 303)
                         {
-                            WeaponEffectObject weaponEffectObject = _normalGreatSwordEffectPool.WeaponEffectPool.Get();
-                            weaponEffectObject.transform.position = transform.position;
-                            weaponEffectObject.Swing(vec);
+                            NGWeaponEffectPos(vec);
                         }
                         else if (EquipWeapon._ItemID == 304)
                         {
-                            WeaponEffectObject weaponEffectObject = _titaniumGreatSwordEffectPool.WeaponEffectPool.Get();
-                            weaponEffectObject.transform.position = transform.position;
-                            weaponEffectObject.Swing(vec);
+                            TGWeaponEffectPos(vec);
                         }
                         collider.GetComponent<Monster>().TakeDamage(_damage);
                         IsMonster = true;
@@ -425,18 +423,12 @@ public class PlayerController : MonoBehaviour
                     {
                         if (EquipWeapon._ItemID == 305)
                         {
-                            WeaponEffectObject weaponEffectObject = _normalSpearEffectPool.WeaponEffectPool.Get();
-                            weaponEffectObject.transform.position = transform.position;
-                            weaponEffectObject.Swing(vec);
+                            NSWeaponEffectPos(vec);
                         }
                         else if (EquipWeapon._ItemID == 306)
                         {
-                            WeaponEffectObject weaponEffectObject = _titaniumSpearEffectPool.WeaponEffectPool.Get();
-                            weaponEffectObject.transform.position = transform.position;
-                            weaponEffectObject.Swing(vec);
+                            TSWeaponEffectPos(vec);
                         }
-
-
                         Debug.Log(hitdataTypeSpear.collider.tag);
                         hitdataTypeSpear.collider.GetComponent<Monster>().TakeDamage(_damage);
                         return;
@@ -504,34 +496,6 @@ public class PlayerController : MonoBehaviour
                                 break;
                             case ItemType.Shovel:
                             case ItemType.Weapon:
-                                //// 무기에 따라 이펙트 변경
-                                //Weapon wp = (Weapon)dropItem.Item;
-                                //if (wp._ItemID == 301) // 단검
-                                //{
-                                //    _normalDaggerEffectPool;
-                                //}
-                                //else if (wp._ItemID == 302) // 티타늄 단검
-                                //{
-                                //    _weaponEffectPrefab = _titaniumDaggerEffectPrefab; 
-                                //}
-                                //else if (wp._ItemID == 303) // 대검
-                                //{
-                                //    _weaponEffectPrefab = _normalGreatSwordEffectPrefab;
-                                //}
-                                //else if (wp._ItemID == 304) // 티타늄 대검
-                                //{
-                                //    _weaponEffectPrefab = _titaniumGreatSwordEffectPrefab;
-                                //}
-                                //else if (wp._ItemID == 305) // 창
-                                //{
-                                //    _weaponEffectPrefab = _normalSpearEffectPrefab;
-                                //}
-                                //else if (wp._ItemID == 306) // 티타늄 창
-                                //{
-                                //    _weaponEffectPrefab = _titaniumSpearEffectPrefab;
-                                //}
-                                //_weaponEffectPool = new ObjectPool<WeaponEffectObject>(CreateWeaponEffect, maxSize:5);
-                                break;
                             case ItemType.Armor:
                             case ItemType.Potion:
                                 GetItem(dropItem);
@@ -569,7 +533,170 @@ public class PlayerController : MonoBehaviour
 
     }
 
-   
+    #region 무기이펙트관리
+    void NDWeaponEffectPos(Vector3 vec)
+    {
+        WeaponEffectObject weaponEffectObject = _normalDaggerEffectPool.WeaponEffectPool.Get();
+        Vector3 newPosition = transform.position;
+
+        if (vec == Vector3.up)
+        {
+            newPosition += Vector3.up; // 이펙트가 위 방향으로 한 칸 이동
+            weaponEffectObject.transform.rotation = Quaternion.Euler(0f, 0f, 90f);
+        }
+        else if (vec == Vector3.down)
+        {
+            newPosition += Vector3.down; // 이펙트가 아래 방향으로 한 칸 이동
+            weaponEffectObject.transform.rotation = Quaternion.Euler(0f, 0f, -90f);
+        }
+        else if (vec == Vector3.left)
+        {
+            newPosition += Vector3.left; // 이펙트가 왼쪽 방향으로 한 칸 이동
+            weaponEffectObject.GetComponent<SpriteRenderer>().flipX = true;
+        }
+        else if (vec == Vector3.right)
+        {
+            newPosition += Vector3.right; // 이펙트가 오른쪽 방향으로 한 칸 이동
+        }
+        weaponEffectObject.transform.position = newPosition;
+        weaponEffectObject.SwingAndRemove();
+    }
+    void TDWeaponEffectPos(Vector3 vec)
+    {
+        WeaponEffectObject weaponEffectObject = _titaniumDaggerEffectPool.WeaponEffectPool.Get();
+        Vector3 newPosition = transform.position;
+
+        if (vec == Vector3.up)
+        {
+            newPosition += Vector3.up; // 이펙트가 위 방향으로 한 칸 이동
+            weaponEffectObject.transform.rotation = Quaternion.Euler(0f, 0f, 90f);
+        }
+        else if (vec == Vector3.down)
+        {
+            newPosition += Vector3.down; // 이펙트가 아래 방향으로 한 칸 이동
+            weaponEffectObject.transform.rotation = Quaternion.Euler(0f, 0f, -90f);
+        }
+        else if (vec == Vector3.left)
+        {
+            newPosition += Vector3.left; // 이펙트가 왼쪽 방향으로 한 칸 이동
+            weaponEffectObject.GetComponent<SpriteRenderer>().flipX = true;
+        }
+        else if (vec == Vector3.right)
+        {
+            newPosition += Vector3.right; // 이펙트가 오른쪽 방향으로 한 칸 이동
+        }
+        weaponEffectObject.transform.position = newPosition;
+        weaponEffectObject.SwingAndRemove();
+    }
+    void NGWeaponEffectPos(Vector3 vec)
+    {
+        WeaponEffectObject weaponEffectObject = _normalGreatSwordEffectPool.WeaponEffectPool.Get();
+        Vector3 newPosition = transform.position;
+
+        if (vec == Vector3.up)
+        {
+            newPosition += Vector3.up; // 이펙트가 위 방향으로 한 칸 이동
+            weaponEffectObject.transform.rotation = Quaternion.Euler(0f, 0f, 90f);
+        }
+        else if (vec == Vector3.down)
+        {
+            newPosition += Vector3.down; // 이펙트가 아래 방향으로 한 칸 이동
+            weaponEffectObject.transform.rotation = Quaternion.Euler(0f, 0f, -90f);
+        }
+        else if (vec == Vector3.left)
+        {
+            newPosition += Vector3.left; // 이펙트가 왼쪽 방향으로 한 칸 이동
+            weaponEffectObject.GetComponent<SpriteRenderer>().flipX = true;
+        }
+        else if (vec == Vector3.right)
+        {
+            newPosition += Vector3.right; // 이펙트가 오른쪽 방향으로 한 칸 이동
+        }
+        weaponEffectObject.transform.position = newPosition;
+        weaponEffectObject.SwingAndRemove();
+    }
+    void TGWeaponEffectPos(Vector3 vec)
+    {
+        WeaponEffectObject weaponEffectObject = _titaniumGreatSwordEffectPool.WeaponEffectPool.Get();
+        Vector3 newPosition = transform.position;
+
+        if (vec == Vector3.up)
+        {
+            newPosition += Vector3.up; // 이펙트가 위 방향으로 한 칸 이동
+            weaponEffectObject.transform.rotation = Quaternion.Euler(0f, 0f, 90f);
+        }
+        else if (vec == Vector3.down)
+        {
+            newPosition += Vector3.down; // 이펙트가 아래 방향으로 한 칸 이동
+            weaponEffectObject.transform.rotation = Quaternion.Euler(0f, 0f, -90f);
+        }
+        else if (vec == Vector3.left)
+        {
+            newPosition += Vector3.left; // 이펙트가 왼쪽 방향으로 한 칸 이동
+            weaponEffectObject.GetComponent<SpriteRenderer>().flipX = true;
+        }
+        else if (vec == Vector3.right)
+        {
+            newPosition += Vector3.right; // 이펙트가 오른쪽 방향으로 한 칸 이동
+        }
+        weaponEffectObject.transform.position = newPosition;
+        weaponEffectObject.SwingAndRemove();
+    }
+    void NSWeaponEffectPos(Vector3 vec)
+    {
+        WeaponEffectObject weaponEffectObject = _normalSpearEffectPool.WeaponEffectPool.Get();
+        Vector3 newPosition = transform.position;
+
+        if (vec == Vector3.up)
+        {
+            newPosition += Vector3.up; // 이펙트가 위 방향으로 한 칸 이동
+            weaponEffectObject.transform.rotation = Quaternion.Euler(0f, 0f, 90f);
+        }
+        else if (vec == Vector3.down)
+        {
+            newPosition += Vector3.down; // 이펙트가 아래 방향으로 한 칸 이동
+            weaponEffectObject.transform.rotation = Quaternion.Euler(0f, 0f, -90f);
+        }
+        else if (vec == Vector3.left)
+        {
+            newPosition += new Vector3(-1, 0.2f, 0); // 이펙트가 왼쪽 방향으로 한 칸 이동
+            weaponEffectObject.GetComponent<SpriteRenderer>().flipX = true;
+        }
+        else if (vec == Vector3.right)
+        {
+            newPosition += new Vector3(1, 0.2f, 0); // 이펙트가 오른쪽 방향으로 한 칸 이동
+        }
+        weaponEffectObject.transform.position = newPosition;
+        weaponEffectObject.SwingAndRemove();
+    }
+    void TSWeaponEffectPos(Vector3 vec)
+    {
+        WeaponEffectObject weaponEffectObject = _titaniumSpearEffectPool.WeaponEffectPool.Get();
+        Vector3 newPosition = transform.position;
+
+        if (vec == Vector3.up)
+        {
+            newPosition += Vector3.up; // 이펙트가 위 방향으로 한 칸 이동
+            weaponEffectObject.transform.rotation = Quaternion.Euler(0f, 0f, 90f);
+        }
+        else if (vec == Vector3.down)
+        {
+            newPosition += Vector3.down; // 이펙트가 아래 방향으로 한 칸 이동
+            weaponEffectObject.transform.rotation = Quaternion.Euler(0f, 0f, -90f);
+        }
+        else if (vec == Vector3.left)
+        {
+            newPosition += new Vector3(-1, 0.2f, 0); // 이펙트가 왼쪽 방향으로 한 칸 이동
+            weaponEffectObject.GetComponent<SpriteRenderer>().flipX = true;
+        }
+        else if (vec == Vector3.right)
+        {
+            newPosition += new Vector3(1, 0.2f, 0); // 이펙트가 오른쪽 방향으로 한 칸 이동
+        }
+        weaponEffectObject.transform.position = newPosition;
+        weaponEffectObject.SwingAndRemove();
+    }
+    #endregion
 
     void GetItem(DropItem dropItem)
     {

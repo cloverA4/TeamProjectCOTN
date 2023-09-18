@@ -329,14 +329,14 @@ public class GameManager : MonoBehaviour
                     case floor.f1:
                         PlayerController.Instance.transfromUpdate(_stageStartPosition.LobbyPosition);
                         GameObject Item = Instantiate(_dropItem, _itemPool.transform);
+                        Item.transform.position = new Vector3(-24, 100, 0);
+                        Item.GetComponent<DropItem>().Init(Data.Instance.GetItemInfo(301));
+                        Item = Instantiate(_dropItem, _itemPool.transform);
                         Item.transform.position = new Vector3(-25, 100, 0);
-                        Item.GetComponent<DropItem>().Init(Data.Instance.GetItemInfo(305));
+                        Item.GetComponent<DropItem>().Init(Data.Instance.GetItemInfo(303));
                         Item = Instantiate(_dropItem, _itemPool.transform);
                         Item.transform.position = new Vector3(-26, 100, 0);
-                        Item.GetComponent<DropItem>().Init(Data.Instance.GetItemInfo(501));
-                        Item = Instantiate(_dropItem, _itemPool.transform);
-                        Item.transform.position = new Vector3(-24, 100, 0);
-                        Item.GetComponent<DropItem>().Init(Data.Instance.GetItemInfo(401));
+                        Item.GetComponent<DropItem>().Init(Data.Instance.GetItemInfo(305));
                         break;
                     case floor.f2:
                     case floor.f3:

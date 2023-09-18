@@ -47,7 +47,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 50
+  spritePixelsToUnits: 25
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -124,7 +124,7 @@ TextureImporter:
         y: 31
         width: 35
         height: 7
-      alignment: 0
+      alignment: 9
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
@@ -138,14 +138,14 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: TitaniumSpear_5
+      name: TitaniumSpear_2
       rect:
         serializedVersion: 2
-        x: 50
-        y: 31
-        width: 140
-        height: 7
-      alignment: 9
+        x: 51
+        y: 32
+        width: 41
+        height: 5
+      alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
@@ -154,6 +154,48 @@ TextureImporter:
       bones: []
       spriteID: 82af86eceb760ef4ebe11c6b8546192b
       internalID: -146964008
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TitaniumSpear_4
+      rect:
+        serializedVersion: 2
+        x: 157
+        y: 32
+        width: 35
+        height: 5
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4c2bb52cd3f789841a4030b646632690
+      internalID: 1287099001
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: TitaniumSpear_3
+      rect:
+        serializedVersion: 2
+        x: 100
+        y: 32
+        width: 44
+        height: 5
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fc5fc5a7ef8c02b449f15217a4cd7cc8
+      internalID: -1517621120
       vertices: []
       indices: 
       edges: []
@@ -169,12 +211,10 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      TitaniumSpear_0: 1287099001
       TitaniumSpear_1: 1049720381
-      TitaniumSpear_2: -1517621120
-      TitaniumSpear_3: 1633268348
-      TitaniumSpear_4: 1325106864
-      TitaniumSpear_5: -146964008
+      TitaniumSpear_2: -146964008
+      TitaniumSpear_3: -1517621120
+      TitaniumSpear_4: 1287099001
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

@@ -5,8 +5,6 @@ using UnityEngine.Pool;
 
 public class WeaponEffectObject : MonoBehaviour
 {
-    
-    private Vector3 _Direction;
 
     private IObjectPool<WeaponEffectObject> _weaponEffectPool;
 
@@ -15,14 +13,15 @@ public class WeaponEffectObject : MonoBehaviour
         _weaponEffectPool = pool;
     }
 
-    public void Swing(Vector3 dir)
+    public void SwingAndRemove()
     {
-        _Direction = dir;
-        Invoke("DestroySpear", 1f);
+        Invoke("DestroyWeaponEffect", 0.3f);
     }
 
-    public void DestroySpear()
+    public void DestroyWeaponEffect()
     {
+        GetComponent<SpriteRenderer>().flipX = false;
+        transform.rotation = Quaternion.identity;
         _weaponEffectPool.Release(this);
     }
 }

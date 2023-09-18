@@ -29,7 +29,7 @@ public class TitaniumGreatSwordEffectPool : MonoBehaviour
 
     private WeaponEffectObject CreateWeaponEffect()
     {
-        WeaponEffectObject weaponEffectObject = Instantiate(_titaniumGreatSwordEffectPrefab).GetComponent<WeaponEffectObject>();
+        WeaponEffectObject weaponEffectObject = Instantiate(_titaniumGreatSwordEffectPrefab);//.GetComponent<WeaponEffectObject>();
         weaponEffectObject.transform.parent = transform;
         weaponEffectObject.SetMenagedPool(_weaponEffectPool);
         return weaponEffectObject;
