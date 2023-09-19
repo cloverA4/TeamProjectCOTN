@@ -421,6 +421,20 @@ public class PlayerController : MonoBehaviour
                 {
                     if (hitdataTypeSpear.collider.tag == "Monster")
                     {
+                        if (Vector2.Distance(hitdataTypeSpear.collider.transform.position, transform.position) <= 1f)
+                        {
+                            if (EquipWeapon._ItemID == 305)
+                            {
+                                NDWeaponEffectPos(vec);
+                            }
+                            else if (EquipWeapon._ItemID == 306)
+                            {
+                                TDWeaponEffectPos(vec);
+                            }
+                            Debug.Log(hitdataTypeSpear.collider.tag);
+                            hitdataTypeSpear.collider.GetComponent<Monster>().TakeDamage(_damage);
+                            return;
+                        }
                         if (EquipWeapon._ItemID == 305)
                         {
                             NSWeaponEffectPos(vec);
@@ -541,22 +555,22 @@ public class PlayerController : MonoBehaviour
 
         if (vec == Vector3.up)
         {
-            newPosition += Vector3.up; // 이펙트가 위 방향으로 한 칸 이동
+            newPosition += new Vector3(0, 0.8f, 0); // 이펙트가 위 방향으로 한 칸 이동
             weaponEffectObject.transform.rotation = Quaternion.Euler(0f, 0f, 90f);
         }
         else if (vec == Vector3.down)
         {
-            newPosition += Vector3.down; // 이펙트가 아래 방향으로 한 칸 이동
+            newPosition += new Vector3(0, -0.8f, 0); // 이펙트가 아래 방향으로 한 칸 이동
             weaponEffectObject.transform.rotation = Quaternion.Euler(0f, 0f, -90f);
         }
         else if (vec == Vector3.left)
         {
-            newPosition += Vector3.left; // 이펙트가 왼쪽 방향으로 한 칸 이동
+            newPosition += new Vector3(-0.8f, 0.2f, 0); // 이펙트가 왼쪽 방향으로 한 칸 이동
             weaponEffectObject.GetComponent<SpriteRenderer>().flipX = true;
         }
         else if (vec == Vector3.right)
         {
-            newPosition += Vector3.right; // 이펙트가 오른쪽 방향으로 한 칸 이동
+            newPosition += new Vector3(0.8f, 0.2f, 0); // 이펙트가 오른쪽 방향으로 한 칸 이동
         }
         weaponEffectObject.transform.position = newPosition;
         weaponEffectObject.SwingAndRemove();
@@ -568,22 +582,22 @@ public class PlayerController : MonoBehaviour
 
         if (vec == Vector3.up)
         {
-            newPosition += Vector3.up; // 이펙트가 위 방향으로 한 칸 이동
+            newPosition += new Vector3(0, 0.8f, 0); // 이펙트가 위 방향으로 한 칸 이동
             weaponEffectObject.transform.rotation = Quaternion.Euler(0f, 0f, 90f);
         }
         else if (vec == Vector3.down)
         {
-            newPosition += Vector3.down; // 이펙트가 아래 방향으로 한 칸 이동
+            newPosition += new Vector3(0, -0.8f, 0); // 이펙트가 아래 방향으로 한 칸 이동
             weaponEffectObject.transform.rotation = Quaternion.Euler(0f, 0f, -90f);
         }
         else if (vec == Vector3.left)
         {
-            newPosition += Vector3.left; // 이펙트가 왼쪽 방향으로 한 칸 이동
+            newPosition += new Vector3(-0.8f, 0.2f, 0); // 이펙트가 왼쪽 방향으로 한 칸 이동
             weaponEffectObject.GetComponent<SpriteRenderer>().flipX = true;
         }
         else if (vec == Vector3.right)
         {
-            newPosition += Vector3.right; // 이펙트가 오른쪽 방향으로 한 칸 이동
+            newPosition += new Vector3(0.8f, 0.2f, 0); // 이펙트가 오른쪽 방향으로 한 칸 이동
         }
         weaponEffectObject.transform.position = newPosition;
         weaponEffectObject.SwingAndRemove();

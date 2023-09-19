@@ -19,6 +19,10 @@ public class Monster : MonoBehaviour
     Animator _animator;
     SpriteRenderer _childSpriteRenderer;
 
+    MonsterAttackEffectPool _monsterAttackEffectPool;
+
+    
+
     void Start()
     {
         //GameManager.Instance.MosterMoveEnvent += new EventHandler(MonsterMove);
@@ -164,7 +168,8 @@ public class Monster : MonoBehaviour
         //해골패턴
         if (_attackReady)
         {
-            Action<Vector3> action;            
+            Action<Vector3> action;  
+            
             if (Vector2.Distance(transform.position, PlayerController.Instance.transform.position) > 1)
             {
                 action = MoveMonster2;
@@ -231,9 +236,42 @@ public class Monster : MonoBehaviour
 
         if (hitdata)
         {
-            if (hitdata.collider.tag == "Player") PlayerController.Instance.TakeDamage(_monsterDamage);
+            if (hitdata.collider.tag == "Player")
+            {
+               
+                PlayerController.Instance.TakeDamage(_monsterDamage);
+            }
         }
     }
+
+    //void MonsterAttackEffectPos(Vector3 vec)
+    //{
+    //    MonsterAttackEffectObject monsterEffectObject = _monsterAttackEffectPool.AttackEffectPool.Get().GetComponent<MonsterAttackEffectObject>();
+    //    Vector3 newPosition = transform.position;
+
+    //    if (vec == Vector3.up)
+    //    {
+    //        newPosition += new Vector3(0, 0.8f, 0); // 이펙트가 위 방향으로 한 칸 이동
+    //        monsterEffectObject.transform.rotation = Quaternion.Euler(0f, 0f, 90f);
+    //    }
+    //    else if (vec == Vector3.down)
+    //    {
+    //        newPosition += new Vector3(0, -0.8f, 0); // 이펙트가 아래 방향으로 한 칸 이동
+    //        monsterEffectObject.transform.rotation = Quaternion.Euler(0f, 0f, -90f);
+    //    }
+    //    else if (vec == Vector3.left)
+    //    {
+    //        newPosition += new Vector3(-0.8f, 0.2f, 0); // 이펙트가 왼쪽 방향으로 한 칸 이동
+    //        monsterEffectObject.GetComponent<SpriteRenderer>().flipX = true;
+    //    }
+    //    else if (vec == Vector3.right)
+    //    {
+    //        newPosition += new Vector3(0.8f, 0.2f, 0); // 이펙트가 오른쪽 방향으로 한 칸 이동
+    //    }
+    //    monsterEffectObject.transform.position = newPosition;
+    //    monsterEffectObject.SwingAndRemove();
+    //}
+
 
     int _attackMoveCount = 0;
     int _specialAttackCount = 0;
