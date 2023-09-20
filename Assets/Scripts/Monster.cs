@@ -4,6 +4,8 @@ using System;
 public class Monster : MonoBehaviour
 {
     [SerializeField] MonsterHPUI _monsterHPUI;
+    [SerializeField] GameObject _monsterNormalAttackEffect;
+
     MonsterType _type;
     public MonsterType Type { get { return _type; } }
 
@@ -16,12 +18,10 @@ public class Monster : MonoBehaviour
     Vector3 MonsterLook = Vector3.zero;
     LayerMask _normalLayerMask;
 
+    
+
     Animator _animator;
     SpriteRenderer _childSpriteRenderer;
-
-    MonsterAttackEffectPool _monsterAttackEffectPool;
-
-    
 
     void Start()
     {
@@ -144,9 +144,9 @@ public class Monster : MonoBehaviour
     }
 
     void MonsterPattern()
-    {        
+    {
         //어느정도 해결은 했는데 서로 같은칸을 보고 동시에 비었다고 판단하고 움직이면 겹쳐버림
-        
+
         //위아래로 또는 좌우로만 움직이고 체력2 - 이니셜라이즈에서 방향 정해짐
         Vector3 Temp = transform.position + MonsterLook/2;
         RaycastHit2D hitdata = Physics2D.Raycast(Temp, MonsterLook, 0.5f, _normalLayerMask);
@@ -154,7 +154,11 @@ public class Monster : MonoBehaviour
         if (hitdata)
         {
             //플레이어면 공격하고 아니면 뒤로돌고 턴 끝
-            if (hitdata.collider.tag == "Player") PlayerController.Instance.TakeDamage(_monsterDamage);//플레이어면 공격
+            if (hitdata.collider.tag == "Player")
+            {
+                MonsterAttackEffectPos(MonsterLook);
+                PlayerController.Instance.TakeDamage(_monsterDamage);//플레이어면 공격
+            }
             else
             {
                 MonsterLook = MonsterLook * -1;
@@ -238,39 +242,40 @@ public class Monster : MonoBehaviour
         {
             if (hitdata.collider.tag == "Player")
             {
-               
+                MonsterAttackEffectPos(vec);
                 PlayerController.Instance.TakeDamage(_monsterDamage);
             }
         }
     }
 
-    //void MonsterAttackEffectPos(Vector3 vec)
-    //{
-    //    MonsterAttackEffectObject monsterEffectObject = _monsterAttackEffectPool.AttackEffectPool.Get().GetComponent<MonsterAttackEffectObject>();
-    //    Vector3 newPosition = transform.position;
+    void MonsterAttackEffectPos(Vector3 vec)
+    {
+        if (_monsterNormalAttackEffect != null)
+        {
+            GameObject NormalAttack = null;
 
-    //    if (vec == Vector3.up)
-    //    {
-    //        newPosition += new Vector3(0, 0.8f, 0); // 이펙트가 위 방향으로 한 칸 이동
-    //        monsterEffectObject.transform.rotation = Quaternion.Euler(0f, 0f, 90f);
-    //    }
-    //    else if (vec == Vector3.down)
-    //    {
-    //        newPosition += new Vector3(0, -0.8f, 0); // 이펙트가 아래 방향으로 한 칸 이동
-    //        monsterEffectObject.transform.rotation = Quaternion.Euler(0f, 0f, -90f);
-    //    }
-    //    else if (vec == Vector3.left)
-    //    {
-    //        newPosition += new Vector3(-0.8f, 0.2f, 0); // 이펙트가 왼쪽 방향으로 한 칸 이동
-    //        monsterEffectObject.GetComponent<SpriteRenderer>().flipX = true;
-    //    }
-    //    else if (vec == Vector3.right)
-    //    {
-    //        newPosition += new Vector3(0.8f, 0.2f, 0); // 이펙트가 오른쪽 방향으로 한 칸 이동
-    //    }
-    //    monsterEffectObject.transform.position = newPosition;
-    //    monsterEffectObject.SwingAndRemove();
-    //}
+            if (vec == Vector3.up)
+            {
+                NormalAttack = Instantiate(_monsterNormalAttackEffect, transform.position + new Vector3(0, 0.8f, 0), Quaternion.Euler(0f, 0f, 90f));
+            }
+            else if (vec == Vector3.down)
+            {
+                NormalAttack = Instantiate(_monsterNormalAttackEffect, transform.position + new Vector3(0, -0.8f, 0), Quaternion.Euler(0f, 0f, -90f));
+            }
+            else if (vec == Vector3.left)
+            {
+                NormalAttack = Instantiate(_monsterNormalAttackEffect, transform.position + new Vector3(-0.8f, 0.2f, 0), Quaternion.identity);
+                NormalAttack.GetComponent<SpriteRenderer>().flipX = true;
+            }
+            else if (vec == Vector3.right)
+            {
+                NormalAttack = Instantiate(_monsterNormalAttackEffect, transform.position + new Vector3(0.8f, 0.2f, 0), Quaternion.identity);
+            }
+            Destroy(NormalAttack, 0.2f);
+        }
+
+        
+    }
 
 
     int _attackMoveCount = 0;

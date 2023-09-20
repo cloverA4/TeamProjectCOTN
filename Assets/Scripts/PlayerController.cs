@@ -12,23 +12,7 @@ public class PlayerController : MonoBehaviour
     LayerMask _weaponCheckLayerMask;
     LayerMask _itemCheckLayerMask;
 
-    
-
-
-    NormalDaggerEffectPool _normalDaggerEffectPool;
-    TitaniumDaggerEffectPool _titaniumDaggerEffectPool;
-
-    NormalSpearEffectPool _normalSpearEffectPool;
-    TitaniumSpearEffectPool _titaniumSpearEffectPool;
-
-    NormalGreatSwordEffectPool _normalGreatSwordEffectPool;
-    TitaniumGreatSwordEffectPool _titaniumGreatSwordEffectPool;
-
-    
-
-    
-
-
+    [SerializeField] GameObject[] _weaponEffect;
 
     [SerializeField] MakeFog2 _MakeFog2;
     [SerializeField] SaveInfoData _unlockSaveData;
@@ -179,16 +163,6 @@ public class PlayerController : MonoBehaviour
         //_childSpriteRenderer = GetComponentInChildrens<SpriteRenderer>()[1];
         _animator = GetComponentsInChildren<Animator>()[0];
         _childSpriteRenderer = GetComponentsInChildren<SpriteRenderer>()[1];
-
-        _normalDaggerEffectPool = GetComponent<NormalDaggerEffectPool>();
-        _titaniumDaggerEffectPool = GetComponent<TitaniumDaggerEffectPool>();
-
-        _normalSpearEffectPool = GetComponent<NormalSpearEffectPool>();
-        _titaniumSpearEffectPool = GetComponent<TitaniumSpearEffectPool>();
-
-        _normalGreatSwordEffectPool = GetComponent<NormalGreatSwordEffectPool>();
-        _titaniumGreatSwordEffectPool = GetComponent<TitaniumGreatSwordEffectPool>();
-
 
         IsX = true;
         //Debug.Log(GameManager.Instance.NowStage); 스테이지확인
@@ -550,165 +524,178 @@ public class PlayerController : MonoBehaviour
     #region 무기이펙트관리
     void NDWeaponEffectPos(Vector3 vec)
     {
-        WeaponEffectObject weaponEffectObject = _normalDaggerEffectPool.WeaponEffectPool.Get();
-        Vector3 newPosition = transform.position;
 
-        if (vec == Vector3.up)
+        if (_weaponEffect[0] != null)
         {
-            newPosition += new Vector3(0, 0.8f, 0); // 이펙트가 위 방향으로 한 칸 이동
-            weaponEffectObject.transform.rotation = Quaternion.Euler(0f, 0f, 90f);
+            // 이펙트를 생성하면서 위치 잡아주기
+            GameObject NDWeaponEffect = null;
+
+            // 위키를 입력 받았을떄 이펙트가 위 방향으로 이동
+            if (vec == Vector3.up)
+            {
+                NDWeaponEffect = Instantiate(_weaponEffect[0], transform.position + new Vector3(0, 0.8f, 0), Quaternion.Euler(0f, 0f, 90f));
+            }
+            else if (vec == Vector3.down) // 아래 키를 입력 받았을떄 이펙트가 아래 방향으로 이동
+            {
+                NDWeaponEffect = Instantiate(_weaponEffect[0], transform.position + new Vector3(0, -0.8f, 0), Quaternion.Euler(0f, 0f, -90f));
+            }
+            else if (vec == Vector3.left) // 왼쪽 키를 입력 받았을떄 이펙트가 왼쪽 방향으로 이동
+            {
+                NDWeaponEffect = Instantiate(_weaponEffect[0], transform.position + new Vector3(-0.8f, 0.2f, 0), Quaternion.identity);
+                NDWeaponEffect.GetComponent<SpriteRenderer>().flipX = true;
+            }
+            else if (vec == Vector3.right) // 오른쪽 키를 입력 받았을떄 이펙트가 오른쪽 방향으로 이동
+            {
+                NDWeaponEffect = Instantiate(_weaponEffect[0], transform.position + new Vector3(0.8f, 0.2f, 0), Quaternion.identity);
+            }
+
+            Destroy(NDWeaponEffect, 0.2f);
         }
-        else if (vec == Vector3.down)
-        {
-            newPosition += new Vector3(0, -0.8f, 0); // 이펙트가 아래 방향으로 한 칸 이동
-            weaponEffectObject.transform.rotation = Quaternion.Euler(0f, 0f, -90f);
-        }
-        else if (vec == Vector3.left)
-        {
-            newPosition += new Vector3(-0.8f, 0.2f, 0); // 이펙트가 왼쪽 방향으로 한 칸 이동
-            weaponEffectObject.GetComponent<SpriteRenderer>().flipX = true;
-        }
-        else if (vec == Vector3.right)
-        {
-            newPosition += new Vector3(0.8f, 0.2f, 0); // 이펙트가 오른쪽 방향으로 한 칸 이동
-        }
-        weaponEffectObject.transform.position = newPosition;
-        weaponEffectObject.SwingAndRemove();
     }
     void TDWeaponEffectPos(Vector3 vec)
     {
-        WeaponEffectObject weaponEffectObject = _titaniumDaggerEffectPool.WeaponEffectPool.Get();
-        Vector3 newPosition = transform.position;
+        if (_weaponEffect[1] != null)
+        {
+            // 이펙트를 생성하면서 위치 잡아주기
+            GameObject NDWeaponEffect = null;
 
-        if (vec == Vector3.up)
-        {
-            newPosition += new Vector3(0, 0.8f, 0); // 이펙트가 위 방향으로 한 칸 이동
-            weaponEffectObject.transform.rotation = Quaternion.Euler(0f, 0f, 90f);
+            // 위키를 입력 받았을떄 이펙트가 위 방향으로 이동
+            if (vec == Vector3.up)
+            {
+                NDWeaponEffect = Instantiate(_weaponEffect[1], transform.position + new Vector3(0, 0.8f, 0), Quaternion.Euler(0f, 0f, 90f));
+            }
+            else if (vec == Vector3.down) // 아래 키를 입력 받았을떄 이펙트가 아래 방향으로 이동
+            {
+                NDWeaponEffect = Instantiate(_weaponEffect[1], transform.position + new Vector3(0, -0.8f, 0), Quaternion.Euler(0f, 0f, -90f));
+            }
+            else if (vec == Vector3.left) // 왼쪽 키를 입력 받았을떄 이펙트가 왼쪽 방향으로 이동
+            {
+                NDWeaponEffect = Instantiate(_weaponEffect[1], transform.position + new Vector3(-0.8f, 0.2f, 0), Quaternion.identity);
+                NDWeaponEffect.GetComponent<SpriteRenderer>().flipX = true;
+            }
+            else if (vec == Vector3.right) // 오른쪽 키를 입력 받았을떄 이펙트가 오른쪽 방향으로 이동
+            {
+                NDWeaponEffect = Instantiate(_weaponEffect[1], transform.position + new Vector3(0.8f, 0.2f, 0), Quaternion.identity);
+            }
+
+            Destroy(NDWeaponEffect, 0.2f);
         }
-        else if (vec == Vector3.down)
-        {
-            newPosition += new Vector3(0, -0.8f, 0); // 이펙트가 아래 방향으로 한 칸 이동
-            weaponEffectObject.transform.rotation = Quaternion.Euler(0f, 0f, -90f);
-        }
-        else if (vec == Vector3.left)
-        {
-            newPosition += new Vector3(-0.8f, 0.2f, 0); // 이펙트가 왼쪽 방향으로 한 칸 이동
-            weaponEffectObject.GetComponent<SpriteRenderer>().flipX = true;
-        }
-        else if (vec == Vector3.right)
-        {
-            newPosition += new Vector3(0.8f, 0.2f, 0); // 이펙트가 오른쪽 방향으로 한 칸 이동
-        }
-        weaponEffectObject.transform.position = newPosition;
-        weaponEffectObject.SwingAndRemove();
     }
     void NGWeaponEffectPos(Vector3 vec)
     {
-        WeaponEffectObject weaponEffectObject = _normalGreatSwordEffectPool.WeaponEffectPool.Get();
-        Vector3 newPosition = transform.position;
+        if (_weaponEffect[2] != null)
+        {
+            // 이펙트를 생성하면서 위치 잡아주기
+            GameObject NDWeaponEffect = null;
 
-        if (vec == Vector3.up)
-        {
-            newPosition += Vector3.up; // 이펙트가 위 방향으로 한 칸 이동
-            weaponEffectObject.transform.rotation = Quaternion.Euler(0f, 0f, 90f);
+            // 위키를 입력 받았을떄 이펙트가 위 방향으로 이동
+            if (vec == Vector3.up)
+            {
+                NDWeaponEffect = Instantiate(_weaponEffect[2], transform.position + new Vector3(0, 0.8f, 0), Quaternion.Euler(0f, 0f, 90f));
+            }
+            else if (vec == Vector3.down) // 아래 키를 입력 받았을떄 이펙트가 아래 방향으로 이동
+            {
+                NDWeaponEffect = Instantiate(_weaponEffect[2], transform.position + new Vector3(0, -0.8f, 0), Quaternion.Euler(0f, 0f, -90f));
+            }
+            else if (vec == Vector3.left) // 왼쪽 키를 입력 받았을떄 이펙트가 왼쪽 방향으로 이동
+            {
+                NDWeaponEffect = Instantiate(_weaponEffect[2], transform.position + new Vector3(-0.8f, 0.2f, 0), Quaternion.identity);
+                NDWeaponEffect.GetComponent<SpriteRenderer>().flipX = true;
+            }
+            else if (vec == Vector3.right) // 오른쪽 키를 입력 받았을떄 이펙트가 오른쪽 방향으로 이동
+            {
+                NDWeaponEffect = Instantiate(_weaponEffect[2], transform.position + new Vector3(0.8f, 0.2f, 0), Quaternion.identity);
+            }
+
+            Destroy(NDWeaponEffect, 0.2f);
         }
-        else if (vec == Vector3.down)
-        {
-            newPosition += Vector3.down; // 이펙트가 아래 방향으로 한 칸 이동
-            weaponEffectObject.transform.rotation = Quaternion.Euler(0f, 0f, -90f);
-        }
-        else if (vec == Vector3.left)
-        {
-            newPosition += Vector3.left; // 이펙트가 왼쪽 방향으로 한 칸 이동
-            weaponEffectObject.GetComponent<SpriteRenderer>().flipX = true;
-        }
-        else if (vec == Vector3.right)
-        {
-            newPosition += Vector3.right; // 이펙트가 오른쪽 방향으로 한 칸 이동
-        }
-        weaponEffectObject.transform.position = newPosition;
-        weaponEffectObject.SwingAndRemove();
     }
     void TGWeaponEffectPos(Vector3 vec)
     {
-        WeaponEffectObject weaponEffectObject = _titaniumGreatSwordEffectPool.WeaponEffectPool.Get();
-        Vector3 newPosition = transform.position;
+        if (_weaponEffect[3] != null) // 예외처리 만약 3번쨰 인덱스에 게임오브젝트가 있다면 실행 없다면 실행 x
+        {
+            // 이펙트를 생성하면서 위치 잡아주기
+            GameObject NDWeaponEffect = null;
 
-        if (vec == Vector3.up)
-        {
-            newPosition += Vector3.up; // 이펙트가 위 방향으로 한 칸 이동
-            weaponEffectObject.transform.rotation = Quaternion.Euler(0f, 0f, 90f);
+            // 위키를 입력 받았을떄 이펙트가 위 방향으로 이동
+            if (vec == Vector3.up)
+            {
+                NDWeaponEffect = Instantiate(_weaponEffect[3], transform.position + new Vector3(0, 0.8f, 0), Quaternion.Euler(0f, 0f, 90f));
+            }
+            else if (vec == Vector3.down) // 아래 키를 입력 받았을떄 이펙트가 아래 방향으로 이동
+            {
+                NDWeaponEffect = Instantiate(_weaponEffect[3], transform.position + new Vector3(0, -0.8f, 0), Quaternion.Euler(0f, 0f, -90f));
+            }
+            else if (vec == Vector3.left) // 왼쪽 키를 입력 받았을떄 이펙트가 왼쪽 방향으로 이동
+            {
+                NDWeaponEffect = Instantiate(_weaponEffect[3], transform.position + new Vector3(-0.8f, 0.2f, 0), Quaternion.identity);
+                NDWeaponEffect.GetComponent<SpriteRenderer>().flipX = true;
+            }
+            else if (vec == Vector3.right) // 오른쪽 키를 입력 받았을떄 이펙트가 오른쪽 방향으로 이동
+            {
+                NDWeaponEffect = Instantiate(_weaponEffect[3], transform.position + new Vector3(0.8f, 0.2f, 0), Quaternion.identity);
+            }
+
+            Destroy(NDWeaponEffect, 0.2f);
         }
-        else if (vec == Vector3.down)
-        {
-            newPosition += Vector3.down; // 이펙트가 아래 방향으로 한 칸 이동
-            weaponEffectObject.transform.rotation = Quaternion.Euler(0f, 0f, -90f);
-        }
-        else if (vec == Vector3.left)
-        {
-            newPosition += Vector3.left; // 이펙트가 왼쪽 방향으로 한 칸 이동
-            weaponEffectObject.GetComponent<SpriteRenderer>().flipX = true;
-        }
-        else if (vec == Vector3.right)
-        {
-            newPosition += Vector3.right; // 이펙트가 오른쪽 방향으로 한 칸 이동
-        }
-        weaponEffectObject.transform.position = newPosition;
-        weaponEffectObject.SwingAndRemove();
     }
     void NSWeaponEffectPos(Vector3 vec)
     {
-        WeaponEffectObject weaponEffectObject = _normalSpearEffectPool.WeaponEffectPool.Get();
-        Vector3 newPosition = transform.position;
+        if (_weaponEffect[4] != null)
+        {
+            // 이펙트를 생성하면서 위치 잡아주기
+            GameObject NDWeaponEffect = null;
 
-        if (vec == Vector3.up)
-        {
-            newPosition += Vector3.up; // 이펙트가 위 방향으로 한 칸 이동
-            weaponEffectObject.transform.rotation = Quaternion.Euler(0f, 0f, 90f);
+            // 위키를 입력 받았을떄 이펙트가 위 방향으로 이동
+            if (vec == Vector3.up)
+            {
+                NDWeaponEffect = Instantiate(_weaponEffect[4], transform.position + new Vector3(0, 0.8f, 0), Quaternion.Euler(0f, 0f, 90f));
+            }
+            else if (vec == Vector3.down) // 아래 키를 입력 받았을떄 이펙트가 아래 방향으로 이동
+            {
+                NDWeaponEffect = Instantiate(_weaponEffect[4], transform.position + new Vector3(0, -0.8f, 0), Quaternion.Euler(0f, 0f, -90f));
+            }
+            else if (vec == Vector3.left) // 왼쪽 키를 입력 받았을떄 이펙트가 왼쪽 방향으로 이동
+            {
+                NDWeaponEffect = Instantiate(_weaponEffect[4], transform.position + new Vector3(-0.8f, 0.2f, 0), Quaternion.identity);
+                NDWeaponEffect.GetComponent<SpriteRenderer>().flipX = true;
+            }
+            else if (vec == Vector3.right) // 오른쪽 키를 입력 받았을떄 이펙트가 오른쪽 방향으로 이동
+            {
+                NDWeaponEffect = Instantiate(_weaponEffect[4], transform.position + new Vector3(0.8f, 0.2f, 0), Quaternion.identity);
+            }
+
+            Destroy(NDWeaponEffect, 0.2f);
         }
-        else if (vec == Vector3.down)
-        {
-            newPosition += Vector3.down; // 이펙트가 아래 방향으로 한 칸 이동
-            weaponEffectObject.transform.rotation = Quaternion.Euler(0f, 0f, -90f);
-        }
-        else if (vec == Vector3.left)
-        {
-            newPosition += new Vector3(-1, 0.2f, 0); // 이펙트가 왼쪽 방향으로 한 칸 이동
-            weaponEffectObject.GetComponent<SpriteRenderer>().flipX = true;
-        }
-        else if (vec == Vector3.right)
-        {
-            newPosition += new Vector3(1, 0.2f, 0); // 이펙트가 오른쪽 방향으로 한 칸 이동
-        }
-        weaponEffectObject.transform.position = newPosition;
-        weaponEffectObject.SwingAndRemove();
     }
     void TSWeaponEffectPos(Vector3 vec)
     {
-        WeaponEffectObject weaponEffectObject = _titaniumSpearEffectPool.WeaponEffectPool.Get();
-        Vector3 newPosition = transform.position;
+        if (_weaponEffect[5] != null)
+        {
+            // 이펙트를 생성하면서 위치 잡아주기
+            GameObject NDWeaponEffect = null;
 
-        if (vec == Vector3.up)
-        {
-            newPosition += Vector3.up; // 이펙트가 위 방향으로 한 칸 이동
-            weaponEffectObject.transform.rotation = Quaternion.Euler(0f, 0f, 90f);
+            // 위키를 입력 받았을떄 이펙트가 위 방향으로 이동
+            if (vec == Vector3.up)
+            {
+                NDWeaponEffect = Instantiate(_weaponEffect[5], transform.position + new Vector3(0, 0.8f, 0), Quaternion.Euler(0f, 0f, 90f));
+            }
+            else if (vec == Vector3.down) // 아래 키를 입력 받았을떄 이펙트가 아래 방향으로 이동
+            {
+                NDWeaponEffect = Instantiate(_weaponEffect[5], transform.position + new Vector3(0, -0.8f, 0), Quaternion.Euler(0f, 0f, -90f));
+            }
+            else if (vec == Vector3.left) // 왼쪽 키를 입력 받았을떄 이펙트가 왼쪽 방향으로 이동
+            {
+                NDWeaponEffect = Instantiate(_weaponEffect[5], transform.position + new Vector3(-0.8f, 0.2f, 0), Quaternion.identity);
+                NDWeaponEffect.GetComponent<SpriteRenderer>().flipX = true;
+            }
+            else if (vec == Vector3.right) // 오른쪽 키를 입력 받았을떄 이펙트가 오른쪽 방향으로 이동
+            {
+                NDWeaponEffect = Instantiate(_weaponEffect[5], transform.position + new Vector3(0.8f, 0.2f, 0), Quaternion.identity);
+            }
+
+            Destroy(NDWeaponEffect, 0.2f);
         }
-        else if (vec == Vector3.down)
-        {
-            newPosition += Vector3.down; // 이펙트가 아래 방향으로 한 칸 이동
-            weaponEffectObject.transform.rotation = Quaternion.Euler(0f, 0f, -90f);
-        }
-        else if (vec == Vector3.left)
-        {
-            newPosition += new Vector3(-1, 0.2f, 0); // 이펙트가 왼쪽 방향으로 한 칸 이동
-            weaponEffectObject.GetComponent<SpriteRenderer>().flipX = true;
-        }
-        else if (vec == Vector3.right)
-        {
-            newPosition += new Vector3(1, 0.2f, 0); // 이펙트가 오른쪽 방향으로 한 칸 이동
-        }
-        weaponEffectObject.transform.position = newPosition;
-        weaponEffectObject.SwingAndRemove();
     }
     #endregion
 

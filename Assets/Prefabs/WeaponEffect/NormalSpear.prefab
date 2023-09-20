@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 8371307291782575595}
   - component: {fileID: 8371307291782575588}
   - component: {fileID: 8371307291782575589}
-  - component: {fileID: 1480644810878900625}
   m_Layer: 0
   m_Name: NormalSpear
   m_TagString: Untagged
@@ -107,15 +106,3 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &1480644810878900625
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8371307291782575590}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7d76d2677e9ec564384be5e496b5f82f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

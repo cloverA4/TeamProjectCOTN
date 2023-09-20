@@ -190,7 +190,6 @@ GameObject:
   - component: {fileID: 7259199321893285418}
   - component: {fileID: 7259199321893285419}
   - component: {fileID: 7259199321893285416}
-  - component: {fileID: -8506054861704551150}
   m_Layer: 19
   m_Name: COTN_EliteMonster_Goblin_Base
   m_TagString: Monster
@@ -281,6 +280,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _monsterHPUI: {fileID: 1338338560280806116}
+  _monsterNormalAttackEffect: {fileID: 2425396381269786317, guid: 3392f62e4303d4548ab2afcfa8222d96,
+    type: 3}
 --- !u!50 &7259199321893285419
 Rigidbody2D:
   serializedVersion: 4
@@ -328,20 +329,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.8, y: 0.8}
   m_EdgeRadius: 0
---- !u!114 &-8506054861704551150
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7259199321893285417}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dc9e72c325c7d7947bcb366aec03eb4b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _monsterAttackEffectPrefab: {fileID: -5746177709979958080, guid: 3392f62e4303d4548ab2afcfa8222d96,
-    type: 3}
 --- !u!1 &7259199323109967662
 GameObject:
   m_ObjectHideFlags: 0

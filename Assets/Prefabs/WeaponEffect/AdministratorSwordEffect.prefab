@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 6902535486557890822}
   - component: {fileID: 6902535486557890823}
   - component: {fileID: 6902535486557890872}
-  - component: {fileID: 528889897324887876}
   m_Layer: 0
   m_Name: AdministratorSwordEffect
   m_TagString: Untagged
@@ -107,15 +106,3 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &528889897324887876
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6902535486557890873}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7d76d2677e9ec564384be5e496b5f82f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
