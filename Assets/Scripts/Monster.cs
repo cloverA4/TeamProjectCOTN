@@ -162,6 +162,7 @@ public class Monster : MonoBehaviour
             else
             {
                 MonsterLook = MonsterLook * -1;
+                _childSpriteRenderer.flipX = !_childSpriteRenderer.flipX;
             }
         }
         else MoveMonster();
