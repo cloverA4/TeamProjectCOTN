@@ -271,112 +271,117 @@ public class Data : MonoBehaviour
 
     void ReadItemData()
     {
-        string path = Application.dataPath + "/Resources/Datas/csv_ItemList.csv";
-        string[] lines;
-
+        /*
+        string path = Application.persistentDataPath + "/Resources/Datas/csv_ItemList.csv";
         if (File.Exists(path))
         {
+        using (StreamReader sr = new StreamReader(path))
+        {
             string source;
-            using (StreamReader sr = new StreamReader(path))
+
+            source = sr.ReadToEnd();
+        }
+        }*/
+
+
+
+        TextAsset txt = (TextAsset)Resources.Load("Datas/csv_ItemList") as TextAsset;
+        string[] lines;
+
+        lines = Regex.Split(txt.text, LINE_SPLIT); // 정규식 사용방법
+        string[] header = Regex.Split(lines[0], SPLIT);
+        for (int i = 1; i < lines.Length; i++)
+        {
+            string[] values = Regex.Split(lines[i], SPLIT);
+            if (values.Length == 0 || values[0] == "") continue;
+
+            Item data = null;
+            switch ((ItemType)(int.Parse(values[2])))
             {
-                source = sr.ReadToEnd();
-
-                lines = Regex.Split(source, LINE_SPLIT); // 정규식 사용방법
-                string[] header = Regex.Split(lines[0], SPLIT);
-                for (int i = 1; i < lines.Length; i++)
-                {
-                    string[] values = Regex.Split(lines[i], SPLIT);
-                    if (values.Length == 0 || values[0] == "") continue;
-
-                    Item data = null;
-                    switch ((ItemType)(int.Parse(values[2])))
+                case ItemType.Currency:
+                    Currency cr = new Currency();
+                    for (int j = 0; j < header.Length && j < values.Length; j++)
                     {
-                        case ItemType.Currency:
-                            Currency cr = new Currency();
-                            for (int j = 0; j < header.Length && j < values.Length; j++)
-                            {
-                                if (header[j] == "ItemID") cr._ItemID = int.Parse(values[j]);
-                                else if (header[j] == "Name") cr._Name = values[j];
-                                else if (header[j] == "ItemType") cr._itemType = (ItemType)(int.Parse(values[j]));
-                            }
-                            data = cr;
-                            break;
-                        case ItemType.Shovel:
-                            Shovel sv = new Shovel();
-                            for (int j = 0; j < header.Length && j < values.Length; j++)
-                            {
-                                if (header[j] == "ItemID") sv._ItemID = int.Parse(values[j]);
-                                else if (header[j] == "Name") sv._Name = values[j];
-                                else if (header[j] == "ItemType") sv._itemType = (ItemType)(int.Parse(values[j]));
-                                else if (header[j] == "1") sv.ShovelPower = int.Parse(values[j]);
-                                else if (header[j] == "2") sv.UnlockPrice = int.Parse(values[j]);
-                                else if (header[j] == "3") sv.Price = int.Parse(values[j]);
-                                else if (header[j] == "4") sv.ItemInfo = values[j];
-                                //else if (header[j] == "5") sv.ShoverEffectType = (ShoverEffectType)int.Parse(values[j]);
-                            }
-                            data = sv;
-                            break;
-                        case ItemType.Weapon:
-                            Weapon wp = new Weapon();
-                            for (int j = 0; j < header.Length && j < values.Length; j++)
-                            {
-                                if (header[j] == "ItemID") wp._ItemID = int.Parse(values[j]);
-                                else if (header[j] == "Name") wp._Name = values[j];
-                                else if (header[j] == "ItemType") wp._itemType = (ItemType)(int.Parse(values[j]));
-                                else if (header[j] == "1") wp.Attack = int.Parse(values[j]);
-                                else if (header[j] == "2") wp.weaponType = (WeaponType)int.Parse(values[j]);
-                                else if (header[j] == "3") wp.UnlockPrice = int.Parse(values[j]);
-                                else if (header[j] == "4") wp.Price = int.Parse(values[j]);
-                                else if (header[j] == "5") wp.ItemInfo = values[j];
-                                else if (header[j] == "6") wp.WeaponEffectType = (WeaponEffectType)int.Parse(values[j]);
-                            }
-                            data = wp;
-                            break;
-                        case ItemType.Potion:
-                            Potion pt = new Potion();
-                            for (int j = 0; j < header.Length && j < values.Length; j++)
-                            {
-                                if (header[j] == "ItemID") pt._ItemID = int.Parse(values[j]);
-                                else if (header[j] == "Name") pt._Name = values[j];
-                                else if (header[j] == "ItemType") pt._itemType = (ItemType)(int.Parse(values[j]));
-                                else if (header[j] == "1") pt.Heal = int.Parse(values[j]);
-                                else if (header[j] == "2") pt.UnlockPrice = int.Parse(values[j]);
-                                else if (header[j] == "3") pt.Price = int.Parse(values[j]);
-                                else if (header[j] == "4") pt.ItemInfo = values[j];
-                            }
-                            data = pt;
-                            break;
-                        case ItemType.Armor:
-                            Armor ar = new Armor();
-                            for (int j = 0; j < header.Length && j < values.Length; j++)
-                            {
-                                if (header[j] == "ItemID") ar._ItemID = int.Parse(values[j]);
-                                else if (header[j] == "Name") ar._Name = values[j];
-                                else if (header[j] == "ItemType") ar._itemType = (ItemType)(int.Parse(values[j]));
-                                else if (header[j] == "1") ar.Defence = int.Parse(values[j]);
-                                else if (header[j] == "2") ar.UnlockPrice = int.Parse(values[j]);
-                                else if (header[j] == "3") ar.Price = int.Parse(values[j]);
-                                else if (header[j] == "4") ar.ItemInfo = values[j];
-                            }
-                            data = ar;
-                            break;
-                        case ItemType.Unlock:
-                            UnlockItem ul = new UnlockItem();
-                            for (int j = 0; j < header.Length && j < values.Length; j++)
-                            {
-                                if (header[j] == "ItemID") ul._ItemID = int.Parse(values[j]);
-                                else if (header[j] == "Name") ul._Name = values[j];
-                                else if (header[j] == "ItemType") ul._itemType = (ItemType)(int.Parse(values[j]));
-                                else if (header[j] == "1") ul.MaxUnlockCount = int.Parse(values[j]);
-                                else if (header[j] == "2") ul.ItemInfo = values[j];
-                            }
-                            data = ul;
-                            break;
+                        if (header[j] == "ItemID") cr._ItemID = int.Parse(values[j]);
+                        else if (header[j] == "Name") cr._Name = values[j];
+                        else if (header[j] == "ItemType") cr._itemType = (ItemType)(int.Parse(values[j]));
                     }
-                    data._ItemIcon = Resources.Load<Sprite>("Item/Item" + data._ItemID);
-                    ItemDataList.Add(data);
-                }
+                    data = cr;
+                    break;
+                case ItemType.Shovel:
+                    Shovel sv = new Shovel();
+                    for (int j = 0; j < header.Length && j < values.Length; j++)
+                    {
+                        if (header[j] == "ItemID") sv._ItemID = int.Parse(values[j]);
+                        else if (header[j] == "Name") sv._Name = values[j];
+                        else if (header[j] == "ItemType") sv._itemType = (ItemType)(int.Parse(values[j]));
+                        else if (header[j] == "1") sv.ShovelPower = int.Parse(values[j]);
+                        else if (header[j] == "2") sv.UnlockPrice = int.Parse(values[j]);
+                        else if (header[j] == "3") sv.Price = int.Parse(values[j]);
+                        else if (header[j] == "4") sv.ItemInfo = values[j];
+                        //else if (header[j] == "5") sv.ShoverEffectType = (ShoverEffectType)int.Parse(values[j]);
+                    }
+                    data = sv;
+                    break;
+                case ItemType.Weapon:
+                    Weapon wp = new Weapon();
+                    for (int j = 0; j < header.Length && j < values.Length; j++)
+                    {
+                        if (header[j] == "ItemID") wp._ItemID = int.Parse(values[j]);
+                        else if (header[j] == "Name") wp._Name = values[j];
+                        else if (header[j] == "ItemType") wp._itemType = (ItemType)(int.Parse(values[j]));
+                        else if (header[j] == "1") wp.Attack = int.Parse(values[j]);
+                        else if (header[j] == "2") wp.weaponType = (WeaponType)int.Parse(values[j]);
+                        else if (header[j] == "3") wp.UnlockPrice = int.Parse(values[j]);
+                        else if (header[j] == "4") wp.Price = int.Parse(values[j]);
+                        else if (header[j] == "5") wp.ItemInfo = values[j];
+                        else if (header[j] == "6") wp.WeaponEffectType = (WeaponEffectType)int.Parse(values[j]);
+                    }
+                    data = wp;
+                    break;
+                case ItemType.Potion:
+                    Potion pt = new Potion();
+                    for (int j = 0; j < header.Length && j < values.Length; j++)
+                    {
+                        if (header[j] == "ItemID") pt._ItemID = int.Parse(values[j]);
+                        else if (header[j] == "Name") pt._Name = values[j];
+                        else if (header[j] == "ItemType") pt._itemType = (ItemType)(int.Parse(values[j]));
+                        else if (header[j] == "1") pt.Heal = int.Parse(values[j]);
+                        else if (header[j] == "2") pt.UnlockPrice = int.Parse(values[j]);
+                        else if (header[j] == "3") pt.Price = int.Parse(values[j]);
+                        else if (header[j] == "4") pt.ItemInfo = values[j];
+                    }
+                    data = pt;
+                    break;
+                case ItemType.Armor:
+                    Armor ar = new Armor();
+                    for (int j = 0; j < header.Length && j < values.Length; j++)
+                    {
+                        if (header[j] == "ItemID") ar._ItemID = int.Parse(values[j]);
+                        else if (header[j] == "Name") ar._Name = values[j];
+                        else if (header[j] == "ItemType") ar._itemType = (ItemType)(int.Parse(values[j]));
+                        else if (header[j] == "1") ar.Defence = int.Parse(values[j]);
+                        else if (header[j] == "2") ar.UnlockPrice = int.Parse(values[j]);
+                        else if (header[j] == "3") ar.Price = int.Parse(values[j]);
+                        else if (header[j] == "4") ar.ItemInfo = values[j];
+                    }
+                    data = ar;
+                    break;
+                case ItemType.Unlock:
+                    UnlockItem ul = new UnlockItem();
+                    for (int j = 0; j < header.Length && j < values.Length; j++)
+                    {
+                        if (header[j] == "ItemID") ul._ItemID = int.Parse(values[j]);
+                        else if (header[j] == "Name") ul._Name = values[j];
+                        else if (header[j] == "ItemType") ul._itemType = (ItemType)(int.Parse(values[j]));
+                        else if (header[j] == "1") ul.MaxUnlockCount = int.Parse(values[j]);
+                        else if (header[j] == "2") ul.ItemInfo = values[j];
+                    }
+                    data = ul;
+                    break;
             }
+            data._ItemIcon = Resources.Load<Sprite>("Item/Item" + data._ItemID);
+            ItemDataList.Add(data);
         }
     }
 
