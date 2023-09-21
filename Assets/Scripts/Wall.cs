@@ -13,19 +13,16 @@ public class Wall : MonoBehaviour
     //LayerMask objectLayer;
     //public GameObject _gameObject;
 
-    
-
-    void Start()
+    private void Awake()
     {
         _hp = _wallMaxHp;
+
         _spriteRenderer = GetComponentsInChildren<SpriteRenderer>()[1];
         _spriteRenderer.GetComponent<SpriteRenderer>().sortingOrder = (int)transform.position.y * -1;
 
         _attackedWall = Resources.Load<Sprite>("Map/BrokenWeedWall");
         _normalWall = Resources.Load<Sprite>("Map/WeedWallVer3");
-    }
-
-    
+    }    
 
     public void WallReset()
     {
