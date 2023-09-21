@@ -25,14 +25,23 @@ public class MonsterHPUI : MonoBehaviour
             _hearts.Add(temp);
         }
     }
-
-    public void MonsterHPUpdata(int nowHP)
+    void HPAllDisabel()
     {
-        _nowHP = _maxHP - nowHP;
+        for(int i = 0; i < _hearts.Count; i++)
+        {
+            _hearts[i].GetComponent<MonsterHeart>().EmptyHeartActive();
+        }
+    }
+
+    public void MonsterHPUpdata(int dmg)
+    {
+        HPAllDisabel();
+        _nowHP -= dmg;
+        if (_nowHP < 0) _nowHP = 0;
         if (gameObject.activeSelf == false) gameObject.SetActive(true);
         for(int i = 0; i < _nowHP; i++)
         {
-            _hearts[i].GetComponent<MonsterHeart>().EmptyHeartActive();
+            _hearts[i].GetComponent<MonsterHeart>().FullHeartActive();
         }
     }
 }

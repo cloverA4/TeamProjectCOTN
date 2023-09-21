@@ -171,7 +171,7 @@ MonoBehaviour:
     m_Top: 0
     m_Bottom: 0
   m_ChildAlignment: 7
-  m_StartCorner: 2
+  m_StartCorner: 3
   m_StartAxis: 0
   m_CellSize: {x: 2, y: 2}
   m_Spacing: {x: 0, y: 0}

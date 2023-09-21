@@ -560,7 +560,7 @@ public class Monster : MonoBehaviour
     { 
         //체력체크
         _monsterHP -= damage;
-        _monsterHPUI.MonsterHPUpdata(_monsterHP);
+        _monsterHPUI.MonsterHPUpdata(damage);
         if (_monsterHP <= 0)
         {
             //사망

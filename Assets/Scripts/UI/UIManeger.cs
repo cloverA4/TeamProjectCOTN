@@ -310,6 +310,7 @@ public class UIManeger : MonoBehaviour
 
     public void endGoLobbyUI()
     {
+        GameManager.Instance.PlayerHpReset();
         _goLobbyUI.SetActive(false);
     }
 
@@ -390,6 +391,7 @@ public class UIManeger : MonoBehaviour
     }
     public void EndAlarmUI()
     {
+        GameManager.Instance.PlayerHpReset();
         _alarmUI.SetActive(false);
         _alarmIndex = 0;
     }
