@@ -5,27 +5,30 @@ public class PlayerController : MonoBehaviour
     private static PlayerController instance;
 
     //priteRenderer _spriter; // 변수 선언과 초기화하기
+    [SerializeField] GameObject[] _weaponEffect;
+    [SerializeField] MakeFog2 _MakeFog2;
+    [SerializeField] SaveInfoData _unlockSaveData;
+    [SerializeField] UIManeger _uiManeger;
+
     SpriteRenderer _childSpriteRenderer;
     Animator _animator;
-    bool _fixanime = false;
     LayerMask _normalLayerMask;
     LayerMask _weaponCheckLayerMask;
     LayerMask _itemCheckLayerMask;
 
-    [SerializeField] GameObject[] _weaponEffect;
-
-    [SerializeField] MakeFog2 _MakeFog2;
-    [SerializeField] SaveInfoData _unlockSaveData;
-    public SaveInfoData UnlockSaveData { get { return _unlockSaveData; } }
-
     float _lobbyMoveDelay = 0f;
+    private float moveSpeed = 10f;
+    private bool isMoving = false;
+    bool _fixanime = false;
+    bool _isLive = true;
 
-    [SerializeField] UIManeger _uiManeger;
+    float[] _baseCoinMultiple = new float[3] { 1f, 1.5f, 2f };
+    int _coinMultipleIndex = 0;
 
     public bool IsX { get; private set; }
+    public SaveInfoData UnlockSaveData { get { return _unlockSaveData; } }
 
     //캐릭터 데이터
-    bool _isLive = true;
     public bool IsLive
     {
         get { return _isLive; }
@@ -42,7 +45,12 @@ public class PlayerController : MonoBehaviour
             {
                 _nowHp = value;
             }
+            else
+            {
+                _nowHp = _maxHP;
+            }
             GameManager.Instance.PlayerHPUpdate();
+
             if (_nowHp <= 0)
             {
                 _isLive = false;
@@ -123,8 +131,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private float moveSpeed = 10f;
-    private bool isMoving = false;
+    
 
     private void Awake()
     {
@@ -288,8 +295,6 @@ public class PlayerController : MonoBehaviour
                 IsX = true;
             }
         }
-
-        
     }
 
 
@@ -453,10 +458,12 @@ public class PlayerController : MonoBehaviour
             else if (hitdata.collider.tag == "BadRock") // BadRock이 힛데이타에 태그로 들어왓다면
             {
                 //hitdata.collider.GetComponent<Door>().InvincibilityWall();
+                PlayerController.Instance.ResetCoinMultiple();
             }
             else if (hitdata.collider.tag == "ShopWall") // ShopWall이 힛데이타에 태그로 들어왓다면
             {
                 //hitdata.collider.GetComponent<Door>().InvincibilityWall();
+                PlayerController.Instance.ResetCoinMultiple();
             }
             else if (hitdata.collider.tag == "Stair")
             {
@@ -482,7 +489,15 @@ public class PlayerController : MonoBehaviour
                                     GameManager.Instance.Dia += cr.Count;
                                     _uiManeger.IconMove(cr);
                                 }
-                                else if (cr._ItemID == 102) GameManager.Instance.Gold += cr.Count;
+                                else if (cr._ItemID == 102)
+                                {
+                                    //코인배수계산
+                                    float level = 0;
+                                    if (PlayerPrefs.HasKey("ComboUpgradeLevel")) level = (float)PlayerPrefs.GetInt("ComboUpgradeLevel");
+
+                                    float multiple = _baseCoinMultiple[_coinMultipleIndex] + (level * 0.5f);
+                                    GameManager.Instance.Gold += Mathf.FloorToInt(cr.Count * multiple);
+                                }
                                 dropItem.DeleteDropItem();
                                 break;
                             case ItemType.Shovel:
@@ -521,7 +536,6 @@ public class PlayerController : MonoBehaviour
             Move(vec);
         }
         //_MakeFog2.UpdateFogOfWar();
-
     }
 
     #region 무기이펙트관리
@@ -831,6 +845,7 @@ public class PlayerController : MonoBehaviour
         else
         {
             //골드부족!
+            ResetCoinMultiple();
         }
     }
 
@@ -869,6 +884,7 @@ public class PlayerController : MonoBehaviour
         else
         {
             //다이아 부족!!
+            ResetCoinMultiple();
         }
     }
 
@@ -1010,9 +1026,8 @@ public class PlayerController : MonoBehaviour
 
     void UsePotion()
     {
-        if (NowHP < MaxHP) NowHP += EquipPotion.Heal;
+        NowHP += EquipPotion.Heal;
         EquipPotion = null;
-        //유아이 업데이트
     }
 
     public void InitCharacterData()
@@ -1105,6 +1120,20 @@ public class PlayerController : MonoBehaviour
         //상자? 게임매니저에 넣어야될듯?
     }
 
+    public void UpCoinMultiple()
+    {
+        if (_coinMultipleIndex < _baseCoinMultiple.Length - 1)
+        {
+            _coinMultipleIndex++;
+        }
+    }
+
+    public void ResetCoinMultiple()
+    {
+        //코인배수 초기화
+        _coinMultipleIndex = 0;
+    }
+
     public void BaseItemEquip()
     {
         EquipShovel = (Shovel)Data.Instance.GetItemInfo(201);
@@ -1124,7 +1153,7 @@ public class PlayerController : MonoBehaviour
         {
             NowHP -= 1;
         }
-         
+        ResetCoinMultiple();
     }
 
     void Death()

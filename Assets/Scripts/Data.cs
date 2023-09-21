@@ -81,20 +81,36 @@ public class Data : MonoBehaviour
         {
             CharacterSaveData._equipShovelID = PlayerController.Instance.EquipShovel._ItemID;
         }
+        else
+        {
+            CharacterSaveData._equipShovelID = 0;
+        }
 
         if (PlayerController.Instance.EquipWeapon != null)
         {
             CharacterSaveData._equipWeaponID = PlayerController.Instance.EquipWeapon._ItemID;
+        }
+        else
+        {
+            CharacterSaveData._equipWeaponID = 0;
         }
 
         if (PlayerController.Instance.EquipArmor != null)
         {
             CharacterSaveData._equipArmorID = PlayerController.Instance.EquipArmor._ItemID;
         }
+        else
+        {
+            CharacterSaveData._equipArmorID = 0;
+        }
 
         if (PlayerController.Instance.EquipPotion != null)
         {
             CharacterSaveData._equipPotionID = PlayerController.Instance.EquipPotion._ItemID;
+        }
+        else
+        {
+            CharacterSaveData._equipPotionID = 0;
         }
 
 

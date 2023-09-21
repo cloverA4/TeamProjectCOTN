@@ -567,6 +567,7 @@ public class Monster : MonoBehaviour
             //»ç¸Á
             ItemDrop();
             gameObject.SetActive(false);
+            PlayerController.Instance.UpCoinMultiple();
 
             if (Type == MonsterType.EliteMonster)
             {

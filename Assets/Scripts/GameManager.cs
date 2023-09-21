@@ -254,6 +254,7 @@ public class GameManager : MonoBehaviour
         {
             //실패
             _uiManeger.MissInfo();
+            PlayerController.Instance.ResetCoinMultiple();
             return isSuccess;
         }
 
@@ -268,12 +269,14 @@ public class GameManager : MonoBehaviour
 
         //실패
         _uiManeger.MissInfo();
+        PlayerController.Instance.ResetCoinMultiple();
         return isSuccess;
     }
 
     public void MissBeat()
     {
         _uiManeger.MissBeatInfo();
+        PlayerController.Instance.ResetCoinMultiple();
     }
 
     #endregion
@@ -302,7 +305,7 @@ public class GameManager : MonoBehaviour
 
         //초기화 및 로드
         ItemClear();
-        ResetNote();
+        ResetNote();        
         NormalBoxSpawn(); //박스 초기화 후 새로 생성
         if (mt != null) StopCoroutine(mt);
         if(sm != null) StopCoroutine(sm);
@@ -317,25 +320,20 @@ public class GameManager : MonoBehaviour
                 _stageClear = true;
                 Gold = 0;
                 PlayerController.Instance.BaseItemEquip();
-                switch (_nowFloor)
-                {
-                    case floor.f1:
-                        PlayerController.Instance.transfromUpdate(_stageStartPosition.LobbyPosition);
-                        GameObject Item = Instantiate(_dropItem, _itemPool.transform);
-                        Item.transform.position = new Vector3(-24, 100, 0);
-                        Item.GetComponent<DropItem>().Init(Data.Instance.GetItemInfo(302));
-                        Item = Instantiate(_dropItem, _itemPool.transform);
-                        Item.transform.position = new Vector3(-25, 100, 0);
-                        Item.GetComponent<DropItem>().Init(Data.Instance.GetItemInfo(304));
-                        Item = Instantiate(_dropItem, _itemPool.transform);
-                        Item.transform.position = new Vector3(-26, 100, 0);
-                        Item.GetComponent<DropItem>().Init(Data.Instance.GetItemInfo(306));
-                        break;
-                    case floor.f2:
-                    case floor.f3:
-                    case floor.fBoss:
-                        break;
-                }
+                PlayerController.Instance.ResetCoinMultiple();
+                PlayerController.Instance.transfromUpdate(_stageStartPosition.LobbyPosition);
+
+                //테스트용 아이템 생성
+                GameObject Item = Instantiate(_dropItem, _itemPool.transform);
+                Item.transform.position = new Vector3(-24, 100, 0);
+                Item.GetComponent<DropItem>().Init(Data.Instance.GetItemInfo(302));
+                Item = Instantiate(_dropItem, _itemPool.transform);
+                Item.transform.position = new Vector3(-25, 100, 0);
+                Item.GetComponent<DropItem>().Init(Data.Instance.GetItemInfo(304));
+                Item = Instantiate(_dropItem, _itemPool.transform);
+                Item.transform.position = new Vector3(-26, 100, 0);
+                Item.GetComponent<DropItem>().Init(Data.Instance.GetItemInfo(306));
+               
                 break;
             case Stage.Stage1:
                 _stageClear = false;
@@ -361,6 +359,7 @@ public class GameManager : MonoBehaviour
                         PlayerController.Instance.transfromUpdate(_stageStartPosition.Stage1FBoss);
                         _audio.clip = Resources.Load<AudioClip>("SoundsUpdate/Stage/StageLobby");
                         _audio.loop = true;
+                        PlayerController.Instance.ResetCoinMultiple();
                         break;
                 }
                 break;
