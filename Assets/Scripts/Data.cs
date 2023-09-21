@@ -312,6 +312,7 @@ public class Data : MonoBehaviour
                                 else if (header[j] == "2") sv.UnlockPrice = int.Parse(values[j]);
                                 else if (header[j] == "3") sv.Price = int.Parse(values[j]);
                                 else if (header[j] == "4") sv.ItemInfo = values[j];
+                                //else if (header[j] == "5") sv.ShoverEffectType = (ShoverEffectType)int.Parse(values[j]);
                             }
                             data = sv;
                             break;
@@ -327,6 +328,7 @@ public class Data : MonoBehaviour
                                 else if (header[j] == "3") wp.UnlockPrice = int.Parse(values[j]);
                                 else if (header[j] == "4") wp.Price = int.Parse(values[j]);
                                 else if (header[j] == "5") wp.ItemInfo = values[j];
+                                else if (header[j] == "6") wp.WeaponEffectType = (WeaponEffectType)int.Parse(values[j]);
                             }
                             data = wp;
                             break;
@@ -427,6 +429,7 @@ public class Shovel : Item
     public int UnlockPrice;
     public int Price;
     public String ItemInfo;
+    public ShoverEffectType ShoverEffectType;
 }
 
 [Serializable]
@@ -437,6 +440,7 @@ public class Weapon : Item
     public int UnlockPrice;
     public int Price;
     public String ItemInfo;
+    public WeaponEffectType WeaponEffectType;
 }
 
 [Serializable]
@@ -497,6 +501,19 @@ public enum WeaponType
     Dagger,
     GreatSword,
     Spear,
+}
+
+public enum ShoverEffectType
+{
+    Normal,
+    Titanium,
+}
+
+public enum WeaponEffectType
+{
+    Normal,
+    Titanium,
+    Administrator,
 }
 
 public enum CharacterState

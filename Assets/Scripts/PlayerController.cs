@@ -334,15 +334,15 @@ public class PlayerController : MonoBehaviour
                 {
                     if (hitdataTypeDagger.collider.tag == "Monster")
                     {
-                        if (EquipWeapon._ItemID == 301)
+                        switch (EquipWeapon.WeaponEffectType) 
                         {
-                            NDWeaponEffectPos(vec);
+                            case WeaponEffectType.Normal :
+                                NDWeaponEffectPos(vec);
+                                break;
+                            case WeaponEffectType.Titanium :
+                                TDWeaponEffectPos(vec);
+                                break;
                         }
-                        else if (EquipWeapon._ItemID == 302)
-                        {
-                            TDWeaponEffectPos(vec);
-                        }
-
                         hitdataTypeDagger.collider.GetComponent<Monster>().TakeDamage(_damage);
                         return;
                     }
@@ -373,13 +373,14 @@ public class PlayerController : MonoBehaviour
                 {
                     if (collider.CompareTag("Monster"))
                     {
-                        if (EquipWeapon._ItemID == 303)
+                        switch (EquipWeapon.WeaponEffectType)
                         {
-                            NGWeaponEffectPos(vec);
-                        }
-                        else if (EquipWeapon._ItemID == 304)
-                        {
-                            TGWeaponEffectPos(vec);
+                            case WeaponEffectType.Normal:
+                                NGWeaponEffectPos(vec);
+                                break;
+                            case WeaponEffectType.Titanium:
+                                TGWeaponEffectPos(vec);
+                                break;
                         }
                         collider.GetComponent<Monster>().TakeDamage(_damage);
                         IsMonster = true;
@@ -397,25 +398,27 @@ public class PlayerController : MonoBehaviour
                     {
                         if (Vector2.Distance(hitdataTypeSpear.collider.transform.position, transform.position) <= 1f)
                         {
-                            if (EquipWeapon._ItemID == 305)
+                            switch (EquipWeapon.WeaponEffectType)
                             {
-                                NDWeaponEffectPos(vec);
+                                case WeaponEffectType.Normal:
+                                    NDWeaponEffectPos(vec);
+                                    break;
+                                case WeaponEffectType.Titanium:
+                                    TDWeaponEffectPos(vec);
+                                    break;
                             }
-                            else if (EquipWeapon._ItemID == 306)
-                            {
-                                TDWeaponEffectPos(vec);
-                            }
-                            Debug.Log(hitdataTypeSpear.collider.tag);
                             hitdataTypeSpear.collider.GetComponent<Monster>().TakeDamage(_damage);
                             return;
                         }
-                        if (EquipWeapon._ItemID == 305)
+
+                        switch (EquipWeapon.WeaponEffectType)
                         {
-                            NSWeaponEffectPos(vec);
-                        }
-                        else if (EquipWeapon._ItemID == 306)
-                        {
-                            TSWeaponEffectPos(vec);
+                            case WeaponEffectType.Normal:
+                                NSWeaponEffectPos(vec);
+                                break;
+                            case WeaponEffectType.Titanium:
+                                TSWeaponEffectPos(vec);
+                                break;
                         }
                         Debug.Log(hitdataTypeSpear.collider.tag);
                         hitdataTypeSpear.collider.GetComponent<Monster>().TakeDamage(_damage);
