@@ -300,13 +300,6 @@ public class GameManager : MonoBehaviour
         //페이드효과가 끝난 후 로드시작
         _MakeFog2.gameObject.SetActive(true); // 안개 오브젝트를 켜주는 구문
 
-        //플레이어의 상태 초기화
-        if (PlayerController.Instance.IsLive == false)
-        {
-            PlayerController.Instance.IsLive = true;
-            PlayerController.Instance.NowHP = PlayerController.Instance.MaxHP;
-        }
-
         //초기화 및 로드
         ItemClear();
         ResetNote();
@@ -322,7 +315,7 @@ public class GameManager : MonoBehaviour
                 _audio.clip = Resources.Load<AudioClip>("SoundsUpdate/Stage/StageLobby");
                 _audio.loop = true;
                 _stageClear = true;
-                _gold = 0;
+                Gold = 0;
                 PlayerController.Instance.BaseItemEquip();
                 switch (_nowFloor)
                 {
@@ -810,8 +803,12 @@ public class GameManager : MonoBehaviour
     //몬스터 ai 구현(종류별로 하나씩 추가)
     #endregion
 
-   
 
+    public void PlayerHpReset()
+    {
+        PlayerController.Instance.IsLive = true;
+        PlayerController.Instance.NowHP = PlayerController.Instance.MaxHP;
+    }
 
     public void PlayerHPUpdate()
     {
