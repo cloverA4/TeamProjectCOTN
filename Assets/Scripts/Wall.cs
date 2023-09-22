@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Wall : MonoBehaviour
 {
+
     Sprite _normalWall;
     Sprite _attackedWall;
     int _hp;

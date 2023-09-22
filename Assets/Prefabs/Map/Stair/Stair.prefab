@@ -211,3 +211,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _nowStage: 1
   _nowFloor: 1
+  _benStair: {fileID: 3633512528764384278}

@@ -210,3 +210,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c25046ed34e95e44694c4115542b122f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _doorImage: {fileID: 930106681975724799}

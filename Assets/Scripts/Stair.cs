@@ -7,13 +7,12 @@ public class Stair : MonoBehaviour
     private Stage _nowStage;
     [SerializeField]
     private floor _nowFloor;
-
-
+    [SerializeField]
     SpriteRenderer _benStair;
 
     private void Start()
     {
-        _benStair = GetComponentsInChildren<SpriteRenderer>()[1];
+        //_benStair = GetComponentsInChildren<SpriteRenderer>()[1];
         GameManager.Instance.EventEliteMonsterDie += new EventHandler(EliteMonsterDied);
     }
 
