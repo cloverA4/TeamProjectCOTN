@@ -1,5 +1,7 @@
+using System;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SocialPlatforms;
 using UnityEngine.UI;
 
 public class AlarmUI : MonoBehaviour
@@ -15,6 +17,8 @@ public class AlarmUI : MonoBehaviour
     [SerializeField] Text _mainText;
 
     int _alarmIndex = 0;
+    UnityAction _action1;
+    UnityAction _action2;
 
     private void Update()
     {
@@ -35,7 +39,22 @@ public class AlarmUI : MonoBehaviour
                         break;
                 }
             }
+        }
 
+        if (Input.GetKeyDown(KeyCode.Return))
+        {
+            Debug.Log("?");
+            switch (_alarmIndex)
+            {
+                case 0:
+                    _action1();
+                    break;
+                case 1:
+                    if (_action2 != null) _action2();
+                    gameObject.SetActive(false);
+                    Time.timeScale = 1;
+                    break;
+            }
         }
     }
 
@@ -46,39 +65,25 @@ public class AlarmUI : MonoBehaviour
     }
 
 
-    public void StartAlarmUI(string mainText, string _toggle1, string _toggle2, UnityAction _action1, UnityAction _action2 = null)
+    public void StartAlarmUI(string mainText, string toggle1Text, string toggle2Text, UnityAction action1, UnityAction action2 = null)
     {
+        Time.timeScale = 0;
+        _action1 = action1;
+        _action2 = action2;
         _alarmIndex = 0;
         gameObject.SetActive(true);
-        _alarmToggle1.gameObject.SetActive(true);
-        _alarmToggle2.gameObject.SetActive(false);
+        _toggle1.isOn = true;
         _alarmText1.gameObject.SetActive(false);
         _alarmText2.gameObject.SetActive(true);
 
         _mainText.text = mainText;
 
-        _alarmToggle1.GetComponent<Text>().text = "-" + _toggle1 + "-";
-        _alarmText1.GetComponent<Text>().text = _toggle1;
+        _alarmToggle1.text = "-" + toggle1Text + "-";
+        _alarmText1.text = toggle1Text;
 
-        _alarmToggle2.GetComponent<Text>().text = "-" + _toggle2 + "-";
-        _alarmText2.GetComponent<Text>().text = _toggle2;
-
-        if (Input.GetKeyDown(KeyCode.KeypadEnter))
-        {
-            switch (_alarmIndex)
-            {
-                case 0:
-                    _action1();
-                    break;
-                case 1:
-                    if(_action2 != null) _action2();
-                    gameObject.SetActive(false);
-                    break;
-            }
-        }
+        _alarmToggle2.text = "-" + toggle2Text + "-";
+        _alarmText2.text = toggle2Text;
     }
-
-    
 
     public void EndAlarmUI()
     {
