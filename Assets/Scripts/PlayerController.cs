@@ -893,7 +893,6 @@ public class PlayerController : MonoBehaviour
             Data.Instance.CharacterSaveData._unlockItemId.Add(dropItem.Item._ItemID); //언락리스트에 아이템아이디 추가
             Data.Instance.SavePlayerData();
 
-            GetItem(dropItem);
             UpdateCharacterState();
         }
         else
@@ -946,8 +945,13 @@ public class PlayerController : MonoBehaviour
             }
             Data.Instance.SavePlayerData();
             UpdateCharacterState();
+            dropItem.DeleteDropItem();
         }
-        dropItem.DeleteDropItem();
+        else
+        {
+            Debug.Log("해금불가");
+        }
+        
     }
 
     private void OnDrawGizmos() //확인용
