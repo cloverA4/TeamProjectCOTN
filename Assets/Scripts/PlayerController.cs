@@ -445,6 +445,11 @@ public class PlayerController : MonoBehaviour
                 //Destroy(hitdata.collider.gameObject); // 힛데이타콜라이더게임오브젝트를 파괴한다
                 //setActive활용해서 벽부수는 표현해보기
                 hitdata.collider.GetComponent<Wall>().DamageWall(_shovelPower);
+                GameObject shovelImage = Instantiate(new GameObject());
+                shovelImage.transform.position = hitdata.collider.transform.position + new Vector3(0, 0.2f, 0);
+                shovelImage.AddComponent<SpriteRenderer>();
+                shovelImage.GetComponent<SpriteRenderer>().sprite = EquipShovel._ItemIcon;
+                Destroy( shovelImage , 0.2f);
             }
             else if (hitdata.collider.tag == "Box")
             {
@@ -459,11 +464,21 @@ public class PlayerController : MonoBehaviour
             {
                 //hitdata.collider.GetComponent<Door>().InvincibilityWall();
                 PlayerController.Instance.ResetCoinMultiple();
+                GameObject shovelImage = Instantiate(new GameObject());
+                shovelImage.transform.position = hitdata.collider.transform.position + new Vector3(0, 0.2f, 0);
+                shovelImage.AddComponent<SpriteRenderer>();
+                shovelImage.GetComponent<SpriteRenderer>().sprite = EquipShovel._ItemIcon;
+                Destroy(shovelImage, 0.2f);
             }
             else if (hitdata.collider.tag == "ShopWall") // ShopWall이 힛데이타에 태그로 들어왓다면
             {
                 //hitdata.collider.GetComponent<Door>().InvincibilityWall();
                 PlayerController.Instance.ResetCoinMultiple();
+                GameObject shovelImage = Instantiate(new GameObject());
+                shovelImage.transform.position = hitdata.collider.transform.position + new Vector3(0, 0.2f, 0);
+                shovelImage.AddComponent<SpriteRenderer>();
+                shovelImage.GetComponent<SpriteRenderer>().sprite = EquipShovel._ItemIcon;
+                Destroy(shovelImage, 0.2f);
             }
             else if (hitdata.collider.tag == "Stair")
             {
