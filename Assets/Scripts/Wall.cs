@@ -4,30 +4,25 @@ using UnityEngine;
 
 public class Wall : MonoBehaviour
 {
-
     Sprite _normalWall;
-    Sprite _attackedWall;
+    [SerializeField] Sprite _attackedWall;
     int _hp;
     int _wallMaxHp = 2;
 
-    private SpriteRenderer _spriteRenderer;
+    [SerializeField] SpriteRenderer _spriteRenderer;
     //LayerMask objectLayer;
     //public GameObject _gameObject;
 
     private void Awake()
     {
         _hp = _wallMaxHp;
-
-        _spriteRenderer = GetComponentsInChildren<SpriteRenderer>()[1];
         _spriteRenderer.GetComponent<SpriteRenderer>().sortingOrder = (int)transform.position.y * -1;
-
-        _attackedWall = Resources.Load<Sprite>("Map/BrokenWeedWall");
-        _normalWall = Resources.Load<Sprite>("Map/WeedWallVer3");
     }    
 
     public void WallReset()
     {
-        _spriteRenderer.sprite = _normalWall;
+        _spriteRenderer.GetComponent<SpriteRenderer>().sortingOrder = (int)transform.position.y * -1;
+        _normalWall = _spriteRenderer.sprite;
         _hp = _wallMaxHp;
         gameObject.SetActive(true);
     }
