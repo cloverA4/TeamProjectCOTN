@@ -118,6 +118,14 @@ public class GameManager : MonoBehaviour
         StageLoad();
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            _uiManeger.Alarm("게임을 종료하시겠습니다", "네", "아니오", () => Application.Quit());
+        }
+    }
+
     void InitGameData()
     {
         //정리 - 저장할 데이터 (위치정보, 착용아이템(로비면 기본), 골드, 다이아, 현재체력(로비면풀))

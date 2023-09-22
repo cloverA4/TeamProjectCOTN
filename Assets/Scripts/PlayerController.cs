@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -823,6 +824,7 @@ public class PlayerController : MonoBehaviour
 
         dropItem.DeleteDropItem();
     }
+
 
     void BuyGoldItem(DropItem dropItem)
     {

@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq.Expressions;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -49,8 +46,15 @@ public class AlarmUI : MonoBehaviour
     }
 
 
-    void ActionEvent(string mainText, string _toggle1, string _toggle2, UnityAction _action1, UnityAction _action2)
+    public void StartAlarmUI(string mainText, string _toggle1, string _toggle2, UnityAction _action1, UnityAction _action2 = null)
     {
+        _alarmIndex = 0;
+        gameObject.SetActive(true);
+        _alarmToggle1.gameObject.SetActive(true);
+        _alarmToggle2.gameObject.SetActive(false);
+        _alarmText1.gameObject.SetActive(false);
+        _alarmText2.gameObject.SetActive(true);
+
         _mainText.text = mainText;
 
         _alarmToggle1.GetComponent<Text>().text = "-" + _toggle1 + "-";
@@ -67,34 +71,15 @@ public class AlarmUI : MonoBehaviour
                     _action1();
                     break;
                 case 1:
-                    _action2();
+                    if(_action2 != null) _action2();
+                    gameObject.SetActive(false);
                     break;
             }
         }
     }
 
-    public void GoLobby()
-    {
-        GameManager.Instance.NowStage = Stage.Lobby;
-        GameManager.Instance.NowFloor = floor.f1;
-        EndAlarmUI();
-        //StartCoroutine(FadeIn());   ui매니저 싱글턴으로 만들고 호츌
-    }
-    public void Retry()
-    {
-        GameManager.Instance.NowFloor = floor.f1;
-        GameManager.Instance.Gold = 0;
-        PlayerController.Instance.BaseItemEquip();
-        EndAlarmUI();
-        //StartCoroutine(FadeIn());
-    }
+    
 
-    public void StartAlarmUI()
-    {
-        _alarmIndex = 0;
-        gameObject.SetActive(true);
-        _alarmText2.gameObject.SetActive(true);
-    }
     public void EndAlarmUI()
     {
         GameManager.Instance.PlayerHpReset();
@@ -104,13 +89,11 @@ public class AlarmUI : MonoBehaviour
 
     public void AlarmToggle1(bool _bool)
     {
-        if (_bool) _alarmText1.gameObject.SetActive(false);
-        else _alarmText1.gameObject.SetActive(true);
+        _alarmText1.gameObject.SetActive(!_bool);
     }
     public void AlarmToggle2(bool _bool)
     {
-        if (_bool) _alarmText2.gameObject.SetActive(false);
-        else _alarmText2.gameObject.SetActive(true);
+        _alarmText2.gameObject.SetActive(!_bool);
     }
 
 }

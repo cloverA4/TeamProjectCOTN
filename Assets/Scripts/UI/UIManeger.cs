@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Pool;
 using UnityEngine.UI;
 
@@ -106,7 +107,10 @@ public class UIManeger : MonoBehaviour
                         endGoLobbyUI();
                         break;
                     case 1:
-                        _alarmUI.StartAlarmUI();
+                        string main = "사용하지 않은 다이아몬드는\r\n재시작시 모두 사라집니다.\r\n로비로 되돌아가 사용하겠습니까? ";
+                        string Toggle1 = "로비에서 다이아몬드 사용";
+                        string toggle2 = "빠른재시작";
+                        _alarmUI.StartAlarmUI(main, Toggle1, toggle2, GoLobby, Retry);
                         endGoLobbyUI();
                         break;
                     case 2:  // replay 기능 추후 구현
@@ -114,6 +118,20 @@ public class UIManeger : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void GoLobby()
+    {
+        GameManager.Instance.NowStage = Stage.Lobby;
+        GameManager.Instance.NowFloor = floor.f1;
+        //StartCoroutine(FadeIn());   ui매니저 싱글턴으로 만들고 호츌
+    }
+    public void Retry()
+    {
+        GameManager.Instance.NowFloor = floor.f1;
+        GameManager.Instance.Gold = 0;
+        PlayerController.Instance.BaseItemEquip();
+        //StartCoroutine(FadeIn());
     }
 
     private void Start()
@@ -425,7 +443,10 @@ public class UIManeger : MonoBehaviour
 
     #endregion
 
-
+    public void Alarm(string str1, string str2, string str3, UnityAction action1, UnityAction action2 = null)
+    {
+        _alarmUI.StartAlarmUI(str1, str2, str3, action1, action2);
+    }
     public void IconMove(Item _item)  // 아이템 아이콘 애니메이션 함수 따로 어떤 무기인지 구분할 필요 없이 아이템만 넣으면됌
     {
         _equipmentIconMove.ItemIconMove(_item);
