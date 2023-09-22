@@ -6,12 +6,10 @@ public class Wall : MonoBehaviour
 {
     Sprite _normalWall;
     [SerializeField] Sprite _attackedWall;
+    [SerializeField] SpriteRenderer _spriteRenderer;
+
     int _hp;
     int _wallMaxHp = 2;
-
-    [SerializeField] SpriteRenderer _spriteRenderer;
-    //LayerMask objectLayer;
-    //public GameObject _gameObject;
 
     private void Awake()
     {
