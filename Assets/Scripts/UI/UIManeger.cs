@@ -30,10 +30,6 @@ public class UIManeger : MonoBehaviour
     [SerializeField] GameObject _retryToggle;
     [SerializeField] GameObject _replayToggle;
 
-    [SerializeField] GameObject _alarmUI;
-    [SerializeField] GameObject _useDiamondToggle;
-    [SerializeField] GameObject _retryToggle2;
-
     [SerializeField] Canvas _infoCanvas;
     [SerializeField] GameInfoMassege _gameInfoMassege;
     [SerializeField] Transform _gameInfoBase;
@@ -44,6 +40,7 @@ public class UIManeger : MonoBehaviour
     int _maxInfoCount = 10;
 
     [SerializeField] EquipmentIconMove _equipmentIconMove;
+    [SerializeField] AlarmUI _alarmUI;
 
     private void Update()
     {
@@ -95,46 +92,8 @@ public class UIManeger : MonoBehaviour
             }
             
         }
-        if (_alarmUI.activeSelf)
-        {
-            if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.UpArrow))
-            {
-                if (_alarmIndex == 0) _alarmIndex = 1;
-                else _alarmIndex = 0;
-                SelectToggle();
-            }
-            if (_useDiamondToggle.GetComponent<Toggle>().isOn)
-            {
-                _alarmIndex = 0;
-            }
-            else if (_retryToggle2.GetComponent<Toggle>().isOn)
-            {
-                _alarmIndex = 1;
-            }
-            
-        }
         if (Input.GetKeyDown(KeyCode.Return))
         {
-            if (_alarmUI.activeSelf)
-            {
-                switch (_alarmIndex)
-                {
-                    case 0:
-                        GameManager.Instance.NowStage = Stage.Lobby;
-                        GameManager.Instance.NowFloor = floor.f1;
-                        EndAlarmUI();
-                        StartCoroutine(FadeIn());
-                        break;
-                    case 1:
-                        GameManager.Instance.NowFloor = floor.f1;
-                        GameManager.Instance.Gold = 0;
-                        PlayerController.Instance.BaseItemEquip();
-                        EndAlarmUI();
-                        StartCoroutine(FadeIn());
-                        break;
-                }
-
-            }
             if (_goLobbyUI.activeSelf)
             {
                 switch (_goLobbyIndex)
@@ -147,7 +106,7 @@ public class UIManeger : MonoBehaviour
                         endGoLobbyUI();
                         break;
                     case 1:
-                        StartAlarmUI();
+                        _alarmUI.StartAlarmUI();
                         endGoLobbyUI();
                         break;
                     case 2:  // replay 기능 추후 구현
@@ -165,13 +124,13 @@ public class UIManeger : MonoBehaviour
         SpawnInfo();
         SpawnGameInfo();
         EquipmentAllDisabel();
+        _alarmUI.Init();
     }
 
     public void UIInit()
     {
         gameObject.SetActive(true);
         _fade.gameObject.SetActive(true);
-        _alarmUI.gameObject.SetActive(false);
         _goLobbyUI.SetActive(false);
     }
     #region HP
@@ -339,18 +298,6 @@ public class UIManeger : MonoBehaviour
             }
            
         }
-        if(_alarmUI.activeSelf)
-        {
-            switch (_alarmIndex)
-            {
-                case 0:
-                    _useDiamondToggle.GetComponent<Toggle>().isOn = true;
-                    break; 
-                case 1:
-                    _retryToggle2.GetComponent<Toggle>().isOn = true;
-                    break;
-            }
-        }
        
     }
 
@@ -378,38 +325,6 @@ public class UIManeger : MonoBehaviour
 
     #endregion
 
-    #region Alarm UI
-    [SerializeField] GameObject alarmText1;
-    [SerializeField] GameObject alarmText2;
-    int _alarmIndex = 0;
-    public void StartAlarmUI()
-    {
-        _alarmIndex = 0;
-        _alarmUI.SetActive(true);
-        alarmText2.gameObject.SetActive(true);
-        SelectToggle();
-    }
-    public void EndAlarmUI()
-    {
-        GameManager.Instance.PlayerHpReset();
-        _alarmUI.SetActive(false);
-        _alarmIndex = 0;
-    }
-
-    public void UseDiamondSelect(bool _bool)
-    {
-        if (_bool) alarmText1.gameObject.SetActive(false);
-        else alarmText1.gameObject.SetActive(true);
-    }
-    public void RetrySelect2(bool _bool)
-    {
-        if (_bool) alarmText2.gameObject.SetActive(false);
-        else alarmText2.gameObject.SetActive(true);
-    }
-
-
-
-    #endregion
 
     #region JudgementInfo
 
@@ -449,7 +364,7 @@ public class UIManeger : MonoBehaviour
 
     public void MissInfo()  // "빗나감!" 텍스트 출력
     {
-        if(_goLobbyUI.activeSelf == false && _alarmUI.activeSelf == false)
+        if(_goLobbyUI.activeSelf == false)
         {
             MissInfoMassege info = InfoPool.Get();
             info.GetComponent<Text>().text = "빗나감!";
