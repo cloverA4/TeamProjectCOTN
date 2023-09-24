@@ -14,16 +14,6 @@ public class UIManeger : MonoBehaviour
     [SerializeField] Text _diamondCount;
 
     int _goLobbyIndex = 0;
-
-    [SerializeField] Image _shovelImage;
-    [SerializeField] Image _armorImage;
-    [SerializeField] Image _weaponImage;
-    [SerializeField] Image _potionImage;
-    [SerializeField] GameObject _shovelSlot;
-    [SerializeField] GameObject _armorSlot;
-    [SerializeField] GameObject _weaponSlot;
-    [SerializeField] GameObject _potionSlot;
-
     [SerializeField] Image _fade;
 
     [SerializeField] GameObject _goLobbyUI;
@@ -40,8 +30,10 @@ public class UIManeger : MonoBehaviour
     [SerializeField] Transform _InfoBase;
     int _maxInfoCount = 10;
 
-    [SerializeField] EquipmentIconMove _equipmentIconMove;
     [SerializeField] AlarmUI _alarmUI;
+    [SerializeField] EquipmentControll _equipmentControll;
+    [SerializeField] StageClearUI _stageClearUI;
+    [SerializeField] CoinMultipleUI _coinMultipleUI;
 
     private void Update()
     {
@@ -141,8 +133,8 @@ public class UIManeger : MonoBehaviour
         GameInfoPool = new ObjectPool<GameInfoMassege>(CreateGameInfoPool, OnGet, OnReleaseInfo, DestroyInfo, maxSize: 15);
         SpawnInfo();
         SpawnGameInfo();
-        EquipmentAllDisabel();
         _alarmUI.Init();
+        _equipmentControll.EquipmentAllDisabel();
     }
 
     public void UIInit()
@@ -197,58 +189,6 @@ public class UIManeger : MonoBehaviour
     public void UpdataDiamond(int _count)
     {
         _diamondCount.text = "X " + _count;
-    }
-
-    #endregion
-
-    #region Equipment
-    public void UpdataShovel()
-    {
-        if (PlayerController.Instance.EquipShovel != null)
-        {
-            _shovelImage.GetComponent<Image>().sprite = PlayerController.Instance.EquipShovel._ItemIcon;
-            _shovelSlot.gameObject.SetActive(true);
-            return;
-        }
-        _shovelSlot.gameObject.SetActive(false);
-    }
-    public void UpdataWeapon()
-    {
-        if (PlayerController.Instance.EquipWeapon != null)
-        {
-            _weaponImage.GetComponent<Image>().sprite = PlayerController.Instance.EquipWeapon._ItemIcon;
-            _weaponSlot.gameObject.SetActive(true);
-            return;
-        }
-        _weaponSlot.gameObject.SetActive(false);
-    }
-    public void UpdateArmor()
-    {
-        if (PlayerController.Instance.EquipArmor != null)
-        {
-            _armorImage.GetComponent<Image>().sprite = PlayerController.Instance.EquipArmor._ItemIcon;
-            _armorSlot.gameObject.SetActive(true);
-            return;
-        }
-        _armorSlot.gameObject.SetActive(false);
-    }
-    public void UpdatePotion()
-    {
-        if(PlayerController.Instance.EquipPotion != null)
-        {
-            _potionImage.GetComponent<Image>().sprite = PlayerController.Instance.EquipPotion._ItemIcon;
-            _potionSlot.gameObject.SetActive(true);
-            return;
-        }
-        _potionSlot.gameObject.SetActive(false);
-    }
-
-    public void EquipmentAllDisabel()
-    {
-        _shovelSlot.gameObject.SetActive(false);
-        _weaponSlot.gameObject.SetActive(false);
-        _armorSlot.gameObject.SetActive(false);
-        _potionSlot.gameObject.SetActive(false);
     }
 
     #endregion
@@ -339,6 +279,30 @@ public class UIManeger : MonoBehaviour
     {
         if (_bool) toggle3S.gameObject.SetActive(false);
         else toggle3S.gameObject.SetActive(true);
+    }
+
+    #endregion
+
+    #region Equipment
+
+    public void UpdataShovel()
+    {
+        _equipmentControll.UpdataShovel();
+    }
+
+    public void UpdataWeapon()
+    {
+        _equipmentControll.UpdataWeapon();
+    }
+
+    public void UpdateArmor()
+    {
+        _equipmentControll.UpdateArmor();
+    }
+
+    public void UpdatePotion()
+    {
+        _equipmentControll.UpdatePotion();
     }
 
     #endregion
@@ -449,6 +413,14 @@ public class UIManeger : MonoBehaviour
     }
     public void IconMove(Item _item)  // 아이템 아이콘 애니메이션 함수 따로 어떤 무기인지 구분할 필요 없이 아이템만 넣으면됌
     {
-        _equipmentIconMove.ItemIconMove(_item);
+        _equipmentControll.ItemIconMove(_item);
+    }
+    public void StageClear() // 마지막 스테이지의 상자를 열때 호출
+    {
+        _stageClearUI.OnClearEffect();
+    }
+    public void CoinMultipleUI(float multiple)
+    {
+        _coinMultipleUI.OnCoinMultiple(multiple);
     }
 }
