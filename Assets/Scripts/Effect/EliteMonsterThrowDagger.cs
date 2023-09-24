@@ -32,7 +32,7 @@ public class EliteMonsterThrowDagger : MonoBehaviour
             float laserLength = hit.distance;
             Vector2 laserPosition = transform.position + (DaggerDirection * laserLength / 2f);
 
-            GameObject laserEffect = Instantiate(gameObject, laserPosition, Quaternion.identity);
+            GameObject laserEffect = Instantiate(this.gameObject, laserPosition, Quaternion.identity);
 
             // 레이저 이펙트의 길이 설정
             laserEffect.transform.localScale = new Vector3(1f, laserLength, 1f);
