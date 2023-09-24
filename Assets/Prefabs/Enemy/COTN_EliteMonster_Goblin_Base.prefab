@@ -282,6 +282,8 @@ MonoBehaviour:
   _monsterHPUI: {fileID: 1338338560280806116}
   _monsterNormalAttackEffect: {fileID: 2425396381269786317, guid: 3392f62e4303d4548ab2afcfa8222d96,
     type: 3}
+  _ElitemonsterAttackEffect: {fileID: 3315359035673166624, guid: b245dec442d74bf4cb3a112750214fd4,
+    type: 3}
 --- !u!50 &7259199321893285419
 Rigidbody2D:
   serializedVersion: 4

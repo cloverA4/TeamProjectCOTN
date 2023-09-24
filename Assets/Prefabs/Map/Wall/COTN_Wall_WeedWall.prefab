@@ -126,6 +126,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4bf07a73c9b88d4428160bf4a8bbe8a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _normalWall: {fileID: 21300000, guid: d9b7dc57a6c66d74eae51a50bab5803e, type: 3}
   _attackedWall: {fileID: 21300000, guid: 955a0d5f6740cb549898babf801281fe, type: 3}
   _spriteRenderer: {fileID: 894370643764842857}
 --- !u!1 &894370643764842859

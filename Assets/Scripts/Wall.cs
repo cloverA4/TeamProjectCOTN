@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Wall : MonoBehaviour
 {
-    Sprite _normalWall;
+    [SerializeField] Sprite _normalWall;
     [SerializeField] Sprite _attackedWall;
     [SerializeField] SpriteRenderer _spriteRenderer;
 
@@ -20,7 +20,7 @@ public class Wall : MonoBehaviour
     public void WallReset()
     {
         _spriteRenderer.GetComponent<SpriteRenderer>().sortingOrder = (int)transform.position.y * -1;
-        _normalWall = _spriteRenderer.sprite;
+        _spriteRenderer.sprite = _normalWall;
         _hp = _wallMaxHp;
         gameObject.SetActive(true);
     }

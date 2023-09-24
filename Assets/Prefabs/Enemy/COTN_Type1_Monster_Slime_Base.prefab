@@ -104,6 +104,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _monsterHPUI: {fileID: 7749261529636038072}
   _monsterNormalAttackEffect: {fileID: 0}
+  _ElitemonsterAttackEffect: {fileID: 3315359035673166624, guid: b245dec442d74bf4cb3a112750214fd4,
+    type: 3}
 --- !u!50 &2403509474068611974
 Rigidbody2D:
   serializedVersion: 4

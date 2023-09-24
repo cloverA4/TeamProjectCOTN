@@ -1,5 +1,6 @@
 using UnityEngine;
 using System;
+using UnityEditor.Profiling;
 
 public class Monster : MonoBehaviour
 {
@@ -281,6 +282,8 @@ public class Monster : MonoBehaviour
 
     int _attackMoveCount = 0;
     int _specialAttackCount = 0;
+    [SerializeField]
+    private GameObject _ElitemonsterAttackEffect;
 
     void EliteMonsterPattern()
     {
@@ -292,16 +295,18 @@ public class Monster : MonoBehaviour
         if(_attackReady)
         {
             //특수공격
-
             Temp = transform.position + MonsterLook / 2;
             hitdata = Physics2D.Raycast(Temp, MonsterLook, 100f, _normalLayerMask);
 
-            if(hitdata)
-            {
-                if(hitdata.collider.CompareTag("Player")) PlayerController.Instance.TakeDamage(_monsterDamage);
-            }
+            Instantiate(_ElitemonsterAttackEffect, transform.position + MonsterLook, Quaternion.identity);
 
-            GetComponentsInChildren<SpriteRenderer>()[1].color = Color.white;
+            if (hitdata)
+            {
+                if (hitdata.collider.CompareTag("Player")) PlayerController.Instance.TakeDamage(_monsterDamage);
+            }
+            
+            //GetComponentsInChildren<SpriteRenderer>()[1].color = Color.white;
+            _animator.SetTrigger("Idle"); // 특수모션에서 기본모션으로 돌아옴
             _specialAttackCount = 0;
             _attackMoveCount = 0;
             _attackReady = false;
@@ -349,6 +354,22 @@ public class Monster : MonoBehaviour
                     if(hitdata.collider.CompareTag("Player"))
                     {
                         PlayerController.Instance.TakeDamage(_monsterDamage);
+                    }
+                    if (MonsterLook == Vector3.up)
+                    {
+                        _animator.SetTrigger("AttackUp");
+                    }
+                    else if (MonsterLook == Vector3.down)
+                    {
+                        _animator.SetTrigger("AttackDown");
+                    }
+                    else if (MonsterLook == Vector3.right)
+                    {
+                        _animator.SetTrigger("AttackRight");
+                    }
+                    else if (MonsterLook == Vector3.left)
+                    {
+                        _animator.SetTrigger("AttackLefts");
                     }
                 }
                 else
@@ -410,6 +431,7 @@ public class Monster : MonoBehaviour
                 hitdata = Physics2D.Raycast(Temp, Vector3.right, 0.5f, _normalLayerMask);
                 vec = Vector3.right;
                 _animator.SetTrigger("Right");
+                _childSpriteRenderer.flipX = true;
             }
             else
             {
@@ -417,11 +439,23 @@ public class Monster : MonoBehaviour
                 hitdata = Physics2D.Raycast(Temp, Vector3.left, 0.5f, _normalLayerMask);
                 vec = Vector3.left;
                 _animator.SetTrigger("Left");
+                _childSpriteRenderer.flipX = false;
             }
 
             if (!hitdata)
             {
                 transform.position += vec;
+
+                if (vec == Vector3.right)
+                {
+                    _animator.SetTrigger("Right");
+                    _childSpriteRenderer.flipX = true;
+                }
+                else if (vec == Vector3.left)
+                {
+                    _animator.SetTrigger("Left");
+                    _childSpriteRenderer.flipX = false;
+                }
             }
         }
         else if(type == 1)
@@ -445,6 +479,15 @@ public class Monster : MonoBehaviour
             if (!hitdata)
             {
                 transform.position += vec;
+
+                if (vec == Vector3.up)
+                {
+                    _animator.SetTrigger("Up");
+                }
+                else if (vec == Vector3.down)
+                {
+                    _animator.SetTrigger("Down");
+                }
             }
         }
 
@@ -455,13 +498,16 @@ public class Monster : MonoBehaviour
         if(PlayerController.Instance.transform.position.x > transform.position.x)
         {
             MonsterLook = Vector3.right;
+            _childSpriteRenderer.flipX = true;
         }
         else
         {
             MonsterLook = Vector3.left;
+            _childSpriteRenderer.flipX = false;
         }
         //브레스 차징
-        GetComponentsInChildren<SpriteRenderer>()[1].color = Color.red;
+        //GetComponentsInChildren<SpriteRenderer>()[1].color = Color.red;
+        _animator.SetTrigger("AttackSpecial"); // 특수공격모션
         _attackReady = true;
     }
 

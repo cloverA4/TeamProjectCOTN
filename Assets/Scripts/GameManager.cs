@@ -341,7 +341,10 @@ public class GameManager : MonoBehaviour
                 Item = Instantiate(_dropItem, _itemPool.transform);
                 Item.transform.position = new Vector3(-26, 100, 0);
                 Item.GetComponent<DropItem>().Init(Data.Instance.GetItemInfo(306));
-               
+                Item = Instantiate(_dropItem, _itemPool.transform);
+                Item.transform.position = new Vector3(-27, 100, 0);
+                Item.GetComponent<DropItem>().Init(Data.Instance.GetItemInfo(202));
+
                 break;
             case Stage.Stage1:
                 _stageClear = false;
