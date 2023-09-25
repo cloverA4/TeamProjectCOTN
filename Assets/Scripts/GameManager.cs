@@ -36,7 +36,7 @@ public class GameManager : MonoBehaviour
         set
         {
             _gold = value;
-            _uiManeger.UpdateGold(_gold);
+            UIManeger.Instance.UpdateGold(_gold);
         }
     }
 
@@ -45,8 +45,8 @@ public class GameManager : MonoBehaviour
         get { return _dia; }
         set 
         {
-            _dia = value; 
-            _uiManeger.UpdataDiamond(_dia);
+            _dia = value;
+            UIManeger.Instance.UpdataDiamond(_dia);
         }
     }
 
@@ -69,8 +69,6 @@ public class GameManager : MonoBehaviour
         get { return _nowFloor; }
         set { _nowFloor = value; }
     }
-
-    [SerializeField] UIManeger _uiManeger;
 
     private void Awake()
     {
@@ -122,7 +120,7 @@ public class GameManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            _uiManeger.Alarm("게임을 종료하시겠습니다", "네", "아니오", () => Application.Quit());
+            UIManeger.Instance.Alarm("게임을 종료하시겠습니다", "네", "아니오", () => Application.Quit());
         }
     }
 
@@ -137,7 +135,7 @@ public class GameManager : MonoBehaviour
         _nowStage = Data.Instance.CharacterSaveData._nowStage;            
         _nowFloor = Data.Instance.CharacterSaveData._nowFloor;
         PlayerController.Instance.InitCharacterData();
-        _uiManeger.setHP();
+        UIManeger.Instance.setHP();
     }
 
     #region 비트
@@ -261,7 +259,7 @@ public class GameManager : MonoBehaviour
         if (_rightNoteList.Count <= 0)
         {
             //실패
-            _uiManeger.MissInfo();
+            UIManeger.Instance.MissInfo();
             PlayerController.Instance.ResetCoinMultiple();
             return isSuccess;
         }
@@ -276,14 +274,14 @@ public class GameManager : MonoBehaviour
         }
 
         //실패
-        _uiManeger.MissInfo();
+        UIManeger.Instance.MissInfo();
         PlayerController.Instance.ResetCoinMultiple();
         return isSuccess;
     }
 
     public void MissBeat()
     {
-        _uiManeger.MissBeatInfo();
+        UIManeger.Instance.MissBeatInfo();
         PlayerController.Instance.ResetCoinMultiple();
     }
 
@@ -296,13 +294,13 @@ public class GameManager : MonoBehaviour
     public void FaidIn()
     {
         //페이드인효과 호출(어두워지게)
-        StartCoroutine(_uiManeger.FadeIn());
+        StartCoroutine(UIManeger.Instance.FadeIn());
     }
 
     public void FaidOut()
     {
         //페이드아웃 효과 호출(밝아지게)
-        StartCoroutine(_uiManeger.FadeOut());
+        StartCoroutine(UIManeger.Instance.FadeOut());
     }
 
     
@@ -345,8 +343,6 @@ public class GameManager : MonoBehaviour
                 Item.transform.position = new Vector3(-27, 100, 0);
                 Item.GetComponent<DropItem>().Init(Data.Instance.GetItemInfo(202));
 
-                _uiManeger.DisableCoinMultiple();
-
                 break;
             case Stage.Stage1:
                 _stageClear = false;
@@ -357,26 +353,22 @@ public class GameManager : MonoBehaviour
                         PlayerController.Instance.transfromUpdate(_stageStartPosition.Stage1F1);
                         _MakeFog2.FogOfWarStageMove();
                         _audio.clip = Resources.Load<AudioClip>("SoundsUpdate/Stage/Stage1-1");
-                        _uiManeger.ActiveCoinMultiple();
                         break;
                     case floor.f2:
                         PlayerController.Instance.transfromUpdate(_stageStartPosition.Stage1F2);
                         _MakeFog2.FogOfWarStageMove();
                         _audio.clip = Resources.Load<AudioClip>("SoundsUpdate/Stage/Stage1-2");
-                        _uiManeger.ActiveCoinMultiple();
                         break;
                     case floor.f3:
                         PlayerController.Instance.transfromUpdate(_stageStartPosition.Stage1F3);
                         _MakeFog2.FogOfWarStageMove();
                         _audio.clip = Resources.Load<AudioClip>("SoundsUpdate/Stage/Stage1-3");
-                        _uiManeger.ActiveCoinMultiple();
                         break;
                     case floor.fBoss:
                         PlayerController.Instance.transfromUpdate(_stageStartPosition.Stage1FBoss);
                         _audio.clip = Resources.Load<AudioClip>("SoundsUpdate/Stage/StageLobby");
                         _audio.loop = true;
                         PlayerController.Instance.ResetCoinMultiple();
-                        _uiManeger.DisableCoinMultiple();
                         break;
                 }
                 break;
@@ -459,7 +451,7 @@ public class GameManager : MonoBehaviour
         if (sm != null) StopCoroutine(sm);
 
         //UI호출 - 스테이지 재시작, 로비이동, 다시보기 선택할수있게끔.
-        _uiManeger.StartGoLobbyUI();
+        UIManeger.Instance.StartGoLobbyUI();
     }
 
     #endregion
@@ -824,13 +816,6 @@ public class GameManager : MonoBehaviour
     {
         PlayerController.Instance.IsLive = true;
         PlayerController.Instance.NowHP = PlayerController.Instance.MaxHP;
-    }
-
-    public void PlayerHPUpdate()
-    {
-        //유아이호출
-        _uiManeger.setHP();
-        //체력변경사항 저장 -> 데이터 세이브데이터 쪽 수정
     }
 }
 

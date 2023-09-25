@@ -10,7 +10,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] GameObject[] _weaponEffect;
     [SerializeField] MakeFog2 _MakeFog2;
     [SerializeField] SaveInfoData _unlockSaveData;
-    [SerializeField] UIManeger _uiManeger;
 
     SpriteRenderer _childSpriteRenderer;
     Animator _animator;
@@ -51,7 +50,7 @@ public class PlayerController : MonoBehaviour
             {
                 _nowHp = _maxHP;
             }
-            GameManager.Instance.PlayerHPUpdate();
+            UIManeger.Instance.setHP();
 
             if (_nowHp <= 0)
             {
@@ -96,7 +95,7 @@ public class PlayerController : MonoBehaviour
         set
         {
             _equipShovel = value;
-            _uiManeger.UpdataShovel();
+            UIManeger.Instance.UpdataShovel();
         }
     }
 
@@ -107,7 +106,7 @@ public class PlayerController : MonoBehaviour
         set
         {
             _equipWeapon = value;
-            _uiManeger.UpdataWeapon();
+            UIManeger.Instance.UpdataWeapon();
         }
     }
 
@@ -118,7 +117,7 @@ public class PlayerController : MonoBehaviour
         set
         {
             _equipArmor = value;
-            _uiManeger.UpdateArmor();
+            UIManeger.Instance.UpdateArmor();
         }
     }
 
@@ -129,7 +128,7 @@ public class PlayerController : MonoBehaviour
         set
         {
             _equipPotion = value;
-            _uiManeger.UpdatePotion();
+            UIManeger.Instance.UpdatePotion();
         }
     }
 
@@ -504,7 +503,7 @@ public class PlayerController : MonoBehaviour
                                 if (cr._ItemID == 101)
                                 {
                                     GameManager.Instance.Dia += cr.Count;
-                                    _uiManeger.IconMove(cr);
+                                    UIManeger.Instance.IconMove(cr);
                                 }
                                 else if (cr._ItemID == 102)
                                 {
@@ -748,7 +747,7 @@ public class PlayerController : MonoBehaviour
                     temp = EquipShovel;
                     EquipShovel = shovel;
                     dropItem.ChangeItem(temp);
-                    _uiManeger.IconMove(EquipShovel);
+                    UIManeger.Instance.IconMove(EquipShovel);
                     Debug.Log($"착용한 아이템 {EquipShovel._ItemID}");
                     Debug.Log($"버려진 아이템 {dropItem.Item._ItemID}");
                     return;
@@ -756,7 +755,7 @@ public class PlayerController : MonoBehaviour
                 else
                 {
                     EquipShovel = shovel;
-                    _uiManeger.IconMove(EquipShovel);
+                    UIManeger.Instance.IconMove(EquipShovel);
                 }
                 break;
             case ItemType.Weapon:
@@ -769,7 +768,7 @@ public class PlayerController : MonoBehaviour
                     temp = EquipWeapon;
                     EquipWeapon = weapon;
                     dropItem.ChangeItem(temp);
-                    _uiManeger.IconMove(EquipWeapon);
+                    UIManeger.Instance.IconMove(EquipWeapon);
                     Debug.Log($"착용한 아이템 {EquipWeapon._ItemID}");
                     Debug.Log($"버려진 아이템 {dropItem.Item._ItemID}");
                     return;
@@ -777,7 +776,7 @@ public class PlayerController : MonoBehaviour
                 else
                 {
                     EquipWeapon = weapon;
-                    _uiManeger.IconMove(EquipWeapon);
+                    UIManeger.Instance.IconMove(EquipWeapon);
                 }
                 
                 break;
@@ -790,7 +789,7 @@ public class PlayerController : MonoBehaviour
                     temp = EquipArmor;
                     EquipArmor = armor;
                     dropItem.ChangeItem(temp);
-                    _uiManeger.IconMove(EquipArmor);
+                    UIManeger.Instance.IconMove(EquipArmor);
                     Debug.Log($"착용한 아이템 {EquipArmor._ItemID}");
                     Debug.Log($"버려진 아이템 {dropItem.Item._ItemID}");
                     return;
@@ -798,7 +797,7 @@ public class PlayerController : MonoBehaviour
                 else
                 {
                     EquipArmor = armor;
-                    _uiManeger.IconMove(EquipArmor);
+                    UIManeger.Instance.IconMove(EquipArmor);
                 }
                 break;
             case ItemType.Potion:
@@ -810,7 +809,7 @@ public class PlayerController : MonoBehaviour
                     temp = EquipPotion;
                     EquipPotion = potion;
                     dropItem.ChangeItem(temp);
-                    _uiManeger.IconMove(EquipPotion);
+                    UIManeger.Instance.IconMove(EquipPotion);
                     Debug.Log($"착용한 아이템 {EquipPotion._ItemID}");
                     Debug.Log($"버려진 아이템 {dropItem.Item._ItemID}");
                     return;
@@ -818,7 +817,7 @@ public class PlayerController : MonoBehaviour
                 else
                 {
                     EquipPotion = potion;
-                    _uiManeger.IconMove(EquipPotion);
+                    UIManeger.Instance.IconMove(EquipPotion);
                 }
                 break;
         }
@@ -1154,7 +1153,7 @@ public class PlayerController : MonoBehaviour
             if (PlayerPrefs.HasKey("ComboUpgradeLevel")) level = (float)PlayerPrefs.GetInt("ComboUpgradeLevel");
             float multiple = _baseCoinMultiple[_coinMultipleIndex] + (level * 0.5f);
 
-            _uiManeger.CoinMultipleUI(multiple, _coinMultipleIndex);
+            UIManeger.Instance.CoinMultipleUI(multiple, _coinMultipleIndex);
         }
     }
 
@@ -1167,7 +1166,7 @@ public class PlayerController : MonoBehaviour
         if (PlayerPrefs.HasKey("ComboUpgradeLevel")) level = (float)PlayerPrefs.GetInt("ComboUpgradeLevel");
         float multiple = _baseCoinMultiple[_coinMultipleIndex] + (level * 0.5f);
 
-        _uiManeger.CoinMultipleUI(multiple, _coinMultipleIndex);
+        UIManeger.Instance.CoinMultipleUI(multiple, _coinMultipleIndex);
     }
 
     public void BaseItemEquip()
