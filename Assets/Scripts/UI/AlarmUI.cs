@@ -43,11 +43,13 @@ public class AlarmUI : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Return))
         {
-            Debug.Log("?");
+            Debug.Log(_alarmIndex);
             switch (_alarmIndex)
             {
                 case 0:
                     _action1();
+                    gameObject.SetActive(false);
+                    Time.timeScale = 1;
                     break;
                 case 1:
                     if (_action2 != null) _action2();

@@ -134,6 +134,14 @@ public class DropItem : MonoBehaviour
         GameObject go = Instantiate(_ItemNameCanvas, transform);
         go.GetComponent<ItemNameCanvas>().InitItemName(Item._Name);
     }
+
+    public void NotEnoughCurreny()
+    {
+        string str = "소지금 부족!";
+
+        GameObject go = Instantiate(_ItemNameCanvas, transform);
+        go.GetComponent<ItemNameCanvas>().NotEnoughCurrency(str);
+    }
 }
 
 

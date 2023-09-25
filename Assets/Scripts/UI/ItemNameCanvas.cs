@@ -18,4 +18,10 @@ public class ItemNameCanvas : MonoBehaviour
         _itemName.gameObject.SetActive(true);
         _itemName.GetComponent<Text>().text = _name;
     }
+
+    public void NotEnoughCurrency(string _str)
+    {
+        _itemName.gameObject.SetActive(true);
+        _itemName.GetComponent<Text>().text = _str;
+    }
 }

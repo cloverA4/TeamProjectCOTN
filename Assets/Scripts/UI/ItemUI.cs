@@ -25,7 +25,8 @@ public class ItemUI : MonoBehaviour
 
     public void ActiveItemUnlockPrice(int price)
     {
-        //다이아상점
+        _itemPrice.GetComponent<Text>().text = price.ToString();
+        _itemPrice.gameObject.SetActive(true);
     }
 
     public void CloseInfo()

@@ -114,16 +114,19 @@ public class UIManeger : MonoBehaviour
 
     public void GoLobby()
     {
+        Debug.Log("aaa");
         GameManager.Instance.NowStage = Stage.Lobby;
         GameManager.Instance.NowFloor = floor.f1;
-        //StartCoroutine(FadeIn());   ui매니저 싱글턴으로 만들고 호츌
+        PlayerController.Instance.BaseItemEquip();
+        StartCoroutine(FadeIn());   
     }
     public void Retry()
     {
+        Debug.Log("bbb");
         GameManager.Instance.NowFloor = floor.f1;
         GameManager.Instance.Gold = 0;
         PlayerController.Instance.BaseItemEquip();
-        //StartCoroutine(FadeIn());
+        StartCoroutine(FadeIn());
     }
 
     private void Start()
