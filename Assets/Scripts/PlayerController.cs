@@ -863,6 +863,7 @@ public class PlayerController : MonoBehaviour
         else
         {
             //골드부족!
+            dropItem.NotEnoughCurreny();
             ResetCoinMultiple();
         }
     }
@@ -901,6 +902,7 @@ public class PlayerController : MonoBehaviour
         else
         {
             //다이아 부족!!
+            dropItem.NotEnoughCurreny();
             ResetCoinMultiple();
         }
     }
