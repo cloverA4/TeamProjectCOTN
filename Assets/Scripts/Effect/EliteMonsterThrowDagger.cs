@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class EliteMonsterThrowDagger : MonoBehaviour
 {
-    private string targetLayerName = "Wall"; // 검출할 대상 레이어 이름
     private float destroyDelay = 0.2f; // 충돌 후 삭제 지연 시간
 
     public void Init(Vector3 vec , Vector3 Attackdirection)

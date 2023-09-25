@@ -35,6 +35,8 @@ public class Monster : MonoBehaviour
                   (1 << LayerMask.NameToLayer("Npc")) |
                   (1 << LayerMask.NameToLayer("Monster")) |
                   (1 << LayerMask.NameToLayer("Player"));
+
+    
     }
 
     public void Init(MonsterType Type) //몬스터 타입 별 기본값 세팅
@@ -622,6 +624,7 @@ public class Monster : MonoBehaviour
             }
         }
         //유아이 체력삭제 호출
+
     }
 
     void ItemDrop()
