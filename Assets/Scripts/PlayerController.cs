@@ -952,11 +952,11 @@ public class PlayerController : MonoBehaviour
             UpdateCharacterState();
             dropItem.DeleteDropItem();
         }
-        else
+        else if(needDia != -1 && GameManager.Instance.Dia < needDia)
         {
+            dropItem.NotEnoughCurreny();
             Debug.Log("해금불가");
         }
-        
     }
 
     private void OnDrawGizmos() //확인용
