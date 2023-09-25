@@ -419,8 +419,8 @@ public class UIManeger : MonoBehaviour
     {
         _stageClearUI.OnClearEffect();
     }
-    public void CoinMultipleUI(float multiple)
+    public void CoinMultipleUI(float multiple , int multipleIndex) // 코인 배수 텍스트로 출력
     {
-        _coinMultipleUI.OnCoinMultiple(multiple);
+        _coinMultipleUI.OnCoinMultiple(multiple, multipleIndex);
     }
 }
