@@ -511,8 +511,8 @@ public class PlayerController : MonoBehaviour
                                     //코인배수계산
                                     float level = 0;
                                     if (PlayerPrefs.HasKey("ComboUpgradeLevel")) level = (float)PlayerPrefs.GetInt("ComboUpgradeLevel");
-
                                     float multiple = _baseCoinMultiple[_coinMultipleIndex] + (level * 0.5f);
+
                                     GameManager.Instance.Gold += Mathf.FloorToInt(cr.Count * multiple);
                                 }
                                 dropItem.DeleteDropItem();
@@ -1147,7 +1147,12 @@ public class PlayerController : MonoBehaviour
         if (_coinMultipleIndex < _baseCoinMultiple.Length - 1)
         {
             _coinMultipleIndex++;
-            _uiManeger.CoinMultipleUI(_baseCoinMultiple[_coinMultipleIndex], _coinMultipleIndex);
+
+            float level = 0;
+            if (PlayerPrefs.HasKey("ComboUpgradeLevel")) level = (float)PlayerPrefs.GetInt("ComboUpgradeLevel");
+            float multiple = _baseCoinMultiple[_coinMultipleIndex] + (level * 0.5f);
+
+            _uiManeger.CoinMultipleUI(multiple, _coinMultipleIndex);
         }
     }
 
@@ -1155,7 +1160,12 @@ public class PlayerController : MonoBehaviour
     {
         //코인배수 초기화
         _coinMultipleIndex = 0;
-        _uiManeger.CoinMultipleUI(_baseCoinMultiple[_coinMultipleIndex], _coinMultipleIndex);
+
+        float level = 0;
+        if (PlayerPrefs.HasKey("ComboUpgradeLevel")) level = (float)PlayerPrefs.GetInt("ComboUpgradeLevel");
+        float multiple = _baseCoinMultiple[_coinMultipleIndex] + (level * 0.5f);
+
+        _uiManeger.CoinMultipleUI(multiple, _coinMultipleIndex);
     }
 
     public void BaseItemEquip()
