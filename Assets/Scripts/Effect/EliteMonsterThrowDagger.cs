@@ -5,46 +5,53 @@ using UnityEngine;
 
 public class EliteMonsterThrowDagger : MonoBehaviour
 {
-    private LayerMask _obstacleLayer; // 장애물 레이어
+    private string targetLayerName = "Wall"; // 검출할 대상 레이어 이름
+    private float destroyDelay = 0.2f; // 충돌 후 삭제 지연 시간
 
-
-    private void Start()
+    public void Init(Vector3 vec , Vector3 Attackdirection)
     {
-        _obstacleLayer =
-            (1 << LayerMask.NameToLayer("Wall"));
-    }
+        //레이케스트를 쏴서 거리를 알아 온다음에 그거리만큼 scale의 x 값을 늘려주고 x포지션의 값을 scale의 x값의 절반을 만들어주는 구문
 
-    private void Update()
-    {
+        Transform SpecialAttackEffect = gameObject.transform;
+        // 레이캐스트 시작 위치를 지정합니다.
+        SpecialAttackEffect.position = vec;
+
+        // Raycast를 실행하여 충돌 정보를 가져옵니다.
+        RaycastHit2D hit = Physics2D.Raycast(SpecialAttackEffect.position, Attackdirection, 100f, 1 << LayerMask.NameToLayer("Wall"));
         
-        StartLaserAttack();
-        
-    }
-
-    private void StartLaserAttack()
-    {
-        if (gameObject != null)
+        if (hit)
         {
-            Vector3 DaggerDirection = transform.forward;
+            Debug.Log(hit.collider.name);
+            // 충돌 지점까지의 거리를 측정합니다.
+            float distanceToHit = hit.distance;
+            Debug.Log(distanceToHit);
 
-            RaycastHit2D hit = Physics2D.Raycast(transform.position, DaggerDirection, 100f, _obstacleLayer);
-            // 엘리트 몬스터 대거 발사루프
-            if (hit.collider != null)
+            // x 스케일 값을 거리에 따라 조절합니다.
+            float newScaleX = Mathf.Min(distanceToHit);
+
+            float newXPosition = 0;
+            if (Attackdirection == Vector3.left)
             {
-                float laserLength = hit.distance;
-                Vector2 laserPosition = transform.position + (DaggerDirection * laserLength / 2f);
-
-                GameObject laserEffect = Instantiate(this.gameObject, laserPosition, Quaternion.identity);
-
-                // 레이저 이펙트의 길이 설정
-                laserEffect.transform.localScale = new Vector3(1f, laserLength, 1f);
-
-                // 0.2초 후에 레이저 이펙트 삭제
-                Destroy(laserEffect, 0.2f);
+                newXPosition = -newScaleX / 2;
             }
+            else if (Attackdirection == Vector3.right)
+            {
+                newXPosition = newScaleX / 2;
+            }
+            // x 포지션 값을 스케일의 x 값의 절반으로 설정합니다.
 
-            // 0.2초 후에 레이저 이펙트 삭제
-            Destroy(gameObject, 0.2f);
+
+            // 스케일과 포지션을 업데이트합니다.
+            transform.localScale = new Vector3(hit.distance, 1, 1);
+            transform.localPosition += new Vector3(newXPosition, 0, 0);
         }
+        Invoke("DestroyEffect", destroyDelay);
     }
+
+    private void DestroyEffect()
+    {
+        // 이펙트를 삭제합니다.
+        Destroy(gameObject);
+    }
+
 }

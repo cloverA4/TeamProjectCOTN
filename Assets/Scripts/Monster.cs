@@ -298,7 +298,8 @@ public class Monster : MonoBehaviour
             Temp = transform.position + MonsterLook / 2;
             hitdata = Physics2D.Raycast(Temp, MonsterLook, 100f, _normalLayerMask);
 
-            Instantiate(_ElitemonsterAttackEffect, transform.position + MonsterLook, Quaternion.identity);
+            GameObject SpecialEffect = Instantiate(_ElitemonsterAttackEffect, transform.position + MonsterLook, Quaternion.identity);
+            SpecialEffect.GetComponent<EliteMonsterThrowDagger>().Init(transform.position + MonsterLook , MonsterLook);
 
             if (hitdata)
             {
