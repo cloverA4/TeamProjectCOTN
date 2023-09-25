@@ -5,24 +5,25 @@ using UnityEngine;
 public class StageClearUI : MonoBehaviour
 {
     [SerializeField] GameObject _clearText;
-    [SerializeField] GameObject _clearPE;
+    [SerializeField] ParticleSystem _clearPE;
 
     public void Start()
     {
-        _clearPE.SetActive(false);
+        _clearPE.gameObject.SetActive(false);
         _clearText.SetActive(false);
     }
 
     public void OnClearEffect()
     {
         _clearText.SetActive(true);
-        _clearPE.SetActive(true);
-        Invoke("OffClearEffect", 10f);     
+        _clearPE.gameObject.SetActive(true);
+        _clearPE.Play();
+        Invoke("OffClearEffect", 3f);
     }
 
     void OffClearEffect()
     {
         _clearText.SetActive(false);
-        _clearPE.SetActive(false);
+        _clearPE.gameObject.SetActive(false);
     }
 }
