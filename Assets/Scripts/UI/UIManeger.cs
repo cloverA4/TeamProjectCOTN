@@ -423,4 +423,12 @@ public class UIManeger : MonoBehaviour
     {
         _coinMultipleUI.OnCoinMultiple(multiple, multipleIndex);
     }
+    public void DisableCoinMultiple() // 코인 배수 꺼주는 함수
+    {
+        _coinMultipleUI.DisableCoinMUltiple();
+    }
+    public void ActiveCoinMultiple()
+    {
+        _coinMultipleUI.ActiveCoinMultiple();
+    }
 }

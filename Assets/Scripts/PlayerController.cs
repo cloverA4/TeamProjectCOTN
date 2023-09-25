@@ -1147,6 +1147,7 @@ public class PlayerController : MonoBehaviour
         if (_coinMultipleIndex < _baseCoinMultiple.Length - 1)
         {
             _coinMultipleIndex++;
+            _uiManeger.CoinMultipleUI(_baseCoinMultiple[_coinMultipleIndex], _coinMultipleIndex);
         }
     }
 
@@ -1154,6 +1155,7 @@ public class PlayerController : MonoBehaviour
     {
         //코인배수 초기화
         _coinMultipleIndex = 0;
+        _uiManeger.CoinMultipleUI(_baseCoinMultiple[_coinMultipleIndex], _coinMultipleIndex);
     }
 
     public void BaseItemEquip()

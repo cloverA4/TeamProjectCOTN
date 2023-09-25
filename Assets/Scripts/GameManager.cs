@@ -345,6 +345,8 @@ public class GameManager : MonoBehaviour
                 Item.transform.position = new Vector3(-27, 100, 0);
                 Item.GetComponent<DropItem>().Init(Data.Instance.GetItemInfo(202));
 
+                _uiManeger.DisableCoinMultiple();
+
                 break;
             case Stage.Stage1:
                 _stageClear = false;
@@ -355,22 +357,26 @@ public class GameManager : MonoBehaviour
                         PlayerController.Instance.transfromUpdate(_stageStartPosition.Stage1F1);
                         _MakeFog2.FogOfWarStageMove();
                         _audio.clip = Resources.Load<AudioClip>("SoundsUpdate/Stage/Stage1-1");
+                        _uiManeger.ActiveCoinMultiple();
                         break;
                     case floor.f2:
                         PlayerController.Instance.transfromUpdate(_stageStartPosition.Stage1F2);
                         _MakeFog2.FogOfWarStageMove();
                         _audio.clip = Resources.Load<AudioClip>("SoundsUpdate/Stage/Stage1-2");
+                        _uiManeger.ActiveCoinMultiple();
                         break;
                     case floor.f3:
                         PlayerController.Instance.transfromUpdate(_stageStartPosition.Stage1F3);
                         _MakeFog2.FogOfWarStageMove();
                         _audio.clip = Resources.Load<AudioClip>("SoundsUpdate/Stage/Stage1-3");
+                        _uiManeger.ActiveCoinMultiple();
                         break;
                     case floor.fBoss:
                         PlayerController.Instance.transfromUpdate(_stageStartPosition.Stage1FBoss);
                         _audio.clip = Resources.Load<AudioClip>("SoundsUpdate/Stage/StageLobby");
                         _audio.loop = true;
                         PlayerController.Instance.ResetCoinMultiple();
+                        _uiManeger.DisableCoinMultiple();
                         break;
                 }
                 break;

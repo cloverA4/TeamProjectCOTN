@@ -10,7 +10,6 @@ public class CoinMultipleUI : MonoBehaviour
 
     private void Start()
     {
-        gameObject.SetActive(false);
     }
 
     public void OnCoinMultiple(float multiple , int multipleIndex)
@@ -20,22 +19,24 @@ public class CoinMultipleUI : MonoBehaviour
             if(multipleIndex < 2)
             {
                 _multipleText.text = multiple.ToString();
-                gameObject.SetActive(true);
+                _multipleText.color = Color.white;
             }
             else if(multipleIndex >= 2)
             {
                 _multipleText.text = multiple.ToString();
-                gameObject.SetActive(true);
                 _multipleText.color = Color.red;
             }
            
             // 코인 배수가 최대치 일때 글자 색이 빨간색으로 변하는 조건 추가
         }
-        else if(multiple <= 0)
-        {
-            gameObject.SetActive(false);
-        }
+    }
 
-
+    public void DisableCoinMUltiple()
+    {
+        gameObject.SetActive(false);
+    }
+    public void ActiveCoinMultiple()
+    {
+        gameObject.SetActive(true);
     }
 }
