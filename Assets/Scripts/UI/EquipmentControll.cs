@@ -94,19 +94,11 @@ public class EquipmentControll : MonoBehaviour
         _weaponImage.GetComponent<Image>().sprite = _item._ItemIcon;
         Vector3 tempPos = _weaponImage.GetComponent<RectTransform>().position;
         var time = 0f;
-        while (true)
+        while (time < 1f)
         {
-            if (Vector3.Distance(tempPos, targetPos) > 0.1f)
-            {
-                time += Time.deltaTime;
-                _weaponImage.GetComponent<RectTransform>().position = Vector3.Lerp(_weaponImage.GetComponent<RectTransform>().position, targetPos, time);
-                Debug.Log(Vector3.Distance(_weaponImage.GetComponent<RectTransform>().position, targetPos));
-                yield return null;
-            }
-            if (Vector3.Distance(_weaponImage.GetComponent<RectTransform>().position, targetPos) == 0)
-            {
-                break;
-            }
+            time += Time.deltaTime;
+            _weaponImage.GetComponent<RectTransform>().position = Vector3.Lerp(tempPos, targetPos, time / 0.5f);
+            yield return null;
         }
         yield return null;
     }
@@ -117,19 +109,11 @@ public class EquipmentControll : MonoBehaviour
         _armorImage.GetComponent<Image>().sprite = _item._ItemIcon;
         Vector3 tempPos = _armorImage.GetComponent<RectTransform>().position;
         var time = 0f;
-        while (true)
+        while (time < 1f)
         {
-            if (Vector3.Distance(tempPos, targetPos) > 0.1f)
-            {
-                time += Time.deltaTime;
-                _armorImage.GetComponent<RectTransform>().position = Vector3.Lerp(_armorImage.GetComponent<RectTransform>().position, targetPos, time);
-                Debug.Log(Vector3.Distance(_armorImage.GetComponent<RectTransform>().position, targetPos));
-                yield return null;
-            }
-            if (Vector3.Distance(_armorImage.GetComponent<RectTransform>().position, targetPos) == 0)
-            {
-                break;
-            }
+            time += Time.deltaTime;
+            _armorImage.GetComponent<RectTransform>().position = Vector3.Lerp(tempPos, targetPos, time / 0.5f);
+            yield return null;
         }
         yield return null;
     }
@@ -140,19 +124,11 @@ public class EquipmentControll : MonoBehaviour
         _shovelImage.GetComponent<Image>().sprite = _item._ItemIcon;
         Vector3 tempPos = _shovelImage.GetComponent<RectTransform>().position;
         var time = 0f;
-        while (true)
+        while (time < 1f)
         {
-            if (Vector3.Distance(tempPos, targetPos) > 0.1f)
-            {
-                time += Time.deltaTime;
-                _shovelImage.GetComponent<RectTransform>().position = Vector3.Lerp(_shovelImage.GetComponent<RectTransform>().position, targetPos, time);
-                Debug.Log(Vector3.Distance(_shovelImage.GetComponent<RectTransform>().position, targetPos));
-                yield return null;
-            }
-            if (Vector3.Distance(_shovelImage.GetComponent<RectTransform>().position, targetPos) == 0)
-            {
-                break;
-            }
+            time += Time.deltaTime;
+            _shovelImage.GetComponent<RectTransform>().position = Vector3.Lerp(tempPos, targetPos, time / 0.5f);
+            yield return null;
         }
         yield return null;
     }
@@ -163,19 +139,11 @@ public class EquipmentControll : MonoBehaviour
         _potionImage.GetComponent<Image>().sprite = _item._ItemIcon;
         Vector3 tempPos = _potionImage.GetComponent<RectTransform>().position;
         var time = 0f;
-        while (true)
+        while (time < 1f)
         {
-            if (Vector3.Distance(tempPos, targetPos) > 0.1f)
-            {
-                time += Time.deltaTime;
-                _potionImage.GetComponent<RectTransform>().position = Vector3.Lerp(_potionImage.GetComponent<RectTransform>().position, targetPos, time);
-                Debug.Log(Vector3.Distance(_potionImage.GetComponent<RectTransform>().position, targetPos));
-                yield return null;
-            }
-            if (Vector3.Distance(_potionImage.GetComponent<RectTransform>().position, targetPos) == 0)
-            {
-                break;
-            }
+            time += Time.deltaTime;
+            _potionImage.GetComponent<RectTransform>().position = Vector3.Lerp(tempPos, targetPos, time / 0.5f);
+            yield return null;
         }
         yield return null;
     }
