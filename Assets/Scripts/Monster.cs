@@ -289,7 +289,7 @@ public class Monster : MonoBehaviour
     {
         Vector3 Temp;
         RaycastHit2D hitdata = new RaycastHit2D();
-
+        
         _specialAttackCount++;
 
         if(_attackReady)
@@ -315,7 +315,7 @@ public class Monster : MonoBehaviour
         
         if (_attackMoveCount >= 1)
         {
-            if(Vector2.Distance(transform.position, PlayerController.Instance.transform.position) < 1)
+            if(Vector2.Distance(transform.position, PlayerController.Instance.transform.position) <= 1)
             {                
                 //공격
                 if (PlayerController.Instance.transform.position.x == transform.position.x)
@@ -355,6 +355,7 @@ public class Monster : MonoBehaviour
                     {
                         PlayerController.Instance.TakeDamage(_monsterDamage);
                     }
+
                     if (MonsterLook == Vector3.up)
                     {
                         _animator.SetTrigger("AttackUp");
@@ -377,7 +378,6 @@ public class Monster : MonoBehaviour
                     Debug.Log("플레이어까지 거리가 1미만인데 상하좌우에 없다????");
                 }
                 _specialAttackCount = 0;
-                _attackMoveCount = 0;
             }
             else
             {
@@ -401,6 +401,7 @@ public class Monster : MonoBehaviour
                     else EliteMonsterMove(1);
                 }
             }
+            _attackMoveCount = 0;
         }
         else
         {
@@ -490,7 +491,6 @@ public class Monster : MonoBehaviour
                 }
             }
         }
-
     }
 
     void breathCharging()
