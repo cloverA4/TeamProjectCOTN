@@ -10,6 +10,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject _dropItem;
     [SerializeField] MakeFog2 _MakeFog2;
     [SerializeField] GameObject _itemPool;
+    [SerializeField] AudioSource _shopF2;
+    [SerializeField] AudioSource _shopF3;
 
     //박스 리젠용 변수들
     [SerializeField] GameObject _clearBox;
@@ -412,7 +414,7 @@ public class GameManager : MonoBehaviour
                 break;
             case Stage.Stage1:
             case Stage.Stage2:
-                
+
                 switch (_nowFloor)
                 {
                     case floor.f1:
@@ -428,8 +430,17 @@ public class GameManager : MonoBehaviour
 
                     case floor.fBoss:
                         break;
-                }                
+                }
                 break;
+        }
+
+        if (_nowStage == Stage.Stage1 && _nowFloor == floor.f2)
+        {
+            _shopF2.Play();
+        }
+        else if (_nowStage == Stage.Stage1 && _nowFloor == floor.f3)
+        {
+            _shopF3.Play();
         }
 
         if (sm != null)

@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour
 
     SpriteRenderer _childSpriteRenderer;
     Animator _animator;
+    AudioSource _audio;
     LayerMask _normalLayerMask;
     LayerMask _weaponCheckLayerMask;
     LayerMask _itemCheckLayerMask;
@@ -54,6 +55,8 @@ public class PlayerController : MonoBehaviour
 
             if (_nowHp <= 0)
             {
+                _audio.clip = Data.Instance.SoundEffect[(int)SoundEffect.PlayerDeath];
+                _audio.Play();
                 _isLive = false;
                 GameManager.Instance.StageFail();
             }
@@ -167,8 +170,9 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
-        
+
         //_childSpriteRenderer = GetComponentInChildrens<SpriteRenderer>()[1];
+        _audio = GetComponent<AudioSource>();
         _animator = GetComponentsInChildren<Animator>()[0];
         _childSpriteRenderer = GetComponentsInChildren<SpriteRenderer>()[1];
 
@@ -451,15 +455,21 @@ public class PlayerController : MonoBehaviour
                 shovelImage.AddComponent<SpriteRenderer>();
                 shovelImage.GetComponent<SpriteRenderer>().sprite = EquipShovel._ItemIcon;
                 Destroy( shovelImage , 0.2f);
+                _audio.clip = Data.Instance.SoundEffect[(int)SoundEffect.Dig];
+                _audio.Play();
             }
             else if (hitdata.collider.tag == "Box")
             {
                 //상자 아이템 기능구현
                 hitdata.collider.GetComponent<Box>().OpenBox();
+                _audio.clip = Data.Instance.SoundEffect[(int)SoundEffect.BoxOpen];
+                _audio.Play();
             }
             else if (hitdata.collider.tag == "Door") // Door이(가) 힛데이타에 태그로 들어왓다면
             {
                 hitdata.collider.GetComponent<Door>().OpenDoor();
+                _audio.clip = Data.Instance.SoundEffect[(int)SoundEffect.OpenDoor];
+                _audio.Play();
             }
             else if (hitdata.collider.tag == "BadRock") // BadRock이 힛데이타에 태그로 들어왓다면
             {
@@ -734,6 +744,8 @@ public class PlayerController : MonoBehaviour
 
     void GetItem(DropItem dropItem)
     {
+        _audio.clip = Data.Instance.SoundEffect[(int)SoundEffect.GetItem];
+        _audio.Play();
         switch (dropItem.Item._itemType)
         {
             case ItemType.Shovel:
@@ -899,6 +911,8 @@ public class PlayerController : MonoBehaviour
 
             UpdateCharacterState();
             dropItem.DeleteDropItem();
+            _audio.clip = Data.Instance.SoundEffect[(int)SoundEffect.UnLock];
+            _audio.Play();
         }
         else
         {
@@ -952,6 +966,8 @@ public class PlayerController : MonoBehaviour
             Data.Instance.SavePlayerData();
             UpdateCharacterState();
             dropItem.DeleteDropItem();
+            _audio.clip = Data.Instance.SoundEffect[(int)SoundEffect.UnLock];
+            _audio.Play();
         }
         else if(needDia != -1 && GameManager.Instance.Dia < needDia)
         {
@@ -1053,6 +1069,8 @@ public class PlayerController : MonoBehaviour
     {
         NowHP += EquipPotion.Heal;
         EquipPotion = null;
+        _audio.clip = Data.Instance.SoundEffect[(int)SoundEffect.UsePotion];
+        _audio.Play();
     }
 
     public void InitCharacterData()
@@ -1182,7 +1200,9 @@ public class PlayerController : MonoBehaviour
     public void TakeDamage(int dmg)
     {
         int damage = dmg - Def;
-        if(damage > 1)
+        _audio.clip = Data.Instance.SoundEffect[(int)SoundEffect.PlayerHit];
+        _audio.Play();
+        if (damage > 1)
         {
             NowHP -= damage;
         }

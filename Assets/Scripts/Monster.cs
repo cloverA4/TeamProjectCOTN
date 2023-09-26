@@ -1,9 +1,9 @@
 using UnityEngine;
 using System;
-using UnityEditor.Profiling;
 
 public class Monster : MonoBehaviour
 {
+    AudioSource _audio;
     [SerializeField] MonsterHPUI _monsterHPUI;
     [SerializeField] GameObject _monsterNormalAttackEffect;
 
@@ -27,6 +27,7 @@ public class Monster : MonoBehaviour
     void Start()
     {
         //GameManager.Instance.MosterMoveEnvent += new EventHandler(MonsterMove);
+        _audio = GetComponent<AudioSource>();
         _animator = GetComponentsInChildren<Animator>()[0];
         _childSpriteRenderer = GetComponentsInChildren<SpriteRenderer>()[1];
 
@@ -35,8 +36,6 @@ public class Monster : MonoBehaviour
                   (1 << LayerMask.NameToLayer("Npc")) |
                   (1 << LayerMask.NameToLayer("Monster")) |
                   (1 << LayerMask.NameToLayer("Player"));
-
-    
     }
 
     public void Init(MonsterType Type) //몬스터 타입 별 기본값 세팅
@@ -160,7 +159,7 @@ public class Monster : MonoBehaviour
             if (hitdata.collider.tag == "Player")
             {
                 MonsterAttackEffectPos(MonsterLook);
-                PlayerController.Instance.TakeDamage(_monsterDamage);//플레이어면 공격
+                MonsterAttack();//플레이어면 공격
             }
             else
             {
@@ -247,7 +246,7 @@ public class Monster : MonoBehaviour
             if (hitdata.collider.tag == "Player")
             {
                 MonsterAttackEffectPos(vec);
-                PlayerController.Instance.TakeDamage(_monsterDamage);
+                MonsterAttack();
             }
         }
     }
@@ -305,7 +304,7 @@ public class Monster : MonoBehaviour
 
             if (hitdata)
             {
-                if (hitdata.collider.CompareTag("Player")) PlayerController.Instance.TakeDamage(_monsterDamage);
+                if (hitdata.collider.CompareTag("Player")) MonsterAttack();
             }
             
             //GetComponentsInChildren<SpriteRenderer>()[1].color = Color.white;
@@ -356,7 +355,7 @@ public class Monster : MonoBehaviour
                 {
                     if(hitdata.collider.CompareTag("Player"))
                     {
-                        PlayerController.Instance.TakeDamage(_monsterDamage);
+                        MonsterAttack();
                     }
 
                     if (MonsterLook == Vector3.up)
@@ -605,6 +604,27 @@ public class Monster : MonoBehaviour
 
     #endregion
 
+    void MonsterAttack()
+    {
+        PlayerController.Instance.TakeDamage(_monsterDamage);
+        switch (Type)
+        {
+            case MonsterType.Monster2:
+                _audio.clip = Data.Instance.SoundEffect[(int)SoundEffect.ZombieAttack];
+                break;
+            case MonsterType.Monster3:
+                _audio.clip = Data.Instance.SoundEffect[(int)SoundEffect.CowAttack];
+                break;
+            case MonsterType.Monster4:
+                _audio.clip = Data.Instance.SoundEffect[(int)SoundEffect.GoblinAttack];
+                break;
+            case MonsterType.EliteMonster:
+                _audio.clip = Data.Instance.SoundEffect[(int)SoundEffect.EliteGoblinAttack];
+                break;
+        }
+        _audio.Play();
+    }
+
 
     public void TakeDamage(int damage)
     { 
@@ -616,6 +636,25 @@ public class Monster : MonoBehaviour
         if (_monsterHP <= 0)
         {
             //사망
+            switch (Type)
+            {
+                case MonsterType.Monster1:
+                    _audio.clip = Data.Instance.SoundEffect[(int)SoundEffect.SlimeDeath];
+                    break;
+                case MonsterType.Monster2:
+                    _audio.clip = Data.Instance.SoundEffect[(int)SoundEffect.ZombieDeath];
+                    break;
+                case MonsterType.Monster3:
+                    _audio.clip = Data.Instance.SoundEffect[(int)SoundEffect.CowDeath];
+                    break;
+                case MonsterType.Monster4:
+                    _audio.clip = Data.Instance.SoundEffect[(int)SoundEffect.GoblinDeath];
+                    break;
+                case MonsterType.EliteMonster:
+                    _audio.clip = Data.Instance.SoundEffect[(int)SoundEffect.EliteGoblinDeath];
+                    break;
+            }
+            _audio.Play();
             ItemDrop();
             gameObject.SetActive(false);
             PlayerController.Instance.UpCoinMultiple();
@@ -624,6 +663,28 @@ public class Monster : MonoBehaviour
             {
                 GameManager.Instance.EliteMonsterDie();
             }
+        }
+        else
+        {
+            switch (Type)
+            {
+                case MonsterType.Monster1:
+                    _audio.clip = Data.Instance.SoundEffect[(int)SoundEffect.SlimeHit];
+                    break;
+                case MonsterType.Monster2:
+                    _audio.clip = Data.Instance.SoundEffect[(int)SoundEffect.CowHit];
+                    break;
+                case MonsterType.Monster3:
+                    _audio.clip = Data.Instance.SoundEffect[(int)SoundEffect.CowHit];
+                    break;
+                case MonsterType.Monster4:
+                    _audio.clip = Data.Instance.SoundEffect[(int)SoundEffect.GoblinHit];
+                    break;
+                case MonsterType.EliteMonster:
+                    _audio.clip = Data.Instance.SoundEffect[(int)SoundEffect.GoblinHit];
+                    break;
+            }
+            _audio.Play();
         }
         //유아이 체력삭제 호출
 

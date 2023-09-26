@@ -5,12 +5,16 @@ using System.IO;
 using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class Data : MonoBehaviour
 {
     #region 전역변수
     [SerializeField] GameObject _ItemPrefab;
     [SerializeField] GameObject _bloodEffect;
+    
+    List<AudioClip> _soundEffect = new List<AudioClip>();
+    public List<AudioClip> SoundEffect { get { return _soundEffect; } }
     public GameObject ItemPrefab { get { return _ItemPrefab; } }
     public GameObject BloodEffect { get { return _bloodEffect; } }
 
@@ -133,6 +137,7 @@ public class Data : MonoBehaviour
         ReadItemData();
         LoadSaveData();
         UPdatelockList();
+        LoadSound();
         yield return null;
 
         // 마지막에 필요한 모든 게임데이터를 로드가되면 gmaeScene로드
@@ -411,6 +416,34 @@ public class Data : MonoBehaviour
         return null;
     }
 
+    void LoadSound()
+    {
+        _soundEffect.Add(Resources.Load<AudioClip>("SoundsUpdate/Enemy/en_cow_attack"));
+        _soundEffect.Add(Resources.Load<AudioClip>("SoundsUpdate/Enemy/en_cow_hit")); 
+        _soundEffect.Add(Resources.Load<AudioClip>("SoundsUpdate/Enemy/en_cow_death"));
+        _soundEffect.Add(Resources.Load<AudioClip>("SoundsUpdate/Enemy/en_goblin_attack"));
+        _soundEffect.Add(Resources.Load<AudioClip>("SoundsUpdate/Enemy/en_goblin_hit"));
+        _soundEffect.Add(Resources.Load<AudioClip>("SoundsUpdate/Enemy/en_goblin_death"));
+        _soundEffect.Add(Resources.Load<AudioClip>("SoundsUpdate/Enemy/en_slime_hit"));
+        _soundEffect.Add(Resources.Load<AudioClip>("SoundsUpdate/Enemy/en_slime_death"));
+        _soundEffect.Add(Resources.Load<AudioClip>("SoundsUpdate/Enemy/en_zombie_attack"));
+        //좀비 맞는거 추가
+        _soundEffect.Add(Resources.Load<AudioClip>("SoundsUpdate/Enemy/en_zombie_death"));
+        _soundEffect.Add(Resources.Load<AudioClip>("SoundsUpdate/Enemy/en_Elite_Goblin_attack"));
+        //엘리트 맞는거 추가
+        _soundEffect.Add(Resources.Load<AudioClip>("SoundsUpdate/Enemy/en_Elite_Goblin_death"));
+        _soundEffect.Add(Resources.Load<AudioClip>("SoundsUpdate/InterAction/Chest_Open"));
+        _soundEffect.Add(Resources.Load<AudioClip>("SoundsUpdate/InterAction/ItemUse_potion"));
+        _soundEffect.Add(Resources.Load<AudioClip>("SoundsUpdate/InterAction/Pickup_Diamond"));
+        _soundEffect.Add(Resources.Load<AudioClip>("SoundsUpdate/Player/Player_ShopItemPurchase"));
+        _soundEffect.Add(Resources.Load<AudioClip>("SoundsUpdate/Player/Player_Dig"));
+        _soundEffect.Add(Resources.Load<AudioClip>("SoundsUpdate/Player/Player_OpenDoor"));
+        _soundEffect.Add(Resources.Load<AudioClip>("SoundsUpdate/Player/Player_Hurt"));
+        _soundEffect.Add(Resources.Load<AudioClip>("SoundsUpdate/Player/Player_Death"));
+        _soundEffect.Add(Resources.Load<AudioClip>("SoundsUpdate/Ui/Ui_Select_Down"));
+        _soundEffect.Add(Resources.Load<AudioClip>("SoundsUpdate/Ui/Ui_Select"));
+    }
+
     #endregion
 }
 
@@ -560,6 +593,34 @@ public enum BoxType
 {
     Normal,
     Clear,
+}
+
+public enum SoundEffect
+{
+    CowAttack,//몬스터가 공격
+    CowHit,//몬스터가 맞을때
+    CowDeath,//몬스터 사망
+    GoblinAttack,
+    GoblinHit,
+    GoblinDeath,
+    SlimeHit,
+    SlimeDeath,
+    ZombieAttack,
+    //좀비맞는거 추가
+    ZombieDeath,
+    EliteGoblinAttack,
+    //엘리트 맞는거 추가
+    EliteGoblinDeath,
+    BoxOpen,
+    UsePotion,
+    GetItem,
+    UnLock,
+    Dig,
+    OpenDoor,
+    PlayerHit,
+    PlayerDeath,
+    UICange,
+    UISelect,
 }
 
 #endregion

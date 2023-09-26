@@ -22,8 +22,7 @@ public class Box : MonoBehaviour
                 GameObject SpawnItem = Instantiate(Data.Instance.ItemPrefab, GameManager.Instance.ItemPool.transform);
                 SpawnItem.transform.position = transform.position;
                 SpawnItem.GetComponent<DropItem>().Init(Data.Instance.GetItemInfo(ItemID));
-                SpawnItem.GetComponent<DropItem>().OpenItemInfo();
-                
+                SpawnItem.GetComponent<DropItem>().OpenItemInfo();                
                 break;
             case BoxType.Clear:
 
@@ -41,7 +40,6 @@ public class Box : MonoBehaviour
                 GameManager.Instance.EliteMonsterDie();
                 break;
         }
-
         DestroyBox();
     }
 
