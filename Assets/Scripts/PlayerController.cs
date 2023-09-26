@@ -858,6 +858,7 @@ public class PlayerController : MonoBehaviour
 
             GetItem(dropItem);
             UpdateCharacterState();
+            dropItem.DeleteDropItem();
         }
         else
         {
@@ -897,6 +898,7 @@ public class PlayerController : MonoBehaviour
             Data.Instance.SavePlayerData();
 
             UpdateCharacterState();
+            dropItem.DeleteDropItem();
         }
         else
         {
