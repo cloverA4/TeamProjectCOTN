@@ -1202,6 +1202,7 @@ public class PlayerController : MonoBehaviour
         int damage = dmg - Def;
         _audio.clip = Data.Instance.SoundEffect[(int)SoundEffect.PlayerHit];
         _audio.Play();
+        ShakeCamera.Instance.ShakeAndFlashCamera();
         if (damage > 1)
         {
             NowHP -= damage;
