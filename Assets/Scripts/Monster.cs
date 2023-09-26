@@ -636,25 +636,7 @@ public class Monster : MonoBehaviour
         if (_monsterHP <= 0)
         {
             //»ç¸Á
-            switch (Type)
-            {
-                case MonsterType.Monster1:
-                    _audio.clip = Data.Instance.SoundEffect[(int)SoundEffect.SlimeDeath];
-                    break;
-                case MonsterType.Monster2:
-                    _audio.clip = Data.Instance.SoundEffect[(int)SoundEffect.ZombieDeath];
-                    break;
-                case MonsterType.Monster3:
-                    _audio.clip = Data.Instance.SoundEffect[(int)SoundEffect.CowDeath];
-                    break;
-                case MonsterType.Monster4:
-                    _audio.clip = Data.Instance.SoundEffect[(int)SoundEffect.GoblinDeath];
-                    break;
-                case MonsterType.EliteMonster:
-                    _audio.clip = Data.Instance.SoundEffect[(int)SoundEffect.EliteGoblinDeath];
-                    break;
-            }
-            _audio.Play();
+            MonsterSound.Instance.MonsterDeath(Type);
             ItemDrop();
             gameObject.SetActive(false);
             PlayerController.Instance.UpCoinMultiple();

@@ -437,10 +437,17 @@ public class GameManager : MonoBehaviour
         if (_nowStage == Stage.Stage1 && _nowFloor == floor.f2)
         {
             _shopF2.Play();
+            _shopF3.Stop();
         }
         else if (_nowStage == Stage.Stage1 && _nowFloor == floor.f3)
         {
             _shopF3.Play();
+            _shopF2.Stop();
+        }
+        else
+        {
+            _shopF3.Stop();
+            _shopF2.Stop();
         }
 
         if (sm != null)
