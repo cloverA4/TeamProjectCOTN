@@ -114,7 +114,7 @@ public class ShakeCamera : MonoBehaviour
 
 
     //피격시 배경색깔
-    private Color flashColor = new Color(1f, 0f, 0f, 0.5f);
+    private Color flashColor = new Color(1f, 0f, 0f, 0.3f);
     IEnumerator FlashBackGround()
     {
         // 배경 이미지의 색상을 빨간색으로 변경
