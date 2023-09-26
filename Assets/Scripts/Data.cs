@@ -10,11 +10,9 @@ public class Data : MonoBehaviour
 {
     #region 전역변수
     [SerializeField] GameObject _ItemPrefab;
-    public GameObject ItemPrefab
-    {
-        private set {  _ItemPrefab = value; }
-        get { return _ItemPrefab; }
-    }
+    [SerializeField] GameObject _bloodEffect;
+    public GameObject ItemPrefab { get { return _ItemPrefab; } }
+    public GameObject BloodEffect { get { return _bloodEffect; } }
 
     string LINE_SPLIT = @"\r\n|\n\r|\n|\r";
     string SPLIT = ",";

@@ -410,6 +410,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _ItemPrefab: {fileID: 988309420317089772, guid: 68b92b1418822bf4b835e2f62e058cf9,
     type: 3}
+  _bloodEffect: {fileID: 2738895058999487357, guid: 8e1921ccb252c8f4982987895003bf8f,
+    type: 3}
   UnlockPirceToLevel: 020000000400000007000000
   CharacterSaveData:
     _gold: 0

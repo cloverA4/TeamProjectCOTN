@@ -611,6 +611,8 @@ public class Monster : MonoBehaviour
         //체력체크
         _monsterHP -= damage;
         _monsterHPUI.MonsterHPUpdata(damage);
+        GameObject go = Instantiate(Data.Instance.BloodEffect, transform.position, Quaternion.identity);
+        Destroy(go, 0.5f);
         if (_monsterHP <= 0)
         {
             //사망
