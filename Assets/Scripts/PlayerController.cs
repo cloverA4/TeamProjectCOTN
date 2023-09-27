@@ -513,6 +513,7 @@ public class PlayerController : MonoBehaviour
                                 if (cr._ItemID == 101)
                                 {
                                     GameManager.Instance.Dia += cr.Count;
+                                    UIManeger.Instance.IconMove(cr);
                                 }
                                 else if (cr._ItemID == 102)
                                 {
@@ -1201,8 +1202,14 @@ public class PlayerController : MonoBehaviour
         int damage = dmg - Def;
         _audio.clip = Data.Instance.SoundEffect[(int)SoundEffect.PlayerHit];
         _audio.Play();
-        ShakeCamera.Instance.ShakeAndFlashCamera();
-        UIManeger.Instance.PlayerHitUI();
+        //if (ShakeCamera.Instance != null)
+        //{
+        //    ShakeCamera.Instance.Shake();
+        //}
+
+        CameraMove.Instance.Shake();
+
+        //ShakeCamera.Instance.ShakeAndFlashCamera();
         if (damage > 1)
         {
             NowHP -= damage;
