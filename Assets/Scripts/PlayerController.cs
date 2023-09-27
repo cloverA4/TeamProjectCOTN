@@ -1202,6 +1202,7 @@ public class PlayerController : MonoBehaviour
         _audio.clip = Data.Instance.SoundEffect[(int)SoundEffect.PlayerHit];
         _audio.Play();
         ShakeCamera.Instance.ShakeAndFlashCamera();
+        UIManeger.Instance.PlayerHitUI();
         if (damage > 1)
         {
             NowHP -= damage;
