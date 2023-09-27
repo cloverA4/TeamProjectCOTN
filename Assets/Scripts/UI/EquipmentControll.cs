@@ -73,39 +73,43 @@ public class EquipmentControll : MonoBehaviour
     {
         StartCoroutine(IconMove(item));
     }
-
+    Image image = null;
     IEnumerator IconMove(Item item)
     {
-        Image image = null;
+        if(image != null)
+        {
+            image.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 0, 0);
+        }
+        
         switch (item._itemType)
         {
-            case ItemType.Shovel:
-                image = _shovelImage;
-                break;
-            case ItemType.Weapon:
-                image = _weaponImage;
-                break;
-            case ItemType.Armor:
-                image = _armorImage;
-                break;
-            case ItemType.Potion:
-                image = _potionImage;
-                break;
+            case ItemType.Shovel: image = _shovelImage; break;
+            case ItemType.Weapon: image = _weaponImage; break;
+            case ItemType.Armor: image = _armorImage; break;
+            case ItemType.Potion: image = _potionImage; break;
         }
+
+        image.transform.SetParent(transform);
+        image.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, 0, 0);
+
+        switch (item._itemType)
+        {
+            case ItemType.Shovel: image.transform.SetParent(_shovelSlot.transform); break;
+            case ItemType.Weapon: image.transform.SetParent(_weaponSlot.transform); break;
+            case ItemType.Armor: image.transform.SetParent(_armorSlot.transform); break;
+            case ItemType.Potion: image.transform.SetParent(_potionSlot.transform); break;
+        }
+
         if (image != null)
         {
             image.GetComponent<Image>().sprite = item._ItemIcon;
-            var time = 0f;
-            Debug.Log(UIManeger.Instance.GetComponent<RectTransform>().anchoredPosition);
-           
-            while (time < 1f)
+
+            while (Vector3.Distance(image.GetComponent<RectTransform>().anchoredPosition, new Vector3(0, 0, 0)) > 0)
             {
-                time += Time.deltaTime;
-                image.GetComponent<RectTransform>().anchoredPosition = Vector3.Lerp(UIManeger.Instance.GetComponent<RectTransform>().localPosition, new Vector3(0,0,0), time / 0.5f);
+                image.GetComponent<RectTransform>().anchoredPosition = Vector3.Lerp(image.GetComponent<RectTransform>().anchoredPosition, new Vector3(0, 0, 0), Time.deltaTime * 2f);
                 yield return null;
             }
         }
-        yield return null;
     }
    
 
