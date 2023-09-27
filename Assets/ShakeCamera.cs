@@ -7,7 +7,6 @@ public class ShakeCamera : MonoBehaviour
 {
     private static ShakeCamera instance;
 
-    [SerializeField] Image _hitBackGround;
     // 피격이벤트지속시간
     float _hitDuration = 0.2f;
 
@@ -82,7 +81,7 @@ public class ShakeCamera : MonoBehaviour
     public void ShakeAndFlashCamera()
     {
         StartCoroutine(PlayerHit()); // 코루틴을 이용해서 이벤트 발생 위아래로 움직이는 코루틴
-        StartCoroutine(FlashBackGround());    //배경화면이 빨간색이 되었다 정상으로 돌아오는 코루틴
+       // StartCoroutine(FlashBackGround());    //배경화면이 빨간색이 되었다 정상으로 돌아오는 코루틴
     }
 
     IEnumerator PlayerHit()
@@ -110,20 +109,5 @@ public class ShakeCamera : MonoBehaviour
         }
         // 카메라위치 다시 제자리로 돌리기
         transform.position = cameraPosition;
-    }
-
-
-    //피격시 배경색깔
-    private Color flashColor = new Color(1f, 0f, 0f, 0.3f);
-    IEnumerator FlashBackGround()
-    {
-        // 배경 이미지의 색상을 빨간색으로 변경
-        _hitBackGround.color = flashColor;
-
-        // 일정 시간 동안 대기
-        yield return new WaitForSeconds(_hitDuration);
-
-        // 캔버스색깔 투명으로 되돌리기
-        _hitBackGround.color = Color.clear;
     }
 }

@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEditor.Progress;
 
 public class EquipmentControll : MonoBehaviour
 {
@@ -68,85 +69,45 @@ public class EquipmentControll : MonoBehaviour
 
     #region 장비 장착 애니메이션
 
-    public void ItemIconMove(Item _item)
+    public void ItemIconMove(Item item)
     {
-        switch (_item._itemType)
-        {
-            case ItemType.Shovel:
-                StartCoroutine(ShovelMove(_item));
-                break;
-            case ItemType.Weapon:
-                StartCoroutine(WeaponMove(_item));
-                break;
-            case ItemType.Armor:
-                StartCoroutine(ArmorMove(_item));
-                break;
-            case ItemType.Potion:
-                StartCoroutine(PotionMove(_item));
-                break;
-        }
+        StartCoroutine(IconMove(item));
     }
 
-    IEnumerator WeaponMove(Item _item)
+    IEnumerator IconMove(Item item)
     {
-        Vector3 targetPos = _weaponImage.GetComponent<RectTransform>().position;
-        _weaponImage.GetComponent<RectTransform>().position = new Vector3(Camera.main.pixelWidth / 2, Camera.main.pixelHeight / 2);
-        _weaponImage.GetComponent<Image>().sprite = _item._ItemIcon;
-        Vector3 tempPos = _weaponImage.GetComponent<RectTransform>().position;
-        var time = 0f;
-        while (time < 1f)
+        Image image = null;
+        switch (item._itemType)
         {
-            time += Time.deltaTime;
-            _weaponImage.GetComponent<RectTransform>().position = Vector3.Lerp(tempPos, targetPos, time / 0.5f);
-            yield return null;
+            case ItemType.Shovel:
+                image = _shovelImage;
+                break;
+            case ItemType.Weapon:
+                image = _weaponImage;
+                break;
+            case ItemType.Armor:
+                image = _armorImage;
+                break;
+            case ItemType.Potion:
+                image = _potionImage;
+                break;
+        }
+        if (image != null)
+        {
+            image.GetComponent<Image>().sprite = item._ItemIcon;
+            var time = 0f;
+            Debug.Log(UIManeger.Instance.GetComponent<RectTransform>().anchoredPosition);
+           
+            while (time < 1f)
+            {
+                time += Time.deltaTime;
+                image.GetComponent<RectTransform>().anchoredPosition = Vector3.Lerp(UIManeger.Instance.GetComponent<RectTransform>().localPosition, new Vector3(0,0,0), time / 0.5f);
+                yield return null;
+            }
         }
         yield return null;
     }
-    IEnumerator ArmorMove(Item _item)
-    {
-        Vector3 targetPos = _armorImage.GetComponent<RectTransform>().position;
-        _armorImage.GetComponent<RectTransform>().position = new Vector3(Camera.main.pixelWidth / 2, Camera.main.pixelHeight / 2);
-        _armorImage.GetComponent<Image>().sprite = _item._ItemIcon;
-        Vector3 tempPos = _armorImage.GetComponent<RectTransform>().position;
-        var time = 0f;
-        while (time < 1f)
-        {
-            time += Time.deltaTime;
-            _armorImage.GetComponent<RectTransform>().position = Vector3.Lerp(tempPos, targetPos, time / 0.5f);
-            yield return null;
-        }
-        yield return null;
-    }
-    IEnumerator ShovelMove(Item _item)
-    {
-        Vector3 targetPos = _shovelImage.GetComponent<RectTransform>().position;
-        _shovelImage.GetComponent<RectTransform>().position = new Vector3(Camera.main.pixelWidth / 2, Camera.main.pixelHeight / 2);
-        _shovelImage.GetComponent<Image>().sprite = _item._ItemIcon;
-        Vector3 tempPos = _shovelImage.GetComponent<RectTransform>().position;
-        var time = 0f;
-        while (time < 1f)
-        {
-            time += Time.deltaTime;
-            _shovelImage.GetComponent<RectTransform>().position = Vector3.Lerp(tempPos, targetPos, time / 0.5f);
-            yield return null;
-        }
-        yield return null;
-    }
-    IEnumerator PotionMove(Item _item)
-    {
-        Vector3 targetPos = _potionImage.GetComponent<RectTransform>().position;
-        _potionImage.GetComponent<RectTransform>().position = new Vector3(Camera.main.pixelWidth / 2, Camera.main.pixelHeight / 2);
-        _potionImage.GetComponent<Image>().sprite = _item._ItemIcon;
-        Vector3 tempPos = _potionImage.GetComponent<RectTransform>().position;
-        var time = 0f;
-        while (time < 1f)
-        {
-            time += Time.deltaTime;
-            _potionImage.GetComponent<RectTransform>().position = Vector3.Lerp(tempPos, targetPos, time / 0.5f);
-            yield return null;
-        }
-        yield return null;
-    }
+   
 
     #endregion
 }

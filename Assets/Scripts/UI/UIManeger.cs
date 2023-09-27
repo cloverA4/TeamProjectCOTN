@@ -37,6 +37,7 @@ public class UIManeger : MonoBehaviour
     [SerializeField] EquipmentControll _equipmentControll;
     [SerializeField] StageClearUI _stageClearUI;
     [SerializeField] CoinMultipleUI _coinMultipleUI;
+    [SerializeField] PlayerHitUI _playerHit;
 
     private void Awake()
     {
@@ -467,5 +468,9 @@ public class UIManeger : MonoBehaviour
     public void ActiveCoinMultiple()
     {
         _coinMultipleUI.ActiveCoinMultiple();
+    }
+    public void PlayerHitUI() // 플레이어가 맞았을경우 UI화면 빨개지는 함수
+    {
+        _playerHit.HitUI();
     }
 }
