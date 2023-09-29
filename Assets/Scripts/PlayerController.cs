@@ -524,6 +524,8 @@ public class PlayerController : MonoBehaviour
                                     GameManager.Instance.Gold += Mathf.FloorToInt(cr.Count * multiple);
                                 }
                                 dropItem.DeleteDropItem();
+                                _audio.clip = Data.Instance.SoundEffect[(int)SoundEffect.GetItem];
+                                _audio.Play();
                                 break;
                             case ItemType.Shovel:
                             case ItemType.Weapon:

@@ -355,25 +355,26 @@ public class Monster : MonoBehaviour
                 {
                     if(hitdata.collider.CompareTag("Player"))
                     {
+                        if (MonsterLook == Vector3.up)
+                        {
+                            _animator.SetTrigger("AttackUp");
+                        }
+                        else if (MonsterLook == Vector3.down)
+                        {
+                            _animator.SetTrigger("AttackDown");
+                        }
+                        else if (MonsterLook == Vector3.right)
+                        {
+                            _animator.SetTrigger("AttackRight");
+                        }
+                        else if (MonsterLook == Vector3.left)
+                        {
+                            _animator.SetTrigger("AttackLefts");
+                        }
                         MonsterAttack();
                     }
 
-                    if (MonsterLook == Vector3.up)
-                    {
-                        _animator.SetTrigger("AttackUp");
-                    }
-                    else if (MonsterLook == Vector3.down)
-                    {
-                        _animator.SetTrigger("AttackDown");
-                    }
-                    else if (MonsterLook == Vector3.right)
-                    {
-                        _animator.SetTrigger("AttackRight");
-                    }
-                    else if (MonsterLook == Vector3.left)
-                    {
-                        _animator.SetTrigger("AttackLefts");
-                    }
+                    
                 }
                 else
                 {
@@ -547,6 +548,7 @@ public class Monster : MonoBehaviour
         MonsterLook = vec;
         Vector3 Temp = transform.position + MonsterLook / 2;
         RaycastHit2D hitdata = Physics2D.Raycast(Temp, MonsterLook, 0.5f, _normalLayerMask);
+        _childSpriteRenderer.sortingOrder = (int)(transform.position.y - 1) * -1;
 
         if (hitdata == false)
         {
@@ -654,7 +656,7 @@ public class Monster : MonoBehaviour
                     _audio.clip = Data.Instance.SoundEffect[(int)SoundEffect.SlimeHit];
                     break;
                 case MonsterType.Monster2:
-                    _audio.clip = Data.Instance.SoundEffect[(int)SoundEffect.CowHit];
+                    _audio.clip = Data.Instance.SoundEffect[(int)SoundEffect.ZombieHit];
                     break;
                 case MonsterType.Monster3:
                     _audio.clip = Data.Instance.SoundEffect[(int)SoundEffect.CowHit];
@@ -663,7 +665,7 @@ public class Monster : MonoBehaviour
                     _audio.clip = Data.Instance.SoundEffect[(int)SoundEffect.GoblinHit];
                     break;
                 case MonsterType.EliteMonster:
-                    _audio.clip = Data.Instance.SoundEffect[(int)SoundEffect.GoblinHit];
+                    _audio.clip = Data.Instance.SoundEffect[(int)SoundEffect.EliteGoblinHit];
                     break;
             }
             _audio.Play();

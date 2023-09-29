@@ -428,9 +428,13 @@ public class Data : MonoBehaviour
         _soundEffect.Add(Resources.Load<AudioClip>("SoundsUpdate/Enemy/en_slime_death"));
         _soundEffect.Add(Resources.Load<AudioClip>("SoundsUpdate/Enemy/en_zombie_attack"));
         //좀비 맞는거 추가
+        _soundEffect.Add(Resources.Load<AudioClip>("SoundsUpdate/Enemy/en_zombie_hit"));
+
         _soundEffect.Add(Resources.Load<AudioClip>("SoundsUpdate/Enemy/en_zombie_death"));
         _soundEffect.Add(Resources.Load<AudioClip>("SoundsUpdate/Enemy/en_Elite_Goblin_attack"));
         //엘리트 맞는거 추가
+        _soundEffect.Add(Resources.Load<AudioClip>("SoundsUpdate/Enemy/en_Elite_Goblin_hit"));
+
         _soundEffect.Add(Resources.Load<AudioClip>("SoundsUpdate/Enemy/en_Elite_Goblin_death"));
         _soundEffect.Add(Resources.Load<AudioClip>("SoundsUpdate/InterAction/Chest_Open"));
         _soundEffect.Add(Resources.Load<AudioClip>("SoundsUpdate/InterAction/ItemUse_potion"));
@@ -607,9 +611,11 @@ public enum SoundEffect
     SlimeDeath,
     ZombieAttack,
     //좀비맞는거 추가
+    ZombieHit,
     ZombieDeath,
     EliteGoblinAttack,
     //엘리트 맞는거 추가
+    EliteGoblinHit,
     EliteGoblinDeath,
     BoxOpen,
     UsePotion,
