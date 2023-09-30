@@ -43,7 +43,6 @@ public class AlarmUI : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Return))
         {
-            Debug.Log(_alarmIndex);
             switch (_alarmIndex)
             {
                 case 0:

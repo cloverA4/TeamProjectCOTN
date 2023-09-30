@@ -122,7 +122,8 @@ public class GameManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            UIManeger.Instance.Alarm("게임을 종료하시겠습니다", "네", "아니오", () => Application.Quit());
+            string str = "오디오 옵션";
+            UIManeger.Instance.Option("메뉴", "계속하기", "사운드", "게임 종료", () => UIManeger.Instance.EndOption(), () => UIManeger.Instance.StartSoundOption(), () => Application.Quit());
         }
     }
 
@@ -285,6 +286,11 @@ public class GameManager : MonoBehaviour
     {
         UIManeger.Instance.MissBeatInfo();
         PlayerController.Instance.ResetCoinMultiple();
+    }
+
+    public void AudioVolumControll(float value)
+    {
+        _audio.volume = value;
     }
 
     #endregion

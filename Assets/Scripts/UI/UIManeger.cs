@@ -38,6 +38,7 @@ public class UIManeger : MonoBehaviour
     [SerializeField] StageClearUI _stageClearUI;
     [SerializeField] CoinMultipleUI _coinMultipleUI;
     [SerializeField] PlayerHitUI _playerHit;
+    [SerializeField] OptionUI _optionUI;
 
     private void Awake()
     {
@@ -149,7 +150,6 @@ public class UIManeger : MonoBehaviour
 
     public void GoLobby()
     {
-        Debug.Log("aaa");
         GameManager.Instance.NowStage = Stage.Lobby;
         GameManager.Instance.NowFloor = floor.f1;
         PlayerController.Instance.BaseItemEquip();
@@ -445,10 +445,25 @@ public class UIManeger : MonoBehaviour
 
     #endregion
 
-    public void Alarm(string str1, string str2, string str3, UnityAction action1, UnityAction action2 = null)
+    public void Alarm(string main, string str1, string str2, UnityAction action1, UnityAction action2 = null)
     {
-        _alarmUI.StartAlarmUI(str1, str2, str3, action1, action2);
+        _alarmUI.StartAlarmUI(main, str1, str2, action1, action2);
     }
+
+    public void Option(string main, string str1, string str2,string str3, UnityAction action1, UnityAction action2, UnityAction action3)
+    {
+        _optionUI.StartOptionUI(main, str1, str2, str3, action1, action2, action3);
+    }
+    public void EndOption()
+    {
+        _optionUI.EndOptionUI();
+    }
+    public void StartSoundOption()
+    {
+        string main = "오디오 옵션";
+        _optionUI.SoundOption(main);
+    }
+
     public void IconMove(Item _item)  // 아이템 아이콘 애니메이션 함수 따로 어떤 무기인지 구분할 필요 없이 아이템만 넣으면됌
     {
         _equipmentControll.ItemIconMove(_item);

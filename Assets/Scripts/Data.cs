@@ -625,7 +625,7 @@ public enum SoundEffect
     OpenDoor,
     PlayerHit,
     PlayerDeath,
-    UICange,
+    UIChange,
     UISelect,
 }
 
