@@ -14,12 +14,12 @@ public class Wall : MonoBehaviour
     private void Awake()
     {
         _hp = _wallMaxHp;
-        _spriteRenderer.GetComponent<SpriteRenderer>().sortingOrder = (int)transform.position.y * -1;
+        _spriteRenderer.GetComponent<SpriteRenderer>().sortingOrder = (int)(transform.position.y - 1) * -1;
     }    
 
     public void WallReset()
     {
-        _spriteRenderer.GetComponent<SpriteRenderer>().sortingOrder = (int)transform.position.y * -1;
+        _spriteRenderer.GetComponent<SpriteRenderer>().sortingOrder = (int)(transform.position.y - 1) * -1;
         _spriteRenderer.sprite = _normalWall;
         _hp = _wallMaxHp;
         gameObject.SetActive(true);

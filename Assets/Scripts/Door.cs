@@ -20,7 +20,7 @@ public class Door : MonoBehaviour
 
     public void DoorReset()
     {
-        _doorImage.sortingOrder = (int)transform.position.y * -1; // y의 위치를 확인하고 이미지를 정렬시켜주는 구문     
+        _doorImage.sortingOrder = (int)(transform.position.y - 1) * -1; // y의 위치를 확인하고 이미지를 정렬시켜주는 구문     
         _wallCount = _WallCountReset;
         gameObject.SetActive(true);
     }

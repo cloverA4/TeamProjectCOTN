@@ -318,7 +318,7 @@ public class Monster : MonoBehaviour
         if (_attackMoveCount >= 1)
         {
             if(Vector2.Distance(transform.position, PlayerController.Instance.transform.position) <= 1)
-            {                
+            {
                 //공격
                 if (PlayerController.Instance.transform.position.x == transform.position.x)
                 {
@@ -428,6 +428,7 @@ public class Monster : MonoBehaviour
         RaycastHit2D hitdata = new RaycastHit2D();
         if (type == 0)
         {
+            _childSpriteRenderer.sortingOrder = (int)(transform.position.y - 1) * -1;
             //x축이동
             if (PlayerController.Instance.transform.position.x > transform.position.x)
             {
