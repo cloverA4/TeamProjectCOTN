@@ -518,6 +518,7 @@ public class PlayerController : MonoBehaviour
                                 if (cr._ItemID == 101)
                                 {
                                     GameManager.Instance.Dia += cr.Count;
+                                    UIManeger.Instance.IconMove(cr);
                                 }
                                 else if (cr._ItemID == 102)
                                 {
