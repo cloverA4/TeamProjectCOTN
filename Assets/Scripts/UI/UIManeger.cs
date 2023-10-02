@@ -39,6 +39,7 @@ public class UIManeger : MonoBehaviour
     [SerializeField] CoinMultipleUI _coinMultipleUI;
     [SerializeField] PlayerHitUI _playerHit;
     [SerializeField] OptionUI _optionUI;
+    [SerializeField] ControllManual _manual;
 
     private void Awake()
     {
@@ -486,5 +487,14 @@ public class UIManeger : MonoBehaviour
     public void PlayerHitUI() // 플레이어가 맞았을경우 UI화면 빨개지는 함수
     {
         _playerHit.HitUI();
+    }
+
+    public void OnControllManual()  // 조작법 켜기
+    {
+        _manual.OnManual();
+    }
+    public void OffControllManual()  // 조작법 끄기
+    {
+        _manual.OffManual();
     }
 }
