@@ -122,7 +122,6 @@ public class GameManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            string str = "오디오 옵션";
             UIManeger.Instance.Option("메뉴", "계속하기", "사운드", "게임 종료", () => UIManeger.Instance.EndOption(), () => UIManeger.Instance.StartSoundOption(), () => Application.Quit());
         }
     }
@@ -311,7 +310,6 @@ public class GameManager : MonoBehaviour
         StartCoroutine(UIManeger.Instance.FadeOut());
     }
 
-    
     public void StageLoad()
     {
         //페이드효과가 끝난 후 로드시작
@@ -811,6 +809,7 @@ public class GameManager : MonoBehaviour
         switch (_nowStage)
         {
             case Stage.Stage1:
+                if (_nowFloor == floor.fBoss) return;
                 for (int i = 0; i < BoxCount; i++)
                 {
                     GameObject go = Instantiate(_normalBox, _boxPool.transform);
@@ -840,11 +839,11 @@ public class GameManager : MonoBehaviour
     {
         if(isplay)
         {
-            _audio.UnPause();
+
         }
         else
         {
-            _audio.Pause();
+
         }
     }
 

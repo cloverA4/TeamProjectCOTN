@@ -93,6 +93,7 @@ public class OptionUI : MonoBehaviour
                 {
                     Time.timeScale = 1;
                     PlayerController.Instance.IsTimeStop = false;
+                    GameManager.Instance.SoundPerse(true);
                 }
             }
         }
@@ -112,13 +113,13 @@ public class OptionUI : MonoBehaviour
     public void StartOptionUI(string mainText, string toggle1Text, string toggle2Text,string toggle3Text , UnityAction action1, UnityAction action2, UnityAction action3)
     {
         Time.timeScale = 0;
+        GameManager.Instance.SoundPerse(false);
         PlayerController.Instance.IsTimeStop = true;
         _action1 = action1;
         _action2 = action2;
         _action3 = action3;
 
         _index = 0;
-        gameObject.SetActive(true);
         _toggleGroup.gameObject.SetActive(true);
         _soundOption.gameObject.SetActive(false);
         _toggle1.isOn = true;

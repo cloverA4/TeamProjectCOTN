@@ -876,7 +876,6 @@ public class PlayerController : MonoBehaviour
 
             GetItem(dropItem);
             UpdateCharacterState();
-            dropItem.DeleteDropItem();
         }
         else
         {

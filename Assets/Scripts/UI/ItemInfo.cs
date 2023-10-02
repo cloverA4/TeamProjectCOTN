@@ -6,15 +6,6 @@ using UnityEngine.UI;
 
 public class ItemInfo : MonoBehaviour
 {
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            SetItemName("TestName");
-
-        }
-    }
-
     [SerializeField] GameObject _ItemInfo;
 
     public void SetItemName(string _name)
