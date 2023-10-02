@@ -147,6 +147,7 @@ public class OptionUI : MonoBehaviour
         _main.text = main;
         _soundOption.gameObject.SetActive(true);
     }
+
     public void SetMusicSound(float value)
     {
         GameManager.Instance.AudioVolumControll(value);

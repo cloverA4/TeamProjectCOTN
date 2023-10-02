@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEditor.Progress;
 
 public class EquipmentControll : MonoBehaviour
 {
@@ -8,10 +9,37 @@ public class EquipmentControll : MonoBehaviour
     [SerializeField] Image _armorImage;
     [SerializeField] Image _weaponImage;
     [SerializeField] Image _potionImage;
+    [SerializeField] Image _diaImage;
     [SerializeField] GameObject _shovelSlot;
     [SerializeField] GameObject _armorSlot;
     [SerializeField] GameObject _weaponSlot;
     [SerializeField] GameObject _potionSlot;
+    [SerializeField] GameObject _diaSlot;
+
+    private void Update()
+    {
+        if (_shovelImage.GetComponent<Transform>().position != new Vector3(0, 0, 0))
+        {
+            _shovelImage.GetComponent<RectTransform>().anchoredPosition = Vector3.Lerp(_shovelImage.GetComponent<RectTransform>().anchoredPosition, new Vector3(0, 0, 0), Time.deltaTime * 2f);
+        }
+        if (_armorImage.GetComponent<Transform>().position != new Vector3(0, 0, 0))
+        {
+            _armorImage.GetComponent<RectTransform>().anchoredPosition = Vector3.Lerp(_armorImage.GetComponent<RectTransform>().anchoredPosition, new Vector3(0, 0, 0), Time.deltaTime * 2f);
+
+        }
+        if (_weaponImage.GetComponent<Transform>().position != new Vector3(0, 0, 0))
+        {
+            _weaponImage.GetComponent<RectTransform>().anchoredPosition = Vector3.Lerp(_weaponImage.GetComponent<RectTransform>().anchoredPosition, new Vector3(0, 0, 0), Time.deltaTime * 2f);
+        }
+        if (_potionImage.GetComponent<Transform>().position != new Vector3(0, 0, 0))
+        {
+            _potionImage.GetComponent<RectTransform>().anchoredPosition = Vector3.Lerp(_potionImage.GetComponent<RectTransform>().anchoredPosition, new Vector3(0, 0, 0), Time.deltaTime * 2f);
+        }
+        if (_diaImage.GetComponent<Transform>().position != new Vector3(0, 0, 0))
+        {
+            _diaImage.GetComponent<RectTransform>().anchoredPosition = Vector3.Lerp(_diaImage.GetComponent<RectTransform>().anchoredPosition, new Vector3(0, 0, 0), Time.deltaTime * 2f);
+        }
+    }
 
     #region 장비 이미지 교체
     public void UpdataShovel()
@@ -70,10 +98,10 @@ public class EquipmentControll : MonoBehaviour
 
     public void ItemIconMove(Item item)
     {
-        StartCoroutine(IconMove(item));
+        IconMove(item);
     }
     Image image = null;
-    IEnumerator IconMove(Item item)
+    void IconMove(Item item)
     {
         if(image != null)
         {
@@ -86,6 +114,7 @@ public class EquipmentControll : MonoBehaviour
             case ItemType.Weapon: image = _weaponImage; break;
             case ItemType.Armor: image = _armorImage; break;
             case ItemType.Potion: image = _potionImage; break;
+            case ItemType.Currency: image = _diaImage; break;
         }
 
         image.transform.SetParent(transform);
@@ -95,19 +124,9 @@ public class EquipmentControll : MonoBehaviour
         {
             case ItemType.Shovel: image.transform.SetParent(_shovelSlot.transform); break;
             case ItemType.Weapon: image.transform.SetParent(_weaponSlot.transform); break;
-            case ItemType.Armor: image.transform.SetParent(_armorSlot.transform); break;
+            case ItemType.Armor:  image.transform.SetParent(_armorSlot.transform); break;
             case ItemType.Potion: image.transform.SetParent(_potionSlot.transform); break;
-        }
-
-        if (image != null)
-        {
-            image.GetComponent<Image>().sprite = item._ItemIcon;
-
-            while (Vector3.Distance(image.GetComponent<RectTransform>().anchoredPosition, new Vector3(0, 0, 0)) > 0)
-            {
-                image.GetComponent<RectTransform>().anchoredPosition = Vector3.Lerp(image.GetComponent<RectTransform>().anchoredPosition, new Vector3(0, 0, 0), Time.deltaTime * 2f);
-                yield return null;
-            }
+            case ItemType.Currency: image.transform.SetParent(_diaSlot.transform); break;
         }
     }
    
