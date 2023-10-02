@@ -166,7 +166,7 @@ public class GameManager : MonoBehaviour
         while(true)
         {
             yield return new WaitForSeconds(1);
-            if (!_audio.isPlaying)
+            if (_audio.time >= _audio.clip.length)
             {
                 if(_stageClear)
                 {
@@ -839,11 +839,11 @@ public class GameManager : MonoBehaviour
     {
         if(isplay)
         {
-
+            _audio.UnPause();
         }
         else
         {
-
+            _audio.Pause();
         }
     }
 
