@@ -451,7 +451,6 @@ public class UIManeger : MonoBehaviour
 
     public void Option(string main, string str1, string str2,string str3, UnityAction action1, UnityAction action2, UnityAction action3)
     {
-        _optionUI.gameObject.SetActive(true);
         _optionUI.StartOptionUI(main, str1, str2, str3, action1, action2, action3);
     }
     public void EndOption()

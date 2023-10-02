@@ -36,6 +36,8 @@ public class OptionUI : MonoBehaviour
 
     [SerializeField] Button _button;
 
+    [SerializeField] GameObject _gameObject;
+
     AudioSource _audio;
 
     // 사운드 조작은 마우스
@@ -103,7 +105,8 @@ public class OptionUI : MonoBehaviour
 
     public void Init()
     {
-        gameObject.SetActive(false);
+        gameObject.SetActive(true);
+        _gameObject.SetActive(false);
         _index = 0;
         _soundOption.gameObject.SetActive(false);
         _soundBar1.value = 0.5f;
@@ -115,6 +118,7 @@ public class OptionUI : MonoBehaviour
         Time.timeScale = 0;
         GameManager.Instance.SoundPerse(false);
         PlayerController.Instance.IsTimeStop = true;
+        _gameObject.SetActive(true);
         _action1 = action1;
         _action2 = action2;
         _action3 = action3;
@@ -156,7 +160,7 @@ public class OptionUI : MonoBehaviour
 
     public void EndOptionUI()
     {
-        gameObject.SetActive(false);
+        _gameObject.SetActive(false);
     }
 
     public void OnBtn()
