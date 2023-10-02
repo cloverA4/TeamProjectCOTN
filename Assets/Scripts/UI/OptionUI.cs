@@ -91,7 +91,7 @@ public class OptionUI : MonoBehaviour
                         _toggleGroup.gameObject.SetActive(false);
                         break;
                 }
-                if (gameObject.activeSelf == false)
+                if (_gameObject.activeSelf == false)
                 {
                     Time.timeScale = 1;
                     PlayerController.Instance.IsTimeStop = false;
