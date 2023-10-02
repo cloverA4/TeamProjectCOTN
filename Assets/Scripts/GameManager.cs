@@ -836,6 +836,18 @@ public class GameManager : MonoBehaviour
     #endregion
 
 
+    public void SoundPerse(bool isplay)
+    {
+        if(isplay)
+        {
+            _audio.UnPause();
+        }
+        else
+        {
+            _audio.Pause();
+        }
+    }
+
     public void PlayerHpReset()
     {
         PlayerController.Instance.IsLive = true;

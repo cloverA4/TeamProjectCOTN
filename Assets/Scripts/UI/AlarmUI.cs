@@ -49,11 +49,15 @@ public class AlarmUI : MonoBehaviour
                     _action1();
                     gameObject.SetActive(false);
                     Time.timeScale = 1;
+                    PlayerController.Instance.IsTimeStop = false;
+                    GameManager.Instance.SoundPerse(true);
                     break;
                 case 1:
                     if (_action2 != null) _action2();
                     gameObject.SetActive(false);
                     Time.timeScale = 1;
+                    PlayerController.Instance.IsTimeStop = false;
+                    GameManager.Instance.SoundPerse(true);
                     break;
             }
         }
@@ -69,6 +73,8 @@ public class AlarmUI : MonoBehaviour
     public void StartAlarmUI(string mainText, string toggle1Text, string toggle2Text, UnityAction action1, UnityAction action2 = null)
     {
         Time.timeScale = 0;
+        GameManager.Instance.SoundPerse(false);
+        PlayerController.Instance.IsTimeStop = true;
         _action1 = action1;
         _action2 = action2;
         _alarmIndex = 0;

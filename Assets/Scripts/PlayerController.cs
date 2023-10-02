@@ -30,6 +30,9 @@ public class PlayerController : MonoBehaviour
     public bool IsX { get; private set; }
     public SaveInfoData UnlockSaveData { get { return _unlockSaveData; } }
 
+    bool _isTimeStop = false;
+    public bool IsTimeStop { get { return _isTimeStop; }  set { _isTimeStop = value; } }
+
     //캐릭터 데이터
     public bool IsLive
     {
@@ -202,6 +205,8 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (_isTimeStop) return;
+
         if (GameManager.Instance.NowStage == Stage.Lobby || GameManager.Instance.NowFloor == floor.fBoss)
         {
             _lobbyMoveDelay += Time.deltaTime;

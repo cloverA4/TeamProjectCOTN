@@ -92,6 +92,7 @@ public class OptionUI : MonoBehaviour
                 if (gameObject.activeSelf == false)
                 {
                     Time.timeScale = 1;
+                    PlayerController.Instance.IsTimeStop = false;
                 }
             }
         }
@@ -111,6 +112,7 @@ public class OptionUI : MonoBehaviour
     public void StartOptionUI(string mainText, string toggle1Text, string toggle2Text,string toggle3Text , UnityAction action1, UnityAction action2, UnityAction action3)
     {
         Time.timeScale = 0;
+        PlayerController.Instance.IsTimeStop = true;
         _action1 = action1;
         _action2 = action2;
         _action3 = action3;
