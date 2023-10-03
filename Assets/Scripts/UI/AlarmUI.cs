@@ -101,10 +101,12 @@ public class AlarmUI : MonoBehaviour
 
     public void AlarmToggle1(bool _bool)
     {
+        _alarmIndex = 0;
         _alarmText1.gameObject.SetActive(!_bool);
     }
     public void AlarmToggle2(bool _bool)
     {
+        _alarmIndex = 1;
         _alarmText2.gameObject.SetActive(!_bool);
     }
 

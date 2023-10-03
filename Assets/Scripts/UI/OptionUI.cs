@@ -46,7 +46,7 @@ public class OptionUI : MonoBehaviour
 
     [SerializeField] Slider _soundBar1;
     [SerializeField] Slider _soundBar2;
-
+    int _soundIndex = 0;
 
     [SerializeField] GameObject _gameObject;
 
@@ -106,15 +106,15 @@ public class OptionUI : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.DownArrow))
             {
-                _index++;
-                if (_index > 2) _index = 0;
-                CheckSoundToggle();
+                _soundIndex++;
+                if (_soundIndex > 2) _soundIndex = 0;
+                CheckToggle();
             }
             if (Input.GetKeyDown(KeyCode.UpArrow))
             {
-                _index--;
-                if (_index < 0) _index = 2;
-                CheckSoundToggle();
+                _soundIndex--;
+                if (_soundIndex < 0) _soundIndex = 2;
+                CheckToggle();
             }
             if(Input.GetKeyDown(KeyCode.LeftArrow))
             {
@@ -128,7 +128,7 @@ public class OptionUI : MonoBehaviour
             }
             if (Input.GetKeyDown(KeyCode.Return))
             {
-                if (_index == 2) OffSoundOption();
+                if (_soundIndex == 2) OffSoundOption();
             }
         }
        
@@ -140,6 +140,8 @@ public class OptionUI : MonoBehaviour
         gameObject.SetActive(true);
         _gameObject.SetActive(false);
         _index = 0;
+        _soundIndex = 0;
+        CheckToggle();
         _soundOption.gameObject.SetActive(false);
         _soundBar1.value = 0.5f;
         _soundBar2.value = 0.5f;
@@ -161,6 +163,7 @@ public class OptionUI : MonoBehaviour
         _toggle1.isOn = true;
         _text1.gameObject.SetActive(false);
         _text2.gameObject.SetActive(true);
+        CheckToggle();
 
         _main.text = mainText;
 
@@ -172,22 +175,6 @@ public class OptionUI : MonoBehaviour
 
         _check3.text = "-" + toggle3Text + "-";
         _text3.text = toggle3Text;
-    }
-
-    void CheckSoundToggle()
-    {
-        switch (_index)
-        {
-            case 0:
-                _soundToggle1.isOn = true;
-                break;
-            case 1:
-                _soundToggle2.isOn = true;
-                break;
-            case 2:
-                _soundToggle3.isOn = true;
-                break;
-        }
     }
     void CheckToggle()
     {
@@ -203,22 +190,38 @@ public class OptionUI : MonoBehaviour
                 _toggle3.isOn = true;
                 break;
         }
+        switch (_soundIndex)
+        {
+            case 0:
+                _soundToggle1.isOn = true;
+                break;
+            case 1:
+                _soundToggle2.isOn = true;
+                break;
+            case 2:
+                _soundToggle3.isOn = true;
+                break;
+        }
     }
 
     public void SoundOption(string main)
     {
         _index = 0;
+        _soundIndex = 0;
         _main.text = main;
+        _toggleGroup.gameObject.SetActive(false);
         _soundOption.gameObject.SetActive(true);
+        OptionToggle1(true);
+        CheckToggle();
     }
     void OffSoundOption()
     {
         _index = 0;
+        _soundIndex = 0;
         _soundOption.gameObject.SetActive(false);
         _toggleGroup.gameObject.SetActive(true);
-        _toggle1.isOn = true;
-        _toggle2.isOn = false;
-        _toggle3.isOn = false;
+        OptionToggle1(true);
+        CheckToggle();
     }
 
     public void SetMusicSound(float value)
@@ -265,50 +268,50 @@ public class OptionUI : MonoBehaviour
 
     public void OptionToggle1(bool _bool)
     {
-        _index = 0;
         if (_toggleGroup.activeSelf)
         {
+            _index = 0;
             _text1.gameObject.SetActive(!_bool);
             return;
         }
         if (_soundOption.activeSelf)
         {
+            _soundIndex = 0;
             _soundText1.gameObject.SetActive(!_bool);
             _volumAddBtn1.gameObject.SetActive(_bool);
             _volumSubBtn1.gameObject.SetActive(_bool);
-            Debug.Log("aaa");
             return;
         }
     }
     public void OptionToggle2(bool _bool)
     {
-        _index = 1;
         if (_toggleGroup.activeSelf)
         {
+            _index = 1;
             _text2.gameObject.SetActive(!_bool);
             return;
         }
         if (_soundOption.activeSelf)
         {
+            _soundIndex = 1;
             _soundText2.gameObject.SetActive(!_bool);
             _volumAddBtn2.gameObject.SetActive(_bool);
             _volumSubBtn2.gameObject.SetActive(_bool);
-            Debug.Log("bbb");
             return;
         }
     }
     public void OptionToggle3(bool _bool)
     {
-        _index = 2;
         if (_toggleGroup.activeSelf)
         {
+            _index = 2;
             _text3.gameObject.SetActive(!_bool);
             return;
         }
         if (_soundOption.activeSelf)
         {
+            _soundIndex = 2;
             _soundText3.gameObject.SetActive(!_bool);
-            Debug.Log("ccc");
             return;
         }
     }

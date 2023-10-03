@@ -473,7 +473,7 @@ public class GameManager : MonoBehaviour
         if (sm != null) StopCoroutine(sm);
 
         //UI호출 - 스테이지 재시작, 로비이동, 다시보기 선택할수있게끔.
-        UIManeger.Instance.StartGoLobbyUI();
+        UIManeger.Instance.StartGoLobby();
     }
 
     #endregion

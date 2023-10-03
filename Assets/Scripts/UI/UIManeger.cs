@@ -19,10 +19,7 @@ public class UIManeger : MonoBehaviour
     int _goLobbyIndex = 0;
     [SerializeField] Image _fade;
 
-    [SerializeField] GameObject _goLobbyUI;
-    [SerializeField] GameObject _lobbyToggle;
-    [SerializeField] GameObject _retryToggle;
-    [SerializeField] GameObject _replayToggle;
+   
 
     [SerializeField] Canvas _infoCanvas;
     [SerializeField] GameInfoMassege _gameInfoMassege;
@@ -40,6 +37,7 @@ public class UIManeger : MonoBehaviour
     [SerializeField] PlayerHitUI _playerHit;
     [SerializeField] OptionUI _optionUI;
     [SerializeField] ControllManual _manual;
+    [SerializeField] GoLobbyUI _goLobby;
 
     private void Awake()
     {
@@ -72,97 +70,6 @@ public class UIManeger : MonoBehaviour
     }
 
 
-    private void Update()
-    {
-        if (_goLobbyUI.activeSelf) 
-        {
-            if (Input.GetKeyDown(KeyCode.DownArrow))
-            {
-                if(_goLobbyIndex == 0)
-                {
-                    _goLobbyIndex = 1;
-                }
-                else if(_goLobbyIndex == 1)
-                {
-                    _goLobbyIndex = 2;
-                }
-                else if(_goLobbyIndex == 2)
-                {
-                    _goLobbyIndex = 0;
-                }
-                SelectToggle();
-            }
-            if (Input.GetKeyDown(KeyCode.UpArrow))
-            {
-                if (_goLobbyIndex == 0)
-                {
-                    _goLobbyIndex = 2;
-                }
-                else if (_goLobbyIndex == 1)
-                {
-                    _goLobbyIndex = 0;
-                }
-                else if (_goLobbyIndex == 2)
-                {
-                    _goLobbyIndex = 1;
-                }
-                SelectToggle();
-            }
-            if (_lobbyToggle.GetComponent<Toggle>().isOn)
-            {
-                _goLobbyIndex = 0;
-            }
-            else if (_retryToggle.GetComponent<Toggle>().isOn)
-            {
-                _goLobbyIndex = 1;
-            }
-            else if (_replayToggle.GetComponent<Toggle>().isOn)
-            {
-                _goLobbyIndex = 2;
-            }
-            
-        }
-        if (Input.GetKeyDown(KeyCode.Return))
-        {
-            if (_goLobbyUI.activeSelf)
-            {
-                switch (_goLobbyIndex)
-                {
-                    case 0:
-                        GameManager.Instance.NowStage = Stage.Lobby;
-                        GameManager.Instance.NowFloor = floor.f1;
-                        GameManager.Instance.Gold = 0;
-                        StartCoroutine(FadeIn());
-                        endGoLobbyUI();
-                        break;
-                    case 1:
-                        string main = "사용하지 않은 다이아몬드는\r\n재시작시 모두 사라집니다.\r\n로비로 되돌아가 사용하겠습니까? ";
-                        string Toggle1 = "로비에서 다이아몬드 사용";
-                        string toggle2 = "빠른재시작";
-                        _alarmUI.StartAlarmUI(main, Toggle1, toggle2, GoLobby, Retry);
-                        endGoLobbyUI();
-                        break;
-                    case 2:  // replay 기능 추후 구현
-                        break;
-                }
-            }
-        }
-    }
-
-    public void GoLobby()
-    {
-        GameManager.Instance.NowStage = Stage.Lobby;
-        GameManager.Instance.NowFloor = floor.f1;
-        PlayerController.Instance.BaseItemEquip();
-        StartCoroutine(FadeIn());   
-    }
-    public void Retry()
-    {
-        GameManager.Instance.NowFloor = floor.f1;
-        GameManager.Instance.Gold = 0;
-        PlayerController.Instance.BaseItemEquip();
-        StartCoroutine(FadeIn());
-    }
 
     private void Start()
     {
@@ -179,7 +86,6 @@ public class UIManeger : MonoBehaviour
     {
         gameObject.SetActive(true);
         _fade.gameObject.SetActive(true);
-        _goLobbyUI.SetActive(false);
     }
     #region HP
     public void setHP()
@@ -232,6 +138,11 @@ public class UIManeger : MonoBehaviour
     #endregion
 
     #region FadeIn , FadeOut
+    public void StartFadin()
+    {
+        StartCoroutine(FadeIn());
+    }
+
     public IEnumerator FadeIn()
     {
         Color color = _fade.color;
@@ -258,66 +169,6 @@ public class UIManeger : MonoBehaviour
         GameManager.Instance.StageStart();
     }
 
-
-    #endregion
-
-    #region Lobby and Retry UI
-
-    public void endGoLobbyUI()
-    {
-        GameManager.Instance.PlayerHpReset();
-        _goLobbyUI.SetActive(false);
-    }
-
-    public void StartGoLobbyUI()
-    {
-        _goLobbyIndex = 0;
-        _goLobbyUI.SetActive(true);
-        SelectToggle();
-    }
-
-    void SelectToggle()
-    {
-        if (_goLobbyUI.activeSelf)
-        {
-            switch (_goLobbyIndex)
-            {
-                case 0:
-                    _lobbyToggle.GetComponent<Toggle>().isOn = true;
-                    break;
-                case 1:
-                    _retryToggle.GetComponent<Toggle>().isOn = true;
-                    break;
-                case 2:  // replay 기능 추후 구현
-                    _replayToggle.GetComponent<Toggle>().isOn = true;
-                    break;
-            }
-           
-        }
-       
-    }
-
-    [SerializeField] GameObject toggle1S;
-
-    [SerializeField] GameObject toggle2S;
-
-    [SerializeField] GameObject toggle3S;
-    
-    public void GoLobbySelect(bool _bool)
-    {
-        if (_bool) toggle1S.gameObject.SetActive(false);
-        else toggle1S.gameObject.SetActive(true);
-    }
-    public void RetrySelect(bool _bool)
-    {
-        if (_bool) toggle2S.gameObject.SetActive(false);
-        else toggle2S.gameObject.SetActive(true);
-    }
-    public void ReplaySelect(bool _bool)
-    {
-        if (_bool) toggle3S.gameObject.SetActive(false);
-        else toggle3S.gameObject.SetActive(true);
-    }
 
     #endregion
 
@@ -384,7 +235,7 @@ public class UIManeger : MonoBehaviour
 
     public void MissInfo()  // "빗나감!" 텍스트 출력
     {
-        if(_goLobbyUI.activeSelf == false)
+        if(_goLobby.gameObject.activeSelf == false)
         {
             MissInfoMassege info = InfoPool.Get();
             info.GetComponent<Text>().text = "빗나감!";
@@ -496,5 +347,10 @@ public class UIManeger : MonoBehaviour
     public void OffControllManual()  // 조작법 끄기
     {
         _manual.OffManual();
+    }
+
+    public void StartGoLobby()
+    {
+        _goLobby.StartGoLobbyUI();
     }
 }
