@@ -331,6 +331,7 @@ public class UIManeger : MonoBehaviour
     public void VolumeChange(float Volume)
     {
         _effectVolume = Volume;
+        _audio.volume = Volume;
         EventVolumeChange?.Invoke(this, EventArgs.Empty);
     }
 
