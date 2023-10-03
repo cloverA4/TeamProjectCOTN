@@ -109,8 +109,7 @@ public class MakeFog2 : MonoBehaviour
         if ((GameManager.Instance.NowStage == Stage.Stage1) && (GameManager.Instance.NowFloor == floor.f1)) 
         {
             //Rect의 값과 비교
-            transform.position = new Vector3(stage1F1FogPosition.position.x + textureWidth / 2,
-                                 stage1F1FogPosition.position.y-1 + textureHeight / 2, 0);
+            transform.position = new Vector3(stage1F1FogPosition.position.x + textureWidth / 2, stage1F1FogPosition.position.y-1 + textureHeight / 2, 0);
             //트랜스폼 포지션의 값비교
             int x = (int)_Player.transform.position.x - (int)stage1F1FogPosition.position.x;
             int y = (int)_Player.transform.position.y - (int)stage1F1FogPosition.position.y;
