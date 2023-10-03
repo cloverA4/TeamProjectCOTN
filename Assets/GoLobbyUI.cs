@@ -11,6 +11,11 @@ public class GoLobbyUI : MonoBehaviour
     [SerializeField] GameObject _retryToggle;
     [SerializeField] GameObject _replayToggle;
     int _index = 0;
+
+    private void Start()
+    {
+        _goLobbyUI.SetActive(false);
+    }
     private void Update()
     {
         if (_goLobbyUI.activeSelf)
