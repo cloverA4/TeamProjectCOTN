@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,6 +10,10 @@ public class UIManeger : MonoBehaviour
 {
     private static UIManeger instance;
 
+    public event EventHandler EventVolumeChange;
+
+    float _effectVolume = 1;
+    public float EffectVolume { get { return _effectVolume; } }
 
     [SerializeField]
     GameObject[] Hearts;
@@ -352,5 +357,11 @@ public class UIManeger : MonoBehaviour
     public void StartGoLobby()
     {
         _goLobby.StartGoLobbyUI();
+    }
+
+    public void VolumeChange(float Volume)
+    {
+        _effectVolume = Volume;
+        EventVolumeChange?.Invoke(this, EventArgs.Empty);
     }
 }

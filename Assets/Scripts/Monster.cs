@@ -19,13 +19,12 @@ public class Monster : MonoBehaviour
     Vector3 MonsterLook = Vector3.zero;
     LayerMask _normalLayerMask;
 
-    
-
     Animator _animator;
     SpriteRenderer _childSpriteRenderer;
 
     void Start()
     {
+        UIManeger.Instance.EventVolumeChange += new EventHandler(VolumeChange);
         //GameManager.Instance.MosterMoveEnvent += new EventHandler(MonsterMove);
         _audio = GetComponent<AudioSource>();
         _animator = GetComponentsInChildren<Animator>()[0];
@@ -36,6 +35,11 @@ public class Monster : MonoBehaviour
                   (1 << LayerMask.NameToLayer("Npc")) |
                   (1 << LayerMask.NameToLayer("Monster")) |
                   (1 << LayerMask.NameToLayer("Player"));
+    }
+
+    public void VolumeChange(object sender, EventArgs s)
+    {
+        _audio.volume = UIManeger.Instance.EffectVolume;
     }
 
     public void Init(MonsterType Type) //몬스터 타입 별 기본값 세팅
