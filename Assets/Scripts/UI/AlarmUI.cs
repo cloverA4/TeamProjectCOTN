@@ -26,6 +26,7 @@ public class AlarmUI : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.UpArrow))
             {
+                UIManeger.Instance.PlayEffectSound(SoundEffect.UIChange);
                 if (_alarmIndex == 0) _alarmIndex = 1;
                 else _alarmIndex = 0;
 
@@ -43,6 +44,7 @@ public class AlarmUI : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Return))
         {
+            UIManeger.Instance.PlayEffectSound(SoundEffect.UISelect);
             switch (_alarmIndex)
             {
                 case 0:

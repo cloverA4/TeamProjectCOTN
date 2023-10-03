@@ -65,12 +65,14 @@ public class OptionUI : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.DownArrow))
             {
+                UIManeger.Instance.PlayEffectSound(SoundEffect.UIChange);
                 _index++;
                 if (_index > 2) _index = 0;
                 CheckToggle();
             }
             if (Input.GetKeyDown(KeyCode.UpArrow))
             {
+                UIManeger.Instance.PlayEffectSound(SoundEffect.UIChange);
                 _index--;
                 if (_index < 0) _index = 2;
                 CheckToggle();
@@ -79,6 +81,7 @@ public class OptionUI : MonoBehaviour
 
             if (Input.GetKeyDown(KeyCode.Return))
             {
+                UIManeger.Instance.PlayEffectSound(SoundEffect.UISelect);
                 switch (_index)
                 {
                     case 0:
@@ -106,28 +109,33 @@ public class OptionUI : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.DownArrow))
             {
+                UIManeger.Instance.PlayEffectSound(SoundEffect.UIChange);
                 _soundIndex++;
                 if (_soundIndex > 2) _soundIndex = 0;
                 CheckToggle();
             }
             if (Input.GetKeyDown(KeyCode.UpArrow))
             {
+                UIManeger.Instance.PlayEffectSound(SoundEffect.UIChange);
                 _soundIndex--;
                 if (_soundIndex < 0) _soundIndex = 2;
                 CheckToggle();
             }
             if(Input.GetKeyDown(KeyCode.LeftArrow))
             {
+                UIManeger.Instance.PlayEffectSound(SoundEffect.UIChange);
                 if (_soundToggle1.isOn) _soundBar1.value -= 0.05f;
                 if (_soundToggle2.isOn) _soundBar2.value -= 0.05f;
             }
             if (Input.GetKeyDown(KeyCode.RightArrow))
             {
+                UIManeger.Instance.PlayEffectSound(SoundEffect.UIChange);
                 if (_soundToggle1.isOn) _soundBar1.value += 0.05f;
                 if (_soundToggle2.isOn) _soundBar2.value += 0.05f;
             }
             if (Input.GetKeyDown(KeyCode.Return))
             {
+                UIManeger.Instance.PlayEffectSound(SoundEffect.UISelect);
                 if (_soundIndex == 2) OffSoundOption();
             }
         }

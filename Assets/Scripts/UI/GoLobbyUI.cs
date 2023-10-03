@@ -25,6 +25,7 @@ public class GoLobbyUI : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.DownArrow))
             {
+                UIManeger.Instance.PlayEffectSound(SoundEffect.UIChange);
                 if (_index == 0)
                 {
                     _index = 1;
@@ -41,6 +42,7 @@ public class GoLobbyUI : MonoBehaviour
             }
             if (Input.GetKeyDown(KeyCode.UpArrow))
             {
+                UIManeger.Instance.PlayEffectSound(SoundEffect.UIChange);
                 if (_index == 0)
                 {
                     _index = 2;
@@ -71,6 +73,7 @@ public class GoLobbyUI : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.Return))
         {
+            UIManeger.Instance.PlayEffectSound(SoundEffect.UISelect);
             if (_goLobbyUI.activeSelf)
             {
                 switch (_index)
