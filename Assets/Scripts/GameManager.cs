@@ -261,7 +261,10 @@ public class GameManager : MonoBehaviour
         if (_rightNoteList.Count <= 0)
         {
             //½ÇÆÐ
-            UIManeger.Instance.MissInfo();
+            if(PlayerController.Instance.NowHP > 0)
+            {
+                UIManeger.Instance.MissInfo();
+            }
             PlayerController.Instance.ResetCoinMultiple();
             return isSuccess;
         }

@@ -10,10 +10,13 @@ public class GoLobbyUI : MonoBehaviour
     [SerializeField] GameObject _lobbyToggle;
     [SerializeField] GameObject _retryToggle;
     [SerializeField] GameObject _replayToggle;
+
+    [SerializeField] GameObject _DieMasseage;
     int _index = 0;
 
     private void Start()
     {
+        _DieMasseage.SetActive(false);
         _goLobbyUI.SetActive(false);
     }
     private void Update()
@@ -91,6 +94,16 @@ public class GoLobbyUI : MonoBehaviour
                 }
             }
         }
+        if (_DieMasseage.activeSelf)
+        {
+            if (Input.GetKeyDown(KeyCode.DownArrow) && Input.GetKeyDown(KeyCode.UpArrow))
+            {
+                _DieMasseage.SetActive(false);
+                _index = 0;
+                _goLobbyUI.SetActive(true);
+                SelectToggle();
+            }
+        }
     }
 
     public void endGoLobbyUI()
@@ -101,9 +114,7 @@ public class GoLobbyUI : MonoBehaviour
 
     public void StartGoLobbyUI()
     {
-        _index = 0;
-        _goLobbyUI.SetActive(true);
-        SelectToggle();
+        _DieMasseage.gameObject.SetActive(true);
     }
 
     void SelectToggle()
