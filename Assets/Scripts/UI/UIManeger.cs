@@ -15,8 +15,6 @@ public class UIManeger : MonoBehaviour
     float _effectVolume = 1;
     public float EffectVolume { get { return _effectVolume; } }
 
-    [SerializeField]
-    GameObject[] Hearts;
 
     [SerializeField] Text _goldCount;
     [SerializeField] Text _diamondCount;
@@ -43,6 +41,7 @@ public class UIManeger : MonoBehaviour
     [SerializeField] OptionUI _optionUI;
     [SerializeField] ControllManual _manual;
     [SerializeField] GoLobbyUI _goLobby;
+    [SerializeField] HPUI _hpUI;
 
     private void Awake()
     {
@@ -93,38 +92,9 @@ public class UIManeger : MonoBehaviour
         _fade.gameObject.SetActive(true);
     }
     #region HP
-    public void setHP()
+   public void setHP()
     {
-        PlayerController pc = PlayerController.Instance;
-        ResetHP();
-
-        int damge = pc.MaxHP - pc.NowHP;
-
-        for(int i = 0; i< pc.MaxHP/2; i++)
-        {
-            Hearts[i].gameObject.SetActive(true);
-            Hearts[i].transform.Find("FullHeart").gameObject.SetActive(true);
-            Hearts[i].transform.Find("HalfHeart").gameObject.SetActive(false);
-        }
-        for (int i = 0;i< damge/2; i++)
-        {
-            Hearts[i].transform.Find("FullHeart").gameObject.SetActive(false);
-            Hearts[i].transform.Find("HalfHeart").gameObject.SetActive(false);
-
-        }
-        if (damge %2 == 1)
-        {
-            Hearts[damge/2].transform.Find("HalfHeart").gameObject.SetActive(true);
-            Hearts[damge/2].transform.Find("FullHeart").gameObject.SetActive(false);
-        }
-    }
-
-    void ResetHP()
-    {
-        for (int i = 0; i < Hearts.Length; i++) 
-        {
-            Hearts[i].gameObject.SetActive(false);
-        } 
+        _hpUI.setHP();
     }
 
     #endregion
