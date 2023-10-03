@@ -235,6 +235,7 @@ public class OptionUI : MonoBehaviour
         // ÀÌÆåÆ® ¿É¼Ç°ª
         _soundText2.text = "ÀÌÆåÆ® º¼·ý: " + (int)(value * 100) + "%";
         _soundCheck2.text = "ÀÌÆåÆ® º¼·ý: " + (int)(value * 100) + "%";
+        UIManeger.Instance.VolumeChange(value);
     }
 
     public void VolumAddBtn()

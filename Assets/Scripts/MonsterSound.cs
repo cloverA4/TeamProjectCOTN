@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -25,6 +26,7 @@ public class MonsterSound : MonoBehaviour
             Destroy(this.gameObject);
         }
         _audio = GetComponent<AudioSource>();
+        UIManeger.Instance.EventVolumeChange += new EventHandler(VolumeChange);
     }
 
     public static MonsterSound Instance
@@ -60,5 +62,9 @@ public class MonsterSound : MonoBehaviour
                 break;
         }
         _audio.Play();
+    }
+    public void VolumeChange(object sender, EventArgs s)
+    {
+        _audio.volume = UIManeger.Instance.EffectVolume;
     }
 }

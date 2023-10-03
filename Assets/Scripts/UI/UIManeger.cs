@@ -12,6 +12,7 @@ public class UIManeger : MonoBehaviour
 
     public event EventHandler EventVolumeChange;
 
+    AudioSource _audio;
     float _effectVolume = 1;
     public float EffectVolume { get { return _effectVolume; } }
 
@@ -59,6 +60,7 @@ public class UIManeger : MonoBehaviour
             //그래서 이미 전역변수인 instance에 인스턴스가 존재한다면 자신을 삭제해준다.
             Destroy(this.gameObject);
         }
+        _audio = GetComponent<AudioSource>();
     }
 
     public static UIManeger Instance
@@ -330,5 +332,11 @@ public class UIManeger : MonoBehaviour
     {
         _effectVolume = Volume;
         EventVolumeChange?.Invoke(this, EventArgs.Empty);
+    }
+
+    public void PlayEffectSound(SoundEffect sound)
+    {
+        _audio.clip = Data.Instance.SoundEffect[(int)sound];
+        _audio.Play();
     }
 }

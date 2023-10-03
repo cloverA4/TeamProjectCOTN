@@ -1,6 +1,6 @@
-using Unity.VisualScripting;
+using System;
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class PlayerController : MonoBehaviour
 {
@@ -199,7 +199,7 @@ public class PlayerController : MonoBehaviour
                   (1 << LayerMask.NameToLayer("DropItem")) |
                   (1 << LayerMask.NameToLayer("ExitItemCheck"));
 
-        
+        UIManeger.Instance.EventVolumeChange += new EventHandler(VolumeChange);
     }
 
     // Update is called once per frame
@@ -1221,6 +1221,11 @@ public class PlayerController : MonoBehaviour
             NowHP -= 1;
         }
         ResetCoinMultiple();
+    }
+
+    public void VolumeChange(object sender, EventArgs s)
+    {
+        _audio.volume = UIManeger.Instance.EffectVolume;
     }
 
     void Death()
