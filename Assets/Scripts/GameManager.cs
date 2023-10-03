@@ -122,7 +122,7 @@ public class GameManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            UIManeger.Instance.Option("메뉴", "계속하기", "사운드", "게임 종료", () => UIManeger.Instance.EndOption(), () => UIManeger.Instance.StartSoundOption(), () => Application.Quit());
+            UIManeger.Instance.Option("메뉴", "계속하기", "사운드","조작법" ,"게임 종료", () => UIManeger.Instance.EndOption(), () => UIManeger.Instance.StartSoundOption(),UIManeger.Instance.OnControllManual ,() => Application.Quit());
         }
     }
 

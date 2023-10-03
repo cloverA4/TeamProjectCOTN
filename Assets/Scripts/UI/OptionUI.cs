@@ -13,14 +13,17 @@ public class OptionUI : MonoBehaviour
     [SerializeField] Toggle _toggle1;
     [SerializeField] Toggle _toggle2;
     [SerializeField] Toggle _toggle3;
+    [SerializeField] Toggle _toggle4;
 
     [SerializeField] Text _check1;
     [SerializeField] Text _check2;
     [SerializeField] Text _check3;
+    [SerializeField] Text _check4;
 
     [SerializeField] Text _text1;
     [SerializeField] Text _text2;
     [SerializeField] Text _text3;
+    [SerializeField] Text _text4;
 
     [SerializeField] Text _main;
 
@@ -28,6 +31,7 @@ public class OptionUI : MonoBehaviour
     UnityAction _action1;
     UnityAction _action2;
     UnityAction _action3;
+    UnityAction _action4;
 
     [SerializeField] Toggle _soundToggle1;
     [SerializeField] Toggle _soundToggle2;
@@ -67,14 +71,14 @@ public class OptionUI : MonoBehaviour
             {
                 UIManeger.Instance.PlayEffectSound(SoundEffect.UIChange);
                 _index++;
-                if (_index > 2) _index = 0;
+                if (_index > 3) _index = 0;
                 CheckToggle();
             }
             if (Input.GetKeyDown(KeyCode.UpArrow))
             {
                 UIManeger.Instance.PlayEffectSound(SoundEffect.UIChange);
                 _index--;
-                if (_index < 0) _index = 2;
+                if (_index < 0) _index = 3;
                 CheckToggle();
             }
             
@@ -94,6 +98,10 @@ public class OptionUI : MonoBehaviour
                         break;
                     case 2:
                         if (_action3 != null) _action3();
+                        _toggleGroup.gameObject.SetActive(false);
+                        break;
+                    case 3:
+                        if(_action4 != null) _action4();
                         _toggleGroup.gameObject.SetActive(false);
                         break;
                 }
@@ -155,7 +163,7 @@ public class OptionUI : MonoBehaviour
         _soundBar2.value = 0.5f;
     }
 
-    public void StartOptionUI(string mainText, string toggle1Text, string toggle2Text,string toggle3Text , UnityAction action1, UnityAction action2, UnityAction action3)
+    public void StartOptionUI(string mainText, string toggle1Text, string toggle2Text,string toggle3Text, string toggle4Text, UnityAction action1, UnityAction action2, UnityAction action3, UnityAction action4)
     {
         Time.timeScale = 0;
         GameManager.Instance.SoundPerse(false);
@@ -164,6 +172,7 @@ public class OptionUI : MonoBehaviour
         _action1 = action1;
         _action2 = action2;
         _action3 = action3;
+        _action4 = action4;
 
         _index = 0;
         _toggleGroup.gameObject.SetActive(true);
@@ -183,6 +192,9 @@ public class OptionUI : MonoBehaviour
 
         _check3.text = "-" + toggle3Text + "-";
         _text3.text = toggle3Text;
+
+        _check4.text = "-" + toggle4Text + "-";
+        _text4.text = toggle4Text;
     }
     void CheckToggle()
     {
@@ -196,6 +208,9 @@ public class OptionUI : MonoBehaviour
                 break;
             case 2:
                 _toggle3.isOn = true;
+                break;
+            case 3:
+                _toggle4.isOn = true;
                 break;
         }
         switch (_soundIndex)
@@ -321,6 +336,14 @@ public class OptionUI : MonoBehaviour
         {
             _soundIndex = 2;
             _soundText3.gameObject.SetActive(!_bool);
+            return;
+        }
+    }
+    public void OptionToggle4(bool _bool)
+    {
+        if (_toggleGroup.activeSelf)
+        {
+            _index = 3;
             return;
         }
     }

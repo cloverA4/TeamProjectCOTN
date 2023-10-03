@@ -293,9 +293,9 @@ public class UIManeger : MonoBehaviour
         _alarmUI.StartAlarmUI(main, str1, str2, action1, action2);
     }
 
-    public void Option(string main, string str1, string str2,string str3, UnityAction action1, UnityAction action2, UnityAction action3)
+    public void Option(string main, string str1, string str2,string str3,string str4, UnityAction action1, UnityAction action2, UnityAction action3,UnityAction action4)
     {
-        _optionUI.StartOptionUI(main, str1, str2, str3, action1, action2, action3);
+        _optionUI.StartOptionUI(main, str1, str2, str3, str4, action1, action2, action3, action4);
     }
     public void EndOption()
     {
