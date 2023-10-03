@@ -55,6 +55,7 @@ public class Stair : MonoBehaviour
             else
             {
                 //ui호출 "엘리트 몬스터를 처치해야합니다!"
+                SetText("엘리트 몬스터를 처치하세요!");
             }
         }
     }

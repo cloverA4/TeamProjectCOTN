@@ -62,6 +62,15 @@ public class UIManeger : MonoBehaviour
             Destroy(this.gameObject);
         }
         _audio = GetComponent<AudioSource>();
+
+        PlayerPrefs.SetInt("TutorialManual", PlayerPrefs.GetInt("TutorialManual", 0));
+        if(PlayerPrefs.GetInt("TutorialManual") == 0)
+        {
+            //최초진입
+            OnControllManual();
+            PlayerPrefs.SetInt("TutorialManual", 1);
+            PlayerPrefs.Save();
+        }
     }
 
     public static UIManeger Instance
@@ -327,6 +336,7 @@ public class UIManeger : MonoBehaviour
     {
         _manual.OnManual();
     }
+
     public void OffControllManual()  // 조작법 끄기
     {
         _manual.OffManual();

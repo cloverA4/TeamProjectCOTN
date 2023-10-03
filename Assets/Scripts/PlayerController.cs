@@ -969,6 +969,7 @@ public class PlayerController : MonoBehaviour
                     PlayerPrefs.SetInt("ComboUpgradeLevel", level + 1);
                     break;
             }
+            PlayerPrefs.Save();
             Data.Instance.SavePlayerData();
             UpdateCharacterState();
             dropItem.DeleteDropItem();
