@@ -790,6 +790,7 @@ public class GameManager : MonoBehaviour
     public void EliteMonsterDie()
     {
         _stageClear = true;
+        UIManeger.Instance.CenterMessage("탈출계단 잠금해제");
         EventEliteMonsterDie?.Invoke(this, EventArgs.Empty);
     }
 

@@ -43,6 +43,7 @@ public class UIManeger : MonoBehaviour
     [SerializeField] ControllManual _manual;
     [SerializeField] GoLobbyUI _goLobby;
     [SerializeField] HPUI _hpUI;
+    [SerializeField] CenterMessage _centerMessage;
 
     private void Awake()
     {
@@ -86,6 +87,14 @@ public class UIManeger : MonoBehaviour
         SpawnGameInfo();
         _alarmUI.Init();
         _equipmentControll.EquipmentAllDisabel();
+    }
+
+    private void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.H))
+        {
+            CenterMessage("탈출계단 잠금해제");
+        }        
     }
 
     public void UIInit()
@@ -339,5 +348,10 @@ public class UIManeger : MonoBehaviour
     {
         _audio.clip = Data.Instance.SoundEffect[(int)sound];
         _audio.Play();
+    }
+
+    public void CenterMessage(string message)
+    {
+        _centerMessage.SetCenterMessage(message);
     }
 }
