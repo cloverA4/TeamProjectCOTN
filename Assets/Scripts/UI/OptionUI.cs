@@ -243,27 +243,21 @@ public class OptionUI : MonoBehaviour
 
     public void SetMusicSound(float value)
     {
-        if (_toggle1.isOn)
-        {
-            float temp = ((float)Mathf.RoundToInt(value * 100) / 100);
-            _soundBar1.SetValueWithoutNotify(temp);
-            GameManager.Instance.AudioVolumControll(temp);
-            _soundText1.text = "À½¾Ç º¼·ý: " + temp * 100 + "%";
-            _soundCheck1.text = "À½¾Ç º¼·ý: " + temp * 100 + "%";
-        }
+        float temp = ((float)Mathf.RoundToInt(value * 100) / 100);
+        _soundBar1.SetValueWithoutNotify(temp);
+        GameManager.Instance.AudioVolumControll(temp);
+        _soundText1.text = "À½¾Ç º¼·ý: " + temp * 100 + "%";
+        _soundCheck1.text = "À½¾Ç º¼·ý: " + temp * 100 + "%";
     }
     public void SetEffectSound(float value)
     {
         // ÀÌÆåÆ® ¿É¼Ç°ª
-        if (_toggle2.isOn)
-        {
-            float temp = ((float)Mathf.RoundToInt(value * 100) / 100);
-            _soundBar2.SetValueWithoutNotify(temp);
-            GameManager.Instance.AudioVolumControll(temp);
-            _soundText2.text = "ÀÌÆåÆ® º¼·ý: " + temp * 100 + "%";
-            _soundCheck2.text = "ÀÌÆåÆ® º¼·ý: " + temp * 100 + "%";
-            UIManeger.Instance.VolumeChange(temp);
-        }
+        float temp = ((float)Mathf.RoundToInt(value * 100) / 100);
+        _soundBar1.SetValueWithoutNotify(temp);
+        GameManager.Instance.AudioVolumControll(temp);
+        _soundText2.text = "ÀÌÆåÆ® º¼·ý: " + temp * 100 + "%";
+        _soundCheck2.text = "ÀÌÆåÆ® º¼·ý: " + temp * 100 + "%";
+        UIManeger.Instance.VolumeChange(temp);
     }
     //public void 
 
