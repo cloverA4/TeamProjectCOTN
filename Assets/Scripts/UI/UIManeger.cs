@@ -22,9 +22,6 @@ public class UIManeger : MonoBehaviour
 
     int _goLobbyIndex = 0;
     [SerializeField] Image _fade;
-
-   
-
     [SerializeField] Canvas _infoCanvas;
     [SerializeField] GameInfoMassege _gameInfoMassege;
     [SerializeField] Transform _gameInfoBase;
@@ -63,17 +60,7 @@ public class UIManeger : MonoBehaviour
             //그래서 이미 전역변수인 instance에 인스턴스가 존재한다면 자신을 삭제해준다.
             Destroy(this.gameObject);
         }
-        _audio = GetComponent<AudioSource>();
-
-        PlayerPrefs.SetInt("TutorialManual", PlayerPrefs.GetInt("TutorialManual", 0));
-        if(PlayerPrefs.GetInt("TutorialManual") == 0)
-        {
-            //최초진입
-            ActiveMenuChange(UIMenu.Menual);
-            _manual.OnMenual();
-            PlayerPrefs.SetInt("TutorialManual", 1);
-            PlayerPrefs.Save();
-        }
+        _audio = GetComponent<AudioSource>();        
     }
 
     public static UIManeger Instance
@@ -99,6 +86,16 @@ public class UIManeger : MonoBehaviour
         SpawnGameInfo();
         _alarmUI.Init();
         _equipmentControll.EquipmentAllDisabel();
+
+        PlayerPrefs.SetInt("TutorialManual", PlayerPrefs.GetInt("TutorialManual", 0));
+        if (PlayerPrefs.GetInt("TutorialManual") == 0)
+        {
+            //최초진입
+            ActiveMenuChange(UIMenu.Menual);
+            _manual.OnMenual();
+            PlayerPrefs.SetInt("TutorialManual", 1);
+            PlayerPrefs.Save();
+        }
     }
 
     public void UIInit()
@@ -106,6 +103,7 @@ public class UIManeger : MonoBehaviour
         gameObject.SetActive(true);
         _fade.gameObject.SetActive(true);
     }
+
     #region HP
    public void setHP()
     {

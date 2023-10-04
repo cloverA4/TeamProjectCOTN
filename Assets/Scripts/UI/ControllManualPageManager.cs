@@ -14,10 +14,13 @@ public class ControllManualPageManager : MonoBehaviour
 
     bool _isOption = false;
     public bool IsOption { set { _isOption = value; } }
+    private void Awake()
+    {
+        _manual.SetActive(false);
+    }
 
     void Start()
     {
-        _manual.SetActive(false);
         UpdateButtonState();        
     }
 

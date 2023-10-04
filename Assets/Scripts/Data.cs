@@ -5,7 +5,6 @@ using System.IO;
 using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 public class Data : MonoBehaviour
 {
@@ -50,7 +49,7 @@ public class Data : MonoBehaviour
             //그래서 이미 전역변수인 instance에 인스턴스가 존재한다면 자신을 삭제해준다.
             Destroy(this.gameObject);
         }
-
+        PlayerPrefs.SetInt("TutorialManual", 0);
     }
 
     //게임 매니저 인스턴스에 접근할 수 있는 프로퍼티. static이므로 다른 클래스에서 맘껏 호출할 수 있다.
