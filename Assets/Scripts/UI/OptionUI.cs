@@ -128,18 +128,8 @@ public class OptionUI : MonoBehaviour
             if(Input.GetKeyDown(KeyCode.LeftArrow))
             {
                 UIManeger.Instance.PlayEffectSound(SoundEffect.UIChange);
-                if (_soundToggle1.isOn)
-                {
-                    _soundBar1.value -= 0.05f;
-                    _soundBar1.interactable = true;
-                    _soundBar2.interactable = false;
-                }
-                if (_soundToggle2.isOn)
-                {
-                    _soundBar2.value -= 0.05f;
-                    _soundBar1.interactable = false;
-                    _soundBar2.interactable = true;
-                }
+                if (_soundToggle1.isOn) _soundBar1.value -= 0.05f;
+                if (_soundToggle2.isOn) _soundBar2.value -= 0.05f;
             }
             if (Input.GetKeyDown(KeyCode.RightArrow))
             {
