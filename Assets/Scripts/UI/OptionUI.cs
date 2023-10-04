@@ -277,6 +277,7 @@ public class OptionUI : MonoBehaviour
         _soundCheck2.text = "ÀÌÆåÆ® º¼·ý: " + (int)(value * 100) + "%";
         UIManeger.Instance.VolumeChange(value);
     }
+    //public void 
 
     public void VolumAddBtn()
     {
@@ -361,6 +362,7 @@ public class OptionUI : MonoBehaviour
         if (_toggleGroup.activeSelf)
         {
             _index = 3;
+            _text4.gameObject.SetActive(!_bool);
             return;
         }
     }
