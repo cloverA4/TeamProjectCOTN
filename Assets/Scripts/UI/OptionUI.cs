@@ -53,6 +53,8 @@ public class OptionUI : MonoBehaviour
     [SerializeField] GameObject _gameObject;
 
     AudioSource _audio;
+    bool _isActive = false;
+    public bool IsActive { set { _isActive = value; } }
 
     // 사운드 조작은 마우스
 
@@ -63,7 +65,7 @@ public class OptionUI : MonoBehaviour
 
     private void Update()
     {
-        if (_toggleGroup.activeSelf)
+        if (_isActive)
         {
             if (Input.GetKeyDown(KeyCode.DownArrow))
             {
@@ -88,19 +90,15 @@ public class OptionUI : MonoBehaviour
                 {
                     case 0:
                         _action1();
-                        _toggleGroup.gameObject.SetActive(false);
                         break;
                     case 1:
                         if (_action2 != null) _action2();
-                        _toggleGroup.gameObject.SetActive(false);
                         break;
                     case 2:
                         if (_action3 != null) _action3();
-                        _toggleGroup.gameObject.SetActive(false);
                         break;
                     case 3:
                         if(_action4 != null) _action4();
-                        _toggleGroup.gameObject.SetActive(false);
                         break;
                 }
                 if (_gameObject.activeSelf == false)
@@ -289,6 +287,7 @@ public class OptionUI : MonoBehaviour
     public void EndOptionUI()
     {
         _gameObject.SetActive(false);
+        UIManeger.Instance.ActiveMenuChange(UIMenu.Null);
     }
 
 
@@ -350,5 +349,4 @@ public class OptionUI : MonoBehaviour
             return;
         }
     }
-
 }

@@ -9,6 +9,11 @@ public class ControllManualPageManager : MonoBehaviour
     [SerializeField] GameObject _manual;
 
     private int _currentPageIndex = 0; // 현재 페이지
+    bool _isActive = false;
+    public bool IsActive { set { _isActive = value; } }
+
+    bool _isOption = false;
+    public bool IsOption { set { _isOption = value; } }
 
     void Start()
     {
@@ -18,7 +23,7 @@ public class ControllManualPageManager : MonoBehaviour
 
     private void Update()
     {
-        if (_manual.activeSelf)
+        if (_isActive)
         {
             if (Input.GetKeyDown(KeyCode.LeftArrow))
             {
@@ -73,8 +78,17 @@ public class ControllManualPageManager : MonoBehaviour
     {
         _manual.SetActive(true);
     }
-        public void OffMenual()
+    public void OffMenual()
     {
+        if(_isOption)
+        {
+            _isOption = false;
+            UIManeger.Instance.ActiveMenuChange(UIMenu.Option);
+        }
+        else
+        {
+            UIManeger.Instance.ActiveMenuChange(UIMenu.Null);
+        }
         _manual.SetActive(false);
     }
 

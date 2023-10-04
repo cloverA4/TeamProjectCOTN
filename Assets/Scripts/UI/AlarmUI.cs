@@ -1,7 +1,5 @@
-using System;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.SocialPlatforms;
 using UnityEngine.UI;
 
 public class AlarmUI : MonoBehaviour
@@ -20,9 +18,12 @@ public class AlarmUI : MonoBehaviour
     UnityAction _action1;
     UnityAction _action2;
 
+    bool _isActive = false;
+    public bool IsActive {  set { _isActive = value; } }
+
     private void Update()
     {
-        if (gameObject.activeSelf)
+        if (_isActive)
         {
             if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.UpArrow))
             {
@@ -40,27 +41,27 @@ public class AlarmUI : MonoBehaviour
                         break;
                 }
             }
-        }
 
-        if (Input.GetKeyDown(KeyCode.Return))
-        {
-            UIManeger.Instance.PlayEffectSound(SoundEffect.UISelect);
-            switch (_alarmIndex)
+            if (Input.GetKeyDown(KeyCode.Return))
             {
-                case 0:
-                    _action1();
-                    gameObject.SetActive(false);
-                    Time.timeScale = 1;
-                    PlayerController.Instance.IsTimeStop = false;
-                    GameManager.Instance.SoundPerse(true);
-                    break;
-                case 1:
-                    if (_action2 != null) _action2();
-                    gameObject.SetActive(false);
-                    Time.timeScale = 1;
-                    PlayerController.Instance.IsTimeStop = false;
-                    GameManager.Instance.SoundPerse(true);
-                    break;
+                UIManeger.Instance.PlayEffectSound(SoundEffect.UISelect);
+                switch (_alarmIndex)
+                {
+                    case 0:
+                        _action1();
+                        gameObject.SetActive(false);
+                        Time.timeScale = 1;
+                        PlayerController.Instance.IsTimeStop = false;
+                        GameManager.Instance.SoundPerse(true);
+                        break;
+                    case 1:
+                        if (_action2 != null) _action2();
+                        gameObject.SetActive(false);
+                        Time.timeScale = 1;
+                        PlayerController.Instance.IsTimeStop = false;
+                        GameManager.Instance.SoundPerse(true);
+                        break;
+                }
             }
         }
     }
@@ -99,6 +100,7 @@ public class AlarmUI : MonoBehaviour
         GameManager.Instance.PlayerHpReset();
         gameObject.SetActive(false);
         _alarmIndex = 0;
+        UIManeger.Instance.ActiveMenuChange(UIMenu.Null);
     }
 
     public void AlarmToggle1(bool _bool)
@@ -111,5 +113,4 @@ public class AlarmUI : MonoBehaviour
         _alarmIndex = 1;
         _alarmText2.gameObject.SetActive(!_bool);
     }
-
 }

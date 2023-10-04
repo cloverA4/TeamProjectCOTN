@@ -1,8 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using static UnityEngine.EventSystems.EventTrigger;
 
 public class GoLobbyUI : MonoBehaviour
 {
@@ -13,6 +10,11 @@ public class GoLobbyUI : MonoBehaviour
 
     [SerializeField] GameObject _DieMasseage;
     int _index = 0;
+    bool _isActive = false;
+    public bool IsActive { set { _isActive = value; } }
+
+    bool _isDieMessage = false;
+    public bool IsDieMessage { set { _isDieMessage = value; } }
 
     private void Start()
     {
@@ -21,7 +23,7 @@ public class GoLobbyUI : MonoBehaviour
     }
     private void Update()
     {
-        if (_goLobbyUI.activeSelf)
+        if (_isActive)
         {
             if (Input.GetKeyDown(KeyCode.DownArrow))
             {
@@ -70,41 +72,49 @@ public class GoLobbyUI : MonoBehaviour
                 _index = 2;
             }
 
-        }
-        if (Input.GetKeyDown(KeyCode.Return))
-        {
-            UIManeger.Instance.PlayEffectSound(SoundEffect.UISelect);
-            if (_goLobbyUI.activeSelf)
+
+            if (Input.GetKeyDown(KeyCode.Return))
             {
-                switch (_index)
+                UIManeger.Instance.PlayEffectSound(SoundEffect.UISelect);
+                if (_goLobbyUI.activeSelf)
                 {
-                    case 0:
-                        GameManager.Instance.NowStage = Stage.Lobby;
-                        GameManager.Instance.NowFloor = floor.f1;
-                        GameManager.Instance.Gold = 0;
-                        UIManeger.Instance.StartFadin();
-                        endGoLobbyUI();
-                        break;
-                    case 1:
-                        string main = "사용하지 않은 다이아몬드는\r\n재시작시 모두 사라집니다.\r\n로비로 되돌아가 사용하겠습니까? ";
-                        string Toggle1 = "로비에서 다이아몬드 사용";
-                        string toggle2 = "빠른재시작";
-                        UIManeger.Instance.Alarm(main, Toggle1, toggle2, GoLobby, Retry);
-                        endGoLobbyUI();
-                        break;
-                    case 2:  // replay 기능 추후 구현
-                        break;
+                    switch (_index)
+                    {
+                        case 0:
+                            GameManager.Instance.NowStage = Stage.Lobby;
+                            GameManager.Instance.NowFloor = floor.f1;
+                            GameManager.Instance.Gold = 0;
+                            UIManeger.Instance.StartFadin();
+                            endGoLobbyUI();
+                            break;
+                        case 1:
+                            string main = "사용하지 않은 다이아몬드는\r\n재시작시 모두 사라집니다.\r\n로비로 되돌아가 사용하겠습니까? ";
+                            string Toggle1 = "로비에서 다이아몬드 사용";
+                            string toggle2 = "빠른재시작";
+                            UIManeger.Instance.Alarm(main, Toggle1, toggle2, GoLobby, Retry);
+                            endGoLobbyUI();
+                            break;
+                        case 2:  // replay 기능 추후 구현
+                            break;
+                    }
                 }
             }
         }
-        if (_DieMasseage.activeSelf)
+        
+        if (_isDieMessage)
         {
-            if (Input.GetKeyDown(KeyCode.DownArrow) && Input.GetKeyDown(KeyCode.UpArrow))
+            if (Input.GetKey(KeyCode.UpArrow))
             {
-                _DieMasseage.SetActive(false);
-                _index = 0;
-                _goLobbyUI.SetActive(true);
-                SelectToggle();
+                if (Input.GetKeyDown(KeyCode.DownArrow))
+                {
+                    Debug.Log("!!!");
+                    _DieMasseage.SetActive(false);
+                    _index = 0;
+                    _goLobbyUI.SetActive(true);
+                    SelectToggle();
+                    _isDieMessage = false;
+                    _isActive = true;
+                }
             }
         }
     }
@@ -113,10 +123,12 @@ public class GoLobbyUI : MonoBehaviour
     {
         GameManager.Instance.PlayerHpReset();
         _goLobbyUI.SetActive(false);
+        UIManeger.Instance.ActiveMenuChange(UIMenu.Null);
     }
 
     public void StartGoLobbyUI()
     {
+        _isDieMessage = true;
         _DieMasseage.gameObject.SetActive(true);
     }
 

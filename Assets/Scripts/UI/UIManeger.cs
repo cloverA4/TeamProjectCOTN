@@ -45,6 +45,8 @@ public class UIManeger : MonoBehaviour
     [SerializeField] HPUI _hpUI;
     [SerializeField] CenterMessage _centerMessage;
 
+    UIMenu _activeMenu;
+
     private void Awake()
     {
         if (null == instance)
@@ -67,7 +69,8 @@ public class UIManeger : MonoBehaviour
         if(PlayerPrefs.GetInt("TutorialManual") == 0)
         {
             //최초진입
-            OnControllManual();
+            ActiveMenuChange(UIMenu.Menual);
+            _manual.OnMenual();
             PlayerPrefs.SetInt("TutorialManual", 1);
             PlayerPrefs.Save();
         }
@@ -96,14 +99,6 @@ public class UIManeger : MonoBehaviour
         SpawnGameInfo();
         _alarmUI.Init();
         _equipmentControll.EquipmentAllDisabel();
-    }
-
-    private void Update()
-    {
-        if(Input.GetKeyDown(KeyCode.H))
-        {
-            CenterMessage("탈출계단 잠금해제");
-        }        
     }
 
     public void UIInit()
@@ -290,11 +285,13 @@ public class UIManeger : MonoBehaviour
 
     public void Alarm(string main, string str1, string str2, UnityAction action1, UnityAction action2 = null)
     {
+        ActiveMenuChange(UIMenu.AlarmUI);
         _alarmUI.StartAlarmUI(main, str1, str2, action1, action2);
     }
 
     public void Option(string main, string str1, string str2,string str3,string str4, UnityAction action1, UnityAction action2, UnityAction action3,UnityAction action4)
     {
+        ActiveMenuChange(UIMenu.Option);
         _optionUI.StartOptionUI(main, str1, str2, str3, str4, action1, action2, action3, action4);
     }
     public void EndOption()
@@ -334,6 +331,8 @@ public class UIManeger : MonoBehaviour
 
     public void OnControllManual()  // 조작법 켜기
     {
+        ActiveMenuChange(UIMenu.Menual);
+        _manual.IsOption = true;
         _manual.OnMenual();
     }
 
@@ -344,6 +343,7 @@ public class UIManeger : MonoBehaviour
 
     public void StartGoLobby()
     {
+        ActiveMenuChange(UIMenu.GoLobby);
         _goLobby.StartGoLobbyUI();
     }
 
@@ -364,4 +364,38 @@ public class UIManeger : MonoBehaviour
     {
         _centerMessage.SetCenterMessage(message);
     }
+
+    public void ActiveMenuChange(UIMenu type)
+    {
+        _goLobby.IsActive = false;
+        _alarmUI.IsActive = false;
+        _optionUI.IsActive = false;
+        _manual.IsActive = false;
+        _goLobby.IsDieMessage = false;
+
+        switch (type)
+        {
+            case UIMenu.AlarmUI:
+                _alarmUI.IsActive = true;
+                break;
+            case UIMenu.GoLobby:
+                _goLobby.IsDieMessage = true;
+                break;
+            case UIMenu.Option:
+                _optionUI.IsActive = true;
+                break;
+            case UIMenu.Menual:
+                _manual.IsActive = true;
+                break;
+        }
+    }
+}
+
+public enum UIMenu
+{
+    Null,
+    AlarmUI,
+    GoLobby,
+    Option,
+    Menual,
 }
