@@ -19,22 +19,23 @@ public class ControllManualPageManager : MonoBehaviour
     //다음 페이지로 넘어가기
     public void NextPage()
     {
-        if(_currentPageIndex > 0)
+        if(_currentPageIndex <= 0)
         {
             _pages[_currentPageIndex].SetActive(false);
             _currentPageIndex++;
             _pages[_currentPageIndex].SetActive(true);
             UpdateButtonState();
+
         }
     }
 
     //이전 페이지로 넘어가기
     public void PreviousPage()
     {
-        if (_currentPageIndex < 0)
+        if (_currentPageIndex > 0)
         {
             _pages[_currentPageIndex].SetActive(false);
-            _currentPageIndex++;
+            _currentPageIndex--;
             _pages[_currentPageIndex].SetActive(true);
             UpdateButtonState();
         }   
