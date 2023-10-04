@@ -38,6 +38,11 @@ public class ControllManualPageManager : MonoBehaviour
                 UIManeger.Instance.PlayEffectSound(SoundEffect.UIChange);
                 NextPage();
             }
+
+            if(Input.GetKeyDown(KeyCode.Escape))
+            {
+                OffMenual();
+            }
         }
     }
 
