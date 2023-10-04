@@ -115,6 +115,7 @@ public class OptionUI : MonoBehaviour
             {
                 UIManeger.Instance.PlayEffectSound(SoundEffect.UIChange);
                 _soundIndex++;
+                Debug.Log(_soundIndex);
                 if (_soundIndex > 2) _soundIndex = 0;
                 CheckToggle();
             }
@@ -122,10 +123,11 @@ public class OptionUI : MonoBehaviour
             {
                 UIManeger.Instance.PlayEffectSound(SoundEffect.UIChange);
                 _soundIndex--;
+                Debug.Log(_soundIndex);
                 if (_soundIndex < 0) _soundIndex = 2;
                 CheckToggle();
             }
-            if(Input.GetKeyDown(KeyCode.LeftArrow))
+            if (Input.GetKeyDown(KeyCode.LeftArrow))
             {
                 UIManeger.Instance.PlayEffectSound(SoundEffect.UIChange);
                 if (_soundToggle1.isOn) _soundBar1.value -= 0.05f;
@@ -153,8 +155,8 @@ public class OptionUI : MonoBehaviour
         _soundIndex = 0;
         CheckToggle();
         _soundOption.gameObject.SetActive(false);
-        _soundBar1.value = 0.5f;
-        _soundBar2.value = 0.5f;
+        SetMusicSound(0.5f);
+        SetEffectSound(0.5f);
     }
 
     public void StartOptionUI(string mainText, string toggle1Text, string toggle2Text,string toggle3Text, string toggle4Text, UnityAction action1, UnityAction action2, UnityAction action3, UnityAction action4)
@@ -243,6 +245,7 @@ public class OptionUI : MonoBehaviour
 
     public void SetMusicSound(float value)
     {
+        _soundToggle1.isOn = true;
         float temp = ((float)Mathf.RoundToInt(value * 100) / 100);
         _soundBar1.SetValueWithoutNotify(temp);
         GameManager.Instance.AudioVolumControll(temp);
@@ -252,6 +255,7 @@ public class OptionUI : MonoBehaviour
     public void SetEffectSound(float value)
     {
         // 이펙트 옵션값
+        _soundToggle2.isOn = true;
         float temp = ((float)Mathf.RoundToInt(value * 100) / 100);
         _soundBar2.SetValueWithoutNotify(temp);
         GameManager.Instance.AudioVolumControll(temp);
