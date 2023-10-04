@@ -9,6 +9,7 @@ public class OptionUI : MonoBehaviour
 {
     [SerializeField] GameObject _toggleGroup;
     [SerializeField] GameObject _soundOption;
+    [SerializeField] GameObject _gameManual;
 
     [SerializeField] Toggle _toggle1;
     [SerializeField] Toggle _toggle2;
@@ -51,6 +52,9 @@ public class OptionUI : MonoBehaviour
     [SerializeField] Slider _soundBar1;
     [SerializeField] Slider _soundBar2;
     int _soundIndex = 0;
+
+    [SerializeField] Button _RightArrow;
+    [SerializeField] Button _LeftArrow;
 
     [SerializeField] GameObject _gameObject;
 
@@ -145,6 +149,19 @@ public class OptionUI : MonoBehaviour
             {
                 UIManeger.Instance.PlayEffectSound(SoundEffect.UISelect);
                 if (_soundIndex == 2) OffSoundOption();
+            }
+        }
+        if (_gameManual.activeSelf)
+        {
+            if (Input.GetKeyDown(KeyCode.LeftArrow))
+            {
+                UIManeger.Instance.PlayEffectSound(SoundEffect.UIChange);
+                _LeftArrow.onClick.Invoke();
+            }
+            if (Input.GetKeyDown(KeyCode.RightArrow))
+            {
+                UIManeger.Instance.PlayEffectSound(SoundEffect.UIChange);
+                _RightArrow.onClick.Invoke();
             }
         }
        
