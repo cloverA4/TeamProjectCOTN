@@ -266,16 +266,21 @@ public class OptionUI : MonoBehaviour
 
     public void SetMusicSound(float value)
     {
-        GameManager.Instance.AudioVolumControll(value);
-        _soundText1.text = "À½¾Ç º¼·ý: " + (int)(value * 100) + "%";
-        _soundCheck1.text = "À½¾Ç º¼·ý: " + (int)(value * 100) + "%";
+        float temp = ((float)Mathf.RoundToInt(value * 100) / 100);
+        _soundBar1.SetValueWithoutNotify(temp);
+        GameManager.Instance.AudioVolumControll(temp);
+        _soundText1.text = "À½¾Ç º¼·ý: " + temp * 100 + "%";
+        _soundCheck1.text = "À½¾Ç º¼·ý: " + temp * 100 + "%";
     }
     public void SetEffectSound(float value)
     {
         // ÀÌÆåÆ® ¿É¼Ç°ª
-        _soundText2.text = "ÀÌÆåÆ® º¼·ý: " + (int)(value * 100) + "%";
-        _soundCheck2.text = "ÀÌÆåÆ® º¼·ý: " + (int)(value * 100) + "%";
-        UIManeger.Instance.VolumeChange(value);
+        float temp = ((float)Mathf.RoundToInt(value * 100) / 100);
+        _soundBar1.SetValueWithoutNotify(temp);
+        GameManager.Instance.AudioVolumControll(temp);
+        _soundText2.text = "ÀÌÆåÆ® º¼·ý: " + temp * 100 + "%";
+        _soundCheck2.text = "ÀÌÆåÆ® º¼·ý: " + temp * 100 + "%";
+        UIManeger.Instance.VolumeChange(temp);
     }
     //public void 
 

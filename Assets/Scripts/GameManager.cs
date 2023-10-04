@@ -122,7 +122,7 @@ public class GameManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            UIManeger.Instance.Option("메뉴", "계속하기", "사운드","조작법" ,"게임 종료", () => UIManeger.Instance.EndOption(), () => UIManeger.Instance.StartSoundOption(),UIManeger.Instance.OnControllManual ,() => Application.Quit());
+            UIManeger.Instance.Option("메뉴", "계속하기", "사운드", "조작법", "게임 종료", () => UIManeger.Instance.EndOption(), () => UIManeger.Instance.StartSoundOption(), UIManeger.Instance.OnControllManual, () => Application.Quit());
         }
     }
 
@@ -163,7 +163,24 @@ public class GameManager : MonoBehaviour
     {
         yield return new WaitForSeconds(3);
         _audio.Play();
-        while(true)
+
+        if (_nowStage == Stage.Stage1 && _nowFloor == floor.f2)
+        {
+            _shopF2.Play();
+            _shopF3.Stop();
+        }
+        else if (_nowStage == Stage.Stage1 && _nowFloor == floor.f3)
+        {
+            _shopF3.Play();
+            _shopF2.Stop();
+        }
+        else
+        {
+            _shopF3.Stop();
+            _shopF2.Stop();
+        }
+
+        while (true)
         {
             yield return new WaitForSeconds(1);
             if (_audio.time >= _audio.clip.length)
@@ -439,22 +456,6 @@ public class GameManager : MonoBehaviour
                         break;
                 }
                 break;
-        }
-
-        if (_nowStage == Stage.Stage1 && _nowFloor == floor.f2)
-        {
-            _shopF2.Play();
-            _shopF3.Stop();
-        }
-        else if (_nowStage == Stage.Stage1 && _nowFloor == floor.f3)
-        {
-            _shopF3.Play();
-            _shopF2.Stop();
-        }
-        else
-        {
-            _shopF3.Stop();
-            _shopF2.Stop();
         }
 
         if (sm != null)
@@ -844,10 +845,14 @@ public class GameManager : MonoBehaviour
         if(isplay)
         {
             _audio.UnPause();
+            _shopF2.UnPause();
+            _shopF3.UnPause();
         }
         else
         {
             _audio.Pause();
+            _shopF2.Pause();
+            _shopF3.Pause();
         }
     }
 
