@@ -128,8 +128,18 @@ public class OptionUI : MonoBehaviour
             if(Input.GetKeyDown(KeyCode.LeftArrow))
             {
                 UIManeger.Instance.PlayEffectSound(SoundEffect.UIChange);
-                if (_soundToggle1.isOn) _soundBar1.value -= 0.05f;
-                if (_soundToggle2.isOn) _soundBar2.value -= 0.05f;
+                if (_soundToggle1.isOn)
+                {
+                    _soundBar1.value -= 0.05f;
+                    _soundBar1.interactable = true;
+                    _soundBar2.interactable = false;
+                }
+                if (_soundToggle2.isOn)
+                {
+                    _soundBar2.value -= 0.05f;
+                    _soundBar1.interactable = false;
+                    _soundBar2.interactable = true;
+                }
             }
             if (Input.GetKeyDown(KeyCode.RightArrow))
             {
@@ -253,7 +263,7 @@ public class OptionUI : MonoBehaviour
     {
         // ÀÌÆåÆ® ¿É¼Ç°ª
         float temp = ((float)Mathf.RoundToInt(value * 100) / 100);
-        _soundBar1.SetValueWithoutNotify(temp);
+        _soundBar2.SetValueWithoutNotify(temp);
         GameManager.Instance.AudioVolumControll(temp);
         _soundText2.text = "ÀÌÆåÆ® º¼·ý: " + temp * 100 + "%";
         _soundCheck2.text = "ÀÌÆåÆ® º¼·ý: " + temp * 100 + "%";
