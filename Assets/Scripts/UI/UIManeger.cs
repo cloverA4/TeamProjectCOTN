@@ -40,7 +40,7 @@ public class UIManeger : MonoBehaviour
     [SerializeField] CoinMultipleUI _coinMultipleUI;
     [SerializeField] PlayerHitUI _playerHit;
     [SerializeField] OptionUI _optionUI;
-    [SerializeField] ControllManual _manual;
+    [SerializeField] ControllManualPageManager _manual;
     [SerializeField] GoLobbyUI _goLobby;
     [SerializeField] HPUI _hpUI;
     [SerializeField] CenterMessage _centerMessage;
@@ -334,12 +334,12 @@ public class UIManeger : MonoBehaviour
 
     public void OnControllManual()  // 조작법 켜기
     {
-        _manual.OnManual();
+        _manual.OnMenual();
     }
 
     public void OffControllManual()  // 조작법 끄기
     {
-        _manual.OffManual();
+        _manual.OffMenual();
     }
 
     public void StartGoLobby()
