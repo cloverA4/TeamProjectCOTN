@@ -117,7 +117,7 @@ public class OptionUI : MonoBehaviour
                 _soundIndex++;
                 Debug.Log(_soundIndex);
                 if (_soundIndex > 2) _soundIndex = 0;
-                CheckToggle();
+                SoundCheckToggle();
             }
             if (Input.GetKeyDown(KeyCode.UpArrow))
             {
@@ -125,7 +125,7 @@ public class OptionUI : MonoBehaviour
                 _soundIndex--;
                 Debug.Log(_soundIndex);
                 if (_soundIndex < 0) _soundIndex = 2;
-                CheckToggle();
+                SoundCheckToggle();
             }
             if (Input.GetKeyDown(KeyCode.LeftArrow))
             {
@@ -209,6 +209,9 @@ public class OptionUI : MonoBehaviour
                 _toggle4.isOn = true;
                 break;
         }
+    }
+    void SoundCheckToggle()
+    {
         switch (_soundIndex)
         {
             case 0:
@@ -228,15 +231,17 @@ public class OptionUI : MonoBehaviour
         _index = 0;
         _soundIndex = 0;
         _main.text = main;
+        _isActive = false;
         _toggleGroup.gameObject.SetActive(false);
         _soundOption.gameObject.SetActive(true);
         OptionToggle1(true);
-        CheckToggle();
+        SoundCheckToggle();
     }
     void OffSoundOption()
     {
         _index = 0;
         _soundIndex = 0;
+        _isActive = true;
         _soundOption.gameObject.SetActive(false);
         _toggleGroup.gameObject.SetActive(true);
         OptionToggle1(true);
