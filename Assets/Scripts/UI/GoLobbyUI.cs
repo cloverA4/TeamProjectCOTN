@@ -107,7 +107,6 @@ public class GoLobbyUI : MonoBehaviour
             {
                 if (Input.GetKeyDown(KeyCode.DownArrow))
                 {
-                    Debug.Log("!!!");
                     _DieMasseage.SetActive(false);
                     _index = 0;
                     _goLobbyUI.SetActive(true);
