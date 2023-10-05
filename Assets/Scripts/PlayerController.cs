@@ -390,6 +390,9 @@ public class PlayerController : MonoBehaviour
                             case WeaponEffectType.Titanium:
                                 TGWeaponEffectPos(vec);
                                 break;
+                            case WeaponEffectType.Administrator:
+                                AGWeaponEffectPos(vec);
+                                break;
                         }
                         collider.GetComponent<Monster>().TakeDamage(_damage);
                         IsMonster = true;
@@ -628,6 +631,7 @@ public class PlayerController : MonoBehaviour
             Destroy(NDWeaponEffect, 0.2f);
         }
     }
+
     void NGWeaponEffectPos(Vector3 vec)
     {
         if (_weaponEffect[2] != null)
@@ -681,6 +685,35 @@ public class PlayerController : MonoBehaviour
             else if (vec == Vector3.right) // 오른쪽 키를 입력 받았을떄 이펙트가 오른쪽 방향으로 이동
             {
                 NDWeaponEffect = Instantiate(_weaponEffect[3], transform.position + new Vector3(0.8f, 0.2f, 0), Quaternion.identity);
+            }
+
+            Destroy(NDWeaponEffect, 0.2f);
+        }
+    }
+    void AGWeaponEffectPos(Vector3 vec)
+    {
+        if (_weaponEffect[6] != null) // 예외처리 만약 6번쨰 인덱스에 게임오브젝트가 있다면 실행 없다면 실행 x
+        {
+            // 이펙트를 생성하면서 위치 잡아주기
+            GameObject NDWeaponEffect = null;
+
+            // 위키를 입력 받았을떄 이펙트가 위 방향으로 이동
+            if (vec == Vector3.up)
+            {
+                NDWeaponEffect = Instantiate(_weaponEffect[6], transform.position + new Vector3(0, 0.8f, 0), Quaternion.Euler(0f, 0f, 90f));
+            }
+            else if (vec == Vector3.down) // 아래 키를 입력 받았을떄 이펙트가 아래 방향으로 이동
+            {
+                NDWeaponEffect = Instantiate(_weaponEffect[6], transform.position + new Vector3(0, -0.8f, 0), Quaternion.Euler(0f, 0f, -90f));
+            }
+            else if (vec == Vector3.left) // 왼쪽 키를 입력 받았을떄 이펙트가 왼쪽 방향으로 이동
+            {
+                NDWeaponEffect = Instantiate(_weaponEffect[6], transform.position + new Vector3(-0.8f, 0.2f, 0), Quaternion.identity);
+                NDWeaponEffect.GetComponent<SpriteRenderer>().flipX = true;
+            }
+            else if (vec == Vector3.right) // 오른쪽 키를 입력 받았을떄 이펙트가 오른쪽 방향으로 이동
+            {
+                NDWeaponEffect = Instantiate(_weaponEffect[6], transform.position + new Vector3(0.8f, 0.2f, 0), Quaternion.identity);
             }
 
             Destroy(NDWeaponEffect, 0.2f);
