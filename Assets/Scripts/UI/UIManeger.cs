@@ -17,8 +17,7 @@ public class UIManeger : MonoBehaviour
     public float EffectVolume { get { return _effectVolume; } }
 
 
-    [SerializeField] Text _goldCount;
-    [SerializeField] Text _diamondCount;
+   
 
     [SerializeField] Image _fade;
     [SerializeField] Canvas _infoCanvas;
@@ -40,6 +39,7 @@ public class UIManeger : MonoBehaviour
     [SerializeField] GoLobbyUI _goLobby;
     [SerializeField] HPUI _hpUI;
     [SerializeField] CenterMessage _centerMessage;
+    [SerializeField] WealthUI _wealthUI;
 
     UIMenu _activeMenu;
 
@@ -110,14 +110,14 @@ public class UIManeger : MonoBehaviour
     #endregion
 
     #region Wealth
-    public void UpdateGold(int _count)
+    public void UpdateGold(int count)
     {
-        _goldCount.text = "X " + _count;
+        _wealthUI.UpdateGold(count);
     }
 
-    public void UpdataDiamond(int _count)
+    public void UpdataDiamond(int count)
     {
-        _diamondCount.text = "X " + _count;
+        _wealthUI.UpdataDiamond(count);
     }
 
     #endregion
@@ -242,11 +242,15 @@ public class UIManeger : MonoBehaviour
         ActiveMenuChange(UIMenu.AlarmUI);
         _alarmUI.StartAlarmUI(main, str1, str2, action1, action2);
     }
+    public void EndAlarm()
+    {
+        _alarmUI.EndAlarmUI();
+    }
 
-    public void Option(string main, string str1, string str2,string str3,string str4, UnityAction action1, UnityAction action2, UnityAction action3,UnityAction action4)
+    public void Option(string main, string str1, string str2, string str3, string str4, string str5, UnityAction action1, UnityAction action2, UnityAction action3, UnityAction action4, UnityAction action5)
     {
         ActiveMenuChange(UIMenu.Option);
-        _optionUI.StartOptionUI(main, str1, str2, str3, str4, action1, action2, action3, action4);
+        _optionUI.StartOptionUI(main, str1, str2, str3, str4, str5, action1, action2, action3, action4, action5);
     }
     public void EndOption()
     {
@@ -295,6 +299,10 @@ public class UIManeger : MonoBehaviour
     {
         ActiveMenuChange(UIMenu.GoLobby);
         _goLobby.StartGoLobbyUI();
+    }
+    public void GoLobby()
+    {
+        _goLobby.GoLobby();
     }
 
     public void VolumeChange(float Volume)

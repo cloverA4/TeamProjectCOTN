@@ -88,11 +88,11 @@ public class GoLobbyUI : MonoBehaviour
                             endGoLobbyUI();
                             break;
                         case 1:
+                            endGoLobbyUI();
                             string main = "사용하지 않은 다이아몬드는\r\n재시작시 모두 사라집니다.\r\n로비로 되돌아가 사용하겠습니까? ";
                             string Toggle1 = "로비에서 다이아몬드 사용";
                             string toggle2 = "빠른재시작";
                             UIManeger.Instance.Alarm(main, Toggle1, toggle2, GoLobby, Retry);
-                            endGoLobbyUI();
                             break;
                         case 2:  // replay 기능 추후 구현
                             break;
@@ -107,7 +107,6 @@ public class GoLobbyUI : MonoBehaviour
             {
                 if (Input.GetKeyDown(KeyCode.DownArrow))
                 {
-                    Debug.Log("!!!");
                     _DieMasseage.SetActive(false);
                     _index = 0;
                     _goLobbyUI.SetActive(true);

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using System.Linq;
+using static UnityEngine.EventSystems.EventTrigger;
 
 public class GameManager : MonoBehaviour
 {
@@ -122,7 +123,7 @@ public class GameManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            UIManeger.Instance.Option("메뉴", "계속하기", "사운드", "조작법", "게임 종료", () => UIManeger.Instance.EndOption(), () => UIManeger.Instance.StartSoundOption(), UIManeger.Instance.OnControllManual, () => Application.Quit());
+            UIManeger.Instance.Option("메뉴", "계속하기", "사운드", "조작법", "로비로 나가기", "게임 종료", () => UIManeger.Instance.EndOption(), () => UIManeger.Instance.StartSoundOption(), UIManeger.Instance.OnControllManual, LobbyAlarm, () => Application.Quit());
         }
     }
 
@@ -860,6 +861,14 @@ public class GameManager : MonoBehaviour
     {
         PlayerController.Instance.IsLive = true;
         PlayerController.Instance.NowHP = PlayerController.Instance.MaxHP;
+    }
+    public void LobbyAlarm()
+    {
+        UIManeger.Instance.EndOption();
+        string main = "정말 로비로\r\n돌아가시겠습니까";
+        string Toggle1 = "네";
+        string toggle2 = "아니요";
+        UIManeger.Instance.Alarm(main, Toggle1, toggle2, UIManeger.Instance.GoLobby, UIManeger.Instance.EndAlarm);
     }
 }
 
