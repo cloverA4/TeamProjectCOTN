@@ -183,11 +183,10 @@ public class GameManager : MonoBehaviour
         }
 
         while (true)
-        {
-            yield return new WaitForSeconds(0.6f);
+        {            
             if (_audio.time >= _audio.clip.length - 0.1f)
             {
-                yield return new WaitForSeconds(1);
+                yield return new WaitForSeconds(0.6f);
                 if (_stageClear)
                 {
                     _nowFloor++;
@@ -199,8 +198,9 @@ public class GameManager : MonoBehaviour
                 }
                 break;
             }
+            yield return null;
         }
-        yield return null;
+        
     }
     IEnumerator Metronom()
     {
