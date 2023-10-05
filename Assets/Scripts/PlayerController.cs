@@ -356,6 +356,7 @@ public class PlayerController : MonoBehaviour
                                 break;
                         }
                         hitdataTypeDagger.collider.GetComponent<Monster>().TakeDamage(_damage);
+                        GameManager.Instance.EndMusic();
                         return;
                     }
                     break;
@@ -364,7 +365,7 @@ public class PlayerController : MonoBehaviour
 
             case WeaponType.GreatSword:
                 Vector3 swordCenter = (Vector3)transform.position + vec; // 대검의 중심 위치 계산
-                Vector3 boxSize;
+                Vector3 boxSize = Vector3.zero;
                 Collider2D[] colliders;
                 if (vec == Vector3.down || vec == Vector3.up)
                 {
@@ -373,10 +374,6 @@ public class PlayerController : MonoBehaviour
                 else if (vec == Vector3.left || vec == Vector3.right)
                 {
                     boxSize = new Vector3(1f, 2f, 0f);
-                }
-                else
-                {
-                    return;
                 }
 
                 colliders = Physics2D.OverlapBoxAll(swordCenter, boxSize, 0f, _weaponCheckLayerMask);
@@ -398,7 +395,7 @@ public class PlayerController : MonoBehaviour
                         IsMonster = true;
                     }
                 }
-
+                GameManager.Instance.EndMusic();
                 if (IsMonster) return;
                 break;
 
@@ -418,22 +415,23 @@ public class PlayerController : MonoBehaviour
                                 case WeaponEffectType.Titanium:
                                     TDWeaponEffectPos(vec);
                                     break;
-                            }
-                            hitdataTypeSpear.collider.GetComponent<Monster>().TakeDamage(_damage);
-                            return;
+                            }                         
                         }
-
-                        switch (EquipWeapon.WeaponEffectType)
+                        else
                         {
-                            case WeaponEffectType.Normal:
-                                NSWeaponEffectPos(vec);
-                                break;
-                            case WeaponEffectType.Titanium:
-                                TSWeaponEffectPos(vec);
-                                break;
+                            switch (EquipWeapon.WeaponEffectType)
+                            {
+                                case WeaponEffectType.Normal:
+                                    NSWeaponEffectPos(vec);
+                                    break;
+                                case WeaponEffectType.Titanium:
+                                    TSWeaponEffectPos(vec);
+                                    break;
+                            }
+                            
                         }
-                        Debug.Log(hitdataTypeSpear.collider.tag);
                         hitdataTypeSpear.collider.GetComponent<Monster>().TakeDamage(_damage);
+                        GameManager.Instance.EndMusic();
                         return;
                     }
                 }
@@ -497,6 +495,7 @@ public class PlayerController : MonoBehaviour
             {
                 _childSpriteRenderer.sortingOrder = (int)(transform.position.y - 1) * -1; // 레이어 값변환
                 Move(vec);
+                if (GameManager.Instance.StageClear) return;
             }
             else if (hitdata.collider.tag == "Item")
             {
@@ -565,6 +564,7 @@ public class PlayerController : MonoBehaviour
             _childSpriteRenderer.sortingOrder = (int)(transform.position.y - 1) * -1; // 레이어 값변환
             Move(vec);
         }
+        GameManager.Instance.EndMusic();
         //_MakeFog2.UpdateFogOfWar();
     }
 
@@ -1024,10 +1024,7 @@ public class PlayerController : MonoBehaviour
             _MakeFog2.UpdateFogOfWar();
         }
 
-        CheckItmeInfo(transform);
-    
-
-
+        CheckItmeInfo(transform);    
         //PlayerMoveEvent?.Invoke(this, EventArgs.Empty);
     }
     //public event EventHandler PlayerMoveEvent;
