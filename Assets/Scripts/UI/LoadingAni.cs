@@ -23,6 +23,5 @@ public class LoadingAni : MonoBehaviour
             if (i >= _texts.Length) i = 0;
             yield return new WaitForSeconds(0.2f);
         }
-        yield return null;
     }
 }
