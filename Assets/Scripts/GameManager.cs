@@ -150,6 +150,8 @@ public class GameManager : MonoBehaviour
     }
 
     [SerializeField] AudioSource _audio;
+    public AudioSource Audio { get { return _audio; } }
+
     [SerializeField] GameObject _note;
     [SerializeField] GameObject _notePool;
 
@@ -164,7 +166,6 @@ public class GameManager : MonoBehaviour
     {
         yield return new WaitForSeconds(3);
         _audio.Play();
-
         if (_nowStage == Stage.Stage1 && _nowFloor == floor.f2)
         {
             _shopF2.Play();
@@ -183,10 +184,11 @@ public class GameManager : MonoBehaviour
 
         while (true)
         {
-            yield return new WaitForSeconds(1);
-            if (_audio.time >= _audio.clip.length)
+            yield return new WaitForSeconds(0.6f);
+            if (_audio.time >= _audio.clip.length - 0.1f)
             {
-                if(_stageClear)
+                yield return new WaitForSeconds(1);
+                if (_stageClear)
                 {
                     _nowFloor++;
                     FaidIn();
@@ -243,6 +245,8 @@ public class GameManager : MonoBehaviour
     void ResetNote() // 노래중지, 노트전부 끄기
     {
         _audio.Stop();
+        _shopF3.Stop();
+        _shopF2.Stop();
         for (int i = 0; i < _pools.Count; i++)
         {
             _pools[i].SetActive(false);
@@ -311,6 +315,8 @@ public class GameManager : MonoBehaviour
     public void AudioVolumControll(float value)
     {
         _audio.volume = value;
+        _shopF2.volume = value;
+        _shopF3.volume = value;
     }
 
     #endregion

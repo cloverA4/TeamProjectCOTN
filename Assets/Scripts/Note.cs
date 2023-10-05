@@ -1,7 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
+using UnityEngine.UI;
 
 public class Note : MonoBehaviour
 {
@@ -28,6 +26,15 @@ public class Note : MonoBehaviour
         _dir = dir;
         rec.anchoredPosition = new Vector3(StartPosition, -420, 0);
         gameObject.SetActive(true);
+
+        if (GameManager.Instance.Audio.time >= GameManager.Instance.Audio.clip.length - 30)
+        {
+            GetComponent<Image>().color = new Color32(255, 85, 91, 255);
+        }
+        else
+        {
+            GetComponent<Image>().color = new Color32(64, 244, 255, 255);
+        }
     }
 
     // Update is called once per frame

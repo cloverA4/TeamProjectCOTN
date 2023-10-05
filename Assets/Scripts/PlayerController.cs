@@ -19,9 +19,6 @@ public class PlayerController : MonoBehaviour
     LayerMask _itemCheckLayerMask;
 
     float _lobbyMoveDelay = 0f;
-    private float moveSpeed = 10f;
-    private bool isMoving = false;
-    bool _fixanime = false;
     bool _isLive = true;
 
     float[] _baseCoinMultiple = new float[3] { 1f, 1.5f, 2f };
