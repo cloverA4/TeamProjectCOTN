@@ -71,20 +71,41 @@ public class OptionUI : MonoBehaviour
     {
         if (_isActive)
         {
-            if (Input.GetKeyDown(KeyCode.DownArrow))
+            if(GameManager.Instance.NowStage == Stage.Lobby)
             {
-                UIManeger.Instance.PlayEffectSound(SoundEffect.UIChange);
-                _index++;
-                if (_index > 4) _index = 0;
-                CheckToggle();
+                if (Input.GetKeyDown(KeyCode.DownArrow))
+                {
+                    UIManeger.Instance.PlayEffectSound(SoundEffect.UIChange);
+                    _index++;
+                    if (_index > 3) _index = 0;
+                    CheckToggle();
+                }
+                if (Input.GetKeyDown(KeyCode.UpArrow))
+                {
+                    UIManeger.Instance.PlayEffectSound(SoundEffect.UIChange);
+                    _index--;
+                    if (_index < 0) _index = 3;
+                    CheckToggle();
+                }
             }
-            if (Input.GetKeyDown(KeyCode.UpArrow))
+            if(GameManager.Instance.NowStage != Stage.Lobby)
             {
-                UIManeger.Instance.PlayEffectSound(SoundEffect.UIChange);
-                _index--;
-                if (_index < 0) _index = 4;
-                CheckToggle();
+                if (Input.GetKeyDown(KeyCode.DownArrow))
+                {
+                    UIManeger.Instance.PlayEffectSound(SoundEffect.UIChange);
+                    _index++;
+                    if (_index > 4) _index = 0;
+                    CheckToggle();
+                }
+                if (Input.GetKeyDown(KeyCode.UpArrow))
+                {
+                    UIManeger.Instance.PlayEffectSound(SoundEffect.UIChange);
+                    _index--;
+                    if (_index < 0) _index = 4;
+                    CheckToggle();
+                }
             }
+           
             
 
             if (Input.GetKeyDown(KeyCode.Return))
@@ -177,6 +198,22 @@ public class OptionUI : MonoBehaviour
         _action3 = action3;
         _action4 = action4;
         _action5 = action5;
+
+        if(_action5 == null)
+        {
+            _toggle5.gameObject.SetActive(false);
+            Vector2 pos =_toggleGroup.GetComponent<RectTransform>().anchoredPosition;
+            pos.y = 135;
+            _toggleGroup.GetComponent<RectTransform>().anchoredPosition = pos;
+        }
+        else
+        {
+            _toggle5.gameObject.SetActive(true);
+            Vector2 pos = _toggleGroup.GetComponent<RectTransform>().anchoredPosition;
+            pos.y = 165;
+            _toggleGroup.GetComponent<RectTransform>().anchoredPosition = pos;
+        }
+
 
         _index = 0;
         _toggleGroup.gameObject.SetActive(true);
