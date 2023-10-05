@@ -53,6 +53,9 @@ public class MinimapVer2 : MonoBehaviour
 
     void _UpdateMiniMapTexture()
     {
+
+        
+
         Color[] pixels = _miniMapTexture.GetPixels();
         Vector3 playerPosition = _PlayerPos.position;
 
@@ -101,6 +104,7 @@ public class MinimapVer2 : MonoBehaviour
         _miniMapTexture.ReadPixels(new Rect(0, 0, _textureWidth, _textureHeight), 0, 0);
         _miniMapTexture.Apply();
         RenderTexture.active = null;
+
 
         // 렌더링 결과를 Texture2D로 가져왔으므로 이제 _miniMapTexture를 사용하여 미니맵을 업데이트합니다.
         _UpdateMiniMapTexture();
