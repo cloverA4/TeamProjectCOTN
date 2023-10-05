@@ -165,7 +165,6 @@ public class GameManager : MonoBehaviour
     {
         yield return new WaitForSeconds(3);
         _audio.Play();
-        _audio.time = 140;
         if (_nowStage == Stage.Stage1 && _nowFloor == floor.f2)
         {
             _shopF2.Play();
