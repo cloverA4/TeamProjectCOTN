@@ -184,7 +184,6 @@ public class Data : MonoBehaviour
         }
         else
         {
-            Debug.Log("파일이 없습니다.");
             CharacterSaveData._gold = 0;
             CharacterSaveData._dia = 0;
             CharacterSaveData._nowStage = Stage.Lobby;
@@ -193,8 +192,6 @@ public class Data : MonoBehaviour
 
             BaseUnlockItemAdd();
         }
-
-        Debug.Log("로딩완료");
     }
 
     void BaseUnlockItemAdd()
@@ -248,7 +245,7 @@ public class Data : MonoBehaviour
         if (PlayerPrefs.HasKey("PlayerHPUpgradeLevel"))
         {
             UnlockItem ul = (UnlockItem)GetItemInfo(601);
-            if (ul.MaxUnlockCount < PlayerPrefs.GetInt("PlayerHPUpgradeLevel"))
+            if (PlayerPrefs.GetInt("PlayerHPUpgradeLevel") < ul.MaxUnlockCount)
             {
                 _lockPassivesList.Add(601);
             }
@@ -261,7 +258,7 @@ public class Data : MonoBehaviour
         if (PlayerPrefs.HasKey("TreasureBoxUpgradeLevel"))
         {
             UnlockItem ul = (UnlockItem)GetItemInfo(602);
-            if (ul.MaxUnlockCount < PlayerPrefs.GetInt("TreasureBoxUpgradeLevel"))
+            if (PlayerPrefs.GetInt("TreasureBoxUpgradeLevel") < ul.MaxUnlockCount)
             {
                 _lockPassivesList.Add(602);
             }
@@ -274,7 +271,7 @@ public class Data : MonoBehaviour
         if (PlayerPrefs.HasKey("ComboUpgradeLevel"))
         {
             UnlockItem ul = (UnlockItem)GetItemInfo(603);
-            if (ul.MaxUnlockCount < PlayerPrefs.GetInt("ComboUpgradeLevel"))
+            if (PlayerPrefs.GetInt("ComboUpgradeLevel") < ul.MaxUnlockCount)
             {
                 _lockPassivesList.Add(603);
             }
@@ -283,7 +280,6 @@ public class Data : MonoBehaviour
         {
             _lockPassivesList.Add(603);
         }
-        Debug.Log("잠금아이템 리스트 생성 완료");
     }
 
     void ReadItemData()
@@ -425,14 +421,10 @@ public class Data : MonoBehaviour
         _soundEffect.Add(Resources.Load<AudioClip>("SoundsUpdate/Enemy/en_slime_hit"));
         _soundEffect.Add(Resources.Load<AudioClip>("SoundsUpdate/Enemy/en_slime_death"));
         _soundEffect.Add(Resources.Load<AudioClip>("SoundsUpdate/Enemy/en_zombie_attack"));
-        //좀비 맞는거 추가
         _soundEffect.Add(Resources.Load<AudioClip>("SoundsUpdate/Enemy/en_zombie_hit"));
-
         _soundEffect.Add(Resources.Load<AudioClip>("SoundsUpdate/Enemy/en_zombie_death"));
         _soundEffect.Add(Resources.Load<AudioClip>("SoundsUpdate/Enemy/en_Elite_Goblin_attack"));
-        //엘리트 맞는거 추가
         _soundEffect.Add(Resources.Load<AudioClip>("SoundsUpdate/Enemy/en_Elite_Goblin_hit"));
-
         _soundEffect.Add(Resources.Load<AudioClip>("SoundsUpdate/Enemy/en_Elite_Goblin_death"));
         _soundEffect.Add(Resources.Load<AudioClip>("SoundsUpdate/InterAction/Chest_Open"));
         _soundEffect.Add(Resources.Load<AudioClip>("SoundsUpdate/InterAction/ItemUse_potion"));

@@ -1042,13 +1042,11 @@ public class PlayerController : MonoBehaviour
             {
                 if (hit.collider.CompareTag("Item"))
                 {
-                    Debug.Log("레이가 'Item' 태그를 가진 물체와 충돌했습니다: " + hit.collider.gameObject.name);
                     // UI 기능 호출
                     hit.collider.GetComponent<DropItem>().OpenItemInfo();
                 }
                 else if (hit.collider.CompareTag("ExitItemCheck"))
                 {
-                    Debug.Log("'Item' 태그를 가진 물체와 멀어졌습니다");
                     hit.collider.GetComponentInParent<DropItem>().CloseItemInfo();
                 }
             }
@@ -1084,7 +1082,6 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            Debug.Log("기본삽 장착");
             EquipShovel = (Shovel)Data.Instance.GetItemInfo(201);
         }
 
@@ -1095,7 +1092,6 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            Debug.Log("기본무기 장착");
             EquipWeapon = (Weapon)Data.Instance.GetItemInfo(301);
         }
 
@@ -1146,7 +1142,6 @@ public class PlayerController : MonoBehaviour
         {
             _damage += EquipWeapon.Attack;
         }
-        Debug.Log($"현재 공격력" + _damage);
 
         //방어력
         if (EquipArmor != null)
