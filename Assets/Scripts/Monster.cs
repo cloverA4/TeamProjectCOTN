@@ -1,5 +1,6 @@
 using UnityEngine;
 using System;
+using Unity.Burst.CompilerServices;
 
 public class Monster : MonoBehaviour
 {
@@ -309,17 +310,30 @@ public class Monster : MonoBehaviour
         if(_attackReady)
         {
             //특수공격
-            Temp = transform.position + MonsterLook / 2;
-            hitdata = Physics2D.Raycast(Temp, MonsterLook, 100f, _normalLayerMask);
+            hitdata = Physics2D.Raycast(gameObject.transform.position, MonsterLook, 100f, (1 << LayerMask.NameToLayer("Wall")));
+
+            if(hitdata)
+            {
+                Vector3 newXPosition = new Vector3((hitdata.distance - 1) / 2, 0, 0);
+                if (MonsterLook == Vector3.left) newXPosition = -newXPosition + MonsterLook;
+                else if (MonsterLook == Vector3.right) newXPosition = newXPosition + MonsterLook;
+
+                Vector3 CenterPoint = transform.position + newXPosition;
+
+                Collider2D[] colliders = Physics2D.OverlapBoxAll(CenterPoint, new Vector3(hitdata.distance - 1, 1, 1), 0f, (1 << LayerMask.NameToLayer("Monster")) | (1 << LayerMask.NameToLayer("Player")));
+                foreach (Collider2D collider in colliders)
+                {
+                    if (collider.CompareTag("Player")) MonsterAttack();
+                    else if(collider.CompareTag("Monster"))
+                    {
+                        collider.GetComponent<Monster>().TakeDamage(_monsterDamage);
+                    }
+                }
+            }
 
             GameObject SpecialEffect = Instantiate(_ElitemonsterAttackEffect, transform.position + MonsterLook, Quaternion.identity);
             SpecialEffect.GetComponent<EliteMonsterThrowDagger>().Init(transform.position + MonsterLook , MonsterLook);
 
-            if (hitdata)
-            {
-                if (hitdata.collider.CompareTag("Player")) MonsterAttack();
-            }
-            
             //GetComponentsInChildren<SpriteRenderer>()[1].color = Color.white;
             _animator.SetTrigger("Idle"); // 특수모션에서 기본모션으로 돌아옴
             _specialAttackCount = 0;

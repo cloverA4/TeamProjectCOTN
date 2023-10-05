@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.Burst.CompilerServices;
 using UnityEngine;
 
 public class EliteMonsterThrowDagger : MonoBehaviour
@@ -21,21 +18,15 @@ public class EliteMonsterThrowDagger : MonoBehaviour
         if (hit)
         {
             Debug.Log(hit.collider.name);
-            // 충돌 지점까지의 거리를 측정합니다.
-            float distanceToHit = hit.distance;
-            Debug.Log(distanceToHit);
-
-            // x 스케일 값을 거리에 따라 조절합니다.
-            float newScaleX = Mathf.Min(distanceToHit);
 
             float newXPosition = 0;
             if (Attackdirection == Vector3.left)
             {
-                newXPosition = -newScaleX / 2;
+                newXPosition = -hit.distance / 2;
             }
             else if (Attackdirection == Vector3.right)
             {
-                newXPosition = newScaleX / 2;
+                newXPosition = hit.distance / 2;
             }
             // x 포지션 값을 스케일의 x 값의 절반으로 설정합니다.
 
