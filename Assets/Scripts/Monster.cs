@@ -206,18 +206,28 @@ public class Monster : MonoBehaviour
                 if (transform.position.x > PlayerController.Instance.transform.position.x)
                 {
                     action(Vector3.left);
+                    _childSpriteRenderer.flipX = false;
                 }
                 else
                 {
                     action(Vector3.right);
+                    _childSpriteRenderer.flipX = true;
                 }
             }
             else
             {
                 if (PlayerController.Instance.IsX)
                 {
-                    if (transform.position.x > PlayerController.Instance.transform.position.x) MoveMonsterX(Vector3.left);
-                    else MoveMonsterX(Vector3.right);
+                    if (transform.position.x > PlayerController.Instance.transform.position.x)
+                    {
+                        MoveMonsterX(Vector3.left);
+                        _childSpriteRenderer.flipX = false;
+                    }
+                    else 
+                    {
+                        MoveMonsterX(Vector3.right);
+                        _childSpriteRenderer.flipX = true;
+                    }
                 }
                 else
                 {
@@ -253,6 +263,9 @@ public class Monster : MonoBehaviour
                 MonsterAttack();
             }
         }
+
+        if (transform.position.x > PlayerController.Instance.transform.position.x) _childSpriteRenderer.flipX = false;
+        else _childSpriteRenderer.flipX = true;
     }
 
     void MonsterAttackEffectPos(Vector3 vec)
@@ -280,11 +293,7 @@ public class Monster : MonoBehaviour
             }
             Destroy(NormalAttack, 0.2f);
         }
-
-        
     }
-
-
     int _attackMoveCount = 0;
     int _specialAttackCount = 0;
     [SerializeField]
@@ -593,14 +602,16 @@ public class Monster : MonoBehaviour
 
         if (hitdata)
         {
-            //y값 쪽으로 한번더 검사
+            //x값 쪽으로 한번더 검사
             if (transform.position.x > PlayerController.Instance.transform.position.x)
             {
                 MoveMonster2(Vector3.left);
+                _childSpriteRenderer.flipX = false;
             }
             else
             {
                 MoveMonster2(Vector3.right);
+                _childSpriteRenderer.flipX = true;
             }
         }
         else
@@ -637,6 +648,7 @@ public class Monster : MonoBehaviour
     { 
         //체력체크
         _monsterHP -= damage;
+        //유아이 체력 호출
         _monsterHPUI.MonsterHPUpdata(damage);
         GameObject go = Instantiate(Data.Instance.BloodEffect, transform.position, Quaternion.identity);
         Destroy(go, 0.5f);
@@ -675,8 +687,6 @@ public class Monster : MonoBehaviour
             }
             _audio.Play();
         }
-        //유아이 체력삭제 호출
-
     }
 
     void ItemDrop()
