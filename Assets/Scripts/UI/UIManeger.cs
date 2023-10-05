@@ -20,7 +20,6 @@ public class UIManeger : MonoBehaviour
     [SerializeField] Text _goldCount;
     [SerializeField] Text _diamondCount;
 
-    int _goLobbyIndex = 0;
     [SerializeField] Image _fade;
     [SerializeField] Canvas _infoCanvas;
     [SerializeField] GameInfoMassege _gameInfoMassege;
@@ -81,9 +80,7 @@ public class UIManeger : MonoBehaviour
     {
         UIInit();
         InfoPool = new ObjectPool<MissInfoMassege>(CreatePool, OnGet, OnReleaseInfo, DestroyInfo, maxSize: 15);
-        GameInfoPool = new ObjectPool<GameInfoMassege>(CreateGameInfoPool, OnGet, OnReleaseInfo, DestroyInfo, maxSize: 15);
         SpawnInfo();
-        SpawnGameInfo();
         _alarmUI.Init();
         _equipmentControll.EquipmentAllDisabel();
 
@@ -182,6 +179,11 @@ public class UIManeger : MonoBehaviour
         _equipmentControll.UpdatePotion();
     }
 
+    public void IconMove(Item _item)  // 아이템 아이콘 애니메이션 함수 따로 어떤 무기인지 구분할 필요 없이 아이템만 넣으면됌
+    {
+        _equipmentControll.ItemIconMove(_item);
+    }
+
     #endregion
 
 
@@ -231,55 +233,9 @@ public class UIManeger : MonoBehaviour
         MissInfoMassege info = InfoPool.Get();
         info.GetComponent<Text>().text = "박자 놓침!";
     }
-
-
     #endregion
 
-    #region PlayingGameInfo
-    private IObjectPool<GameInfoMassege> GameInfoPool;
 
-    public List<GameInfoMassege> SpawnGameInfo()
-    {
-        List<GameInfoMassege> _infoList = new List<GameInfoMassege>(_maxInfoCount);
-        for (int i = 0; i < _maxInfoCount; i++)
-        {
-            GameInfoMassege info = GameInfoPool.Get();
-            info.GetComponent<GameInfoMassege>().Init();
-            _infoList.Add(info);
-        }
-        return _infoList;
-    }
-
-    private GameInfoMassege CreateGameInfoPool()
-    {
-        GameInfoMassege _info = Instantiate(_gameInfoMassege, _gameInfoBase);
-        _info.SetPool(GameInfoPool);
-        return _info;
-    }
-
-    private void OnGet(GameInfoMassege _info) //  풀 활성화
-    {
-        _info.gameObject.SetActive(true);
-    }
-    private void OnReleaseInfo(GameInfoMassege _info) // 풀 비활성화
-    {
-        _info.gameObject.SetActive(false);
-    }
-    private void DestroyInfo(GameInfoMassege _info) // 풀 삭제
-    {
-        Destroy(_info);
-    }
-
-    public void GamePlayeInfo(string str) // 아이템 이름과 같은 텍스트를 넣으면 그에 맞게 출력
-    {
-        GameInfoMassege _info = GameInfoPool.Get();
-        _info.GetComponent<Text>().text = str;
-        Vector3 pos = PlayerController.Instance.GetComponent<Transform>().localPosition;
-        Vector3 screenPos = Camera.main.WorldToScreenPoint(PlayerController.Instance.GetComponent<Transform>().position); 
-        _info.GetComponent<RectTransform>().position = screenPos;
-    }
-
-    #endregion
 
     public void Alarm(string main, string str1, string str2, UnityAction action1, UnityAction action2 = null)
     {
@@ -302,10 +258,6 @@ public class UIManeger : MonoBehaviour
         _optionUI.SoundOption(main);
     }
 
-    public void IconMove(Item _item)  // 아이템 아이콘 애니메이션 함수 따로 어떤 무기인지 구분할 필요 없이 아이템만 넣으면됌
-    {
-        _equipmentControll.ItemIconMove(_item);
-    }
     public void StageClear() // 마지막 스테이지의 상자를 열때 호출
     {
         _stageClearUI.OnClearEffect();

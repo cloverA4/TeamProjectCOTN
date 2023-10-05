@@ -8,6 +8,7 @@ public class ItemUI : MonoBehaviour
 {
     [SerializeField] GameObject _itemPrice;
     [SerializeField] GameObject _itemInfo;
+    [SerializeField] GameObject _dia;
 
 
     public void ItemUIInit()
@@ -15,18 +16,21 @@ public class ItemUI : MonoBehaviour
         gameObject.SetActive(true);
         _itemInfo.SetActive(false);
         _itemPrice.SetActive(false);
+        _dia.SetActive(false);
     }
     // 상점 일 경우 아이템 가격 UI 활성화 아닐경우 비활
     public void ActiveItemPrice(int price)
     {
         _itemPrice.GetComponent<Text>().text = price.ToString();
         _itemPrice.gameObject.SetActive(true);
+        _dia.SetActive(false);
     }
 
     public void ActiveItemUnlockPrice(int price)
     {
         _itemPrice.GetComponent<Text>().text = price.ToString();
         _itemPrice.gameObject.SetActive(true);
+        _dia.SetActive(true);
     }
 
     public void CloseInfo()
