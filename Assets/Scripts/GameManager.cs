@@ -123,18 +123,7 @@ public class GameManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            string str = null;
-            if(GameManager.instance.NowStage == Stage.Lobby)
-            {
-                string str2 = null;
-                str = "메뉴";
-                UIManeger.Instance.Option(str, "계속하기", "사운드", "조작법", "게임 종료", str2, () => UIManeger.Instance.EndOption(), () => UIManeger.Instance.StartSoundOption(), UIManeger.Instance.OnControllManual, () => Application.Quit(), null);
-            }
-            else if (GameManager.instance.NowStage!= Stage.Lobby) 
-            {
-                str = "일시정지";
-                UIManeger.Instance.Option(str, "계속하기", "사운드", "조작법", "로비로 나가기", "게임 종료", () => UIManeger.Instance.EndOption(), () => UIManeger.Instance.StartSoundOption(), UIManeger.Instance.OnControllManual, LobbyAlarm, () => Application.Quit());
-            }
+            UIManeger.Instance.Option("메뉴", "계속하기", "사운드", "조작법", "로비로 나가기", "게임 종료", () => UIManeger.Instance.EndOption(), () => UIManeger.Instance.StartSoundOption(), UIManeger.Instance.OnControllManual, LobbyAlarm, () => Application.Quit());
         }
     }
 
@@ -177,6 +166,7 @@ public class GameManager : MonoBehaviour
     {
         yield return new WaitForSeconds(3);
         _audio.Play();
+        _isLastNote = false;
         if (_nowStage == Stage.Stage1 && _nowFloor == floor.f2)
         {
             _shopF2.Play();
@@ -192,26 +182,7 @@ public class GameManager : MonoBehaviour
             _shopF3.Stop();
             _shopF2.Stop();
         }
-
-        while (true)
-        {            
-            if (_audio.time >= _audio.clip.length - 0.1f)
-            {
-                yield return new WaitForSeconds(0.6f);
-                if (_stageClear)
-                {
-                    _nowFloor++;
-                    FaidIn();
-                }
-                else
-                {
-                    PlayerController.Instance.NowHP = 0;
-                }
-                break;
-            }
-            yield return null;
-        }
-        
+        yield return null;        
     }
     IEnumerator Metronom()
     {
@@ -277,8 +248,17 @@ public class GameManager : MonoBehaviour
     public void LeftNoteRemove(GameObject note) //활성노트 리스트에서 제거
     {
         _leftNoteList.Remove(note);
+        //마지막노트인지를 검사해서 마지막노트면 특정 불값을 바꿔주면 그뒤로 더이상 노트가 없다
+        if (_leftNoteList.Count == 0)
+        {
+            _isLastNote = true;
+        }
+        else
+        {
+            _isLastNote = false;
+        }
     }
-
+    bool _isLastNote = false;
     void DeleteJudgementNote()
     {    
         _rightNoteList[0].SetActive(false);
@@ -328,6 +308,22 @@ public class GameManager : MonoBehaviour
         _audio.volume = value;
         _shopF2.volume = value;
         _shopF3.volume = value;
+    }
+
+    public void EndMusic()
+    {
+        if (_isLastNote)
+        {
+            if (_stageClear)
+            {
+                _nowFloor++;
+                FaidIn();
+            }
+            else
+            {
+                PlayerController.Instance.NowHP = 0;
+            }
+        }
     }
 
     #endregion
