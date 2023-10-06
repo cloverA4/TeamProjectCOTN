@@ -87,7 +87,16 @@ public class AlarmUI : MonoBehaviour
     public void EndAlarmUI()
     {
         gameObject.SetActive(false);
-        _alarmIndex = 0;        
+        _alarmIndex = 0;
+        switch (_alarmIndex)
+        {
+            case 0:
+                _toggle1.isOn = true;
+                break;
+            case 1:
+                _toggle2.isOn = true;
+                break;
+        }
     }
 
     public void OnValueChangeAlarmToggle1(bool _bool)
