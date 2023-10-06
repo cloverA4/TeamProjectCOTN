@@ -7,18 +7,16 @@ using System.Linq;
 public class GameManager : MonoBehaviour
 {
     private static GameManager instance = null;
+
     [SerializeField] GameObject _dropItem;
     [SerializeField] MakeFog2 _MakeFog2;
     [SerializeField] GameObject _itemPool;
     [SerializeField] AudioSource _shopF2;
     [SerializeField] AudioSource _shopF3;
-
     //박스 리젠용 변수들
     [SerializeField] GameObject _clearBox;
     [SerializeField] GameObject _ClearBoxPos;
-
     [SerializeField] GameObject[] _boxSpawnPoint;
-
     [SerializeField] GameObject _normalBox;
     [SerializeField] GameObject _boxPool;
 
@@ -30,8 +28,6 @@ public class GameManager : MonoBehaviour
     bool _stageClear = false;
 
     int _gold = 0;
-    int _dia = 0;
-
     public int Gold
     {
         get { return _gold; }
@@ -42,6 +38,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    int _dia = 0;
     public int Dia
     {
         get { return _dia; }
@@ -77,20 +74,14 @@ public class GameManager : MonoBehaviour
         if (null == instance)
         {
             instance = this;
-
-            //씬 전환이 되더라도 파괴되지 않게 한다.
             DontDestroyOnLoad(this.gameObject);
         }
         else
         {
-            //만약 씬 이동이 되었는데 그 씬에도 Hierarchy에 GameMgr이 존재할 수도 있다.
-            //그럴 경우엔 이전 씬에서 사용하던 인스턴스를 계속 사용해주는 경우가 많은 것 같다.
-            //그래서 이미 전역변수인 instance에 인스턴스가 존재한다면 자신을 삭제해준다.
             Destroy(this.gameObject);
         }
     }
 
-    //게임 매니저 인스턴스에 접근할 수 있는 프로퍼티. static이므로 다른 클래스에서 맘껏 호출할 수 있다.
     public static GameManager Instance
     {
         get
@@ -103,19 +94,11 @@ public class GameManager : MonoBehaviour
         }
     }
 
-
-    // Start is called before the first frame update
     void Start()
-    {
-        //노트풀 생성
+    {        
         CreateNote();
-        //몬스터 풀 생성
-        //아이템 풀 생성
-
-        // 로드전에 초기화
         InitGameData();
-        // 로드시작
-        StageLoad();
+        StageLoad(); 
     }
 
     private void Update()
@@ -139,10 +122,6 @@ public class GameManager : MonoBehaviour
 
     void InitGameData()
     {
-        //정리 - 저장할 데이터 (위치정보, 착용아이템(로비면 기본), 골드, 다이아, 현재체력(로비면풀))
-        //1. 저장된 데이터에서 위치정보 불러오기
-        //2. 장소가 로비가 아니면 스테이지 시작할 때 저장해둔 데이터 불러오기 -> 스테이지클리어 후 다음스테이지 입장할때, 정보 저장해야됨.
-        //3. 장소가 로비면 기본장착아이템 착용시키고 다이아만 저장된거 불러오고 현재체력은 그냥 풀로 채워주고
         Gold = Data.Instance.CharacterSaveData._gold;
         Dia = Data.Instance.CharacterSaveData._dia;
         _nowStage = Data.Instance.CharacterSaveData._nowStage;            
@@ -154,14 +133,7 @@ public class GameManager : MonoBehaviour
     #region 비트
 
     [SerializeField] float _bpm;
-    public float BPM
-    {
-        get { return _bpm; }
-    }
-
     [SerializeField] AudioSource _audio;
-    public AudioSource Audio { get { return _audio; } }
-
     [SerializeField] GameObject _note;
     [SerializeField] GameObject _notePool;
 
@@ -171,6 +143,12 @@ public class GameManager : MonoBehaviour
 
     IEnumerator mt;
     IEnumerator sm;
+    public AudioSource Audio { get { return _audio; } }
+    public float BPM
+    {
+        get { return _bpm; }
+    }
+
 
     IEnumerator StartMusic()
     {
@@ -340,37 +318,31 @@ public class GameManager : MonoBehaviour
 
     #region 스테이지관리
 
-    //데이터 스테이지변수에 변경할 스테이지가 어딘지 입력 후  페이드 후에 해당스테이지를 로드할수 있게끔
-    //해당 스테이지 입구별로 함수 개별 적용?
     public void FaidIn()
     {
         ResetNote();
         if (mt != null) StopCoroutine(mt);
         if (sm != null) StopCoroutine(sm);
-        //페이드인효과 호출(어두워지게)
         StartCoroutine(UIManeger.Instance.FadeIn());
     }
 
     public void FaidOut()
     {
-        //페이드아웃 효과 호출(밝아지게)
         StartCoroutine(UIManeger.Instance.FadeOut());
     }
 
     public void StageLoad()
     {
-        //페이드효과가 끝난 후 로드시작
         _MakeFog2.gameObject.SetActive(true); // 안개 오브젝트를 켜주는 구문
 
         //초기화 및 로드
         ItemClear();
         ResetNote();        
-        NormalBoxSpawn(); //박스 초기화 후 새로 생성
+        NormalBoxSpawn();
         if (mt != null) StopCoroutine(mt);
         if(sm != null) StopCoroutine(sm);
-        //스테이지 배경음 설정
 
-        //현재 스테이 데이터에 맞춰서 해당 스테이지 로딩
+        //현재 스테이지 데이터에 맞춰서 해당 스테이지 로딩
         switch (_nowStage)
         {
             case Stage.Lobby:
@@ -429,7 +401,6 @@ public class GameManager : MonoBehaviour
                 Item.transform.position = new Vector3(-40, 94, 0);
                 Item.GetComponent<DropItem>().Init(Data.Instance.GetItemInfo(202));
                 Item = Instantiate(_dropItem, _itemPool.transform);
-
                 break;
             case Stage.Stage1:
                 _stageClear = false;
@@ -490,9 +461,6 @@ public class GameManager : MonoBehaviour
 
     public void StageStart()
     {
-        //페이드아웃이 끝난 후 노래,비트 시작
-        //스테이지에 맞는 bpm설정
-
         switch (_nowStage)
         {
             case Stage.Lobby:
@@ -667,14 +635,12 @@ public class GameManager : MonoBehaviour
     #region 몬스터 제어
     public event EventHandler EventEliteMonsterDie;
 
-    [SerializeField] Transform[] _spawnPoint1s1f; // 방마다 하나씩
+    [SerializeField] Transform[] _spawnPoint1s1f;
     [SerializeField] Transform[] _spawnPoint1s2f;
     [SerializeField] Transform[] _spawnPoint1s3f;
-
     [SerializeField] Transform _eliteSpawnPoint1s1f;
     [SerializeField] Transform _eliteSpawnPoint1s2f;
     [SerializeField] Transform _eliteSpawnPoint1s3f;
-
     [SerializeField] GameObject[] _monsterPreFabs;
     [SerializeField] GameObject _eliteMonsterPrefab;
     [SerializeField] GameObject _monsterPool;
@@ -894,11 +860,7 @@ public class GameManager : MonoBehaviour
             Destroy(_boxPool.transform.GetChild(i).gameObject);
         }
     }
-
-
-    //몬스터 ai 구현(종류별로 하나씩 추가)
     #endregion
-
 
     public void SoundPerse(bool isplay)
     {
@@ -929,30 +891,3 @@ public class GameManager : MonoBehaviour
         UIManeger.Instance.Alarm(main, Toggle1, toggle2, UIManeger.Instance.GoLobby, UIManeger.Instance.ReturnOption);
     }
 }
-
-
-
-
-/* //심장 커졌다 작아졌다 하게 만드는 코드
-public class Pulse : MonoBehaviour
-{
-    [SerializeField] float _pulseSize = 1.5f;
-    [SerializeField] float _returnSpeed = 5f;
-    private Vector3 _startSize;
-
-    private void Start()
-    {
-        _startSize = transform.localScale;
-    }
-
-    void Update()
-    { // for smooth pulse movement of the object (선형 보간)
-        transform.localScale = Vector3.Lerp(transform.localScale, _startSize, Time.deltaTime * _returnSpeed);
-    }
-
-    public void PulseinSize()
-    {  //changing size of the object
-        transform.localScale = _startSize * _pulseSize;
-    }
-}
-*/

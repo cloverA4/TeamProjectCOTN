@@ -12,21 +12,21 @@ public class Data : MonoBehaviour
     [SerializeField] GameObject _ItemPrefab;
     [SerializeField] GameObject _bloodEffect;
     
+    List<int> _lockEquipItemIDList = new List<int>();
+    List<int> _lockPotionList = new List<int>();
+    List<int> _lockPassivesList = new List<int>();
+    List<Item> ItemDataList = new List<Item>();
+
+    string LINE_SPLIT = @"\r\n|\n\r|\n|\r";
+    string SPLIT = ",";
+
+    public int[] UnlockPirceToLevel = new int[3] { 2, 4, 7 };
+    public SaveData CharacterSaveData = new SaveData();
+
     List<AudioClip> _soundEffect = new List<AudioClip>();
     public List<AudioClip> SoundEffect { get { return _soundEffect; } }
     public GameObject ItemPrefab { get { return _ItemPrefab; } }
     public GameObject BloodEffect { get { return _bloodEffect; } }
-
-    string LINE_SPLIT = @"\r\n|\n\r|\n|\r";
-    string SPLIT = ",";
-    public int[] UnlockPirceToLevel = new int[3] { 2, 4, 7 };
-    List<Item> ItemDataList = new List<Item>();
-    public SaveData CharacterSaveData = new SaveData();
-
-
-    List<int> _lockEquipItemIDList = new List<int>();
-    List<int> _lockPotionList = new List<int>();
-    List<int> _lockPassivesList = new List<int>();
     public List<int> LockEquipItemIDList { get { return _lockEquipItemIDList; } }
     public List<int> LockPotionList { get { return _lockPotionList; } }
     public List<int> LockPassivesList { get { return _lockPassivesList; } }
@@ -38,20 +38,14 @@ public class Data : MonoBehaviour
         if (null == instance)
         {
             instance = this;
-
-            //씬 전환이 되더라도 파괴되지 않게 한다.
             DontDestroyOnLoad(this.gameObject);
         }
         else
         {
-            //만약 씬 이동이 되었는데 그 씬에도 Hierarchy에 GameMgr이 존재할 수도 있다.
-            //그럴 경우엔 이전 씬에서 사용하던 인스턴스를 계속 사용해주는 경우가 많은 것 같다.
-            //그래서 이미 전역변수인 instance에 인스턴스가 존재한다면 자신을 삭제해준다.
             Destroy(this.gameObject);
         }
     }
 
-    //게임 매니저 인스턴스에 접근할 수 있는 프로퍼티. static이므로 다른 클래스에서 맘껏 호출할 수 있다.
     public static Data Instance
     {
         get
@@ -131,11 +125,10 @@ public class Data : MonoBehaviour
 
     public IEnumerator LoadGame()
     {
-        // 게임 진행에 필요한 게임 데이터 함수 순서대로 로드
-        ReadItemData();
-        LoadSaveData();
-        UPdatelockList();
-        LoadSound();
+        ReadItemData(); //아이템 테이블
+        LoadSaveData(); //플레이어 저장 정보
+        UPdatelockList(); //해금아이템 정보
+        LoadSound(); // 사운드 소스
         yield return null;
 
         // 마지막에 필요한 모든 게임데이터를 로드가되면 gmaeScene로드
@@ -284,20 +277,6 @@ public class Data : MonoBehaviour
 
     void ReadItemData()
     {
-        /*
-        string path = Application.persistentDataPath + "/Resources/Datas/csv_ItemList.csv";
-        if (File.Exists(path))
-        {
-        using (StreamReader sr = new StreamReader(path))
-        {
-            string source;
-
-            source = sr.ReadToEnd();
-        }
-        }*/
-
-
-
         TextAsset txt = (TextAsset)Resources.Load("Datas/csv_ItemList") as TextAsset;
         string[] lines;
 
@@ -332,7 +311,6 @@ public class Data : MonoBehaviour
                         else if (header[j] == "2") sv.UnlockPrice = int.Parse(values[j]);
                         else if (header[j] == "3") sv.Price = int.Parse(values[j]);
                         else if (header[j] == "4") sv.ItemInfo = values[j];
-                        //else if (header[j] == "5") sv.ShoverEffectType = (ShoverEffectType)int.Parse(values[j]);
                     }
                     data = sv;
                     break;

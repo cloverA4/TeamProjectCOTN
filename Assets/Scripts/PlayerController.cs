@@ -6,7 +6,6 @@ public class PlayerController : MonoBehaviour
 {
     private static PlayerController instance;
 
-    //priteRenderer _spriter; // 변수 선언과 초기화하기
     [SerializeField] GameObject[] _weaponEffect;
     [SerializeField] MakeFog2 _MakeFog2;
     [SerializeField] SaveInfoData _unlockSaveData;
@@ -19,9 +18,8 @@ public class PlayerController : MonoBehaviour
     LayerMask _itemCheckLayerMask;
 
     float _lobbyMoveDelay = 0f;
-    bool _isLive = true;
-
     float[] _baseCoinMultiple = new float[3] { 1f, 1.5f, 2f };
+
     int _coinMultipleIndex = 0;
 
     public bool IsX { get; private set; }
@@ -31,6 +29,7 @@ public class PlayerController : MonoBehaviour
     public bool IsTimeStop { get { return _isTimeStop; }  set { _isTimeStop = value; } }
 
     //캐릭터 데이터
+    bool _isLive = true;
     public bool IsLive
     {
         get { return _isLive; }
@@ -135,22 +134,15 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    
-
     private void Awake()
     {
         if (null == instance)
         {
             instance = this;
-
-            //씬 전환이 되더라도 파괴되지 않게 한다.
             DontDestroyOnLoad(this.gameObject);
         }
         else
         {
-            //만약 씬 이동이 되었는데 그 씬에도 Hierarchy에 GameMgr이 존재할 수도 있다.
-            //그럴 경우엔 이전 씬에서 사용하던 인스턴스를 계속 사용해주는 경우가 많은 것 같다.
-            //그래서 이미 전역변수인 instance에 인스턴스가 존재한다면 자신을 삭제해준다.
             Destroy(this.gameObject);
         }
     }
@@ -167,20 +159,12 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-
     void Start()
     {
-
-        //_childSpriteRenderer = GetComponentInChildrens<SpriteRenderer>()[1];
         _audio = GetComponent<AudioSource>();
         _animator = GetComponentsInChildren<Animator>()[0];
         _childSpriteRenderer = GetComponentsInChildren<SpriteRenderer>()[1];
-
         IsX = true;
-        //Debug.Log(GameManager.Instance.NowStage); 스테이지확인
-
-
-
         _normalLayerMask =
                   (1 << LayerMask.NameToLayer("Wall")) |
                   (1 << LayerMask.NameToLayer("Npc")) |
@@ -199,7 +183,50 @@ public class PlayerController : MonoBehaviour
         UIManeger.Instance.EventVolumeChange += new EventHandler(VolumeChange);
     }
 
-    // Update is called once per frame
+    public void InitCharacterData()
+    {
+        if (Data.Instance.CharacterSaveData._equipShovelID != 0)
+        {
+            EquipShovel = (Shovel)Data.Instance.GetItemInfo(Data.Instance.CharacterSaveData._equipShovelID);
+        }
+        else
+        {
+            EquipShovel = (Shovel)Data.Instance.GetItemInfo(201);
+        }
+
+
+        if (Data.Instance.CharacterSaveData._equipWeaponID != 0)
+        {
+            EquipWeapon = (Weapon)Data.Instance.GetItemInfo(Data.Instance.CharacterSaveData._equipWeaponID);
+        }
+        else
+        {
+            EquipWeapon = (Weapon)Data.Instance.GetItemInfo(301);
+        }
+
+
+        if (Data.Instance.CharacterSaveData._equipArmorID != 0)
+        {
+            EquipArmor = (Armor)Data.Instance.GetItemInfo(Data.Instance.CharacterSaveData._equipArmorID);
+        }
+        else
+        {
+            EquipArmor = null;
+        }
+
+        if (Data.Instance.CharacterSaveData._equipPotionID != 0)
+        {
+            EquipPotion = (Potion)Data.Instance.GetItemInfo(Data.Instance.CharacterSaveData._equipPotionID);
+        }
+        else
+        {
+            EquipArmor = null;
+        }
+
+        //캐릭터 스텟
+        UpdateCharacterState();
+    }
+
     void Update()
     {
         if (_isTimeStop) return;
@@ -211,8 +238,6 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetKey(KeyCode.LeftShift))
         {
-            //특수기능들 구현
-
             //물약
             if (Input.GetKeyDown(KeyCode.UpArrow))
             {
@@ -226,10 +251,11 @@ public class PlayerController : MonoBehaviour
                     }
                 }
             }
+
+            //특수기능들 구현 예정
         }
         else
         {
-
             if (Input.GetKeyDown(KeyCode.UpArrow)) // 위 화살표를 입력 받았을때
             {
                 if (GameManager.Instance.NowStage != Stage.Lobby && GameManager.Instance.NowFloor != floor.fBoss)
@@ -245,7 +271,6 @@ public class PlayerController : MonoBehaviour
                         _lobbyMoveDelay = 0f;
                     }
                 }
-
                 IsX = false;
             }
             else if (Input.GetKeyDown(KeyCode.DownArrow)) // 아래 화살표를 입력 받았을때
@@ -303,37 +328,6 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
-
-
-
-
-    //IEnumerator SmoothMove(Vector3 targetPosition) // 충돌체가 먼저 앞에 있어야하므로 이구문은 사용x
-    //{
-    //    if (isMoving == true)
-    //    {
-    //        yield break;
-    //    }
-    //    isMoving = true;
-    //    float startTime = Time.time;
-    //    Vector3 startPosition = transform.position;
-
-    //    while (Time.time < startTime + 1 / moveSpeed)
-    //    {
-    //        float t = (Time.time - startTime) * moveSpeed;
-    //        transform.position = Vector3.MoveTowards(startPosition, targetPosition, t);
-    //        yield return null;
-    //    }
-
-    //    transform.position = targetPosition;
-    //    isMoving = false;
-    //    if (isMoving == false) 
-    //    {
-    //        _MakeFog2.UpdateFogOfWar();
-    //    }
-    //}
-
-   
-
     void MoveCharacter(Vector3 vec)
     {
         Vector3 Temp = transform.position + vec / 2;
@@ -439,19 +433,14 @@ public class PlayerController : MonoBehaviour
                     }
                 }
                 break;
-
-            
         }
 
         RaycastHit2D hitdata = Physics2D.Raycast(Temp, vec, 0.5f, _normalLayerMask);
 
         if (hitdata)
         {
-            if (hitdata.collider.tag == "WeedWall") // weedwall이 힛데이타에 태그로 들어왓다면
+            if (hitdata.collider.tag == "WeedWall")
             {
-                //Debug.Log(hitdata.collider.gameObject); // 힛데이타콜라이더게임오브젝트에 대한 정보가 출력된다
-                //Destroy(hitdata.collider.gameObject); // 힛데이타콜라이더게임오브젝트를 파괴한다
-                //setActive활용해서 벽부수는 표현해보기
                 hitdata.collider.GetComponent<Wall>().DamageWall(_shovelPower);
                 GameObject shovelImage = Instantiate(new GameObject());
                 shovelImage.transform.position = hitdata.collider.transform.position + new Vector3(0, 0.2f, 0);
@@ -463,20 +452,18 @@ public class PlayerController : MonoBehaviour
             }
             else if (hitdata.collider.tag == "Box")
             {
-                //상자 아이템 기능구현
                 hitdata.collider.GetComponent<Box>().OpenBox();
                 _audio.clip = Data.Instance.SoundEffect[(int)SoundEffect.BoxOpen];
                 _audio.Play();
             }
-            else if (hitdata.collider.tag == "Door") // Door이(가) 힛데이타에 태그로 들어왓다면
+            else if (hitdata.collider.tag == "Door")
             {
                 hitdata.collider.GetComponent<Door>().OpenDoor();
                 _audio.clip = Data.Instance.SoundEffect[(int)SoundEffect.OpenDoor];
                 _audio.Play();
             }
-            else if (hitdata.collider.tag == "BadRock") // BadRock이 힛데이타에 태그로 들어왓다면
+            else if (hitdata.collider.tag == "BadRock") 
             {
-                //hitdata.collider.GetComponent<Door>().InvincibilityWall();
                 PlayerController.Instance.ResetCoinMultiple();
                 GameObject shovelImage = Instantiate(new GameObject());
                 shovelImage.transform.position = hitdata.collider.transform.position + new Vector3(0, 0.2f, 0);
@@ -484,9 +471,8 @@ public class PlayerController : MonoBehaviour
                 shovelImage.GetComponent<SpriteRenderer>().sprite = EquipShovel._ItemIcon;
                 Destroy(shovelImage, 0.2f);
             }
-            else if (hitdata.collider.tag == "ShopWall") // ShopWall이 힛데이타에 태그로 들어왓다면
+            else if (hitdata.collider.tag == "ShopWall")
             {
-                //hitdata.collider.GetComponent<Door>().InvincibilityWall();
                 PlayerController.Instance.ResetCoinMultiple();
                 GameObject shovelImage = Instantiate(new GameObject());
                 shovelImage.transform.position = hitdata.collider.transform.position + new Vector3(0, 0.2f, 0);
@@ -568,7 +554,6 @@ public class PlayerController : MonoBehaviour
             Move(vec);
         }
         GameManager.Instance.EndMusic();
-        //_MakeFog2.UpdateFogOfWar();
     }
 
     #region 무기이펙트관리
@@ -787,8 +772,6 @@ public class PlayerController : MonoBehaviour
         {
             case ItemType.Shovel:
                 Shovel shovel = (Shovel)dropItem.Item;
-                Debug.Log($"먹을 아이템 {dropItem.Item._ItemID}");
-
                 if (EquipShovel != null)
                 {
                     //장착중인 삽이 있으면
@@ -797,8 +780,6 @@ public class PlayerController : MonoBehaviour
                     EquipShovel = shovel;
                     dropItem.ChangeItem(temp);
                     UIManeger.Instance.IconMove(EquipShovel);
-                    Debug.Log($"착용한 아이템 {EquipShovel._ItemID}");
-                    Debug.Log($"버려진 아이템 {dropItem.Item._ItemID}");
                     return;
                 }
                 else
@@ -809,7 +790,6 @@ public class PlayerController : MonoBehaviour
                 break;
             case ItemType.Weapon:
                 Weapon weapon = (Weapon)dropItem.Item;
-                Debug.Log($"먹을 아이템 {dropItem.Item._ItemID}");
 
                 if (EquipWeapon != null)
                 {
@@ -818,8 +798,6 @@ public class PlayerController : MonoBehaviour
                     EquipWeapon = weapon;
                     dropItem.ChangeItem(temp);
                     UIManeger.Instance.IconMove(EquipWeapon);
-                    Debug.Log($"착용한 아이템 {EquipWeapon._ItemID}");
-                    Debug.Log($"버려진 아이템 {dropItem.Item._ItemID}");
                     return;
                 }
                 else
@@ -831,7 +809,6 @@ public class PlayerController : MonoBehaviour
                 break;
             case ItemType.Armor:
                 Armor armor = (Armor)dropItem.Item;
-                Debug.Log($"먹을 아이템 {dropItem.Item._ItemID}");
                 if (EquipArmor != null)
                 {
                     Armor temp = new Armor();
@@ -839,8 +816,6 @@ public class PlayerController : MonoBehaviour
                     EquipArmor = armor;
                     dropItem.ChangeItem(temp);
                     UIManeger.Instance.IconMove(EquipArmor);
-                    Debug.Log($"착용한 아이템 {EquipArmor._ItemID}");
-                    Debug.Log($"버려진 아이템 {dropItem.Item._ItemID}");
                     return;
                 }
                 else
@@ -851,7 +826,6 @@ public class PlayerController : MonoBehaviour
                 break;
             case ItemType.Potion:
                 Potion potion = (Potion)dropItem.Item;
-                Debug.Log($"먹을 아이템 {dropItem.Item._ItemID}");
                 if (EquipPotion != null)
                 {
                     Potion temp = new Potion();
@@ -859,8 +833,6 @@ public class PlayerController : MonoBehaviour
                     EquipPotion = potion;
                     dropItem.ChangeItem(temp);
                     UIManeger.Instance.IconMove(EquipPotion);
-                    Debug.Log($"착용한 아이템 {EquipPotion._ItemID}");
-                    Debug.Log($"버려진 아이템 {dropItem.Item._ItemID}");
                     return;
                 }
                 else
@@ -870,14 +842,12 @@ public class PlayerController : MonoBehaviour
                 }
                 break;
         }
-
         dropItem.DeleteDropItem();
     }
 
 
     void BuyGoldItem(DropItem dropItem)
     {
-        //골드체크를 하고 골드가충분하면, 골드를 차감하고 저장한다음에 습득 호출
         int needGold = -1;
         switch (dropItem.Item._itemType)
         {
@@ -903,8 +873,6 @@ public class PlayerController : MonoBehaviour
         {
             //자원이 충분하면 구매
             GameManager.Instance.Gold -= needGold;
-            //Data.Instance.SavePlayerData();
-
             GetItem(dropItem);
             UpdateCharacterState();
         }
@@ -944,7 +912,6 @@ public class PlayerController : MonoBehaviour
             GameManager.Instance.Dia -= needDia;
             Data.Instance.CharacterSaveData._unlockItemId.Add(dropItem.Item._ItemID); //언락리스트에 아이템아이디 추가
             Data.Instance.SavePlayerData();
-
             UpdateCharacterState();
             dropItem.DeleteDropItem();
             _audio.clip = Data.Instance.SoundEffect[(int)SoundEffect.UnLock];
@@ -962,6 +929,8 @@ public class PlayerController : MonoBehaviour
     {
         UnlockItem Unlock = (UnlockItem)dropItem.Item;
         int level = 0;
+        int needDia = -1;
+
         switch (Unlock._ItemID)
         {
             case 601:
@@ -974,7 +943,6 @@ public class PlayerController : MonoBehaviour
                 if (PlayerPrefs.HasKey("ComboUpgradeLevel")) level = PlayerPrefs.GetInt("ComboUpgradeLevel");
                 break;
         }
-        int needDia = -1;
         for (int j = 0; j < _unlockSaveData.unlockNeedDias.Count; j++)
         {
             if (_unlockSaveData.unlockNeedDias[j].level == level)
@@ -1009,30 +977,12 @@ public class PlayerController : MonoBehaviour
         else if(needDia != -1 && GameManager.Instance.Dia < needDia)
         {
             dropItem.NotEnoughCurreny();
-            Debug.Log("해금불가");
-        }
-    }
-
-    private void OnDrawGizmos() //확인용
-    {
-        Vector2[] UDLR = { Vector2.up, Vector2.down, Vector2.left, Vector2.right };
-
-        foreach (Vector3 urdr in UDLR)
-        {
-            Vector3 temp = transform.position + urdr / 2;
-            RaycastHit2D hit = Physics2D.Raycast(transform.position, temp, 0.5f, _itemCheckLayerMask);
-            if (hit)
-            {
-                Debug.DrawLine(transform.position, hit.point, Color.green);
-                // 충돌한 물체가 "Item" 태그를 가진 경우
-            }
         }
     }
 
     void Move(Vector3 vec)
     {
         transform.position += vec;
-
 
         GetComponent<SpriteRenderer>().sortingOrder = (int)(transform.position.y - 1) * -1; // 레이어 값변환
         if (vec == Vector3.left)
@@ -1057,11 +1007,8 @@ public class PlayerController : MonoBehaviour
             _MakeFog2.UpdateFogOfWar();
         }
 
-        CheckItmeInfo(transform);    
-        //PlayerMoveEvent?.Invoke(this, EventArgs.Empty);
+        CheckItmeInfo(transform);
     }
-    //public event EventHandler PlayerMoveEvent;
-
 
     public void CheckItmeInfo(Transform Player)
     {
@@ -1086,15 +1033,9 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-
-
-    //PlayerMoveEvent?.Invoke(this, EventArgs.Empty);
-
-    //public event EventHandler PlayerMoveEvent;
     public void transfromUpdate(Vector3 vec)
     {
         transform.position = vec;
-        //PlayerMoveEvent?.Invoke(this, EventArgs.Empty);
     }
 
     void UsePotion()
@@ -1103,53 +1044,7 @@ public class PlayerController : MonoBehaviour
         EquipPotion = null;
         _audio.clip = Data.Instance.SoundEffect[(int)SoundEffect.UsePotion];
         _audio.Play();
-    }
-
-    public void InitCharacterData()
-    {
-        //게임메니져에서 각종 데이터 로드가 끝나면, 그때 실행
-
-        if (Data.Instance.CharacterSaveData._equipShovelID != 0)
-        {
-            EquipShovel = (Shovel)Data.Instance.GetItemInfo(Data.Instance.CharacterSaveData._equipShovelID);
-        }
-        else
-        {
-            EquipShovel = (Shovel)Data.Instance.GetItemInfo(201);
-        }
-
-
-        if (Data.Instance.CharacterSaveData._equipWeaponID != 0)
-        {
-            EquipWeapon = (Weapon)Data.Instance.GetItemInfo(Data.Instance.CharacterSaveData._equipWeaponID);
-        }
-        else
-        {
-            EquipWeapon = (Weapon)Data.Instance.GetItemInfo(301);
-        }
-
-
-        if (Data.Instance.CharacterSaveData._equipArmorID != 0)
-        {
-            EquipArmor = (Armor)Data.Instance.GetItemInfo(Data.Instance.CharacterSaveData._equipArmorID);
-        }
-        else
-        {
-            EquipArmor = null;
-        }
-
-        if (Data.Instance.CharacterSaveData._equipPotionID != 0)
-        {
-            EquipPotion = (Potion)Data.Instance.GetItemInfo(Data.Instance.CharacterSaveData._equipPotionID);
-        }
-        else
-        {
-            EquipArmor = null;
-        }
-
-        //캐릭터 스텟
-        UpdateCharacterState();
-    }
+    }    
 
     void UpdateCharacterState()
     {
@@ -1187,9 +1082,6 @@ public class PlayerController : MonoBehaviour
         {
             _shovelPower += EquipShovel.ShovelPower;
         }
-       
-        //코인배수 - 콤보구현을 어디서 하냐에 따라서 거기에 적용
-        //상자? 게임매니저에 넣어야될듯?
     }
 
     public void UpCoinMultiple()
@@ -1249,10 +1141,5 @@ public class PlayerController : MonoBehaviour
     public void VolumeChange(object sender, EventArgs s)
     {
         _audio.volume = UIManeger.Instance.EffectVolume;
-    }
-
-    void Death()
-    {
-        GameManager.Instance.StageFail();
     }
 }
