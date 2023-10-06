@@ -712,22 +712,22 @@ public class Monster : MonoBehaviour
         {
             if(hitdata.collider.GetComponent<DropItem>().Item._itemType == ItemType.Currency)
             {
+                //이미 골드가 있으면 합쳐짐
                 Currency cur = (Currency)hitdata.collider.GetComponent<DropItem>().Item;
                 cur.Count += dropCount;
+                return;
             }
         }
-        else
-        {
-            GameObject go = Instantiate(Data.Instance.ItemPrefab, GameManager.Instance.ItemPool.transform);
-            go.transform.position = transform.position;
 
-            Currency cr = (Currency)Data.Instance.GetItemInfo(102);
-            cr.Count = dropCount;
+        GameObject go = Instantiate(Data.Instance.ItemPrefab, GameManager.Instance.ItemPool.transform);
+        go.transform.position = transform.position;
 
-            go.GetComponent<DropItem>().Init(cr);
+        Currency cr = (Currency)Data.Instance.GetItemInfo(102);
+        cr.Count = dropCount;
 
-            if (Vector3.Distance(transform.position, PlayerController.Instance.transform.position) <= 1) go.GetComponent<DropItem>().OpenItemInfo();
-        }
+        go.GetComponent<DropItem>().Init(cr);
+
+        if (Vector3.Distance(transform.position, PlayerController.Instance.transform.position) <= 1) go.GetComponent<DropItem>().OpenItemInfo();
     }
 }
 
