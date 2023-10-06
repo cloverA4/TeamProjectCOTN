@@ -16,32 +16,12 @@ public class Note : MonoBehaviour
         if (_judgemonet == null) _judgemonet = GameObject.Find("Judgement").GetComponent<RectTransform>();
         //시작위치
         rec.anchoredPosition = new Vector3(1000, -420, 0);
-        
-
         gameObject.SetActive(false);
     }
 
-    public void PlayNote(int dir, int StartPosition)
-    {
-        _dir = dir;
-        rec.anchoredPosition = new Vector3(StartPosition, -420, 0);
-        gameObject.SetActive(true);
-
-        if (GameManager.Instance.Audio.time >= GameManager.Instance.Audio.clip.length - 30)
-        {
-            GetComponent<Image>().color = new Color32(255, 85, 91, 255);
-        }
-        else
-        {
-            GetComponent<Image>().color = new Color32(64, 244, 255, 255);
-        }
-    }
-
-    // Update is called once per frame
     void Update()
     {
         rec.anchoredPosition3D += new Vector3(_dir * Time.deltaTime * _speed, 0, 0);
-        //if(rec.anchoredPosition.x < _judgemonet.anchoredPosition.x)
         if (_dir > 0)
         {
             if (rec.anchoredPosition.x >= 0)
@@ -59,7 +39,22 @@ public class Note : MonoBehaviour
                 gameObject.SetActive(false);
                 GameManager.Instance.RightNoteRemove(gameObject);
             }
+        }        
+    }
+
+    public void PlayNote(int dir, int StartPosition)
+    {
+        _dir = dir;
+        rec.anchoredPosition = new Vector3(StartPosition, -420, 0);
+        gameObject.SetActive(true);
+
+        if (GameManager.Instance.Audio.time >= GameManager.Instance.Audio.clip.length - 30)
+        {
+            GetComponent<Image>().color = new Color32(255, 85, 91, 255);
         }
-        
+        else
+        {
+            GetComponent<Image>().color = new Color32(64, 244, 255, 255);
+        }
     }
 }

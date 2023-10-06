@@ -12,20 +12,13 @@ public class UIManeger : MonoBehaviour
 
     public event EventHandler EventVolumeChange;
 
-    AudioSource _audio;
-    float _effectVolume = 1;
-    public float EffectVolume { get { return _effectVolume; } }
-
     [SerializeField] Image _fade;
     [SerializeField] Canvas _infoCanvas;
     [SerializeField] GameInfoMassege _gameInfoMassege;
     [SerializeField] Transform _gameInfoBase;
-
     [SerializeField] GameObject Judgement;
     [SerializeField] MissInfoMassege _missInfo;
     [SerializeField] Transform _InfoBase;
-    int _maxInfoCount = 10;
-
     [SerializeField] AlarmUI _alarmUI;
     [SerializeField] EquipmentControll _equipmentControll;
     [SerializeField] StageClearUI _stageClearUI;
@@ -38,26 +31,25 @@ public class UIManeger : MonoBehaviour
     [SerializeField] CenterMessage _centerMessage;
     [SerializeField] WealthUI _wealthUI;
 
+    int _maxInfoCount = 10;
+    AudioSource _audio;
+
+    float _effectVolume = 1;
+    public float EffectVolume { get { return _effectVolume; } }
 
     private void Awake()
     {
         if (null == instance)
         {
             instance = this;
-
-            //씬 전환이 되더라도 파괴되지 않게 한다.
             DontDestroyOnLoad(this.gameObject);
         }
         else
         {
-            //만약 씬 이동이 되었는데 그 씬에도 Hierarchy에 GameMgr이 존재할 수도 있다.
-            //그럴 경우엔 이전 씬에서 사용하던 인스턴스를 계속 사용해주는 경우가 많은 것 같다.
-            //그래서 이미 전역변수인 instance에 인스턴스가 존재한다면 자신을 삭제해준다.
             Destroy(this.gameObject);
         }
         _audio = GetComponent<AudioSource>();        
     }
-
     public static UIManeger Instance
     {
         get
@@ -70,11 +62,10 @@ public class UIManeger : MonoBehaviour
         }
     }
 
-
-
     private void Start()
     {
-        UIInit();
+        gameObject.SetActive(true);
+        _fade.gameObject.SetActive(true);
         InfoPool = new ObjectPool<MissInfoMassege>(CreatePool, OnGet, OnReleaseInfo, DestroyInfo, maxSize: 15);
         SpawnInfo();
         _alarmUI.Init();
@@ -91,21 +82,11 @@ public class UIManeger : MonoBehaviour
         }
     }
 
-    public void UIInit()
-    {
-        gameObject.SetActive(true);
-        _fade.gameObject.SetActive(true);
-    }
-
-    #region HP
    public void setHP()
     {
         _hpUI.setHP();
     }
 
-    #endregion
-
-    #region Wealth
     public void UpdateGold(int count)
     {
         _wealthUI.UpdateGold(count);
@@ -115,8 +96,6 @@ public class UIManeger : MonoBehaviour
     {
         _wealthUI.UpdataDiamond(count);
     }
-
-    #endregion
 
     #region FadeIn , FadeOut
     public void StartFadin()
@@ -149,39 +128,31 @@ public class UIManeger : MonoBehaviour
         }
         GameManager.Instance.StageStart();
     }
-
-
     #endregion
 
     #region Equipment
-
     public void UpdataShovel()
     {
         _equipmentControll.UpdataShovel();
     }
-
     public void UpdataWeapon()
     {
         _equipmentControll.UpdataWeapon();
     }
-
     public void UpdateArmor()
     {
         _equipmentControll.UpdateArmor();
     }
-
     public void UpdatePotion()
     {
         _equipmentControll.UpdatePotion();
     }
-
     public void IconMove(Item _item)  // 아이템 아이콘 애니메이션 함수 따로 어떤 무기인지 구분할 필요 없이 아이템만 넣으면됌
     {
         _equipmentControll.ItemIconMove(_item);
     }
 
     #endregion
-
 
     #region JudgementInfo
 
@@ -198,14 +169,12 @@ public class UIManeger : MonoBehaviour
         }
         return _infoList;
     }
-
     private MissInfoMassege CreatePool()
     {
         MissInfoMassege _info = Instantiate(_missInfo, _InfoBase);
         _info.SetPool(InfoPool);
         return _info;
     }
-
     private void OnGet(MissInfoMassege _info) //  풀 활성화
     {
         _info.gameObject.SetActive(true);
@@ -231,8 +200,6 @@ public class UIManeger : MonoBehaviour
     }
     #endregion
 
-
-
     public void Alarm(string main, string str1, string str2, UnityAction action1, UnityAction action2 = null)
     {
         ActiveMenuChange(UIMenu.AlarmUI);
@@ -252,8 +219,7 @@ public class UIManeger : MonoBehaviour
 
     public void StartSoundOption()
     {
-        string main = "오디오 옵션";
-        _optionUI.SoundOption(main);
+        _optionUI.SoundOption();
     }
 
     public void StageClear() // 마지막 스테이지의 상자를 열때 호출
@@ -276,19 +242,16 @@ public class UIManeger : MonoBehaviour
     {
         _playerHit.HitUI();
     }
-
     public void OnControllManual()  // 조작법 켜기
     {
         ActiveMenuChange(UIMenu.Menual);
         _manual.IsOption = true;
         _manual.OnMenual();
     }
-
     public void OffControllManual()  // 조작법 끄기
     {
         _manual.OffMenual();
     }
-
     public void StartGoLobby()
     {
         ActiveMenuChange(UIMenu.GoLobby);
@@ -298,25 +261,21 @@ public class UIManeger : MonoBehaviour
     {
         _goLobby.GoLobby();
     }
-
     public void VolumeChange(float Volume)
     {
         _effectVolume = Volume;
         _audio.volume = Volume;
         EventVolumeChange?.Invoke(this, EventArgs.Empty);
     }
-
     public void PlayEffectSound(SoundEffect sound)
     {
         _audio.clip = Data.Instance.SoundEffect[(int)sound];
         _audio.Play();
     }
-
     public void CenterMessage(string message)
     {
         _centerMessage.SetCenterMessage(message);
     }
-
     public void ActiveMenuChange(UIMenu type)
     {
         _goLobby.IsActive = false;
@@ -341,7 +300,6 @@ public class UIManeger : MonoBehaviour
                 break;
         }
     }
-
     public void AllCloseUI()
     {
         _goLobby.endGoLobbyUI();

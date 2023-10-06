@@ -23,7 +23,6 @@ public class EquipmentControll : MonoBehaviour
         if (_armorImage.GetComponent<Transform>().position != new Vector3(0, 0, 0))
         {
             _armorImage.GetComponent<RectTransform>().anchoredPosition = Vector3.Lerp(_armorImage.GetComponent<RectTransform>().anchoredPosition, new Vector3(0, 0, 0), Time.deltaTime * 2f);
-
         }
         if (_weaponImage.GetComponent<Transform>().position != new Vector3(0, 0, 0))
         {
@@ -88,12 +87,9 @@ public class EquipmentControll : MonoBehaviour
         _armorSlot.gameObject.SetActive(false);
         _potionSlot.gameObject.SetActive(false);
     }
-
     #endregion
 
-
     #region 장비 장착 애니메이션
-
     public void ItemIconMove(Item item)
     {
         IconMove(item);
@@ -127,7 +123,5 @@ public class EquipmentControll : MonoBehaviour
             case ItemType.Currency: image.transform.SetParent(_diaSlot.transform); break;
         }
     }
-   
-
     #endregion
 }

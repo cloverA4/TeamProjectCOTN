@@ -1,7 +1,6 @@
 using UnityEngine;
 using System;
 
-
 public class LoadingUI : MonoBehaviour
 {
     [SerializeField] GameObject _loadingText;
@@ -22,7 +21,6 @@ public class LoadingUI : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Escape))
             {
-                Debug.Log("게임 종료");
                 Application.Quit();
             }
             else if (Input.anyKeyDown)
@@ -31,7 +29,6 @@ public class LoadingUI : MonoBehaviour
             }
         }
     }
-
     void LoadingEnd(object sender, EventArgs s)
     {
         DisableLoadingText();
@@ -43,7 +40,6 @@ public class LoadingUI : MonoBehaviour
         _infoText.SetActive(false);
         _loadingText.SetActive(true);
     }
-
     void DisableLoadingText()
     {
         _loadingText.SetActive(false);

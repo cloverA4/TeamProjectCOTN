@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class StageClearUI : MonoBehaviour
@@ -12,7 +10,6 @@ public class StageClearUI : MonoBehaviour
         _clearPE.gameObject.SetActive(false);
         _clearText.SetActive(false);
     }
-
     public void OnClearEffect()
     {
         _clearText.SetActive(true);
@@ -20,7 +17,6 @@ public class StageClearUI : MonoBehaviour
         _clearPE.Play();
         Invoke("OffClearEffect", 3f);
     }
-
     void OffClearEffect()
     {
         _clearText.SetActive(false);

@@ -21,7 +21,7 @@ public class ControllManualPageManager : MonoBehaviour
 
     void Start()
     {
-        UpdateButtonState();        
+        UpdateButtonState();
     }
 
     private void Update()
@@ -38,16 +38,13 @@ public class ControllManualPageManager : MonoBehaviour
                 UIManeger.Instance.PlayEffectSound(SoundEffect.UIChange);
                 NextPage();
             }
-
             if(Input.GetKeyDown(KeyCode.Escape))
             {
                 OffMenual();
             }
         }
     }
-
-    //다음 페이지로 넘어가기
-    public void NextPage()
+    public void NextPage() //다음 페이지로 넘어가기
     {
         if(_currentPageIndex <= 0)
         {
@@ -57,10 +54,8 @@ public class ControllManualPageManager : MonoBehaviour
             UpdateButtonState();
 
         }
-    }
-
-    //이전 페이지로 넘어가기
-    public void PreviousPage()
+    }    
+    public void PreviousPage() //이전 페이지로 넘어가기
     {
         if (_currentPageIndex > 0)
         {
@@ -70,18 +65,15 @@ public class ControllManualPageManager : MonoBehaviour
             UpdateButtonState();
         }   
     }
-
     public void ExitManual()
     {
         UIManeger.Instance.OffControllManual();
     }
-
     private void UpdateButtonState()
     {
         _prevButton.interactable = _currentPageIndex > 0;
         _nextButton.interactable = _currentPageIndex < _pages.Length - 1;
     }
-
     public void OnMenual()
     {
         _manual.SetActive(true);
@@ -99,5 +91,4 @@ public class ControllManualPageManager : MonoBehaviour
         }
         _manual.SetActive(false);
     }
-
 }

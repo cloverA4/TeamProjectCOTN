@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,13 +10,6 @@ public class CenterMessage : MonoBehaviour
     {
         _centerMessage.gameObject.SetActive(false);
         rect = _centerMessage.GetComponent<RectTransform>();
-    }
-
-    public void SetCenterMessage(string str)
-    {
-        _centerMessage.text = str;
-        rect.anchoredPosition = new Vector3(0, 50, 0);
-        _centerMessage.gameObject.SetActive(true);
     }
 
     void Update()
@@ -35,5 +25,12 @@ public class CenterMessage : MonoBehaviour
                 _centerMessage.gameObject.SetActive(false);
             }            
         }
+    }
+
+    public void SetCenterMessage(string str)
+    {
+        _centerMessage.text = str;
+        rect.anchoredPosition = new Vector3(0, 50, 0);
+        _centerMessage.gameObject.SetActive(true);
     }
 }

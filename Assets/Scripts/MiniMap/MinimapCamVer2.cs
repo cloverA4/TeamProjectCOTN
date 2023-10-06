@@ -1,8 +1,4 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class MinimapCamVer2 : MonoBehaviour
 {
@@ -11,21 +7,14 @@ public class MinimapCamVer2 : MonoBehaviour
     [SerializeField] private Transform _stage1F2MinimapCamPos;
     [SerializeField] private Transform _stage1F3MinimapCamPos;
     [SerializeField] private Transform _stage1FBossMinimapCamPos;
-
     [SerializeField] private GameObject _stageLobbyFloor;
     [SerializeField] private GameObject _stage1F1MinimapFloor;
     [SerializeField] private GameObject _stage1F2MinimapFloor;
     [SerializeField] private GameObject _stage1F3MinimapFloor;
     [SerializeField] private GameObject _stage1FBossFloor;
 
-   
-
-
-    
-
     void Update()
-    {
-       
+    {        
         if (GameManager.Instance.NowStage == Stage.Lobby)
         {
             transform.position = _stageLobbyMinimapCamPos.position + new Vector3(0, 0, -10);

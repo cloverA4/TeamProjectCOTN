@@ -1,39 +1,22 @@
-using JetBrains.Annotations;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class MapManager : MonoBehaviour
 {
     //로비 맵 데이터
-    [SerializeField]
-    GameObject StageLobbyDoorList;
-    [SerializeField]
-    GameObject LobbyBenStair;
+    [SerializeField] GameObject StageLobbyDoorList;
+    [SerializeField] GameObject LobbyBenStair;
     //스테이지1 1층 맵 데이터
-    [SerializeField]
-    GameObject Stage1F1WeedWallList;
-    [SerializeField]
-    GameObject Stage1F1DoorList;
-    [SerializeField]
-    GameObject Stage1F1BenStair;
+    [SerializeField] GameObject Stage1F1WeedWallList;
+    [SerializeField] GameObject Stage1F1DoorList;
+    [SerializeField] GameObject Stage1F1BenStair;
     //스테이지1 2층 맵 데이터
-    [SerializeField]
-    GameObject Stage1F2WeedWallList;
-    [SerializeField]
-    GameObject Stage1F2DoorList;
-    [SerializeField]
-    GameObject Stage1F2BenStair;
+    [SerializeField] GameObject Stage1F2WeedWallList;
+    [SerializeField] GameObject Stage1F2DoorList;
+    [SerializeField] GameObject Stage1F2BenStair;
     //스테이지1 3층 맵 데이터
-    [SerializeField]
-    GameObject Stage1F3WeedWallList;
-    [SerializeField]
-    GameObject Stage1F3DoorList;
-    [SerializeField]
-    GameObject Stage1F3BenStair;
-
-
-
+    [SerializeField] GameObject Stage1F3WeedWallList;
+    [SerializeField] GameObject Stage1F3DoorList;
+    [SerializeField] GameObject Stage1F3BenStair;
 
     public void ResetMapObject()
     {
@@ -105,6 +88,4 @@ public class MapManager : MonoBehaviour
             Wall.transform.GetChild(i).GetComponent<Wall>().WallReset();
         }
     }
-
-
 }

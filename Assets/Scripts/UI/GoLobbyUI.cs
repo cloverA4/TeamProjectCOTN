@@ -7,8 +7,10 @@ public class GoLobbyUI : MonoBehaviour
     [SerializeField] GameObject _lobbyToggle;
     [SerializeField] GameObject _retryToggle;
     [SerializeField] GameObject _replayToggle;
-
     [SerializeField] GameObject _DieMasseage;
+    [SerializeField] GameObject toggle1S;
+    [SerializeField] GameObject toggle2S;
+    [SerializeField] GameObject toggle3S;
     int _index = 0;
     bool _isActive = false;
     public bool IsActive { set { _isActive = value; } }
@@ -72,7 +74,6 @@ public class GoLobbyUI : MonoBehaviour
                 _index = 2;
             }
 
-
             if (Input.GetKeyDown(KeyCode.Return))
             {
                 UIManeger.Instance.PlayEffectSound(SoundEffect.UISelect);
@@ -116,18 +117,15 @@ public class GoLobbyUI : MonoBehaviour
             }
         }
     }
-
     public void endGoLobbyUI()
     {
         _goLobbyUI.SetActive(false);
     }
-
     public void StartGoLobbyUI()
     {
         _isDieMessage = true;
         _DieMasseage.gameObject.SetActive(true);
     }
-
     void SelectToggle()
     {
         if (_goLobbyUI.activeSelf)
@@ -144,17 +142,8 @@ public class GoLobbyUI : MonoBehaviour
                     _replayToggle.GetComponent<Toggle>().isOn = true;
                     break;
             }
-
         }
-
     }
-
-    [SerializeField] GameObject toggle1S;
-
-    [SerializeField] GameObject toggle2S;
-
-    [SerializeField] GameObject toggle3S;
-
     public void GoLobbySelect(bool _bool)
     {
         if (_bool) toggle1S.gameObject.SetActive(false);
@@ -170,7 +159,6 @@ public class GoLobbyUI : MonoBehaviour
         if (_bool) toggle3S.gameObject.SetActive(false);
         else toggle3S.gameObject.SetActive(true);
     }
-
 
     public void GoLobby()
     {

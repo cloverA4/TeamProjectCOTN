@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Pool;
 
@@ -15,13 +13,10 @@ public class GameInfoMassege : MonoBehaviour
     {
         _pool = pool;
     }
-
-
     public void EndAni()
     {
         Release();
     }
-
     public void Release()
     {
         _pool.Release(this);

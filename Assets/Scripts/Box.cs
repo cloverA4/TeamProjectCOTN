@@ -8,14 +8,11 @@ public class Box : MonoBehaviour
         GetComponent<SpriteRenderer>().sortingOrder = (int)(transform.position.y - 1) * -1; // 레이어 값변환
         _type = type;
     }
-
     public void OpenBox()
     {
         switch (_type)
         {
             case BoxType.Normal:
-                //해금된 모든 아이템 중 랜덤?
-
                 int random = UnityEngine.Random.Range(0, Data.Instance.CharacterSaveData._unlockItemId.Count);
                 int ItemID = Data.Instance.CharacterSaveData._unlockItemId[random];
                 
@@ -25,7 +22,6 @@ public class Box : MonoBehaviour
                 SpawnItem.GetComponent<DropItem>().OpenItemInfo();                
                 break;
             case BoxType.Clear:
-
                 UIManeger.Instance.StageClear();
 
                 GameObject go = Instantiate(Data.Instance.ItemPrefab, GameManager.Instance.ItemPool.transform);
@@ -42,7 +38,6 @@ public class Box : MonoBehaviour
         }
         DestroyBox();
     }
-
     public void DestroyBox()
     {
         Destroy(gameObject);

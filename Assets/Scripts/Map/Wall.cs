@@ -1,7 +1,5 @@
 using UnityEngine;
 
-
-
 public class Wall : MonoBehaviour
 {
     [SerializeField] Sprite _normalWall;
@@ -27,8 +25,7 @@ public class Wall : MonoBehaviour
 
     public void DamageWall(int ADWall)
     {
-        //spriteRenderer의 스프라이트를 _attackedWall(데미지를받은 벽)으로 바꿔주는것
-        _spriteRenderer.sprite = _attackedWall;
+        _spriteRenderer.sprite = _attackedWall; //spriteRenderer의 스프라이트를 _attackedWall(데미지를받은 벽)으로 바꿔주는것
 
         _hp -= ADWall; //벽의 남은체력에서 ADWall 만큼빼주기
 
@@ -45,7 +42,6 @@ public class Wall : MonoBehaviour
                     coll.GetComponent<Door>().updateWallCount(); // 충돌체의 문코드의 updateWallCount 함수를 실행한다
                 }
             }
-
             gameObject.SetActive(false); //벽 파괴 구문
         }
     }

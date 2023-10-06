@@ -1,5 +1,3 @@
-using System.Data;
-using System.Data.Common;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -8,12 +6,10 @@ public class AlarmUI : MonoBehaviour
 {
     [SerializeField] Toggle _toggle1;
     [SerializeField] Toggle _toggle2;
-
     [SerializeField] Text _alarmToggle1;
     [SerializeField] Text _alarmText1;
     [SerializeField] Text _alarmToggle2;
     [SerializeField] Text _alarmText2;
-
     [SerializeField] Text _mainText;
 
     int _alarmIndex = 0;
@@ -22,6 +18,12 @@ public class AlarmUI : MonoBehaviour
 
     bool _isActive = false;
     public bool IsActive {  set { _isActive = value; } }
+
+    public void Init()
+    {
+        gameObject.SetActive(false);
+        _alarmIndex = 0;
+    }
 
     private void Update()
     {
@@ -60,13 +62,6 @@ public class AlarmUI : MonoBehaviour
         }
     }
 
-    public void Init()
-    {
-        gameObject.SetActive(false);
-        _alarmIndex = 0;
-    }
-
-
     public void StartAlarmUI(string mainText, string toggle1Text, string toggle2Text, UnityAction action1, UnityAction action2 = null)
     {
         Time.timeScale = 0;
@@ -95,12 +90,12 @@ public class AlarmUI : MonoBehaviour
         _alarmIndex = 0;        
     }
 
-    public void AlarmToggle1(bool _bool)
+    public void OnValueChangeAlarmToggle1(bool _bool)
     {
         _alarmIndex = 0;
         _alarmText1.gameObject.SetActive(!_bool);
     }
-    public void AlarmToggle2(bool _bool)
+    public void OnValueChangeAlarmToggle2(bool _bool)
     {
         _alarmIndex = 1;
         _alarmText2.gameObject.SetActive(!_bool);

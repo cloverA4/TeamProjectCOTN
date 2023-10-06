@@ -4,13 +4,11 @@ using UnityEngine;
 
 public class HPUI : MonoBehaviour
 {
-    [SerializeField]
-    GameObject[] Hearts;
+    [SerializeField] GameObject[] Hearts;
     public void setHP()
     {
-        PlayerController pc = PlayerController.Instance;
         ResetHP();
-
+        PlayerController pc = PlayerController.Instance;
         int damge = pc.MaxHP - pc.NowHP;
 
         for (int i = 0; i < pc.MaxHP / 2; i++)

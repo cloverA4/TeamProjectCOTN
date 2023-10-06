@@ -1,8 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor.Rendering.Universal;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class ItemInfo : MonoBehaviour
 {

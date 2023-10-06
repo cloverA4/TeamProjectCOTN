@@ -1,39 +1,16 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class CameraMove : MonoBehaviour
 {
     private static CameraMove instance;
-
-    public static CameraMove Instance
-    {
-        get
-        {
-            if (null == instance)
-            {
-                return null;
-            }
-            return instance;
-        }
-    }
-
     Transform _player;
     Vector3 _offset;
     Vector3 velocity = Vector3.zero;
     float _time = 0f; // 시간초기화
     float _smoothTime = 0.3f; // 부드러운 이동을 위한 시간
-    bool _isShake = false;
     float _shakeEndTime = 0.2f; // 흔드는 시간
     float shakeIntensity = 0.1f;// 흔드는 강도
-
-    public void Shake()
-    {
-        if (_isShake == false)
-        {
-            _isShake = true;
-        }
-    }
+    bool _isShake = false;
 
     private void Awake()
     {
@@ -48,16 +25,24 @@ public class CameraMove : MonoBehaviour
             Destroy(this.gameObject);
         }
     }
-
-
-
+    public static CameraMove Instance
+    {
+        get
+        {
+            if (null == instance)
+            {
+                return null;
+            }
+            return instance;
+        }
+    }
     private void Start()
     {
         _player = PlayerController.Instance.transform;
         _offset = new Vector3(0, 0, -10);
     }
 
-    void LateUpdate() // LateUpdate를 사용하여 카메라 업데이트
+    void LateUpdate()
     {
         // 플레이어의 현재 위치에 offset을 더한 위치를 목표 위치로 설정
         Vector3 targetPosition = _player.position + _offset;
@@ -84,6 +69,11 @@ public class CameraMove : MonoBehaviour
             transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref velocity, _smoothTime);
         }
     }
-
-    
+    public void Shake()
+    {
+        if (_isShake == false)
+        {
+            _isShake = true;
+        }
+    }    
 }

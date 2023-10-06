@@ -2,19 +2,16 @@ using UnityEngine;
 
 public class MakeFog2 : MonoBehaviour
 {
+    [SerializeField] private Transform stage1F1FogPosition;
+    [SerializeField] private Transform stage1F2FogPosition;
+    [SerializeField] private Transform stage1F3FogPosition;
+
     private int textureWidth = 40;
     private int textureHeight = 40;
 
     private Texture2D fogOfWarTexture;
     private Color[] visitedColorData; // 초기의 컬러데이터
     private Color[] currentColorData; // 현재의 컬러데이터(플레이어 위치)
-
-    [SerializeField]
-    private Transform stage1F1FogPosition;
-    [SerializeField]
-    private Transform stage1F2FogPosition;
-    [SerializeField]
-    private Transform stage1F3FogPosition;
 
     GameObject _Player;
 
@@ -47,13 +44,10 @@ public class MakeFog2 : MonoBehaviour
             }
         }
 
-
-
         fogOfWarTexture.SetPixels(visitedColorData);
         fogOfWarTexture.Apply();
         GetComponent<Renderer>().material.SetTexture("_BaseMap", fogOfWarTexture);
         GetComponent<Renderer>().sortingOrder = 999;
-        //Stage1F1UpdateFogOfWar();
     }
 
     public void FogOfWarStageMove()
@@ -66,10 +60,9 @@ public class MakeFog2 : MonoBehaviour
     {
         if ((GameManager.Instance.NowStage == Stage.Lobby) && (GameManager.Instance.NowFloor == floor.f1)) 
         {
-            return;
+            return; //예외처리 로비에 있을때는 안개 업데이트 x
         } 
-        //예외처리 로비에 있을때는 안개 업데이트 x
-
+        
         Color[] lastcolorData = visitedColorData;
 
         for (int i = 0; i < currentColorData.Length; i++)
@@ -98,14 +91,12 @@ public class MakeFog2 : MonoBehaviour
         }
 
         // 변경 사항을 안개 텍스처에 적용
-        fogOfWarTexture.SetPixels(lastcolorData);
-        
+        fogOfWarTexture.SetPixels(lastcolorData);        
         fogOfWarTexture.Apply();
     }
 
     public int PlayerAround() 
-    {
-        
+    {        
         if ((GameManager.Instance.NowStage == Stage.Stage1) && (GameManager.Instance.NowFloor == floor.f1)) 
         {
             //Rect의 값과 비교

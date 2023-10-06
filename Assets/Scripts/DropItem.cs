@@ -5,21 +5,21 @@ public class DropItem : MonoBehaviour
     [SerializeField] GameObject _ItemNameCanvas;
     [SerializeField] SpriteRenderer _ItemIcon;
     [SerializeField] ItemUI _itemUI;
+    
     Item _item;
+    public Item Item 
+    {
+        private set { _item = value; }
+        get { return _item; }
+    }
+
     DropItemType _dropItemType;
-
-
     public DropItemType DropItemType
     {
         private set { _dropItemType = value; }
         get { return _dropItemType; }
     }
 
-    public Item Item 
-    {
-        private set { _item = value; }
-        get { return _item; }
-    }
 
     public void Init(Item item, DropItemType type = DropItemType.Drop)
     {
@@ -79,7 +79,6 @@ public class DropItem : MonoBehaviour
                 break;
         }
     }
-
     public void OpenItemInfo()
     {
         switch (_item._itemType)
@@ -110,7 +109,6 @@ public class DropItem : MonoBehaviour
                 break;
         }
     }
-
     public void CloseItemInfo()
     {
         _itemUI.CloseInfo();
@@ -144,7 +142,6 @@ public class DropItem : MonoBehaviour
         go.GetComponent<ItemNameCanvas>().NotEnoughCurrency(str);
     }
 }
-
 
 public enum DropItemType
 {

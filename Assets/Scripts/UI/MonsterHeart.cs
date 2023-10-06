@@ -12,5 +12,4 @@ public class MonsterHeart : MonoBehaviour
     {
         _fullHeart.SetActive(true);
     }
-
 }

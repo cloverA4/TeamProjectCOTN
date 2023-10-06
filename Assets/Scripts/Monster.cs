@@ -1,16 +1,14 @@
 using UnityEngine;
 using System;
-using Unity.Burst.CompilerServices;
 
 public class Monster : MonoBehaviour
 {
-    AudioSource _audio;
     [SerializeField] MonsterHPUI _monsterHPUI;
     [SerializeField] GameObject _monsterNormalAttackEffect;
+    [SerializeField] private GameObject _ElitemonsterAttackEffect;
 
-    MonsterType _type;
-    public MonsterType Type { get { return _type; } }
-
+    int _attackMoveCount = 0;
+    int _specialAttackCount = 0;
     int _monsterHP = 0;
     int _monsterDamage = 0;
     int _turnCount;
@@ -19,14 +17,16 @@ public class Monster : MonoBehaviour
     bool _attackReady;
     Vector3 MonsterLook = Vector3.zero;
     LayerMask _normalLayerMask;
-
     Animator _animator;
+    AudioSource _audio;
     SpriteRenderer _childSpriteRenderer;
+
+    MonsterType _type;
+    public MonsterType Type { get { return _type; } }
 
     void Start()
     {
         UIManeger.Instance.EventVolumeChange += new EventHandler(VolumeChange);
-        //GameManager.Instance.MosterMoveEnvent += new EventHandler(MonsterMove);
         _audio = GetComponent<AudioSource>();
         _animator = GetComponentsInChildren<Animator>()[0];
         _childSpriteRenderer = GetComponentsInChildren<SpriteRenderer>()[1];
@@ -83,7 +83,6 @@ public class Monster : MonoBehaviour
         _monsterHPUI.Init(_monsterHP);
     }
 
-    //void MonsterMove(object sender, EventArgs s)
     public void MonsterMove()
     {
         if (_aggro == false)
@@ -132,29 +131,8 @@ public class Monster : MonoBehaviour
         }
     }
 
-    private void OnDrawGizmos()
-    {
-        float maxDistance = 0.5f;
-        RaycastHit hit;
-        // Physics.Raycast (레이저를 발사할 위치, 발사 방향, 충돌 결과, 최대 거리)
-        bool isHit = Physics.Raycast(transform.position + MonsterLook/2, MonsterLook, out hit, maxDistance, _normalLayerMask);
-
-        Gizmos.color = Color.red;
-        if (isHit)
-        {
-            Gizmos.DrawRay(transform.position + MonsterLook/2, MonsterLook * hit.distance);
-        }
-        else
-        {
-            Gizmos.DrawRay(transform.position + MonsterLook/2, MonsterLook * maxDistance);
-        }
-    }
-
     void MonsterPattern()
     {
-        //어느정도 해결은 했는데 서로 같은칸을 보고 동시에 비었다고 판단하고 움직이면 겹쳐버림
-
-        //위아래로 또는 좌우로만 움직이고 체력2 - 이니셜라이즈에서 방향 정해짐
         Vector3 Temp = transform.position + MonsterLook/2;
         RaycastHit2D hitdata = Physics2D.Raycast(Temp, MonsterLook, 0.5f, _normalLayerMask);
         
@@ -236,19 +214,15 @@ public class Monster : MonoBehaviour
                     else MoveMonsterY(Vector3.up);
                 }                
             }
-
-            //GetComponentsInChildren<SpriteRenderer>()[1].color = Color.white;
             _animator.SetTrigger("Idle");
             _attackReady = false;
         }
         else
         {
-            //GetComponentsInChildren<SpriteRenderer>()[1].color = Color.red;
             _animator.SetTrigger("AttackMotion");
             _attackReady = true;
         }
     }
-        
 
     void AttackCheck(Vector3 vec)
     {
@@ -295,11 +269,6 @@ public class Monster : MonoBehaviour
             Destroy(NormalAttack, 0.2f);
         }
     }
-    int _attackMoveCount = 0;
-    int _specialAttackCount = 0;
-    [SerializeField]
-    private GameObject _ElitemonsterAttackEffect;
-
     void EliteMonsterPattern()
     {
         Vector3 Temp;
@@ -330,11 +299,9 @@ public class Monster : MonoBehaviour
                     }
                 }
             }
-
             GameObject SpecialEffect = Instantiate(_ElitemonsterAttackEffect, transform.position + MonsterLook, Quaternion.identity);
             SpecialEffect.GetComponent<EliteMonsterThrowDagger>().Init(transform.position + MonsterLook , MonsterLook);
 
-            //GetComponentsInChildren<SpriteRenderer>()[1].color = Color.white;
             _animator.SetTrigger("Idle"); // 특수모션에서 기본모션으로 돌아옴
             _specialAttackCount = 0;
             _attackMoveCount = 0;
@@ -400,12 +367,6 @@ public class Monster : MonoBehaviour
                         }
                         MonsterAttack();
                     }
-
-                    
-                }
-                else
-                {
-                    Debug.Log("플레이어까지 거리가 1미만인데 상하좌우에 없다????");
                 }
                 _specialAttackCount = 0;
             }
@@ -441,12 +402,6 @@ public class Monster : MonoBehaviour
             }
             _attackMoveCount++;
         }
-        //근접공격가능하면 브레스카운터 초기화 및 근접공격
-        //근접공격 불가능할 시 브레스 가능하면 브레스차징
-        //근접공격 및 브레스 불가 시 이동 y값이 1차이날 경우 y축으로 이동하면서 차징까지(차지카운트 2이상)
-
-        //브레스카운터는 3턴째 차징 4턴째 발사
-        //이동 및 공격은 2턴마다
     }
     void EliteMonsterMove(int type)
     {
@@ -536,8 +491,6 @@ public class Monster : MonoBehaviour
             MonsterLook = Vector3.left;
             _childSpriteRenderer.flipX = false;
         }
-        //브레스 차징
-        //GetComponentsInChildren<SpriteRenderer>()[1].color = Color.red;
         _animator.SetTrigger("AttackSpecial"); // 특수공격모션
         _attackReady = true;
     }
@@ -565,8 +518,7 @@ public class Monster : MonoBehaviour
         else if (MonsterLook == Vector3.down)
         {
             _animator.SetTrigger("Down");
-        }
-        // 자식스프라이트 Layer값 이동시 바꾸기
+        }        
         _childSpriteRenderer.sortingOrder = (int)(transform.position.y - 1) * -1;
     }
 
@@ -578,10 +530,7 @@ public class Monster : MonoBehaviour
         RaycastHit2D hitdata = Physics2D.Raycast(Temp, MonsterLook, 0.5f, _normalLayerMask);
         _childSpriteRenderer.sortingOrder = (int)(transform.position.y - 1) * -1;
 
-        if (hitdata == false)
-        {
-            MoveMonster();
-        }
+        if (hitdata == false) MoveMonster();
     }
 
     void MoveMonsterX(Vector3 vec)
@@ -602,10 +551,7 @@ public class Monster : MonoBehaviour
                 MoveMonster2(Vector3.up);
             }
         }
-        else
-        {
-            MoveMonster();
-        }
+        else MoveMonster();
     }
 
     void MoveMonsterY(Vector3 vec)
@@ -628,10 +574,7 @@ public class Monster : MonoBehaviour
                 _childSpriteRenderer.flipX = true;
             }
         }
-        else
-        {
-            MoveMonster();
-        }
+        else MoveMonster();
     }
 
     #endregion

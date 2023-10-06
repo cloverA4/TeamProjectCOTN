@@ -4,34 +4,27 @@ using UnityEngine.UI;
 
 public class Stair : MonoBehaviour
 {
-    [SerializeField]
-    private Stage _nowStage;
-    [SerializeField]
-    private floor _nowFloor;
-    [SerializeField]
-    SpriteRenderer _benStair;
+    [SerializeField] private Stage _nowStage;
+    [SerializeField] private floor _nowFloor;
+    [SerializeField] SpriteRenderer _benStair;
     [SerializeField] Text _text;
 
     private void Start()
     {
-        //_benStair = GetComponentsInChildren<SpriteRenderer>()[1];
         GameManager.Instance.EventEliteMonsterDie += new EventHandler(EliteMonsterDied);
         _text.gameObject.SetActive(false);
     }
-
-    //엘리트 몬스터가 살아있을때 체크하는 함수 스테이지 이동때마다 호출
 
     public void StageLock()
     {
         _benStair.enabled = !GameManager.Instance.StageClear;
     }
 
-    //엘리트 몬스터가 죽었을때 불값변환후 _benStair게임오브젝트꺼주기, 의도는이미지 삭제
-
     public void EliteMonsterDied(object sender, EventArgs s)
     {
         StageLock();
     }
+
     public void SetText(string str)  // 계단 텍스트 출력
     {
         _text.text = str;
@@ -54,17 +47,8 @@ public class Stair : MonoBehaviour
             }
             else
             {
-                //ui호출 "엘리트 몬스터를 처치해야합니다!"
                 SetText("엘리트 몬스터를 처치하세요!");
             }
-        }
-    }
-
-    private void OnDestroy()
-    {
-        if(GameManager.Instance != null)
-        {
-            GameManager.Instance.EventEliteMonsterDie -= new EventHandler(EliteMonsterDied);
         }
     }
 }

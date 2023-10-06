@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,6 +7,8 @@ public class MonsterHPUI : MonoBehaviour
     [SerializeField] GameObject _heart;
     int _maxHP = 0;
     int _nowHP = 0;
+    List<GameObject> _hearts = new List<GameObject>();
+
     public void Init(int hp)
     {
         _maxHP = _nowHP = hp;
@@ -15,7 +16,6 @@ public class MonsterHPUI : MonoBehaviour
         gameObject.SetActive(false);
     }
     
-    List<GameObject> _hearts = new List<GameObject>();  
     public void setMaxHP()
     {
         for (int i = 0; i < _maxHP; i++)
@@ -32,7 +32,6 @@ public class MonsterHPUI : MonoBehaviour
             _hearts[i].GetComponent<MonsterHeart>().EmptyHeartActive();
         }
     }
-
     public void MonsterHPUpdata(int dmg)
     {
         HPAllDisabel();

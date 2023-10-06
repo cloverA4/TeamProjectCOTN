@@ -1,17 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Tilemaps;
 
 public class Door : MonoBehaviour
 {
+    [SerializeField] SpriteRenderer _doorImage;
+
     private int _wallCount;
     private int _WallCountReset = 2; //주변의 벽 갯수 주변벽이깨지면 문파괴
-
-    [SerializeField] SpriteRenderer _doorImage;
-    //1
-    //[SerializeField]
-    //LayerMask objectLayer;
 
     void Start()
     {

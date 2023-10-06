@@ -6,55 +6,49 @@ public class OptionUI : MonoBehaviour
 {
     [SerializeField] GameObject _toggleGroup;
     [SerializeField] GameObject _soundOption;
-
+    [SerializeField] GameObject _gameObject;
     [SerializeField] Toggle _toggle1;
     [SerializeField] Toggle _toggle2;
     [SerializeField] Toggle _toggle3;
     [SerializeField] Toggle _toggle4;
     [SerializeField] Toggle _toggle5;
-
+    [SerializeField] Toggle _soundToggle1;
+    [SerializeField] Toggle _soundToggle2;
+    [SerializeField] Toggle _soundToggle3;
     [SerializeField] Text _check1;
     [SerializeField] Text _check2;
     [SerializeField] Text _check3;
     [SerializeField] Text _check4;
     [SerializeField] Text _check5;
-
     [SerializeField] Text _text1;
     [SerializeField] Text _text2;
     [SerializeField] Text _text3;
     [SerializeField] Text _text4;
     [SerializeField] Text _text5;
-
     [SerializeField] Text _main;
+    [SerializeField] Text _soundText1;
+    [SerializeField] Text _soundText2;
+    [SerializeField] Text _soundText3;
+    [SerializeField] Text _soundCheck1;
+    [SerializeField] Text _soundCheck2;
+    [SerializeField] Button _volumAddBtn1;
+    [SerializeField] Button _volumAddBtn2;
+    [SerializeField] Button _volumSubBtn1;
+    [SerializeField] Button _volumSubBtn2;
+    [SerializeField] Slider _soundBar1;
+    [SerializeField] Slider _soundBar2;
 
     int _index = 0;
+    int _soundIndex = 0;
+
     UnityAction _action1;
     UnityAction _action2;
     UnityAction _action3;
     UnityAction _action4;
     UnityAction _action5;
 
-    [SerializeField] Toggle _soundToggle1;
-    [SerializeField] Toggle _soundToggle2;
-    [SerializeField] Toggle _soundToggle3;
-
-    [SerializeField] Text _soundText1;
-    [SerializeField] Text _soundText2;
-    [SerializeField] Text _soundText3;
-    [SerializeField] Text _soundCheck1;
-    [SerializeField] Text _soundCheck2;
-
-    [SerializeField] Button _volumAddBtn1;
-    [SerializeField] Button _volumAddBtn2;
-    [SerializeField] Button _volumSubBtn1;
-    [SerializeField] Button _volumSubBtn2;
-
-    [SerializeField] Slider _soundBar1;
-    [SerializeField] Slider _soundBar2;
-    int _soundIndex = 0;
 
 
-    [SerializeField] GameObject _gameObject;
 
     AudioSource _audio;
     bool _isActive = false;
@@ -106,8 +100,6 @@ public class OptionUI : MonoBehaviour
                 }
             }
            
-            
-
             if (Input.GetKeyDown(KeyCode.Return))
             {
                 UIManeger.Instance.PlayEffectSound(SoundEffect.UISelect);
@@ -168,7 +160,6 @@ public class OptionUI : MonoBehaviour
             }
         }
     }
-
     public void Init()
     {
         gameObject.SetActive(true);
@@ -207,7 +198,6 @@ public class OptionUI : MonoBehaviour
             pos.y = 165;
             _toggleGroup.GetComponent<RectTransform>().anchoredPosition = pos;
         }
-
 
         _index = 0;
         _toggleGroup.gameObject.SetActive(true);
@@ -253,7 +243,6 @@ public class OptionUI : MonoBehaviour
             case 4:
                 _toggle5.isOn = true;
                 break;
-
         }
     }
     void SoundCheckToggle()
@@ -272,11 +261,11 @@ public class OptionUI : MonoBehaviour
         }
     }
 
-    public void SoundOption(string main)
+    public void SoundOption()
     {
         _index = 0;
         _soundIndex = 0;
-        _main.text = main;
+        _main.text = "¿Àµð¿À ¿É¼Ç";
         _isActive = false;
         _toggleGroup.gameObject.SetActive(false);
         _soundOption.gameObject.SetActive(true);
@@ -314,8 +303,6 @@ public class OptionUI : MonoBehaviour
         _soundCheck2.text = "ÀÌÆåÆ® º¼·ý: " + temp * 100 + "%";
         UIManeger.Instance.VolumeChange(temp);
     }
-    //public void 
-
     public void VolumAddBtn()
     {
         if (_soundToggle1.isOn)
@@ -338,13 +325,10 @@ public class OptionUI : MonoBehaviour
             _soundBar2.value -= 0.05f;
         }
     }
-
     public void EndOptionUI()
     {
         _gameObject.SetActive(false);
     }
-
-
     public void OptionToggle1(bool _bool)
     {
         if (_toggleGroup.activeSelf)
@@ -403,7 +387,6 @@ public class OptionUI : MonoBehaviour
             return;
         }
     }
-
     public void OptionToggle5(bool _bool)
     {
         if (_isActive)
