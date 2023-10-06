@@ -705,17 +705,29 @@ public class Monster : MonoBehaviour
 
     void ItemDrop()
     {
-        GameObject go = Instantiate(Data.Instance.ItemPrefab, GameManager.Instance.ItemPool.transform);
-        go.transform.position = transform.position;
         int dropCount = UnityEngine.Random.Range(3, 5);
 
-        Currency cr = (Currency)Data.Instance.GetItemInfo(102);
-        cr.Count = dropCount;
+        RaycastHit2D hitdata = Physics2D.Raycast(transform.position, MonsterLook, 0.1f, 1 << LayerMask.NameToLayer("DropItem"));
+        if(hitdata)
+        {
+            if(hitdata.collider.GetComponent<DropItem>().Item._itemType == ItemType.Currency)
+            {
+                Currency cur = (Currency)hitdata.collider.GetComponent<DropItem>().Item;
+                cur.Count += dropCount;
+            }
+        }
+        else
+        {
+            GameObject go = Instantiate(Data.Instance.ItemPrefab, GameManager.Instance.ItemPool.transform);
+            go.transform.position = transform.position;
 
-        go.GetComponent<DropItem>().Init(cr);
+            Currency cr = (Currency)Data.Instance.GetItemInfo(102);
+            cr.Count = dropCount;
 
-        if(Vector3.Distance(transform.position, PlayerController.Instance.transform.position) <= 1)
-        go.GetComponent<DropItem>().OpenItemInfo();
+            go.GetComponent<DropItem>().Init(cr);
+
+            if (Vector3.Distance(transform.position, PlayerController.Instance.transform.position) <= 1) go.GetComponent<DropItem>().OpenItemInfo();
+        }
     }
 }
 

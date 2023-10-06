@@ -344,6 +344,9 @@ public class GameManager : MonoBehaviour
     //해당 스테이지 입구별로 함수 개별 적용?
     public void FaidIn()
     {
+        ResetNote();
+        if (mt != null) StopCoroutine(mt);
+        if (sm != null) StopCoroutine(sm);
         //페이드인효과 호출(어두워지게)
         StartCoroutine(UIManeger.Instance.FadeIn());
     }
@@ -525,7 +528,6 @@ public class GameManager : MonoBehaviour
 
         Data.Instance.SavePlayerData();
     }
-
 
     public void StageFail()
     {
