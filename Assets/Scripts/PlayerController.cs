@@ -425,7 +425,6 @@ public class PlayerController : MonoBehaviour
                                     TSWeaponEffectPos(vec);
                                     break;
                             }
-                            
                         }
                         hitdataTypeSpear.collider.GetComponent<Monster>().TakeDamage(_damage);
                         GameManager.Instance.EndMusic();
@@ -1116,6 +1115,7 @@ public class PlayerController : MonoBehaviour
         EquipWeapon = (Weapon)Data.Instance.GetItemInfo(301);
         EquipArmor = null;
         EquipPotion = null;
+        UpdateCharacterState();
     }
 
     public void TakeDamage(int dmg)
