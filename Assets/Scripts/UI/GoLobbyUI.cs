@@ -180,6 +180,7 @@ public class GoLobbyUI : MonoBehaviour
         GameManager.Instance.NowStage = Stage.Lobby;
         GameManager.Instance.NowFloor = floor.f1;
         PlayerController.Instance.BaseItemEquip();
+        PlayerController.Instance.NowHP = PlayerController.Instance.MaxHP;
         UIManeger.Instance.StartFadin();
     }
     public void Retry()
