@@ -16,9 +16,6 @@ public class UIManeger : MonoBehaviour
     float _effectVolume = 1;
     public float EffectVolume { get { return _effectVolume; } }
 
-
-   
-
     [SerializeField] Image _fade;
     [SerializeField] Canvas _infoCanvas;
     [SerializeField] GameInfoMassege _gameInfoMassege;
@@ -41,7 +38,6 @@ public class UIManeger : MonoBehaviour
     [SerializeField] CenterMessage _centerMessage;
     [SerializeField] WealthUI _wealthUI;
 
-    UIMenu _activeMenu;
 
     private void Awake()
     {
@@ -242,9 +238,10 @@ public class UIManeger : MonoBehaviour
         ActiveMenuChange(UIMenu.AlarmUI);
         _alarmUI.StartAlarmUI(main, str1, str2, action1, action2);
     }
-    public void EndAlarm()
+    public void ReturnOption()
     {
         _alarmUI.EndAlarmUI();
+        UIManeger.Instance.ActiveMenuChange(UIMenu.Option);
     }
 
     public void Option(string main, string str1, string str2, string str3, string str4, string str5, UnityAction action1, UnityAction action2, UnityAction action3, UnityAction action4, UnityAction action5)
@@ -252,10 +249,7 @@ public class UIManeger : MonoBehaviour
         ActiveMenuChange(UIMenu.Option);
         _optionUI.StartOptionUI(main, str1, str2, str3, str4, str5, action1, action2, action3, action4, action5);
     }
-    public void EndOption()
-    {
-        _optionUI.EndOptionUI();
-    }
+
     public void StartSoundOption()
     {
         string main = "오디오 옵션";
@@ -346,6 +340,18 @@ public class UIManeger : MonoBehaviour
                 _manual.IsActive = true;
                 break;
         }
+    }
+
+    public void AllCloseUI()
+    {
+        _goLobby.endGoLobbyUI();
+        _optionUI.EndOptionUI();
+        _alarmUI.EndAlarmUI();
+
+        Time.timeScale = 1;
+        GameManager.Instance.SoundPerse(true);
+        PlayerController.Instance.IsTimeStop = false;
+        ActiveMenuChange(UIMenu.Null);
     }
 }
 

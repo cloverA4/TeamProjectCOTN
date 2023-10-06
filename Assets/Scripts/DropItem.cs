@@ -122,6 +122,7 @@ public class DropItem : MonoBehaviour
         _item = Changeitem;
         _ItemIcon.sprite = _item._ItemIcon;
         _dropItemType = DropItemType.Drop;
+        _itemUI.ItemUIInit();
     }
 
     public void DeleteDropItem()

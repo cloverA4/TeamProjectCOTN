@@ -129,12 +129,6 @@ public class OptionUI : MonoBehaviour
                         if(_action5 != null)_action5();
                         break;
                 }
-                if (_gameObject.activeSelf == false)
-                {
-                    Time.timeScale = 1;
-                    PlayerController.Instance.IsTimeStop = false;
-                    GameManager.Instance.SoundPerse(true);
-                }
             }
         }
         if (_soundOption.activeSelf)
@@ -348,7 +342,6 @@ public class OptionUI : MonoBehaviour
     public void EndOptionUI()
     {
         _gameObject.SetActive(false);
-        UIManeger.Instance.ActiveMenuChange(UIMenu.Null);
     }
 
 

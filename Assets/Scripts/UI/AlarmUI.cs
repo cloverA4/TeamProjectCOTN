@@ -51,17 +51,9 @@ public class AlarmUI : MonoBehaviour
                 {
                     case 0:
                         _action1();
-                        gameObject.SetActive(false);
-                        Time.timeScale = 1;
-                        PlayerController.Instance.IsTimeStop = false;
-                        GameManager.Instance.SoundPerse(true);
                         break;
                     case 1:
                         if (_action2 != null) _action2();
-                        gameObject.SetActive(false);
-                        Time.timeScale = 1;
-                        PlayerController.Instance.IsTimeStop = false;
-                        GameManager.Instance.SoundPerse(true);
                         break;
                 }
             }
@@ -99,10 +91,8 @@ public class AlarmUI : MonoBehaviour
 
     public void EndAlarmUI()
     {
-        GameManager.Instance.PlayerHpReset();
         gameObject.SetActive(false);
-        _alarmIndex = 0;
-        UIManeger.Instance.ActiveMenuChange(UIMenu.Null);
+        _alarmIndex = 0;        
     }
 
     public void AlarmToggle1(bool _bool)

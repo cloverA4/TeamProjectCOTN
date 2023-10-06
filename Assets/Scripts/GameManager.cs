@@ -127,12 +127,12 @@ public class GameManager : MonoBehaviour
             {
                 string str2 = null;
                 str = "메뉴";
-                UIManeger.Instance.Option(str, "계속하기", "사운드", "조작법", "게임 종료", str2, () => UIManeger.Instance.EndOption(), () => UIManeger.Instance.StartSoundOption(), UIManeger.Instance.OnControllManual, () => Application.Quit(), null);
+                UIManeger.Instance.Option(str, "계속하기", "사운드", "조작법", "게임 종료", str2, () => UIManeger.Instance.AllCloseUI(), () => UIManeger.Instance.StartSoundOption(), UIManeger.Instance.OnControllManual, () => Application.Quit(), null);
             }
             else if (GameManager.instance.NowStage != Stage.Lobby)
             {
                 str = "일시정지";
-                UIManeger.Instance.Option(str, "계속하기", "사운드", "조작법", "로비로 나가기", "게임 종료", () => UIManeger.Instance.EndOption(), () => UIManeger.Instance.StartSoundOption(), UIManeger.Instance.OnControllManual, LobbyAlarm, () => Application.Quit());
+                UIManeger.Instance.Option(str, "계속하기", "사운드", "조작법", "로비로 나가기", "게임 종료", () => UIManeger.Instance.AllCloseUI(), () => UIManeger.Instance.StartSoundOption(), UIManeger.Instance.OnControllManual, LobbyAlarm, () => Application.Quit());
             }
         }
     }
@@ -378,6 +378,7 @@ public class GameManager : MonoBehaviour
                 PlayerController.Instance.BaseItemEquip();
                 PlayerController.Instance.ResetCoinMultiple();
                 PlayerController.Instance.transfromUpdate(_stageStartPosition.LobbyPosition);
+                PlayerHpReset();
 
                 //관리자방에서 아이템 생성
                 GameObject Item = Instantiate(_dropItem, _itemPool.transform);
@@ -920,11 +921,10 @@ public class GameManager : MonoBehaviour
     }
     public void LobbyAlarm()
     {
-        UIManeger.Instance.EndOption();
         string main = "정말 로비로\r\n돌아가시겠습니까";
         string Toggle1 = "네";
         string toggle2 = "아니요";
-        UIManeger.Instance.Alarm(main, Toggle1, toggle2, UIManeger.Instance.GoLobby, UIManeger.Instance.EndAlarm);
+        UIManeger.Instance.Alarm(main, Toggle1, toggle2, UIManeger.Instance.GoLobby, UIManeger.Instance.ReturnOption);
     }
 }
 

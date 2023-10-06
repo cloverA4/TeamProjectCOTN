@@ -85,10 +85,9 @@ public class GoLobbyUI : MonoBehaviour
                             GameManager.Instance.NowFloor = floor.f1;
                             GameManager.Instance.Gold = 0;
                             UIManeger.Instance.StartFadin();
-                            endGoLobbyUI();
+                            UIManeger.Instance.AllCloseUI();
                             break;
                         case 1:
-                            endGoLobbyUI();
                             string main = "사용하지 않은 다이아몬드는\r\n재시작시 모두 사라집니다.\r\n로비로 되돌아가 사용하겠습니까? ";
                             string Toggle1 = "로비에서 다이아몬드 사용";
                             string toggle2 = "빠른재시작";
@@ -120,9 +119,7 @@ public class GoLobbyUI : MonoBehaviour
 
     public void endGoLobbyUI()
     {
-        GameManager.Instance.PlayerHpReset();
         _goLobbyUI.SetActive(false);
-        UIManeger.Instance.ActiveMenuChange(UIMenu.Null);
     }
 
     public void StartGoLobbyUI()
@@ -180,7 +177,7 @@ public class GoLobbyUI : MonoBehaviour
         GameManager.Instance.NowStage = Stage.Lobby;
         GameManager.Instance.NowFloor = floor.f1;
         PlayerController.Instance.BaseItemEquip();
-        PlayerController.Instance.NowHP = PlayerController.Instance.MaxHP;
+        UIManeger.Instance.AllCloseUI();
         UIManeger.Instance.StartFadin();
     }
     public void Retry()
@@ -188,6 +185,8 @@ public class GoLobbyUI : MonoBehaviour
         GameManager.Instance.NowFloor = floor.f1;
         GameManager.Instance.Gold = 0;
         PlayerController.Instance.BaseItemEquip();
+        GameManager.Instance.PlayerHpReset();
+        UIManeger.Instance.AllCloseUI();
         UIManeger.Instance.StartFadin();
     }
 }
