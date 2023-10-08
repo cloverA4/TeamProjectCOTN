@@ -279,6 +279,8 @@ public class OptionUI : MonoBehaviour
         _isActive = true;
         _soundOption.gameObject.SetActive(false);
         _toggleGroup.gameObject.SetActive(true);
+        if (GameManager.Instance.NowStage == Stage.Lobby) _main.text = "메뉴";
+        else if (GameManager.Instance.NowStage != Stage.Lobby) _main.text = "일시정지";
         OptionToggle1(true);
         CheckToggle();
     }
