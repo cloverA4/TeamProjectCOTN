@@ -356,51 +356,54 @@ public class GameManager : MonoBehaviour
                 PlayerHpReset();
 
                 //관리자방에서 아이템 생성
+                //무기 타입들
                 GameObject Item = Instantiate(_dropItem, _itemPool.transform);
-                Item.transform.position = new Vector3(-46, 98, 0);
+                Item.transform.position = new Vector3(-48, 98, 0);
                 Item.GetComponent<DropItem>().Init(Data.Instance.GetItemInfo(301));
                 Item = Instantiate(_dropItem, _itemPool.transform);
-                Item.transform.position = new Vector3(-44, 98, 0);
+                Item.transform.position = new Vector3(-46, 98, 0);
                 Item.GetComponent<DropItem>().Init(Data.Instance.GetItemInfo(302));
                 Item = Instantiate(_dropItem, _itemPool.transform);
-                Item.transform.position = new Vector3(-42, 98, 0);
+                Item.transform.position = new Vector3(-44, 98, 0);
                 Item.GetComponent<DropItem>().Init(Data.Instance.GetItemInfo(303));
                 Item = Instantiate(_dropItem, _itemPool.transform);
-                Item.transform.position = new Vector3(-40, 98, 0);
+                Item.transform.position = new Vector3(-42, 98, 0);
                 Item.GetComponent<DropItem>().Init(Data.Instance.GetItemInfo(304));
                 Item = Instantiate(_dropItem, _itemPool.transform);
-                Item.transform.position = new Vector3(-38, 98, 0);
+                Item.transform.position = new Vector3(-40, 98, 0);
                 Item.GetComponent<DropItem>().Init(Data.Instance.GetItemInfo(305));
                 Item = Instantiate(_dropItem, _itemPool.transform);
-                Item.transform.position = new Vector3(-36, 98, 0);
+                Item.transform.position = new Vector3(-38, 98, 0);
                 Item.GetComponent<DropItem>().Init(Data.Instance.GetItemInfo(306));
                 Item = Instantiate(_dropItem, _itemPool.transform);
-
-                Item.transform.position = new Vector3(-46, 96, 0);
-                Item.GetComponent<DropItem>().Init(Data.Instance.GetItemInfo(501));
-                Item = Instantiate(_dropItem, _itemPool.transform);
-                Item.transform.position = new Vector3(-44, 96, 0);
-                Item.GetComponent<DropItem>().Init(Data.Instance.GetItemInfo(502));
-                Item = Instantiate(_dropItem, _itemPool.transform);
-                Item.transform.position = new Vector3(-42, 96, 0);
+                Item.transform.position = new Vector3(-36, 98, 0);
                 Item.GetComponent<DropItem>().Init(Data.Instance.GetItemInfo(307));
                 Item = Instantiate(_dropItem, _itemPool.transform);
-                Item.transform.position = new Vector3(-40, 96, 0);
+                //갑옷 타입들
+                Item.transform.position = new Vector3(-48, 96, 0);
+                Item.GetComponent<DropItem>().Init(Data.Instance.GetItemInfo(501));
+                Item = Instantiate(_dropItem, _itemPool.transform);
+                Item.transform.position = new Vector3(-46, 96, 0);
+                Item.GetComponent<DropItem>().Init(Data.Instance.GetItemInfo(502));
+                Item = Instantiate(_dropItem, _itemPool.transform);
+                //포션 타입들
+                Item.transform.position = new Vector3(-44, 96, 0);
                 Item.GetComponent<DropItem>().Init(Data.Instance.GetItemInfo(401));
                 Item = Instantiate(_dropItem, _itemPool.transform);
-                Item.transform.position = new Vector3(-38, 96, 0);
+                Item.transform.position = new Vector3(-42, 96, 0);
                 Item.GetComponent<DropItem>().Init(Data.Instance.GetItemInfo(402));
                 Item = Instantiate(_dropItem, _itemPool.transform);
-                Item.transform.position = new Vector3(-36, 96, 0);
+                Item.transform.position = new Vector3(-40, 96, 0);
                 Item.GetComponent<DropItem>().Init(Data.Instance.GetItemInfo(403));
                 Item = Instantiate(_dropItem, _itemPool.transform);
-
-                Item.transform.position = new Vector3(-42, 94, 0);
+                //삽 타입들
+                Item.transform.position = new Vector3(-38, 96, 0);
                 Item.GetComponent<DropItem>().Init(Data.Instance.GetItemInfo(201));
                 Item = Instantiate(_dropItem, _itemPool.transform);
-                Item.transform.position = new Vector3(-40, 94, 0);
+                Item.transform.position = new Vector3(-36, 96, 0);
                 Item.GetComponent<DropItem>().Init(Data.Instance.GetItemInfo(202));
                 Item = Instantiate(_dropItem, _itemPool.transform);
+
                 break;
             case Stage.Stage1:
                 _stageClear = false;
