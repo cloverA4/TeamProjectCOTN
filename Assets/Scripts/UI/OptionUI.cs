@@ -122,6 +122,10 @@ public class OptionUI : MonoBehaviour
                         break;
                 }
             }
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                UIManeger.Instance.AllCloseUI();
+            }
         }
         if (_soundOption.activeSelf)
         {
