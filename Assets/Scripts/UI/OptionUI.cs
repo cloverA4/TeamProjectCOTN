@@ -99,7 +99,7 @@ public class OptionUI : MonoBehaviour
                     CheckToggle();
                 }
             }
-           
+
             if (Input.GetKeyDown(KeyCode.Return))
             {
                 UIManeger.Instance.PlayEffectSound(SoundEffect.UISelect);
@@ -121,10 +121,6 @@ public class OptionUI : MonoBehaviour
                         if(_action5 != null)_action5();
                         break;
                 }
-            }
-            if (Input.GetKeyDown(KeyCode.Escape))
-            {
-                UIManeger.Instance.AllCloseUI();
             }
         }
         if (_soundOption.activeSelf)
@@ -333,6 +329,7 @@ public class OptionUI : MonoBehaviour
     }
     public void EndOptionUI()
     {
+        _isActive = false;
         _gameObject.SetActive(false);
     }
     public void OptionToggle1(bool _bool)

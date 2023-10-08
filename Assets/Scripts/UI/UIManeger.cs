@@ -35,6 +35,7 @@ public class UIManeger : MonoBehaviour
     AudioSource _audio;
 
     float _effectVolume = 1;
+    bool _isOption = false;
     public float EffectVolume { get { return _effectVolume; } }
 
     private void Awake()
@@ -213,8 +214,13 @@ public class UIManeger : MonoBehaviour
 
     public void Option(string main, string str1, string str2, string str3, string str4, string str5, UnityAction action1, UnityAction action2, UnityAction action3, UnityAction action4, UnityAction action5)
     {
-        ActiveMenuChange(UIMenu.Option);
-        _optionUI.StartOptionUI(main, str1, str2, str3, str4, str5, action1, action2, action3, action4, action5);
+        if (_isOption) AllCloseUI();
+        else
+        {
+            _isOption = true;
+            _optionUI.StartOptionUI(main, str1, str2, str3, str4, str5, action1, action2, action3, action4, action5);
+            UIManeger.Instance.ActiveMenuChange(UIMenu.Option);
+        }
     }
 
     public void StartSoundOption()
@@ -305,6 +311,7 @@ public class UIManeger : MonoBehaviour
         _goLobby.endGoLobbyUI();
         _optionUI.EndOptionUI();
         _alarmUI.EndAlarmUI();
+        _isOption = false;
 
         Time.timeScale = 1;
         GameManager.Instance.SoundPerse(true);
