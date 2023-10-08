@@ -43,7 +43,7 @@ public class AlarmUI : MonoBehaviour
                     case 1:
                         _toggle2.isOn = true;
                         break;
-                }
+                } 
             }
 
             if (Input.GetKeyDown(KeyCode.Return))
@@ -58,6 +58,10 @@ public class AlarmUI : MonoBehaviour
                         if (_action2 != null) _action2();
                         break;
                 }
+            }
+            if(Input.GetKeyDown(KeyCode.Escape))
+            {
+                UIManeger.Instance.ReturnOption();
             }
         }
     }
