@@ -135,7 +135,6 @@ public class OptionUI : MonoBehaviour
             {
                 UIManeger.Instance.PlayEffectSound(SoundEffect.UIChange);
                 _soundIndex++;
-                Debug.Log(_soundIndex);
                 if (_soundIndex > 2) _soundIndex = 0;
                 SoundCheckToggle();
             }
@@ -143,7 +142,6 @@ public class OptionUI : MonoBehaviour
             {
                 UIManeger.Instance.PlayEffectSound(SoundEffect.UIChange);
                 _soundIndex--;
-                Debug.Log(_soundIndex);
                 if (_soundIndex < 0) _soundIndex = 2;
                 SoundCheckToggle();
             }
@@ -402,7 +400,7 @@ public class OptionUI : MonoBehaviour
     }
     public void OptionToggle5(bool _bool)
     {
-        if (_isActive)
+        if (_toggleGroup.activeSelf)
         {
             _index = 4;
             _text5.gameObject.SetActive(!_bool);
