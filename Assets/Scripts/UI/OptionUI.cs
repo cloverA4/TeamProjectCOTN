@@ -62,13 +62,13 @@ public class OptionUI : MonoBehaviour
     }
 
     private void Update()
-    {
-        
+    {        
         if (_isActive)    
         {
             if (Input.GetKeyDown(KeyCode.Escape))
             {
                 UIManeger.Instance.AllCloseUI();
+                UIManeger.Instance.PlayEffectSound(SoundEffect.UISelect);
             }
             
             if(GameManager.Instance.NowStage == Stage.Lobby)
@@ -163,6 +163,10 @@ public class OptionUI : MonoBehaviour
             {
                 UIManeger.Instance.PlayEffectSound(SoundEffect.UISelect);
                 if (_soundIndex == 2) OffSoundOption();
+            }
+            if(Input.GetKeyDown(KeyCode.Escape))
+            {
+                OffSoundOption();
             }
         }
     }

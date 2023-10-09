@@ -38,7 +38,6 @@ public class UIManeger : MonoBehaviour
     AudioSource _audio;
 
     float _effectVolume = 1;
-    bool _isOption = false;
     bool _optionActive = true;
     public float EffectVolume { get { return _effectVolume; } }
 
@@ -80,7 +79,7 @@ public class UIManeger : MonoBehaviour
         if (PlayerPrefs.GetInt("TutorialManual") == 0)
         {
             //최초진입
-            ActiveMenuChange(UIMenu.Menual);
+            StartCoroutine(ActiveMenuChange(UIMenu.Menual));
             _manual.OnMenual();
             PlayerController.Instance.IsTimeStop = true;
             PlayerPrefs.SetInt("TutorialManual", 1);
@@ -208,9 +207,8 @@ public class UIManeger : MonoBehaviour
 
     public void Alarm(string main, string str1, string str2, UnityAction action1, UnityAction action2 = null)
     {
-        ActiveMenuChange(UIMenu.AlarmUI);
+        StartCoroutine(ActiveMenuChange(UIMenu.AlarmUI));
         _alarmUI.StartAlarmUI(main, str1, str2, action1, action2);
-        _isOption = false;
         _optionActive = false;
     }
     public void ReturnOption()
@@ -218,9 +216,8 @@ public class UIManeger : MonoBehaviour
         if (_optionUI.transform.Find("Image").gameObject.activeSelf)
         {
             _optionActive = true;
-            _isOption = true;
             _alarmUI.EndAlarmUI();
-            UIManeger.Instance.ActiveMenuChange(UIMenu.Option);
+            StartCoroutine(ActiveMenuChange(UIMenu.Option));
         }
     }
 
@@ -228,20 +225,14 @@ public class UIManeger : MonoBehaviour
     {
         if (_optionActive)
         {
-            if (_isOption) AllCloseUI();
-            else
-            {
-                _isOption = true;
-                _optionUI.StartOptionUI(main, str1, str2, str3, str4, str5, action1, action2, action3, action4, action5);
-                UIManeger.Instance.ActiveMenuChange(UIMenu.Option);
-            }
+            _optionUI.StartOptionUI(main, str1, str2, str3, str4, str5, action1, action2, action3, action4, action5);
+            StartCoroutine(ActiveMenuChange(UIMenu.Option));
         }
     }
 
     public void StartSoundOption()
     {
         _optionUI.SoundOption();
-        _isOption = false;
     }
 
     public void StageClear() // 마지막 스테이지의 상자를 열때 호출
@@ -266,10 +257,9 @@ public class UIManeger : MonoBehaviour
     }
     public void OnControllManual()  // 조작법 켜기
     {
-        ActiveMenuChange(UIMenu.Menual);
+        StartCoroutine(ActiveMenuChange(UIMenu.Menual));
         _manual.IsOption = true;
         _manual.OnMenual();
-        _isOption = false;
     }
     public void OffControllManual()  // 조작법 끄기
     {
@@ -277,7 +267,7 @@ public class UIManeger : MonoBehaviour
     }
     public void StartGoLobby()
     {
-        ActiveMenuChange(UIMenu.GoLobby);
+        StartCoroutine(ActiveMenuChange(UIMenu.GoLobby));
         _goLobby.StartGoLobbyUI();
     }
     public void GoLobby()
@@ -299,15 +289,13 @@ public class UIManeger : MonoBehaviour
     {
         _centerMessage.SetCenterMessage(message);
     }
-    public void ActiveMenuChange(UIMenu type)
+    public IEnumerator ActiveMenuChange(UIMenu type)
     {
         _goLobby.IsActive = false;
         _alarmUI.IsActive = false;
         _optionUI.IsActive = false;
         _manual.IsActive = false;
         _goLobby.IsDieMessage = false;
-
-        _status = type;
 
         switch (type)
         {
@@ -326,19 +314,21 @@ public class UIManeger : MonoBehaviour
                 _manual.IsActive = true;
                 break;
         }
+
+        yield return null;
+        _status = type;
     }
     public void AllCloseUI()
     {
         _goLobby.endGoLobbyUI();
         _optionUI.EndOptionUI();
         _alarmUI.EndAlarmUI();
-        _isOption = false;
         _optionActive = true;
 
         Time.timeScale = 1;
         GameManager.Instance.SoundPerse(true);
         PlayerController.Instance.IsTimeStop = false;
-        ActiveMenuChange(UIMenu.Null);
+        StartCoroutine(ActiveMenuChange(UIMenu.Null));
     }
 }
 

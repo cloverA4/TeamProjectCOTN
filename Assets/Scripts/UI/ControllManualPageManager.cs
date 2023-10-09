@@ -83,19 +83,13 @@ public class ControllManualPageManager : MonoBehaviour
         if(_isOption)
         {
             _isOption = false;
-            UIManeger.Instance.ActiveMenuChange(UIMenu.Option);
+            StartCoroutine(UIManeger.Instance.ActiveMenuChange(UIMenu.Option));
         }
         else
         {
             PlayerController.Instance.IsTimeStop = false;
-            Invoke("MenuChange", 0.1f);
+            StartCoroutine(UIManeger.Instance.ActiveMenuChange(UIMenu.Null));
         }
         _manual.SetActive(false);
     }
-
-    void MenuChange()
-    {
-        UIManeger.Instance.ActiveMenuChange(UIMenu.Null);
-    }
-
 }
