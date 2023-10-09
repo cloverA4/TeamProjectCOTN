@@ -103,7 +103,7 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape) && UIManeger.Instance.Status == UIMenu.Null)
         {
             string str = null;
             if (GameManager.instance.NowStage == Stage.Lobby)

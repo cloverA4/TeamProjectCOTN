@@ -28,6 +28,13 @@ public class LoadingUI : MonoBehaviour
                 Data.Instance.SceneChange();
             }
         }
+        else
+        {
+            if (Input.GetKeyDown(KeyCode.F8))
+            {
+                PlayerPrefs.DeleteAll();
+            }
+        }
     }
     void LoadingEnd(object sender, EventArgs s)
     {

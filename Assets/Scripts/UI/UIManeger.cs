@@ -31,6 +31,9 @@ public class UIManeger : MonoBehaviour
     [SerializeField] CenterMessage _centerMessage;
     [SerializeField] WealthUI _wealthUI;
 
+    UIMenu _status = UIMenu.Null;
+    public UIMenu Status { get { return _status; } }
+
     int _maxInfoCount = 10;
     AudioSource _audio;
 
@@ -79,6 +82,7 @@ public class UIManeger : MonoBehaviour
             //최초진입
             ActiveMenuChange(UIMenu.Menual);
             _manual.OnMenual();
+            PlayerController.Instance.IsTimeStop = true;
             PlayerPrefs.SetInt("TutorialManual", 1);
             PlayerPrefs.Save();
         }
@@ -302,6 +306,8 @@ public class UIManeger : MonoBehaviour
         _optionUI.IsActive = false;
         _manual.IsActive = false;
         _goLobby.IsDieMessage = false;
+
+        _status = type;
 
         switch (type)
         {

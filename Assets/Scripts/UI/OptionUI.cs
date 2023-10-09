@@ -63,8 +63,14 @@ public class OptionUI : MonoBehaviour
 
     private void Update()
     {
-        if (_isActive)
+        
+        if (_isActive)    
         {
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                UIManeger.Instance.AllCloseUI();
+            }
+            
             if(GameManager.Instance.NowStage == Stage.Lobby)
             {
                 if (Input.GetKeyDown(KeyCode.DownArrow))

@@ -87,8 +87,15 @@ public class ControllManualPageManager : MonoBehaviour
         }
         else
         {
-            UIManeger.Instance.ActiveMenuChange(UIMenu.Null);
+            PlayerController.Instance.IsTimeStop = false;
+            Invoke("MenuChange", 0.1f);
         }
         _manual.SetActive(false);
     }
+
+    void MenuChange()
+    {
+        UIManeger.Instance.ActiveMenuChange(UIMenu.Null);
+    }
+
 }
