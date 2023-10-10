@@ -1060,9 +1060,9 @@ public class PlayerController : MonoBehaviour
         //현재체력
         if (Data.Instance.CharacterSaveData._nowHP <= 0)
         {
-            _nowHp = _maxHP;
+            NowHP = _maxHP;
         }
-        else _nowHp = Data.Instance.CharacterSaveData._nowHP;
+        else NowHP = Data.Instance.CharacterSaveData._nowHP;
 
         //공격력
         if (EquipWeapon != null)
