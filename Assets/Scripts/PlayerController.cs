@@ -969,6 +969,7 @@ public class PlayerController : MonoBehaviour
             PlayerPrefs.Save();
             Data.Instance.SavePlayerData();
             UpdateCharacterState();
+            NowHP = _maxHP;
             dropItem.DeleteDropItem();
             _audio.clip = Data.Instance.SoundEffect[(int)SoundEffect.UnLock];
             _audio.Play();
